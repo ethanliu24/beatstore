@@ -38,3 +38,13 @@ rails db:setup  # set up dev and test databases for rails
 
 Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
+
+
+## Testing
+To run tests, use the commands below.
+```
+$ rspec  $ run all tests
+$ rspec <directory-or-file>  # run all tests in the given directory or file
+
+# or alternatively, use "bundle exec rspec" instead of rspec
+```
