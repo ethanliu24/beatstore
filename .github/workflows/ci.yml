@@ -107,3 +107,17 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  finish:
+    needs: test
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-22.04
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          carryforward: "rspec"
