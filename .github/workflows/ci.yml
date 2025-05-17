@@ -92,6 +92,14 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test test:system
 
+      - name: Coveralls Parallel (rspec)
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: rspec
+          parallel: true
+          file: coverage/lcov.info
+
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
