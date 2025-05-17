@@ -18,12 +18,15 @@ require 'simplecov'
 require 'simplecov-lcov'
 
 SimpleCov::Formatter::LcovFormatter.config do |config|
+  config.report_with_single_file = true
   config.output_directory = 'coverage'
   config.lcov_file_name = 'lcov.info'
 end
 
 SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
-SimpleCov.start 'rails' # or your custom profile
+SimpleCov.start 'rails' do
+  add_filter '/spec/'
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
