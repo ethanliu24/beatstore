@@ -68,6 +68,11 @@ gem "tailwindcss-rails", "~> 4.2"
 
 gem "devise", "~> 4.9"
 
+group :test do
+  gem "simplecov", require: false
+  gem "simplecov-lcov", require: false
+end
+
 group :development, :test do
   gem "rspec-rails", "~> 8.0.0"
 end
