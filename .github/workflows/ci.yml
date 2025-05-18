@@ -72,6 +72,11 @@ jobs:
       #     - 6379:6379
       #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
+    env:
+      POSTGRES_USER: beatstore
+      POSTGRES_PASSWORD: beatstore
+      DATABASE_URL: postgres://beatstore:beatstore@localhost:5432/beatstore_test
+
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config google-chrome-stable
