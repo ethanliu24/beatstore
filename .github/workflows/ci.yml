@@ -60,8 +60,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: beatstore
+          POSTGRES_PASSWORD: beatstore
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -85,10 +85,18 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Set up database
+        run: |
+          sudo apt-get install -y postgresql-client
+          psql -h 127.0.0.1 -U beatstore -c "CREATE DATABASE beatstore_test;"
+          bin/rails db:prepare
+        env:
+          PGPASSWORD: beatstore
+
       - name: Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          DATABASE_URL: postgres://beatstore:beatstore@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
         run: bundle exec rspec
 

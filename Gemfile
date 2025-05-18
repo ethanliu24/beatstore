@@ -68,6 +68,10 @@ gem "tailwindcss-rails", "~> 4.2"
 
 gem "devise", "~> 4.9"
 
+group :development do
+  gem "letter_opener"
+end
+
 group :test do
   gem "simplecov", require: false
   gem "simplecov-lcov", require: false
@@ -75,4 +79,7 @@ end
 
 group :development, :test do
   gem "rspec-rails", "~> 8.0.0"
+  gem "factory_bot_rails"
+  gem "shoulda-matchers"
+  gem "rails-controller-testing"
 end

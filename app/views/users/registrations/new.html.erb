@@ -9,10 +9,13 @@
   </div>
 
   <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autofocus: true, autocomplete: "username" %>
+  </div>
+
+  <div class="field">
     <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
+    <div>Password must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 numeric and 1 special. (TODO list it out instead)</div>
     <%= f.password_field :password, autocomplete: "new-password" %>
   </div>
 
