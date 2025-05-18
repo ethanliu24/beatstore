@@ -20,6 +20,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: beatstore
   password: beatstore
+  host: 127.0.0.1
 
 
 development:
