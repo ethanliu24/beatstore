@@ -79,6 +79,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up database
+        run: |
+          bin/rails db:create RAILS_ENV=test
+          bin/rails db:schema:load RAILS_ENV=test
+
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
