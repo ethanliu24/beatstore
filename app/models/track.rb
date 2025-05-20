@@ -1,11 +1,18 @@
 class Track < ApplicationRecord
   # before_validation :adjust_visibility
 
+  # === Constants ===
+  VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
+
   # === Validations ===
   validates :title, presence: true
   validates :hearts, :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :is_public, inclusion: { in: [ true, false ] }
+  validates :key, format: {
+    with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/i,
+    message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
+  }, allow_blank: true
 
   # def adjust_visibility
   #   # mark track private if not all links are available
