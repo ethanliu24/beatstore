@@ -3,7 +3,7 @@ class CreateTracks < ActiveRecord::Migration[8.0]
     create_table :tracks do |t|
       t.string :title, null: false
       t.string :key
-      t.string :bpm
+      t.integer :bpm
       t.integer :hearts, default: 0, null: false
       t.integer :plays, default: 0, null: false
       t.boolean :is_public, default: true, null: false
