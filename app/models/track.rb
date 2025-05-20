@@ -19,4 +19,8 @@ class Track < ApplicationRecord
   #   required_files = [ tagged_mp3, untagged_mp3, untagged_wav, track_stems, project ]
   #   self.is_public = !required_files.all?(&:blank?)
   # end
+
+  def is_public?
+    is_public
+  end
 end
