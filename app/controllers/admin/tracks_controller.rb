@@ -19,10 +19,8 @@ module Admin
       respond_to do |format|
         if @track.save
           format.html { redirect_to @track, notice: "Track was successfully created." }
-          format.json { render :show, status: :created, location: @track }
         else
           format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @track.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -32,10 +30,8 @@ module Admin
       respond_to do |format|
         if @track.update(track_params)
           format.html { redirect_to @track, notice: "Track was successfully updated." }
-          format.json { render :show, status: :ok, location: @track }
         else
           format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @track.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -46,7 +42,6 @@ module Admin
 
       respond_to do |format|
         format.html { redirect_to tracks_path, status: :see_other, notice: "Track was successfully destroyed." }
-        format.json { head :no_content }
       end
     end
 
