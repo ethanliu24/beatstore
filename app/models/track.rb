@@ -10,7 +10,7 @@ class Track < ApplicationRecord
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :is_public, inclusion: { in: [ true, false ] }
   validates :key, format: {
-    with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/i,
+    with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
     message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
   }, allow_blank: true
 
