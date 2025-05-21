@@ -52,8 +52,6 @@ module Admin
         :title,
         :key,
         :bpm,
-        :hearts,
-        :plays,
         :is_public,
         :tagged_mp3,
         :untagged_mp3,
