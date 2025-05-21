@@ -1,15 +1,25 @@
-<%= form_with(model: track, class: "contents") do |form| %>
-  <% if track.errors.any? %>
+<%= form_with(
+      model: @track,
+      url: @track.persisted? ? admin_track_path(@track) : admin_tracks_path,
+      method: @track.persisted? ? :patch : :post,
+      class: "contents"
+    ) do |form| %>
+  <% if @track.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(track.errors.count, "error") %> prohibited this track from being saved:</h2>
+      <h2><%= pluralize(@track.errors.count, "error") %> prohibited this track from being saved:</h2>
 
       <ul class="list-disc ml-6">
-        <% track.errors.each do |error| %>
+        <% @track.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
+
+  <div class="field">
+    <%= form.label :title %><br />
+    <%= form.text_field :title, autofocus: true %>
+  </div>
 
   <div class="inline">
     <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
