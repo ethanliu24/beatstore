@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_18_054928) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_20_161241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "tracks", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "key"
+    t.integer "bpm"
+    t.integer "hearts", default: 0, null: false
+    t.integer "plays", default: 0, null: false
+    t.boolean "is_public", default: true, null: false
+    t.string "tagged_mp3"
+    t.string "untagged_mp3"
+    t.string "untagged_wav"
+    t.string "track_stems"
+    t.string "project"
+    t.string "cover_photo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
