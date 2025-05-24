@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: #ffffff;
+  --color-bg-secondary: #f4f4f4;
+  --color-primary-txt: #121212;
+  --color-secondary-txt: #888888;
+}
+
+@layer {
+  .avatar {
+    @apply rounded-full;
+  }
+
+  .nav-dropdown {
+    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-gray-200 rounded-full cursor-pointer;
+  }
+}
