@@ -36,6 +36,12 @@ ALTER ROLE beatstore CREATEDB;
 rails db:setup  # set up dev and test databases for rails
 ```
 
+### Tailwind
+After `bundle install`, run this enable tailwind watch:
+```
+./bin/dev
+```
+
 Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
 
