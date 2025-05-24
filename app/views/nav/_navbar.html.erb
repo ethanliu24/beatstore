@@ -17,15 +17,32 @@
     <li>
       <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
     </li>
-    <li class="nav-dropdown -mr-6">
+    <li
+      id="cart-dropdown-btn" class="nav-dropdown -mr-6"
+      data-dropdown-toggle="cart-dropdown" data-dropdown-placement="bottom-end"
+    >
       <%# TODO add actual amount in cart %>
       <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
       $0.00
       <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+
+      <!-- Cart Dropdown -->
+      <div
+        id="cart-dropdown"
+        class="
+          absolute top-full rounded-lg shadow-sm hidden w-auto select-none
+          text-primary-txt bg-background divide-y divide-gray-100
+        "
+      >
+        <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+          <%# Set a max width for each cart item %>
+          <div><%= t("label.your_cart") %></div>
+        </div>
+      </div>
     </li>
     <% if current_user %>
       <li
-        class="nav-dropdown" type="button"
+        id="user-dropdown-btn" class="nav-dropdown" type="button"
         data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-start"
       >
         <% unless current_user.profile_picture.blank? %>
@@ -50,7 +67,7 @@
             <div><%= current_user.username %></div>
             <div><%= current_user.email %></div>
           </div>
-          <ul class="py-2 text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+          <ul class="py-2" aria-labelledby="cart-dropdown-btn">
             <li class="dropdown-item">
               <%= icon "settings", class: "w-4 h-4" %>
               <a href=""><%= t("label.account_settings") %></a>
