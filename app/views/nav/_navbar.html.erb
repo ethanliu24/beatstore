@@ -6,7 +6,7 @@
   "
 >
   <div class="text-amber-300"><a href="<%= root_path %>">Temporary logo</a></div>
-  <ul class="flex items-center gap-10 text-xs">
+  <ul class="flex items-center gap-4 text-xs">
     <li>
       <a href="<%= tracks_path %>"><%= t("label.tracks") %></a>
     </li>
@@ -17,8 +17,14 @@
     <li>
       <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
     </li>
+    <li data-controller="dark-mode">
+      <span
+        data-dark-mode-target="icon" data-action="click->dark-mode#toggle"
+        class="w-full h-full rounded-full cursor-pointer hover:bg-secondary-bg">
+      </span>
+    </li>
     <li
-      id="cart-dropdown-btn" class="nav-dropdown -mr-6"
+      id="cart-dropdown-btn" class="nav-dropdown"
       data-dropdown-toggle="cart-dropdown" data-dropdown-placement="bottom-end"
     >
       <%# TODO add actual amount in cart %>
@@ -52,7 +58,7 @@
             class="avatar w-6 h-6"
           >
         <% else %>
-          <div class="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+          <div class="relative w-6 h-6 overflow-hidden bg-secondary-bg rounded-full">
             <svg class="absolute w-6 h-6 text-gray-400 translate-y-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
             </svg>
