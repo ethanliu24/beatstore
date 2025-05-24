@@ -1,0 +1,10 @@
+en:
+  tracks: "Tracks"
+  playlists: "Playlists"
+  contact: "Contact"
+  auth:
+    sign_in: "Sign in"
+    sign_up: "Sign up"
+    log_in: "Log in"
+    log_out: "Log out"
+  
