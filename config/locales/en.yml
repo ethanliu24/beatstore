@@ -1,11 +1,13 @@
 en:
-  user:
-    account_settings: "AAA"
-  tracks: "Tracks"
-  playlists: "Playlists"
-  contact: "Contact"
-  auth:
-    sign_in: "Sign in"
-    sign_up: "Sign up"
-    log_in: "Log in"
-    log_out: "Log out"
+  label:
+    sign_in: "Sign In"
+    sign_up: "Sign In"
+    sign_out: "Sign Out"
+    log_in: "Log In"
+    log_out: "Log Out"
+    account_settings: "Account Settings"
+    orders: "Orders"
+    cart: "Cart"
+    tracks: "Tracks"
+    playlists: "Playlists"
+    contact: "Contact"
