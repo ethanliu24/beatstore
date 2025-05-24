@@ -1,4 +1,6 @@
 en:
+  user:
+    account_settings: "AAA"
   tracks: "Tracks"
   playlists: "Playlists"
   contact: "Contact"
@@ -7,4 +9,3 @@ en:
     sign_up: "Sign up"
     log_in: "Log in"
     log_out: "Log out"
-  
