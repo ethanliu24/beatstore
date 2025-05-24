@@ -46,7 +46,7 @@ Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
 
 ### Tabler Icons
-Icons are not committed to the repo due to the large amount of it, so newly cloned projects will need to install them.
+Icons are not committed to the repo due to the large amount of it, so newly cloned projects will need to install them. Icons are from [Tabler](https://tabler.io/icons).
 ```
 $ rails generate rails_icons:install --libraries=tabler
 ```
