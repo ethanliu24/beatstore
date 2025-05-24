@@ -48,10 +48,44 @@ RSpec.configure do |config|
     Rails.root.join('spec/fixtures')
   ]
 
+  config.include Warden::Test::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FactoryBot::Syntax::Methods
+
+  # sign in as admin for any actions that requires admin access
+  config.before(:each, type: :request, admin: true) do
+    @admin = User.find_or_initialize_by(email: "admin@example.com") do |user|
+      user.email = "admin@example.com"
+      user.password = "Password1!"
+      user.username = "admin"
+      user.role = "admin"
+    end
+
+    @admin.skip_confirmation! if @admin.respond_to?(:skip_confirmation!)
+    @admin.confirmed_at ||= Time.current
+    @admin.save! if @admin.changed?
+
+    sign_in @admin, scope: :user
+  end
+
+  # sign in as a normal user to test access permissions
+  config.before(:each, type: :request, authorization_test: true) do
+    sign_out @admin
+    user = User.find_or_initialize_by(email: "customer@example.com") do |user|
+      user.email = "customer@exmaple.com"
+      user.password = "Password1!"
+      user.username = "customer"
+      user.role = "customer"
+    end
+
+    user.skip_confirmation! if user.respond_to?(:skip_confirmation!)
+    user.confirmed_at ||= Time.current
+    user.save! if user.changed?
+
+    sign_in user, scope: :user
+  end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

@@ -13,4 +13,10 @@ Rails.application.routes.draw do
   root "pages#home"
 
   devise_for :users, controllers: { registrations: "users/registrations" }
+
+  resources :tracks, only: [ :index, :show ]
+
+  namespace :admin do
+    resources :tracks, except: [ :index, :show ]
+  end
 end
