@@ -19,6 +19,12 @@ Things to cover:
 
 ## Installation
 
+### Gems
+Install all the gems with bundle:
+```
+$ bundle install
+```
+
 ### PostgreSQL
 First install Postgresql if haven't yet and create a super user.
 
@@ -38,6 +44,12 @@ rails db:setup  # set up dev and test databases for rails
 
 Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
+
+### Tabler Icons
+Icons are not committed to the repo due to the large amount of it, so newly cloned projects will need to install them.
+```
+$ rails generate rails_icons:install --libraries=tabler
+```
 
 
 ## Running

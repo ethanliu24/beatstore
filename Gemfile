@@ -83,3 +83,5 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "rails-controller-testing"
 end
+
+gem "rails_icons", "~> 1.3"
