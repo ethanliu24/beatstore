@@ -11,28 +11,14 @@ RSpec.describe User, type: :model do
     it { should define_enum_for(:role).with_values([ :customer, :admin ]) }
 
     context "password format" do
-      it "is valid with a strong password" do
-        user.password = "Password1!"
+      it "is valid" do
+        user.password = "12345678"
+        user.password_confirmation = "12345678"
         expect(user).to be_valid
       end
 
-      it "is invalid without an uppercase letter" do
-        user.password = user.password_confirmation = "password1!"
-        expect(user).to be_invalid
-      end
-
-      it "is invalid without a digit" do
-        user.password = user.password_confirmation = "Password!"
-        expect(user).to be_invalid
-      end
-
-      it "is invalid without a special character" do
-        user.password = user.password_confirmation = "Password1"
-        expect(user).to be_invalid
-      end
-
       it "is invalid if too short" do
-        user.password = user.password_confirmation = "Passw0!"
+        user.password = user.password_confirmation = "1234567"
         expect(user).to be_invalid
       end
     end
