@@ -4,24 +4,22 @@
   <h2 class="font-bold text-center"><%= t("label.sign_up") %></h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
-
-    <%= render "users/shared/input", form: f,
+    <%= render "users/shared/input", form: f, resource: resource,
       label: t("label.email"), field: :email, field_type: :email,
       options: { autofocus: true, autocomplete: "email" }
     %>
 
-    <%= render "users/shared/input", form: f,
+    <%= render "users/shared/input", form: f, resource: resource,
       label: t("label.username"), field: :username, field_type: :text,
       options: { autofocus: true, autocomplete: "username" }
     %>
 
-    <%= render "users/shared/input", form: f,
+    <%= render "users/shared/input", form: f, resource: resource,
       label: t("label.password"), field: :password, field_type: :password,
       options: { autocomplete: "new-password" }
     %>
 
-    <%= render "users/shared/input", form: f,
+    <%= render "users/shared/input", form: f, resource: resource,
       label: t("label.password_confirmation"), field: :password_confirmation, field_type: :password,
       options: { autocomplete: "new-password" }
     %>
