@@ -8,10 +8,17 @@ export default class extends Controller {
   }
 
   toggle() {
+    /**
+     * Local storage for dynamic runtime theme toggles, cookie to avoid flashing.
+     * A better method is to use cookie only and turbo stream and refetch the page on toggle.
+     * If done that way then this controller is not needed anymore.
+     */
     if (localStorage.beatstore_theme === "dark") {
       localStorage.beatstore_theme = "light";
+      document.cookie = "beatstore_theme=light;path=/";
     } else {
       localStorage.beatstore_theme = "dark";
+      document.cookie = "beatstore_theme=dark;path=/";
     }
     this.update(); // Update the theme and icon
   }
