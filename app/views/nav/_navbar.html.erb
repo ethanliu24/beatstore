@@ -1,0 +1,107 @@
+<nav
+  class="
+    flex justify-between items-center flex-nowrap w-full px-6 py-2
+  bg-background/95 backdrop-blur-md sticky top-0 left-0
+    shadow-xs dark:shadow-secondary-bg
+  "
+>
+  <div class="text-amber-300"><a href="<%= root_path %>">Temporary logo</a></div>
+  <ul class="flex items-center gap-4 text-xs">
+    <li>
+      <a href="<%= tracks_path %>"><%= t("label.tracks") %></a>
+    </li>
+    <%# TODO add path to these patges when available %>
+    <li>
+      <a href="<%= tracks_path %>"><%= t("label.playlists") %></a>
+    </li>
+    <li>
+      <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
+    </li>
+    <li data-controller="dark-mode">
+      <span
+        data-dark-mode-target="icon" data-action="click->dark-mode#toggle"
+        class="w-full h-full rounded-full cursor-pointer hover:bg-secondary-bg">
+      </span>
+    </li>
+    <li
+      id="cart-dropdown-btn" class="nav-dropdown"
+      data-dropdown-toggle="cart-dropdown" data-dropdown-placement="bottom-end"
+    >
+      <%# TODO add actual amount in cart %>
+      <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
+      $0.00
+      <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+
+      <!-- Cart Dropdown -->
+      <div
+        id="cart-dropdown"
+        class="
+          dropdown absolute top-full rounded-lg shadow-sm hidden w-auto select-none
+          text-primary-txt bg-background divide-y
+        "
+      >
+        <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+          <%# Set a max width for each cart item or on cart-dropdown (remove w-auto) %>
+          <div><%= t("label.your_cart") %></div>
+        </div>
+      </div>
+    </li>
+    <% if current_user %>
+      <li
+        id="user-dropdown-btn" class="nav-dropdown" type="button"
+        data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-start"
+      >
+        <% unless current_user.profile_picture.blank? %>
+          <img
+            src="<%= current_user.profile_picture %>%"
+            alt="avatar"
+            class="avatar w-6 h-6"
+          >
+        <% else %>
+          <div class="relative w-6 h-6 overflow-hidden bg-secondary-bg rounded-full">
+            <svg class="absolute w-6 h-6 text-gray-400 translate-y-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+        <% end %>
+
+        <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+
+        <!-- User dropdown -->
+        <div id="user-dropdown" class="dropdown hidden w-44">
+          <div class="px-4 py-3 text-primary-txt truncate text-[0.6rem]">
+            <div><%= current_user.username %></div>
+            <div><%= current_user.email %></div>
+          </div>
+          <ul class="py-2" aria-labelledby="cart-dropdown-btn">
+            <li class="dropdown-item">
+              <%= icon "settings", class: "w-4 h-4" %>
+              <a href=""><%= t("label.account_settings") %></a>
+            </li>
+            <li class="dropdown-item">
+              <%= icon "currency-dollar", class: "w-4 h-4" %>
+              <a href=""><%= t("label.orders") %></a>
+            </li>
+            <li class="dropdown-item">
+              <%= icon "shopping-bag", class: "w-4 h-4" %>
+              <a href=""><%= t("label.cart") %></a>
+            </li>
+          </ul>
+          <div class="py-1">
+            <a href="<%= destroy_user_session_path %>" data-turbo-method="delete" class="dropdown-item text-error">
+              <%= icon "logout", class: "w-4 h-4 text-error" %>
+              <%= t("label.sign_out") %>
+            </a>
+          </div>
+        </div>
+      </li>
+    <% else %>
+      <li class="text-secondary-txt font-light text-nowrap">
+        <a href="<%= new_user_session_path %>" class="hover:text-primary-txt"><%= t(".auth.sign_in") %></a>
+        <span class="h-full border-l-1 mx-2"></span>
+        <a href="<%= new_user_registration_path %>" class="hover:text-primary-txt"><%= t(".auth.sign_up") %></a>
+      </li>
+    <% end %>
+  </ul>
+
+</nav>

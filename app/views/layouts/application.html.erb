@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html class="<%= get_theme %>">
   <head>
     <title><%= content_for(:title) || "Beatstore" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -22,7 +23,9 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-background text-primary-txt">
+    <%= render "nav/navbar" %>
+
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>

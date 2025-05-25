@@ -19,6 +19,12 @@ Things to cover:
 
 ## Installation
 
+### Gems
+Install all the gems with bundle:
+```
+$ bundle install
+```
+
 ### PostgreSQL
 First install Postgresql if haven't yet and create a super user.
 
@@ -38,6 +44,21 @@ rails db:setup  # set up dev and test databases for rails
 
 Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
+
+### Tabler Icons
+Icons are not committed to the repo due to the large amount of it, so newly cloned projects will need to install them. Icons are from [Tabler](https://tabler.io/icons).
+```
+$ rails generate rails_icons:install --libraries=tabler
+```
+
+
+## Running
+Run this to start the server:
+```
+$ ./bin/dev
+```
+
+The reason we use this instead of `rails s` is so that Tailwind can watch for changes. If not working on views, either command works.
 
 
 ## Testing
