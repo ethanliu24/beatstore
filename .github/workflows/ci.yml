@@ -93,6 +93,9 @@ jobs:
         env:
           PGPASSWORD: beatstore
 
+      - name: Install icons
+        run: bin/rails generate rails_icons:install --libraries=tabler
+
       - name: Run tests
         env:
           RAILS_ENV: test
