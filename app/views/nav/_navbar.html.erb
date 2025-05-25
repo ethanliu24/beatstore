@@ -17,6 +17,12 @@
     <li>
       <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
     </li>
+    <% if current_user && current_user.admin? %>
+      <li>
+        <%# TODO replace with path variable %>
+        <a href="<%= "/admin" %>"><%= icon "lock", class: "w-4 h-4" %></a>
+      </li>
+    <% end %>
     <li data-controller="dark-mode">
       <span
         data-dark-mode-target="icon" data-action="click->dark-mode#toggle"
