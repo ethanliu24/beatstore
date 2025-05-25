@@ -1,0 +1,6 @@
+en:
+  activerecord:
+    errors:
+      messages:
+        blank: "is required"
+        taken: "has already been taken"
