@@ -1,0 +1,9 @@
+<div class="field text-input w-full mb-2">
+  <%= form.label label, class: "text-[0.7rem]" %><br />
+  <%= form.send("#{field_type}_field", field, options.merge(
+    class: "
+      w-full border-1 rounded border-secondary-txt/30 pl-1
+      focus:outline-none focus:ring-1 focus:ring-accent
+    "
+  ))%>
+</div>

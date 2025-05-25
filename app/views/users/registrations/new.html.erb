@@ -1,32 +1,36 @@
-<h2>Sign up</h2>
+<% content_for :title, t("label.sign_up") %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<div class="auth-form">
+  <h2 class="font-bold text-center"><%= t("label.sign_up") %></h2>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :username %><br />
-    <%= f.text_field :username, autofocus: true, autocomplete: "username" %>
-  </div>
+    <%= render "users/shared/input", form: f,
+      label: t("label.email"), field: :email, field_type: :email,
+      options: { autofocus: true, autocomplete: "email" }
+    %>
 
-  <div class="field">
-    <%= f.label :password %>
-    <div>Password must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 numeric and 1 special. (TODO list it out instead)</div>
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
+    <%= render "users/shared/input", form: f,
+      label: t("label.username"), field: :email, field_type: :email,
+      options: { autofocus: true, autocomplete: "username" }
+    %>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+    <%= render "users/shared/input", form: f,
+      label: t("label.password"), field: :email, field_type: :email,
+      options: { autocomplete: "new-password" }
+    %>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
+    <%= render "users/shared/input", form: f,
+      label: t("label.password_confirmation"), field: :email, field_type: :email,
+      options: { autocomplete: "new-password" }
+    %>
 
-<%= render "devise/shared/links" %>
+    <div class="actions">
+      <%= f.submit "Sign up" %>
+    </div>
+  <% end %>
+
+  <%= render "devise/shared/links" %>
+</div>
+
