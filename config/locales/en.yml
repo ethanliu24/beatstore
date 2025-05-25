@@ -20,4 +20,9 @@ en:
   authentication:
     agree_tos: "By signing up, you agree with the "
     already_signed_up: "Already signed up?"
+    already_signed_in: "Already signed in?"
     no_confirmation_instructions: "Didn't recieve confirmation instructions?"
+    forgot_password: "Forgot password?"
+    email_exists: "already exists"  # e.g. Email alreay exists
+    email_does_not_exist: "does not exist"  # e.g. Email does not exist
+    incorrect_password: "incorrect"  # e.g. Password incorrect

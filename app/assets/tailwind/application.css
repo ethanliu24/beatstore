@@ -59,6 +59,6 @@
   }
 
   .external-link {
-    @apply text-[0.6rem] italic underline text-accent-text;
+    @apply text-[0.6rem] italic underline font-light text-accent-text;
   }
 }
