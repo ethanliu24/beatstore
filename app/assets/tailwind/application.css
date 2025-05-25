@@ -10,6 +10,8 @@
 
   --color-accent: #9244ff;
   --color-accent-light: #dcd6fb;
+  --color-accent-dim: #873fed;
+  --color-accent-text: #aa6eff;
   --color-error: #ff0000;
 }
 
@@ -23,6 +25,14 @@
 }
 
 @layer {
+  .field-input {
+    @apply w-full border-1 rounded border-secondary-txt/30 pl-1 focus:outline-none focus:ring-1 focus:ring-accent;
+  }
+
+  .button {
+    @apply flex justify-around items-center bg-accent hover:bg-accent-dim rounded cursor-pointer text-white;
+  }
+
   .avatar {
     @apply rounded-full;
   }
@@ -46,5 +56,9 @@
     @apply
       flex flex-col justify-center items-stretch rounded min-w-80 px-6 py-4
       shadow-[0px_0px_8px_2px_rgba(0,_0,_0,_0.1)] dark:bg-secondary-bg;
+  }
+
+  .external-link {
+    @apply text-[0.6rem] italic underline text-accent-text;
   }
 }

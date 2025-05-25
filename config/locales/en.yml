@@ -9,6 +9,7 @@ en:
     username: "Username"
     password: "Password"
     password_confirmation: "Password Confirmation"
+    terms_of_service: "Terms of Service"
     account_settings: "Account Settings"
     orders: "Orders"
     cart: "Cart"
@@ -16,3 +17,7 @@ en:
     tracks: "Tracks"
     playlists: "Playlists"
     contact: "Contact"
+  authentication:
+    agree_tos: "By signing up, you agree with the "
+    already_signed_up: "Already signed up?"
+    no_confirmation_instructions: "Didn't recieve confirmation instructions?"
