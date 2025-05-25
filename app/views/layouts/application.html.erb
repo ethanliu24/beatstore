@@ -26,8 +26,6 @@
   <body class="bg-background text-primary-txt">
     <%= render "nav/navbar" %>
 
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+    <%= render current_page %>
   </body>
 </html>
