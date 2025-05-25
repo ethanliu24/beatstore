@@ -2,7 +2,7 @@
   class="
     flex justify-between items-center flex-nowrap w-full px-6 py-2
   bg-background/95 backdrop-blur-md sticky top-0 left-0
-    shadow-xs
+    shadow-xs dark:shadow-secondary-bg
   "
 >
   <div class="text-amber-300"><a href="<%= root_path %>">Temporary logo</a></div>
@@ -36,12 +36,12 @@
       <div
         id="cart-dropdown"
         class="
-          absolute top-full rounded-lg shadow-sm hidden w-auto select-none
-          text-primary-txt bg-background divide-y divide-gray-100
+          dropdown absolute top-full rounded-lg shadow-sm hidden w-auto select-none
+          text-primary-txt bg-background divide-y
         "
       >
         <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
-          <%# Set a max width for each cart item %>
+          <%# Set a max width for each cart item or on cart-dropdown (remove w-auto) %>
           <div><%= t("label.your_cart") %></div>
         </div>
       </div>
@@ -68,7 +68,7 @@
         <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
 
         <!-- User dropdown -->
-        <div id="user-dropdown" class="dropdown hidden">
+        <div id="user-dropdown" class="dropdown hidden w-44">
           <div class="px-4 py-3 text-primary-txt truncate text-[0.6rem]">
             <div><%= current_user.username %></div>
             <div><%= current_user.email %></div>
