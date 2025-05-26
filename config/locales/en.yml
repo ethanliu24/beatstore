@@ -5,6 +5,8 @@ en:
     sign_out: "Sign Out"
     log_in: "Log In"
     log_out: "Log Out"
+    resend_instructions: "Resend Instructions"
+    resend: "Resend"
     email: "Email"
     username: "Username"
     password: "Password"
@@ -26,3 +28,6 @@ en:
     email_exists: "already exists"  # e.g. Email alreay exists
     email_does_not_exist: "does not exist"  # e.g. Email does not exist
     incorrect_password: "incorrect"  # e.g. Password incorrect
+    back_to_sign_in: "Back to sign in"
+    back_to_log_in: "Back to log in"
+    back_to_sign_up: "Back to sign up"
