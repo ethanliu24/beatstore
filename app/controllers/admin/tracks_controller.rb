@@ -1,7 +1,6 @@
 module Admin
-  class TracksController < ApplicationController
+  class TracksController < Admin::BaseController
     before_action :set_track, except: [ :new, :create ]
-    before_action :check_admin
 
     def new
       @track = Track.new
@@ -60,10 +59,6 @@ module Admin
         :project,
         :cover_photo
       )
-    end
-
-    def check_admin
-      redirect_to root_path, status: :forbidden, alert: "You are not authorized to access this page." unless current_user&.admin?
     end
   end
 end

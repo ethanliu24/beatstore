@@ -128,35 +128,35 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /new" do
       get new_admin_track_url
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(root_path)
     end
 
     it "only allows admin at GET /edit" do
       track = Track.create! valid_attributes
 
       get edit_admin_track_path(track)
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(root_path)
     end
 
     it "only allows admin at POST /create" do
       post admin_tracks_path, params: { track: valid_attributes }
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(root_path)
     end
 
     it "only allows admin at PATCH or PUT /update" do
       track = Track.create! valid_attributes
 
       patch admin_track_url(track), params: { track: valid_attributes }
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(root_path)
       put admin_track_url(track), params: { track: valid_attributes }
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(root_path)
     end
 
     it "only allows admin at DELETE /destroy" do
       track = Track.create! valid_attributes
 
       delete admin_track_url(track)
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(root_path)
     end
   end
 end

@@ -1,14 +1,21 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  before_action :store_previous_location, if: :storable_location?
 
-  def get_theme
-    if cookies[:beatstore_theme].blank?
-      "dark"
-    else
-      cookies[:beatstore_theme] == "dark" ? "dark" : ""
-    end
+  def after_sign_in_path_for(resource)
+    stored_location_for(resource) || root_path
   end
 
-  helper_method :get_theme
+  private
+
+  def storable_location?
+    request.get? &&
+    is_navigational_format? &&
+    !devise_controller? &&
+    !request.xhr? &&
+    !user_signed_in?
+  end
+
+  def store_previous_location
+    store_location_for(:user, request.fullpath)
+  end
 end

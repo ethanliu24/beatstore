@@ -8,19 +8,31 @@
   --color-primary-txt: #121212;
   --color-secondary-txt: #888888;
 
+  --color-accent: #9244ff;
+  --color-accent-light: #dcd6fb;
+  --color-accent-dim: #873fed;
+  --color-accent-text: #aa6eff;
   --color-error: #ff0000;
 }
 
 @layer {
   .dark {
-    --color-background: #121212;
-    --color-secondary-bg: #333333;
+    --color-background: #000000;
+    --color-secondary-bg: #1a1a1a;
     --color-primary-txt: #f4f4f4;
-    --color-secondary-txt: #555555;
+    --color-secondary-txt: #888888;
   }
 }
 
 @layer {
+  .field-input {
+    @apply w-full border-1 rounded border-secondary-txt/30 pl-1 focus:outline-none focus:ring-1 focus:ring-accent;
+  }
+
+  .button {
+    @apply flex justify-around items-center bg-accent hover:bg-accent-dim rounded cursor-pointer text-white;
+  }
+
   .avatar {
     @apply rounded-full;
   }
@@ -28,7 +40,7 @@
   .dropdown {
     @apply
       z-10 rounded-lg shadow-sm text-xs text-primary-txt bg-background divide-y
-      divide-gray-100 dark:divide-gray-800 dark:border-1 dark:border-secondary-bg;
+      divide-gray-100 dark:divide-gray-800 dark:bg-secondary-bg;
   }
 
   .dropdown-item {
@@ -37,5 +49,16 @@
 
   .nav-dropdown {
     @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-secondary-bg rounded-full cursor-pointer;
+  }
+
+  /* Authentication */
+  .auth-form {
+    @apply
+      flex flex-col justify-center items-stretch rounded min-w-80 px-6 py-4
+      shadow-[0px_0px_8px_2px_rgba(0,_0,_0,_0.1)] dark:bg-secondary-bg;
+  }
+
+  .external-link {
+    @apply text-[0.6rem] italic underline font-light text-accent-text;
   }
 }

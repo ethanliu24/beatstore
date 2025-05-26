@@ -1,0 +1,9 @@
+<div class="field text-input w-full mb-2">
+  <%= form.label label, class: "text-[0.7rem]" %><br />
+  <%= form.send("#{field_type}_field", field, options.merge(class: "field-input")) %>
+  <% if resource.errors.full_messages_for(field).any? %>
+    <% resource.errors.full_messages_for(field).each do |error| %>
+      <p class="text-error text-[0.6rem] mt-1"><%= error %></p>
+    <% end %>
+  <% end %>
+</div>

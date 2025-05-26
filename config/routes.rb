@@ -12,7 +12,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  devise_for :users, controllers: { registrations: "users/registrations" }
+  devise_for :users, path: "", controllers: {
+    registrations: "users/registrations",
+    sessions: "users/sessions",
+    confirmations: "users/confirmations",
+    passwords: "users/passwords"
+  }
 
   resources :tracks, only: [ :index, :show ]
 

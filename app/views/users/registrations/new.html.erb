@@ -1,32 +1,47 @@
-<h2>Sign up</h2>
+<% title(t("label.sign_up")) %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<div class="auth-form">
+  <h2 class="font-bold text-center"><%= t("label.sign_up") %></h2>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: t("label.email"), field: :email, field_type: :email,
+      options: { autofocus: true, autocomplete: "email" }
+    %>
 
-  <div class="field">
-    <%= f.label :username %><br />
-    <%= f.text_field :username, autofocus: true, autocomplete: "username" %>
-  </div>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: t("label.username"), field: :username, field_type: :text,
+      options: { autofocus: true, autocomplete: "username" }
+    %>
 
-  <div class="field">
-    <%= f.label :password %>
-    <div>Password must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 numeric and 1 special. (TODO list it out instead)</div>
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: t("label.password"), field: :password, field_type: :password,
+      options: { autocomplete: "new-password" }
+    %>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: t("label.password_confirmation"), field: :password_confirmation, field_type: :password,
+      options: { autocomplete: "new-password" }
+    %>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
+    <%# TODO link to tos page %>
+    <p class="text-[0.55rem] mt-12 mb-1 font-light text-center">
+      <%= t("authentication.agree_tos") %>
+      <a href="" class="external-link" target="_blank" rel="noopener noreferrer"><%= t("label.terms_of_service") %></a>
+    </p>
 
-<%= render "devise/shared/links" %>
+    <div class="actions button py-0.5">
+      <%= f.submit t("label.sign_up"), class: "w-full cursor-pointer" %>
+    </div>
+
+    <a href=<%= new_confirmation_path(resource_name) %> class="external-link" target="_blank" rel="noopener noreferrer">
+      <%= t("authentication.no_confirmation_instructions") %>
+    </a>
+  <% end %>
+
+  <p class="text-[0.6rem] mt-12 mb-1 font-light text-center">
+    <%= t("authentication.already_signed_up") %>
+    <a href=<%= new_session_path(resource_name) %> class="external-link"><%= t("label.sign_in") %></a>
+  </p>
+</div>
+
