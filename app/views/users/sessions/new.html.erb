@@ -21,7 +21,7 @@
           <%= f.label :remember_me %>
         </div>
       <% end %>
-      <a class="external-link"><%= t("authentication.forgot_password") %></a>
+      <a href=<%= new_password_path(resource_name) %> class="external-link"><%= t("authentication.forgot_password") %></a>
     </div>
 
     <div class="actions button py-0.5">

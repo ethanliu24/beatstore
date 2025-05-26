@@ -7,6 +7,8 @@ en:
     log_out: "Log Out"
     resend_instructions: "Resend Instructions"
     resend: "Resend"
+    reset_password: "Reset Password"
+    send: "Send"
     email: "Email"
     username: "Username"
     password: "Password"
