@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_27_032207) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_27_032632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,12 +49,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_27_032207) do
     t.integer "hearts", default: 0, null: false
     t.integer "plays", default: 0, null: false
     t.boolean "is_public", default: true, null: false
-    t.string "tagged_mp3"
-    t.string "untagged_mp3"
-    t.string "untagged_wav"
-    t.string "track_stems"
     t.string "project"
-    t.string "cover_photo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

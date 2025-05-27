@@ -23,12 +23,6 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
         bpm: 140,
         key: "A MINOR",
         is_public: true,
-        tagged_mp3: "",
-        untagged_mp3: "",
-        untagged_wav: "",
-        track_stems: "",
-        project: "",
-        cover_photo: "",
         foo: "bar"
       }
     )
