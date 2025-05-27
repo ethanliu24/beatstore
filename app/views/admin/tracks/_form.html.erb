@@ -1,27 +1,46 @@
-<%= form_with(
+<div class="flex justify-start items-center w-full h-full px-16">
+  <%= form_with(
       model: @track,
       url: @track.persisted? ? admin_track_path(@track) : admin_tracks_path,
       method: @track.persisted? ? :patch : :post,
-      class: "contents"
+      class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/50 w-full h-full"
     ) do |form| %>
-  <% if @track.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(@track.errors.count, "error") %> prohibited this track from being saved:</h2>
+    <% if @track.errors.any? %>
+      <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+        <h2><%= pluralize(@track.errors.count, "error") %> prohibited this track from being saved:</h2>
 
-      <ul class="list-disc ml-6">
-        <% @track.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <ul class="list-disc ml-6">
+          <% @track.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <section class="w-full flex justify-start items-stretch">
+      <div class="w-40 h-40 bg-secondary-bg rounded-2xl flex justify-center items-center">
+        <% if @track.cover_photo.attached? %>
+        <% else %>
+          <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
         <% end %>
-      </ul>
+      </div>
+      <div class="flex flex-col justify-start gap-4 flex-1 ml-8">
+        <div class="field content-input-container">
+          <%= form.label :title %>
+          <%= form.text_field :title, autofocus: true, class: "content-input" %>
+        </div>
+        <%# TODO add description when ready %>
+        <%# <!-- %>
+        <div class="field content-input-container flex-1">
+          <%= form.label :description %>
+          <%= form.text_area :title, autofocus: true, class: "content-input resize-none flex-1" %>
+        </div>
+        <%# --> %>
+      </div>
+    </section>
+
+    <div class="inline">
+      <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :title %><br />
-    <%= form.text_field :title, autofocus: true %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-  </div>
-<% end %>
+</div>
