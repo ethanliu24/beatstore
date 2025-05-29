@@ -1,0 +1,12 @@
+<div class="flex justify-center items-center w-full flex-1">
+  <label
+    for=<%= generate_id(file_for) %>
+    class="
+      flex flex-col justify-center items-center rounded w-full h-full cursor-pointer py-4
+      border-1 dark:border-none border-secondary-txt/30 dark:bg-secondary-bg
+    ">
+    <p><%= t("track.upload_file", file_for: file_for) %></p>
+    <%= form.file_field field, id: generate_id(file_for), class: "hidden",
+      data: { image_target: "upload", action: "change->track-upload#upload" } %>
+  </label>
+</div>

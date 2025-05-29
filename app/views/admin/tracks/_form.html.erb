@@ -50,6 +50,13 @@
         <%# --> %>
       </div>
     </section>
+    <section class="flex justify-between items-center w-full gap-4" data-controller="track-upload">
+      <%= render "track_upload", form: form, field: :tagged_mp3, file_for: t("label.tagged_mp3") %>
+      <%= render "track_upload", form: form, field: :untagged_mp3, file_for: t("label.untagged_mp3") %>
+      <%= render "track_upload", form: form, field: :untagged_wav, file_for: t("label.untagged_wav") %>
+      <%= render "track_upload", form: form, field: :track_stems, file_for: t("label.track_stems") %>
+
+    </section>
 
     <div class="inline">
       <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>

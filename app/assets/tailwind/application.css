@@ -67,7 +67,7 @@
   }
 
   .file-upload-chip {
-    @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/40 text-accent hover:bg-accent/50;
+    @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/30 text-accent hover:bg-accent/50;
   }
 
   /* Authentication */
