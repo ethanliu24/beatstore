@@ -7,6 +7,6 @@
     ">
     <p><%= t("track.upload_file", file_for: file_for) %></p>
     <%= form.file_field field, id: generate_id(file_for), class: "hidden",
-      data: { image_target: "upload", action: "change->track-upload#upload" } %>
+      data: { upload_target: "upload", action: "change->upload#track_upload" } %>
   </label>
 </div>

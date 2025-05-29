@@ -17,14 +17,14 @@
       </div>
     <% end %>
 
-    <section class="w-full flex justify-start items-stretch" data-controller="image">
+    <section class="w-full flex justify-start items-stretch" data-controller="upload">
       <div class="flex flex-col justify-start items-center gap-3">
         <div class="w-40 h-40 bg-secondary-bg rounded-2xl flex justify-center items-center">
-          <%= icon "photo-scan", class: "w-1/4 h-1/4", data: { image_target: "placeholder" } %>
+          <%= icon "photo-scan", class: "w-1/4 h-1/4", data: { upload_target: "imgPlaceholder" } %>
           <img id="cover-photo-preview"
             src="<%= track_image_url %>"
             alt="Cover preview"
-            data-image-target="cover"
+            data-upload-target="imgCover"
             class="object-cover w-full h-full <%= has_img_attached? ? "" : "hidden" %>" />
         </div>
         <div class="flex justify-center items-center w-full">
@@ -33,7 +33,7 @@
             <%= t("label.upload") %>
           </label>
           <%= form.file_field :cover_photo, id: "cover-photo-upload", class: "hidden",
-            data: { image_target: "upload", action: "change->image#onchange" } %>
+            data: { upload_target: "imgUpload", action: "change->upload#image_upload" } %>
         </div>
       </div>
       <div class="flex flex-col justify-start gap-4 flex-1 ml-8">
@@ -42,15 +42,15 @@
           <%= form.text_field :title, autofocus: true, class: "content-input" %>
         </div>
         <%# TODO add description when ready %>
-        <%# <!-- %>
+        <!--
         <div class="field content-input-container flex-1">
           <%= form.label :description %>
           <%= form.text_area :title, autofocus: true, class: "content-input resize-none flex-1" %>
         </div>
-        <%# --> %>
+        -->
       </div>
     </section>
-    <section class="flex justify-between items-center w-full gap-4" data-controller="track-upload">
+    <section class="flex justify-between items-center w-full gap-4" data-controller="upload">
       <%= render "track_upload", form: form, field: :tagged_mp3, file_for: t("label.tagged_mp3") %>
       <%= render "track_upload", form: form, field: :untagged_mp3, file_for: t("label.untagged_mp3") %>
       <%= render "track_upload", form: form, field: :untagged_wav, file_for: t("label.untagged_wav") %>
