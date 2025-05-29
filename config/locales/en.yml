@@ -24,6 +24,7 @@ en:
     playlists: "Playlists"
     contact: "Contact"
     new_track: "New Track"
+    upload: "Upload"
   authentication:
     agree_tos: "By signing up, you agree with the "
     already_signed_up: "Already signed up?"
