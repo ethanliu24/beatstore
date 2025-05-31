@@ -60,11 +60,11 @@
       </div>
     </section>
 
-    <section class="flex justify-between items-center w-full gap-4" data-controller="upload">
-      <%= render "track_upload", form: form, field: :tagged_mp3, file_for: t("label.tagged_mp3") %>
-      <%= render "track_upload", form: form, field: :untagged_mp3, file_for: t("label.untagged_mp3") %>
-      <%= render "track_upload", form: form, field: :untagged_wav, file_for: t("label.untagged_wav") %>
-      <%= render "track_upload", form: form, field: :track_stems, file_for: t("label.track_stems") %>
+    <section class="flex justify-between items-stretch w-full gap-4" data-controller="upload">
+      <%= render "track_upload", form: form, attachment: @track.tagged_mp3, field: :tagged_mp3, file_for: t("label.tagged_mp3") %>
+      <%= render "track_upload", form: form, attachment: @track.untagged_mp3, field: :untagged_mp3, file_for: t("label.untagged_mp3") %>
+      <%= render "track_upload", form: form, attachment: @track.untagged_wav, field: :untagged_wav, file_for: t("label.untagged_wav") %>
+      <%= render "track_upload", form: form, attachment: @track.track_stems, field: :track_stems, file_for: t("label.track_stems") %>
     </section>
 
     <section class="flex flex-col justify-center items-stretch w-full">

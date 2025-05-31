@@ -35,7 +35,7 @@
   }
 
   .content-input-container {
-    @apply flex flex-col gap-1 w-full;
+    @apply flex flex-col gap-1 w-full text-nowrap;
   }
 
   .content-input {
