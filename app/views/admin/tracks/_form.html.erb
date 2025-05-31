@@ -55,7 +55,23 @@
       <%= render "track_upload", form: form, field: :untagged_mp3, file_for: t("label.untagged_mp3") %>
       <%= render "track_upload", form: form, field: :untagged_wav, file_for: t("label.untagged_wav") %>
       <%= render "track_upload", form: form, field: :track_stems, file_for: t("label.track_stems") %>
+    </section>
 
+    <section class="flex flex-col justify-center items-stretch w-full">
+      <div class="flex justify-between items-stretch gap-6">
+        <div class="field content-input-container">
+          <%= form.label :bpm %>
+          <%= form.number_field :bpm, autofocus: true, class: "content-input", min: 0, step: 1 %>
+        </div>
+        <div class="field content-input-container">
+          <%= form.label :key %>
+          <%= form.select :title, options_for_select(key_options), {}, class: "content-input" %>
+        </div>
+        <div class="field content-input-container">
+          <%= form.label :is_public %>
+          <%= form.select :is_public, options_for_select(is_public_options), {}, class: "content-input" %>
+        </div>
+      </div>
     </section>
 
     <div class="inline">

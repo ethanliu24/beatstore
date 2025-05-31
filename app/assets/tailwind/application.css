@@ -31,7 +31,7 @@
 
   .content-input {
     @apply
-      w-full border-1 rounded px-2 text-sm py-1
+      w-full border-1 rounded px-2 text-sm py-1 shadow-sm
     border-secondary-txt/30 focus:outline-none focus:ring-1 focus:ring-accent
     dark:bg-secondary-bg dark:border-none dark:focus:outline-none dark:focus:ring-0;
   }
