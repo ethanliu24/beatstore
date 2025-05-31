@@ -14,6 +14,13 @@ class Track < ApplicationRecord
     message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
   }, allow_blank: true
 
+  # === Relationships ===
+  has_one_attached :tagged_mp3
+  has_one_attached :untagged_mp3
+  has_one_attached :untagged_wav
+  has_one_attached :track_stems
+  has_one_attached :cover_photo
+
   # def adjust_visibility
   #   # mark track private if not all links are available
   #   required_files = [ tagged_mp3, untagged_mp3, untagged_wav, track_stems, project ]

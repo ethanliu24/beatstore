@@ -23,6 +23,15 @@ en:
     tracks: "Tracks"
     playlists: "Playlists"
     contact: "Contact"
+    new_track: "New Track"
+    upload: "Upload"
+    tagged_mp3: "Tagged MP3"
+    untagged_mp3: "Untagged MP3"
+    untagged_wav: "Untagged WAV"
+    track_stems: "Track Stems"
+    create: "Create"
+    update: "Update"
+
   authentication:
     agree_tos: "By signing up, you agree with the "
     already_signed_up: "Already signed up?"
@@ -35,3 +44,8 @@ en:
     back_to_sign_in: "Back to sign in"
     back_to_log_in: "Back to log in"
     back_to_sign_up: "Back to sign up"
+
+  admin:
+    track:
+      upload_file: "Upload %{file_for}"
+      back_to_tracks: "Back to tracks"

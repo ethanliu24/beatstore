@@ -12,7 +12,8 @@
   --color-accent-light: #dcd6fb;
   --color-accent-dim: #873fed;
   --color-accent-text: #aa6eff;
-  --color-error: #ff0000;
+
+  --color-error: #f44336;
 }
 
 @layer {
@@ -25,8 +26,27 @@
 }
 
 @layer {
-  .field-input {
-    @apply w-full border-1 rounded border-secondary-txt/30 pl-1 focus:outline-none focus:ring-1 focus:ring-accent;
+  .flash {
+    @apply px-3 py-2 font-medium rounded w-full border-1;
+  }
+
+  .flash-error {
+    @apply border-error/20 bg-error/20 text-error;
+  }
+
+  .content-input-container {
+    @apply flex flex-col gap-1 w-full text-nowrap;
+  }
+
+  .content-input {
+    @apply
+      w-full border-1 rounded px-2 text-xs py-2 shadow-sm
+    border-secondary-txt/30 focus:outline-none focus:ring-1 focus:ring-accent
+    dark:bg-secondary-bg dark:border-none dark:focus:outline-none dark:focus:ring-0;
+  }
+
+  .auth-input {
+    @apply w-full border-1 rounded border-secondary-txt/30 px-1 focus:outline-none focus:ring-1 focus:ring-accent;
   }
 
   .button {
@@ -51,6 +71,14 @@
     @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-secondary-bg rounded-full cursor-pointer;
   }
 
+  .chip {
+    @apply rounded-full;
+  }
+
+  .file-upload-chip {
+    @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/30 text-accent hover:bg-accent/50;
+  }
+
   /* Authentication */
   .auth-form {
     @apply
@@ -60,5 +88,14 @@
 
   .external-link {
     @apply text-[0.6rem] italic underline font-light text-accent-text;
+  }
+
+  /* Track */
+  .track-form label {
+    @apply font-bold text-xs;
+  }
+
+  .track-form > section {
+    @apply py-6;
   }
 }
