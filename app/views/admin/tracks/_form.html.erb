@@ -1,5 +1,5 @@
 <div class="flex flex-col justify-start items-start w-full h-full px-16 py-4">
-  <h1 class="font-bold text-4xl mb-3"><%= t("label.#{@track.persisted? ? "update" : "create"}") %></h1>
+  <h1 class="font-bold text-4xl mb-5 text-accent"><%= t("label.#{@track.persisted? ? "update" : "create"}") %></h1>
 
   <a
     href=<%= admin_tracks_path %>
@@ -15,7 +15,7 @@
       class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/30 w-full h-full"
     ) do |form| %>
     <% if @track.errors.any? %>
-      <div id="error_explanation" class="px-3 py-2 font-medium rounded w-full border-1 border-error/20 bg-error/20 text-error">
+      <div id="error_explanation" class="flash flash-error">
         <h2><%= pluralize(@track.errors.count, "error") %> prohibited this track from being saved:</h2>
 
         <ul class="list-disc ml-6">
@@ -29,7 +29,7 @@
     <section class="w-full flex justify-start items-stretch" data-controller="upload">
       <div class="flex flex-col justify-start items-center gap-3">
         <div class="w-40 h-40 bg-secondary-bg rounded-2xl flex justify-center items-center">
-          <%= icon "photo-scan", class: "w-1/4 h-1/4", data: { upload_target: "imgPlaceholder" } %>
+          <%= icon "photo-scan", class: "w-1/4 h-1/4 #{has_img_attached? ? "hidden" : ""}", data: { upload_target: "imgPlaceholder" } %>
           <img id="cover-photo-preview"
             src="<%= track_image_url %>"
             alt="Cover preview"

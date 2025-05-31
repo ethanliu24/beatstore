@@ -26,6 +26,14 @@
 }
 
 @layer {
+  .flash {
+    @apply px-3 py-2 font-medium rounded w-full border-1;
+  }
+
+  .flash-error {
+    @apply border-error/20 bg-error/20 text-error;
+  }
+
   .content-input-container {
     @apply flex flex-col gap-1 w-full;
   }
