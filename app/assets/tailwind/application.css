@@ -12,7 +12,8 @@
   --color-accent-light: #dcd6fb;
   --color-accent-dim: #873fed;
   --color-accent-text: #aa6eff;
-  --color-error: #ff0000;
+
+  --color-error: #f44336;
 }
 
 @layer {
@@ -31,7 +32,7 @@
 
   .content-input {
     @apply
-      w-full border-1 rounded px-2 text-sm py-1 shadow-sm
+      w-full border-1 rounded px-2 text-xs py-2 shadow-sm
     border-secondary-txt/30 focus:outline-none focus:ring-1 focus:ring-accent
     dark:bg-secondary-bg dark:border-none dark:focus:outline-none dark:focus:ring-0;
   }
