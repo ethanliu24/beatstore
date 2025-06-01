@@ -1,2 +1,5 @@
 <div id="<%= dom_id track %>" class="w-full sm:w-auto my-5 space-y-5">
+  <%= track.title %>
+  <%= track.hearts.count %>
+  <%= button_to "Heart", track_heart_path(track), method: :post, class: "button" %>
 </div>

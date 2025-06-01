@@ -19,7 +19,9 @@ Rails.application.routes.draw do
     passwords: "users/passwords"
   }
 
-  resources :tracks, only: [ :index, :show ]
+  resources :tracks, only: [ :index, :show ] do
+    resource :heart, only: [ :create, :destroy ]
+  end
 
   namespace :admin do
     resources :tracks, except: [ :index, :show ]

@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   after_initialize :set_default_columns, if: :new_record?
 
+  # === Validations ===
   validates :username,
     presence: true,
     uniqueness: { case_sensitive: false }
@@ -12,8 +13,13 @@ class User < ApplicationRecord
     presence: true,
     inclusion: { in: roles }
 
+  # === Associations ===
+  has_many :hearts, dependent: :destroy
+  has_many :hearted_tracks, through: :hearts, source: :track
+
+  private
+
   def set_default_columns
-    self.profile_picture ||= ""
     self.role ||= User.roles[:customer]
   end
 end

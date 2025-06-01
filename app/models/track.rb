@@ -6,8 +6,8 @@ class Track < ApplicationRecord
 
   # === Validations ===
   validates :title, presence: true
-  validates :hearts, :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :is_public, inclusion: { in: [ true, false ] }
   validates :key, format: {
     with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
@@ -19,7 +19,11 @@ class Track < ApplicationRecord
   has_one_attached :untagged_mp3
   has_one_attached :untagged_wav
   has_one_attached :track_stems
+  has_one_attached :project_file
   has_one_attached :cover_photo
+
+  has_many :hearts, dependent: :destroy
+  has_many :hearted_by_users, through: :hearts, source: :user
 
   # def adjust_visibility
   #   # mark track private if not all links are available
