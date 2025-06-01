@@ -22,6 +22,9 @@ class Track < ApplicationRecord
   has_one_attached :project_file
   has_one_attached :cover_photo
 
+  has_many :hearts, dependent: :destroy
+  has_many :hearted_by_users, through: :hearts, source: :user
+
   # def adjust_visibility
   #   # mark track private if not all links are available
   #   required_files = [ tagged_mp3, untagged_mp3, untagged_wav, track_stems, project ]
