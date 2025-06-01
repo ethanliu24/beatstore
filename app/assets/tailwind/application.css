@@ -40,7 +40,7 @@
 
   .content-input {
     @apply
-      w-full border-1 rounded px-2 text-xs py-2 shadow-sm
+      w-full border-1 rounded px-2 text-xs py-2
     border-secondary-txt/30 focus:outline-none focus:ring-1 focus:ring-accent
     dark:bg-secondary-bg dark:border-none dark:focus:outline-none dark:focus:ring-0;
   }
