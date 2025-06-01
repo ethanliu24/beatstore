@@ -56,7 +56,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_01_183344) do
     t.string "title", null: false
     t.string "key"
     t.integer "bpm"
-    t.integer "hearts", default: 0, null: false
     t.integer "plays", default: 0, null: false
     t.boolean "is_public", default: true, null: false
     t.datetime "created_at", null: false

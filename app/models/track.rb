@@ -6,7 +6,6 @@ class Track < ApplicationRecord
 
   # === Validations ===
   validates :title, presence: true
-  validates :hearts, :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :is_public, inclusion: { in: [ true, false ] }
   validates :key, format: {
