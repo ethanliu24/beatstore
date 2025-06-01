@@ -7,6 +7,7 @@ class Track < ApplicationRecord
   # === Validations ===
   validates :title, presence: true
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :is_public, inclusion: { in: [ true, false ] }
   validates :key, format: {
     with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
