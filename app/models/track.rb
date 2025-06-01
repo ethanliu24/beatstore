@@ -19,6 +19,7 @@ class Track < ApplicationRecord
   has_one_attached :untagged_mp3
   has_one_attached :untagged_wav
   has_one_attached :track_stems
+  has_one_attached :project_file
   has_one_attached :cover_photo
 
   # def adjust_visibility
