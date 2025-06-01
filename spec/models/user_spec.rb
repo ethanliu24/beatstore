@@ -30,11 +30,6 @@ RSpec.describe User, type: :model do
       user.save!
       expect(user.role).to eq("customer")
     end
-
-    it "sets default profile_picture to empty string" do
-      user.save!
-      expect(user.profile_picture).to eq("")
-    end
   end
 
   describe 'hearted_tracks association' do

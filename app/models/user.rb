@@ -17,8 +17,9 @@ class User < ApplicationRecord
   has_many :hearts, dependent: :destroy
   has_many :hearted_tracks, through: :hearts, source: :track
 
+  private
+
   def set_default_columns
-    self.profile_picture ||= ""
     self.role ||= User.roles[:customer]
   end
 end
