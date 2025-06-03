@@ -3,8 +3,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-background: #ffffff;
-  --color-secondary-bg: #f4f4f4;
+  --color-background: #f6f6f6;
+  --color-secondary-bg: #ffffff;
   --color-primary-txt: #121212;
   --color-secondary-txt: #888888;
 
@@ -59,16 +59,16 @@
 
   .dropdown {
     @apply
-      z-10 rounded-lg shadow-sm text-xs text-primary-txt bg-background divide-y
-      divide-gray-100 dark:divide-gray-800 dark:bg-secondary-bg;
+      z-10 rounded-lg shadow-sm text-xs text-primary-txt divide-y
+      divide-gray-100 dark:divide-gray-800 bg-secondary-bg;
   }
 
   .dropdown-item {
-    @apply flex justify-start items-center gap-2 px-4 py-2 hover:bg-secondary-bg dark:hover:bg-gray-600 dark:hover:text-white;
+    @apply flex justify-start items-center gap-2 px-4 py-2 hover:bg-background dark:hover:bg-gray-600 dark:hover:text-white;
   }
 
   .nav-dropdown {
-    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-secondary-bg rounded-full cursor-pointer;
+    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-background rounded-full cursor-pointer;
   }
 
   .chip {
@@ -83,7 +83,7 @@
   .auth-form {
     @apply
       flex flex-col justify-center items-stretch rounded min-w-80 px-6 py-4
-      shadow-[0px_0px_8px_2px_rgba(0,_0,_0,_0.1)] dark:bg-secondary-bg;
+      shadow-sm bg-secondary-bg;
   }
 
   .external-link {

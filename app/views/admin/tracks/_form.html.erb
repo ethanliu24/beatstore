@@ -1,9 +1,9 @@
 <div class="flex flex-col justify-start items-start w-full h-full px-16 py-4">
-  <h1 class="font-bold text-4xl mb-5 text-accent"><%= t("label.#{@track.persisted? ? "update" : "create"}") %></h1>
+  <h1 class="font-bold text-4xl text-accent"><%= t("label.#{@track.persisted? ? "update" : "create"}") %></h1>
 
   <a
     href=<%= admin_tracks_path %>
-    class="text-xs font-light flex justify-center items-center gap-1 hover:bg-secondary-bg p-2 rounded-full">
+    class="text-xs font-light flex justify-center items-center gap-1 hover:bg-secondary-bg p-2 rounded-full mt-4 mb-1">
     <%= icon "arrow-left", class: "w-4 h-4" %>
     <%= t("admin.track.back_to_tracks") %>
   </a>
@@ -12,7 +12,7 @@
       model: @track,
       url: @track.persisted? ? admin_track_path(@track) : admin_tracks_path,
       method: @track.persisted? ? :patch : :post,
-      class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/30 w-full h-full"
+      class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/30 w-full h-full bg-white dark:bg-background rounded-2xl px-8 py-2"
     ) do |form| %>
     <% if @track.errors.any? %>
       <div id="error_explanation" class="flash flash-error">
@@ -28,13 +28,13 @@
 
     <section class="w-full flex justify-start items-stretch" data-controller="upload">
       <div class="flex flex-col justify-start items-center gap-3">
-        <div class="w-40 h-40 bg-secondary-bg rounded-2xl flex justify-center items-center">
+        <div class="w-40 h-40 bg-background dark:bg-secondary-bg rounded-2xl flex justify-center items-center">
           <%= icon "photo-scan", class: "w-1/4 h-1/4 #{has_img_attached? ? "hidden" : ""}", data: { upload_target: "imgPlaceholder" } %>
           <img id="cover-photo-preview"
             src="<%= track_image_url %>"
             alt="Cover preview"
             data-upload-target="imgCover"
-            class="object-cover w-full h-full <%= has_img_attached? ? "" : "hidden" %>" />
+            class="object-cover w-full h-full rounded-2xl <%= has_img_attached? ? "" : "hidden" %>" />
         </div>
         <div class="flex justify-center items-center w-full">
           <label for="cover-photo-upload" class="flex justify-center items-center gap-1 file-upload-chip w-fit">
