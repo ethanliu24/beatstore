@@ -57,7 +57,7 @@
               <span data-char-count-target="count">0</span><%= "/#{max_description_length}" %>
             </div>
           </div>
-          <%= form.text_area :title, autofocus: true, class: "content-input resize-none flex-1", maxlength: max_description_length,
+          <%= form.text_area :description, autofocus: true, class: "content-input resize-none flex-1", maxlength: max_description_length,
             data: { char_count_target: "input", action: "input->char-count#count" } %>
         </div>
       </div>
@@ -83,6 +83,10 @@
         <div class="field content-input-container">
           <%= form.label :is_public %>
           <%= form.select :is_public, options_for_select(is_public_options), {}, class: "content-input" %>
+        </div>
+        <div class="field content-input-container">
+          <%= form.label :genre %>
+          <%= form.select :genre, options_for_select(genre_options), {}, class: "content-input" %>
         </div>
       </div>
     </section>

@@ -33,6 +33,10 @@ module TrackUploadHelper
     ]
   end
 
+  def genre_options
+    Track::GENRES
+  end
+
   def max_description_length
     Track::MAX_DESCRIPTION_LENGTH
   end
