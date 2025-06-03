@@ -32,4 +32,8 @@ module TrackUploadHelper
       [ "Private", false ]
     ]
   end
+
+  def max_description_length
+    Track::MAX_DESCRIPTION_LENGTH
+  end
 end

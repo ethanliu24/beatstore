@@ -3,17 +3,18 @@ class Track < ApplicationRecord
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
+  MAX_DESCRIPTION_LENGTH = 200
   GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
 
   # === Validations ===
   validates :title, presence: true
-  validates :description, length: { maximum: 200 }, allow_blank: true
+  validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :is_public, inclusion: { in: [ true, false ] }
-  validates :genre, presence: true, inclusion: { in: Track::GENRES }
+  validates :genre, presence: true, inclusion: { in: GENRES }
   validates :key, format: {
-    with: /\A(#{Track::VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
+    with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
     message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
   }, allow_blank: true
 
