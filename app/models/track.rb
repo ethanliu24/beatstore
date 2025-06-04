@@ -28,6 +28,7 @@ class Track < ApplicationRecord
 
   has_many :hearts, dependent: :destroy
   has_many :hearted_by_users, through: :hearts, source: :user
+  has_many :tags, dependent: :destroy
 
   # def adjust_visibility
   #   # mark track private if not all links are available

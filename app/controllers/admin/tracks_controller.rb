@@ -59,7 +59,8 @@ module Admin
         :untagged_wav,
         :track_stems,
         :project,
-        :cover_photo
+        :cover_photo,
+        tags_attributes: [ :id, :value, :_destroy ]
       )
     end
   end
