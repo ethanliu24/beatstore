@@ -5,7 +5,8 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
     {
       title: "Valid Track Title",
       key: "C MAJOR",
-      bpm: 111
+      bpm: 111,
+      genre: Track::GENRES[0]
     }
   }
 
@@ -153,7 +154,6 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
           }
         }
       }
-      p response.status
       expect(Track.last.tags.pluck(:name)).to include("test")
     end
 
