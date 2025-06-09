@@ -7,7 +7,7 @@ User.create(
   confirmed_at: Time.now
 )
 
-User.create!(
+User.create(
   username: "customer",
   email: "customer@email.com",
   password: "12345678",
@@ -16,16 +16,18 @@ User.create!(
 )
 
 # === Tracks ===
-Track.create!(
+Track.create(
   title: "Pinis",
   bpm: 69,
   key: "A MINOR",
-  is_public: true
+  is_public: true,
+  genre: Track::GENRES[0]
 )
 
-Track.create!(
+Track.create(
   title: "Nair Type Beat",
   bpm: 130,
   key: "C# MAJOR",
-  is_public: false
+  is_public: false,
+  genre: Track::GENRES[-1]
 )
