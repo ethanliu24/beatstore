@@ -34,6 +34,10 @@
     @apply border-error/20 bg-error/20 text-error;
   }
 
+  .page-title {
+    @apply font-bold text-4xl mb-5;
+  }
+
   .content-input-container {
     @apply flex flex-col gap-1 w-full text-nowrap;
   }
