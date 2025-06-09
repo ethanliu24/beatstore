@@ -3,9 +3,16 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="chip-selector"
 export default class extends Controller {
   static targets = ["input", "display", "tagValues"];
+  static values = {
+    curTags: Array
+  }
 
   connect() {
     this.chips = [];
+    console.log(this.curTagsValue)
+    this.curTagsValue.forEach(({id, name}) => {
+      this.addChip(name, id);
+    })
   }
 
   handleKeydown(e) {
@@ -14,18 +21,26 @@ export default class extends Controller {
 
       const value = this.inputTarget.value.trim();
       if (value !== "" && !this.chips.includes(value)) {
-        const chip = { id: null, value: value, _destroy: false }
-        this.chips.push(chip);
-        this.inputTarget.value = ""
-        this.displayChips();
+        this.addChip(value);
       }
     }
+  }
+
+  addChip(name, id = null) {
+    const chip = { id: id, value: name, _destroy: false }
+    this.chips.push(chip);
+    this.inputTarget.value = ""
+    this.displayChips();
   }
 
   displayChips() {
     this.displayTarget.replaceChildren();
 
     this.chips.forEach(({id, value, _destroy}, index) => {
+      if (_destroy) {
+        return;
+      }
+
       const chip = value;
       const chipElement = document.createElement("div");
       chipElement.classList.add("chip");
@@ -34,12 +49,12 @@ export default class extends Controller {
       const closeButton = document.createElement("button");
       closeButton.innerText = "✕";
       closeButton.addEventListener("click", () => {
-        // tells rails to destroy the chip
         if (this.chips[index].id) {
           this.chips[index]._destroy = true;
+        } else {
+          this.chips.splice(index, 1);
         }
 
-        this.chips.splice(index, 1);
         this.displayChips();
       });
 
@@ -59,7 +74,7 @@ export default class extends Controller {
         const destroyInput = document.createElement("input");
         destroyInput.type = "hidden";
         destroyInput.name = `track[tags_attributes][${index}][_destroy]`;
-        destroyInput.value = "1";  // "1" or "true" means delete
+        destroyInput.value = "true";  // "1" or "true" means delete
         this.tagValuesTarget.appendChild(destroyInput);
 
         // Include id so Rails knows which to delete

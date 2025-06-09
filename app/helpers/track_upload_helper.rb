@@ -40,4 +40,8 @@ module TrackUploadHelper
   def max_description_length
     Track::MAX_DESCRIPTION_LENGTH
   end
+
+  def serialize_tags
+    @track.tags.map { |t| { id: t.id, name: t.name } }.to_json
+  end
 end
