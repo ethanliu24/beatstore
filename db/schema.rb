@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_01_183344) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_03_221929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_01_183344) do
     t.index ["user_id"], name: "index_hearts_on_user_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "track_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["track_id", "name"], name: "index_tags_on_track_id_and_name", unique: true
+    t.index ["track_id"], name: "index_tags_on_track_id"
+  end
+
   create_table "tracks", force: :cascade do |t|
     t.string "title", null: false
     t.string "key"
@@ -60,6 +69,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_01_183344) do
     t.boolean "is_public", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "genre"
+    t.text "description"
   end
 
   create_table "users", force: :cascade do |t|
@@ -87,4 +98,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_01_183344) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "hearts", "tracks"
   add_foreign_key "hearts", "users"
+  add_foreign_key "tags", "tracks"
 end

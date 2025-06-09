@@ -68,11 +68,15 @@
   }
 
   .nav-dropdown {
-    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-secondary-bg rounded-full cursor-pointer;
+    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-background rounded-full cursor-pointer;
   }
 
   .chip {
-    @apply rounded-full;
+    @apply rounded-full bg-secondary-bg text-[0.7rem] px-2 py-0.5 w-fit text-primary-txt whitespace-nowrap;
+  }
+
+  .chip > button {
+    @apply pl-3 rounded-full text-[0.5rem] hover:cursor-pointer;
   }
 
   .file-upload-chip {

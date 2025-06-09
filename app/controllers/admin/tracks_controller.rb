@@ -50,14 +50,17 @@ module Admin
       params.require(:track).permit(
         :title,
         :key,
+        :description,
         :bpm,
         :is_public,
+        :genre,
         :tagged_mp3,
         :untagged_mp3,
         :untagged_wav,
         :track_stems,
         :project,
-        :cover_photo
+        :cover_photo,
+        tags_attributes: [ :id, :name, :_destroy ]
       )
     end
   end

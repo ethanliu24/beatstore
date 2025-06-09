@@ -5,5 +5,6 @@ FactoryBot.define do
     bpm { 111 }
     plays { 0 }
     is_public { true }
+    genre { "Trap" }
   end
 end

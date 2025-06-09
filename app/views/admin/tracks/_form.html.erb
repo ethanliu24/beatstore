@@ -50,13 +50,16 @@
           <%= form.label :title %>
           <%= form.text_field :title, autofocus: true, class: "content-input" %>
         </div>
-        <%# TODO add description when ready %>
-        <!--
-        <div class="field content-input-container flex-1">
-          <%= form.label :description %>
-          <%= form.text_area :title, autofocus: true, class: "content-input resize-none flex-1" %>
+        <div class="field content-input-container flex-1" data-controller="char-count">
+          <div class="flex justify-between items-center w-full">
+            <%= form.label :description %>
+            <div class="text-[0.6rem] text-secondary-txt">
+              <span data-char-count-target="count">0</span><%= "/#{max_description_length}" %>
+            </div>
+          </div>
+          <%= form.text_area :description, autofocus: true, class: "content-input resize-none flex-1", maxlength: max_description_length,
+            data: { char_count_target: "input", action: "input->char-count#count" } %>
         </div>
-        -->
       </div>
     </section>
 
@@ -67,7 +70,7 @@
       <%= render "track_upload", form: form, attachment: @track.track_stems, field: :track_stems, file_for: t("label.track_stems") %>
     </section>
 
-    <section class="flex flex-col justify-center items-stretch w-full">
+    <section class="flex flex-col justify-center items-stretch w-full gap-2">
       <div class="flex justify-between items-stretch gap-6">
         <div class="field content-input-container">
           <%= form.label :bpm %>
@@ -81,6 +84,19 @@
           <%= form.label :is_public %>
           <%= form.select :is_public, options_for_select(is_public_options), {}, class: "content-input" %>
         </div>
+        <div class="field content-input-container">
+          <%= form.label :genre %>
+          <%= form.select :genre, options_for_select(genre_options), {}, class: "content-input" %>
+        </div>
+      </div>
+      <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags %>">
+        <div class="field content-input-container">
+          <%= form.label :tags %>
+          <%= form.text_field :tag_input, autofocus: true, class: "content-input",
+            data: { chip_selector_target: "input", action: "keydown->chip-selector#handleKeydown" } %>
+        </div>
+        <div data-chip-selector-target="display" class="flex justify-start items-center flex-wrap gap-1 mt-2"></div>
+        <div data-chip-selector-target="tagValues" class="hidden"></div>
       </div>
     </section>
 

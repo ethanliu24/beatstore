@@ -5,7 +5,8 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
     {
       title: "Valid Track Title",
       key: "C MAJOR",
-      bpm: 111
+      bpm: 111,
+      genre: Track::GENRES[0]
     }
   }
 
@@ -30,6 +31,7 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
         track_stems: "",
         project: "",
         cover_photo: "",
+        tag_attributes: { "0" => { id: 1, name: "test", _destroy: "false" } },
         foo: "bar"
       }
     )
@@ -45,8 +47,10 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
       "untagged_wav",
       "track_stems",
       "project",
-      "cover_photo"
+      "cover_photo",
+      "tag_attributes"
     )
+    expect(permitted[:tags_attributes]["0"].keys).to contain_exactly("id", "name", "_destroy")
   end
 
   describe "GET /new" do
@@ -123,6 +127,111 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
       track = Track.create! valid_attributes
       delete admin_track_path(track.id)
       expect(response).to redirect_to(tracks_url)
+    end
+
+    it "destroys all tags when the track is destroyed" do
+      track = create(:track)
+      tag1 = create(:tag, track: track, name: "t1")
+      tag2 = create(:tag, track: track, name: "t2")
+
+      expect(track.reload.tags.where(name: "t1").count).to eq(1)
+      expect(track.reload.tags.where(name: "t2").count).to eq(1)
+      expect { track.destroy }.to change { Tag.count }.by(-2)
+      expect(Tag.where(id: [ tag1.id, tag2.id ])).to be_empty
+    end
+  end
+
+  describe "tags" do
+    let!(:track) { create(:track, title: "Duplicate", genre: Track::GENRES[0]) }
+
+    it "adds a new tag on #create" do
+      post admin_tracks_url(track), params: {
+        track: {
+          title: "Test",
+          genre: Track::GENRES[0],
+          tags_attributes: {
+            "0" => { name: "test" }
+          }
+        }
+      }
+      expect(Track.last.tags.pluck(:name)).to include("test")
+    end
+
+    it "adds a new tag on #update" do
+      patch admin_track_url(track), params: {
+        track: {
+          tags_attributes: {
+            "0" => { name: "test" },
+            "1" => { name: "test_again" }
+          }
+        }
+      }
+
+      tags = track.reload.tags.pluck(:name)
+      expect(tags).to include("test")
+      expect(tags).to include("test_again")
+    end
+
+    it "rejects a duplicate tag name" do
+      create(:tag, track: track, name: "duplicate")
+
+      patch admin_track_url(track), params: {
+        track: {
+          tags_attributes: {
+            "0" => { name: "duplicate" }
+          }
+        }
+      }
+
+      expect(track.reload.tags.where(name: "duplicate").count).to eq(1)
+    end
+
+    it "rejects a blank tag name" do
+      patch admin_track_url(track), params: {
+        track: {
+          tags_attributes: {
+            "0" => { name: "" }
+          }
+        }
+      }
+
+      expect(track.reload.tags.pluck(:name)).not_to include("")
+    end
+
+    it "deletes an existing tag" do
+      tag = create(:tag, track: track, name: "trap")
+
+      patch admin_track_path(track), params: {
+        track: {
+          tags_attributes: {
+            "0" => {
+              id: tag.id,
+              _destroy: "true"
+            }
+          }
+        }
+      }
+
+      expect(track.reload.tags.find_by(id: tag.id)).to be_nil
+    end
+
+    it "does not delete a tag not associated with the track" do
+      create(:tag, track: track, name: "tag")
+      other_track = create(:track)
+      other_tag = create(:tag, track: other_track, name: "other")
+
+      patch admin_track_path(track), params: {
+        track: {
+          tags_attributes: {
+            "0" => {
+              id: other_tag.id,
+              _destroy: "1"
+            }
+          }
+        }
+      }
+
+      expect(Tag.find_by(id: other_tag.id)).not_to be_nil
     end
   end
 
