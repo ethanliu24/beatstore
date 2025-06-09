@@ -64,11 +64,11 @@
   }
 
   .dropdown-item {
-    @apply flex justify-start items-center gap-2 px-4 py-2 hover:bg-secondary-bg dark:hover:bg-gray-600 dark:hover:text-white;
+    @apply flex justify-start items-center gap-2 px-4 py-2 hover:bg-background dark:hover:bg-gray-600 dark:hover:text-white;
   }
 
   .nav-dropdown {
-    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-secondary-bg rounded-full cursor-pointer;
+    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-background rounded-full cursor-pointer;
   }
 
   .chip {
