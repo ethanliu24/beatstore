@@ -70,7 +70,7 @@
       <%= render "track_upload", form: form, attachment: @track.track_stems, field: :track_stems, file_for: t("label.track_stems") %>
     </section>
 
-    <section class="flex flex-col justify-center items-stretch w-full">
+    <section class="flex flex-col justify-center items-stretch w-full gap-2">
       <div class="flex justify-between items-stretch gap-6">
         <div class="field content-input-container">
           <%= form.label :bpm %>
@@ -88,6 +88,15 @@
           <%= form.label :genre %>
           <%= form.select :genre, options_for_select(genre_options), {}, class: "content-input" %>
         </div>
+      </div>
+      <div class="w-full" data-controller="chip-selector">
+        <div class="field content-input-container">
+          <%= form.label :tags %>
+          <%= form.text_field :tags, autofocus: true, class: "content-input",
+            data: { chip_selector_target: "input", action: "keydown->chip-selector#handleKeydown" } %>
+        </div>
+        <div data-chip-selector-target="display" class="flex justify-start items-center flex-wrap gap-1 mt-2"></div>
+        <div data-chip-selector-target="tagValues" class="hidden"></div>
       </div>
     </section>
 

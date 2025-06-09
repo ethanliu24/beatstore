@@ -72,7 +72,11 @@
   }
 
   .chip {
-    @apply rounded-full;
+    @apply rounded-full bg-secondary-bg text-[0.7rem] px-2 py-0.5 w-fit text-primary-txt whitespace-nowrap;
+  }
+
+  .chip > button {
+    @apply pl-3 rounded-full text-[0.5rem] hover:cursor-pointer;
   }
 
   .file-upload-chip {

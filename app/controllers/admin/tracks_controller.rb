@@ -60,7 +60,7 @@ module Admin
         :track_stems,
         :project,
         :cover_photo,
-        tags_attributes: [ :id, :value, :_destroy ]
+        tags_attributes: [ :id, :name, :_destroy ]
       )
     end
   end
