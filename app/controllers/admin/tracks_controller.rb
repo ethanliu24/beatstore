@@ -1,6 +1,10 @@
 module Admin
   class TracksController < Admin::BaseController
-    before_action :set_track, except: [ :new, :create ]
+    before_action :set_track, except: [ :index, :new, :create ]
+
+    def index
+      @tracks = Track.all
+    end
 
     def new
       @track = Track.new

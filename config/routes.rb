@@ -24,6 +24,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :tracks, except: [ :index, :show ]
+    resources :tracks, except: [ :show ]
   end
 end
