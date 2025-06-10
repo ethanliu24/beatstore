@@ -3,8 +3,8 @@
 <div class="w-full">
   <h1 class="page-title"><%= t("label.tracks") %></h1>
 
-  <%= render "shared/flash_notice", flash: flash %>
-  <%= render "shared/flash_error", flash: flash %>
+  <%= render "shared/flash_notice" %>
+  <%= render "shared/flash_error" %>
 
   <a href=<%= new_admin_track_path %> class="button w-fit px-2 py-1">
     <%= icon "plus", class: "w-4 h-4" %>
