@@ -236,6 +236,11 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
   end
 
   describe "admin paths", authorization_test: true do
+    it "only allows admin at GET /index" do
+      get admin_tracks_url
+      expect(response).to redirect_to(root_path)
+    end
+
     it "only allows admin at GET /new" do
       get new_admin_track_url
       expect(response).to redirect_to(root_path)
