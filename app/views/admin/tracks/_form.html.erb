@@ -1,9 +1,9 @@
-<div class="flex flex-col justify-start items-start w-full h-full px-16 py-4">
-  <h1 class="font-bold text-4xl mb-5 text-accent"><%= t("label.#{@track.persisted? ? "update" : "create"}") %></h1>
+<div class="w-full">
+  <h1 class="page-title text-accent"><%= t("label.#{@track.persisted? ? "update" : "create"}") %></h1>
 
   <a
     href=<%= admin_tracks_path %>
-    class="text-xs font-light flex justify-center items-center gap-1 hover:bg-secondary-bg p-2 rounded-full">
+    class="text-xs font-light flex justify-center items-center gap-1 hover:bg-secondary-bg p-2 rounded-full w-fit">
     <%= icon "arrow-left", class: "w-4 h-4" %>
     <%= t("admin.track.back_to_tracks") %>
   </a>
@@ -34,7 +34,7 @@
             src="<%= track_image_url %>"
             alt="Cover preview"
             data-upload-target="imgCover"
-            class="object-cover w-full h-full <%= has_img_attached? ? "" : "hidden" %>" />
+            class="object-cover w-full h-full rounded-2xl <%= has_img_attached? ? "" : "hidden" %>" />
         </div>
         <div class="flex justify-center items-center w-full">
           <label for="cover-photo-upload" class="flex justify-center items-center gap-1 file-upload-chip w-fit">
@@ -78,18 +78,18 @@
         </div>
         <div class="field content-input-container">
           <%= form.label :key %>
-          <%= form.select :key, options_for_select(key_options), {}, class: "content-input" %>
+          <%= form.select :key, options_for_select(key_options, track.key), {}, class: "content-input" %>
         </div>
         <div class="field content-input-container">
           <%= form.label :is_public %>
-          <%= form.select :is_public, options_for_select(is_public_options), {}, class: "content-input" %>
+          <%= form.select :is_public, options_for_select(is_public_options, track.is_public), {}, class: "content-input" %>
         </div>
         <div class="field content-input-container">
           <%= form.label :genre %>
-          <%= form.select :genre, options_for_select(genre_options), {}, class: "content-input" %>
+          <%= form.select :genre, options_for_select(genre_options, track.genre), {}, class: "content-input" %>
         </div>
       </div>
-      <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags %>">
+      <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags(@track) %>">
         <div class="field content-input-container">
           <%= form.label :tags %>
           <%= form.text_field :tag_input, autofocus: true, class: "content-input",

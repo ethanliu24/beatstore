@@ -1,6 +1,10 @@
 module Admin
   class TracksController < Admin::BaseController
-    before_action :set_track, except: [ :new, :create ]
+    before_action :set_track, except: [ :index, :new, :create ]
+
+    def index
+      @tracks = Track.order(created_at: :desc)
+    end
 
     def new
       @track = Track.new
@@ -14,7 +18,7 @@ module Admin
 
       respond_to do |format|
         if @track.save
-          format.html { redirect_to @track, notice: "Track was successfully created." }
+          format.html { redirect_to admin_tracks_path, notice: "Track was successfully created." }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
@@ -24,7 +28,7 @@ module Admin
     def update
       respond_to do |format|
         if @track.update(sanitize_track_params)
-          format.html { redirect_to @track, notice: "Track was successfully updated." }
+          format.html { redirect_to admin_tracks_path, notice: "Track was successfully updated." }
         else
           format.html { render :edit, status: :unprocessable_entity }
         end
@@ -36,7 +40,7 @@ module Admin
       @track.destroy!
 
       respond_to do |format|
-        format.html { redirect_to tracks_path, status: :see_other, notice: "Track was successfully destroyed." }
+        format.html { redirect_to admin_tracks_path, status: :see_other, notice: "Track was successfully destroyed." }
       end
     end
 

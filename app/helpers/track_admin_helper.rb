@@ -1,4 +1,4 @@
-module TrackUploadHelper
+module TrackAdminHelper
   def generate_id(file_for)
     file_for.downcase.split(" ").join("-") + "-upload"
   end
@@ -41,7 +41,17 @@ module TrackUploadHelper
     Track::MAX_DESCRIPTION_LENGTH
   end
 
-  def serialize_tags
-    @track.tags.map { |t| { id: t.id, name: t.name } }.to_json
+  def serialize_tags(track)
+    track.tags.map { |t| { id: t.id, name: t.name } }.to_json
+  end
+
+  def track_file_upload_indicator_styles(file)
+    uploaded = "text-success bg-success/20"
+    missing = "text-error bg-error/20"
+    "px-1 py-0.5 rounded #{file.attached? ? uploaded : missing}"
+  end
+
+  def track_more_dropdown_id(track)
+    "track-#{track.id}-more-dropdown"
   end
 end

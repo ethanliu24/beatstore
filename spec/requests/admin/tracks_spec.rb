@@ -110,7 +110,7 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
         track = Track.create! valid_attributes
         patch admin_track_url(track), params: { track: new_attributes }
         track.reload
-        expect(response).to redirect_to(track_url(track))
+        expect(response).to redirect_to(admin_tracks_url)
       end
     end
   end
@@ -126,7 +126,7 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
     it "redirects to the tracks list" do
       track = Track.create! valid_attributes
       delete admin_track_path(track.id)
-      expect(response).to redirect_to(tracks_url)
+      expect(response).to redirect_to(admin_tracks_url)
     end
 
     it "destroys all tags when the track is destroyed" do
@@ -236,6 +236,11 @@ RSpec.describe "/admin/tracks", type: :request, admin: true do
   end
 
   describe "admin paths", authorization_test: true do
+    it "only allows admin at GET /index" do
+      get admin_tracks_url
+      expect(response).to redirect_to(root_path)
+    end
+
     it "only allows admin at GET /new" do
       get new_admin_track_url
       expect(response).to redirect_to(root_path)
