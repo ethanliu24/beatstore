@@ -31,6 +31,8 @@ en:
     track_stems: "Track Stems"
     create: "Create"
     update: "Update"
+    edit: "Edit"
+    delete: "Delete"
 
   authentication:
     agree_tos: "By signing up, you agree with the "

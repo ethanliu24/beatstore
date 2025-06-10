@@ -89,7 +89,7 @@
           <%= form.select :genre, options_for_select(genre_options), {}, class: "content-input" %>
         </div>
       </div>
-      <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags %>">
+      <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags(@track) %>">
         <div class="field content-input-container">
           <%= form.label :tags %>
           <%= form.text_field :tag_input, autofocus: true, class: "content-input",

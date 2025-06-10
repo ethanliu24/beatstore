@@ -3,7 +3,7 @@ module Admin
     before_action :set_track, except: [ :index, :new, :create ]
 
     def index
-      @tracks = Track.all
+      @tracks = Track.order(created_at: :desc)
     end
 
     def new
@@ -40,7 +40,7 @@ module Admin
       @track.destroy!
 
       respond_to do |format|
-        format.html { redirect_to tracks_path, status: :see_other, notice: "Track was successfully destroyed." }
+        format.html { redirect_to admin_tracks_path, status: :see_other, notice: "Track was successfully destroyed." }
       end
     end
 

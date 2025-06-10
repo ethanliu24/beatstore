@@ -2,4 +2,92 @@
 
 <div class="w-full">
   <h1 class="page-title"><%= t("label.tracks") %></h1>
+
+  <% if notice.present? %>
+    <p class="flash flash-success my-2"><%= notice %></p>
+  <% end %>
+
+  <% if flash[:error].present? %>
+    <p class="flash flash-error my-4"><%= flash %></p>
+  <% end %>
+
+  <a href=<%= new_admin_track_path %> class="button w-fit px-2 py-1">
+    <%= icon "plus", class: "w-4 h-4" %>
+    <span class="ml-2"><%= t("label.create") %></span>
+  </a>
+
+  <%# TODO add filter later %>
+
+  <div class="grid [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))] gap-x-2 gap-y-8 mt-6">
+    <% @tracks.each do |track| %>
+      <%# Temporary solution, but the width of the card is width of image + 2 in tailwind %>
+      <div class="flex flex-col justify-start items-stretch bg-background dark:bg-secondary-bg w-42 h-fit rounded p-1">
+        <div class="flex justify-center items-center bg-secondary-bg dark:bg-background w-40 h-40 rounded">
+          <% if track.cover_photo.attached? %>
+            <%= image_tag track.cover_photo, class: "object-cover w-full h-full rounded" %>
+          <% else %>
+            <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
+          <% end %>
+        </div>
+        <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
+          <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">
+            <p class="truncate mb-2"><%= track.title %></p>
+            <p class="mx-1">·</p>
+            <p class="<%= track.is_public? ? "text-success" : "text-error" %>"><%= track.is_public? ? "Public" : "Private" %></p>
+          </div>
+          <div class="flex justify-start items-center gap-1">
+            <%= icon "calendar", class: "w-3 h-3" %>
+            <p><%= format_date(track.created_at) %></p>
+          </div>
+          <div class="flex justify-start items-center gap-1">
+            <%= icon "activity-heartbeat", class: "w-3 h-3" %>
+            <p><%= track.bpm ? "#{track.bpm} BPM" : "_" %></p>
+          </div>
+          <div class="flex justify-start items-center gap-1">
+            <%= icon "piano", class: "w-3 h-3" %>
+            <p><%= track.key.presence || "_" %></p>
+          </div>
+          <div class="flex justify-start items-center gap-1">
+            <%= icon "music", class: "w-3 h-3" %>
+            <p><%= track.genre %></p>
+          </div>
+          <div class="flex justify-start items-center gap-1">
+            <%= icon "player-play", class: "w-3 h-3" %>
+            <p><%= track.plays %></p>
+          </div>
+          <div class="flex justify-start items-center gap-1">
+            <%= icon "heart", class: "w-3 h-3" %>
+            <p><%= track.hearts.count %></p>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-[0.6rem] px-1 mt-4">
+          <div class="<%= track_file_upload_indicator_styles(track.tagged_mp3) %>">Tagged</div>
+          <div class="<%= track_file_upload_indicator_styles(track.untagged_mp3) %>">MP3</div>
+          <div class="<%= track_file_upload_indicator_styles(track.untagged_wav) %>">WAV</div>
+          <div class="<%= track_file_upload_indicator_styles(track.track_stems) %>">ZIP</div>
+        </div>
+
+        <div class="flex justify-end items-center p-2 mt-1">
+          <button data-dropdown-toggle="<%= track_more_dropdown_id(track) %>" data-dropdown-placement="bottom-end" class="w-fit h-fit">
+            <%= icon "dots", class: "cursor-pointer w-4 h-4" %>
+          </button>
+
+          <%# More Dropdown %>
+          <div id="<%= track_more_dropdown_id(track) %>" class="dropdown hidden">
+            <ul>
+              <li class="dropdown-item">
+                <%= icon "pencil", class: "w-3 h-3" %>
+                <%= link_to t("label.edit"), edit_admin_track_path(track) %>
+              </li>
+              <li class="dropdown-item text-error">
+                <%= icon "trash", class: "w-3 h-3" %>
+                <%= button_to t("label.delete"), admin_track_path(track), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
