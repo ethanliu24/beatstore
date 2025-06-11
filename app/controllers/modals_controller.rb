@@ -3,7 +3,7 @@ class ModalsController < ApplicationController
 
   def test
     @track = Track.first
-    render partial: "modal/test", locals: { track: @track }
+    render partial: "modals/test", locals: { track: @track }
   end
 
   def ensure_turbo_request

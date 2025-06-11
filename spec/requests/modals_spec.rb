@@ -16,7 +16,7 @@ RSpec.describe "Modals", type: :request do
     it "fetches modal from #test" do
       get test_modal_path, headers: @headers
       expect(response).to have_http_status(:ok)
-      expect(response).to render_template(partial: "modal/_test")
+      expect(response).to render_template(partial: "modals/_test")
     end
   end
 end
