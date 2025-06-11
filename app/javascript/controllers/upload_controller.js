@@ -3,6 +3,9 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="upload"
 export default class extends Controller {
   static targets = ["imgUpload", "imgCover", "imgPlaceholder"];
+  static values = {
+    cropModalUrl: String
+  }
 
   connect() {
     this.track_uploaded_classes = [
@@ -23,6 +26,23 @@ export default class extends Controller {
     this.imgCoverTarget.src = URL.createObjectURL(this.imgUploadTarget.files[0]);
     this.imgCoverTarget.classList.remove("hidden");
     this.imgPlaceholderTarget.classList.add("hidden");
+
+    fetch(this.cropModalUrlValue, {
+      method: "GET",
+      headers: { "Turbo-Frame": "modal" },
+    })
+      .then(response => response.text())
+      .then(html => {
+        const modalEl = document.getElementById("default-modal");
+        if (!modalEl) {
+          console.warn("Modal element not found");
+          return;
+        }
+
+        const modal = new window.Modal(modalEl);
+        modal.show();
+        document.getElementById("modal").innerHTML = html;
+      })
   }
 
   track_upload(event) {

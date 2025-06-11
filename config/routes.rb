@@ -29,5 +29,6 @@ Rails.application.routes.draw do
 
   scope :modal, controller: :modals do
     get :test, action: "test", as: "test_modal"
+    get :crop_image, action: "crop_image", as: "crop_image_modal"
   end
 end
