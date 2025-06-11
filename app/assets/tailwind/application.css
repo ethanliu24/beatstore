@@ -29,6 +29,10 @@
 }
 
 @layer {
+  #modal > * {
+    @apply px-4 py-2;
+  }
+
   .flash {
     @apply px-3 py-2 font-medium rounded w-full border-1;
   }
@@ -62,6 +66,10 @@
 
   .button {
     @apply flex justify-around items-center bg-accent hover:bg-accent-dim rounded cursor-pointer text-white;
+  }
+
+  .button-secondary {
+    @apply flex justify-around items-center border-1 border-secondary-txt/50 bg-secondary-bg hover:bg-hover rounded cursor-pointer text-primary-txt;
   }
 
   .avatar {
