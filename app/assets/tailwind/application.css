@@ -7,6 +7,7 @@
   --color-secondary-bg: #f4f4f4;
   --color-primary-txt: #121212;
   --color-secondary-txt: #888888;
+  --color-hover: #eeeeee;
 
   --color-accent: #9244ff;
   --color-accent-light: #dcd6fb;
@@ -23,6 +24,7 @@
     --color-secondary-bg: #1a1a1a;
     --color-primary-txt: #f4f4f4;
     --color-secondary-txt: #888888;
+    --color-hover: #2b2b2b;
   }
 }
 
