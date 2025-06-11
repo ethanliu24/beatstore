@@ -36,7 +36,7 @@
             class="object-cover w-full h-full rounded-2xl <%= has_img_attached? ? "" : "hidden" %>" />
         </div>
         <div class="flex justify-center items-center w-full">
-          <%= link_to image_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+          <%= link_to track_image_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
             data: {
               turbo_frame: "modal",
               modal_target: "default-modal",
