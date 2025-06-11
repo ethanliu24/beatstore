@@ -79,7 +79,7 @@
   }
 
   .nav-dropdown {
-    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-background rounded-full cursor-pointer;
+    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-hover rounded-full cursor-pointer;
   }
 
   .chip {
