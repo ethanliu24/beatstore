@@ -6,6 +6,11 @@ RSpec.describe "Modals", type: :request do
       get test_modal_path
       expect(response).to redirect_to(root_path)
     end
+
+    it "does not allow visits to #track_image_upload" do
+      get track_image_upload_modal_url
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "where request are from turbo frame" do
@@ -17,6 +22,12 @@ RSpec.describe "Modals", type: :request do
       get test_modal_path, headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_test")
+    end
+
+    it "fetches modal from #track_image_upload" do
+      get track_image_upload_modal_url, headers: @headers
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template(partial: "modals/_image_upload")
     end
   end
 end
