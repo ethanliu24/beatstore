@@ -1,0 +1,27 @@
+<turbo-frame id="modal">
+  <%= render "modals/header", title: "Upload file" %>
+  <div class="flex items-center justify-center w-full" data-controller="upload">
+    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 cursor-pointer bg-secondary-bg hover:bg-hover">
+      <div class="flex flex-col items-center justify-center pt-5 pb-6 w-full h-full rounded-lg border-2 border-dashed border-secondary-txt" data-upload-target="imgPlaceholder">
+        <%= icon "cloud-up", class: "text-secondary-txt w-10 h-10 mb-2" %>
+        <p class="mb-2 text-sm text-secondary-txt"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+        <p class="text-xs text-secondary-txt">PNG, JPG or JPEG</p>
+      </div>
+      <img id="img-upload-crop" src="" alt="" data-upload-target="imgCover" class="object-cover w-full h-full rounded-lg hidden" />
+      <input id="dropzone-file" type="file" class="hidden" data-upload-target="imgUpload" data-action="change->upload#image_upload" />
+    </label>
+  </div>
+
+  <% content_for :modal_continue do %>
+    <button data-modal-hide="default-modal" type="button" class="button px-2 py-1"
+      data-controller="upload"
+      data-action="click->upload#display_cropped_image"
+      data-upload-model-value="track"
+      data-upload-img-source-input-id-value="dropzone-file"
+      data-upload-img-destination-id-value="track-cover-photo-preview"
+      data-upload-file-upload-input-container-id-value="cover-photo-upload-container">
+      <%= t("label.upload") %>
+    </button>
+  <% end %>
+  <%= render "modals/footer" %>
+</turbo-frame>

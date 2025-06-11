@@ -2,9 +2,12 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="upload"
 export default class extends Controller {
-  static targets = ["imgUpload", "imgCover", "imgPlaceholder"];
+  static targets = ["imgUpload", "imgCover", "imgPlaceholder", "imageDestination", "imageDestinationPlaceholder"];
   static values = {
-    cropModalUrl: String
+    imgDestinationId: String,
+    imgSourceInputId: String,
+    fileUploadInputContainerId: String,
+    model: String,
   }
 
   connect() {
@@ -26,23 +29,34 @@ export default class extends Controller {
     this.imgCoverTarget.src = URL.createObjectURL(this.imgUploadTarget.files[0]);
     this.imgCoverTarget.classList.remove("hidden");
     this.imgPlaceholderTarget.classList.add("hidden");
+  }
 
-    fetch(this.cropModalUrlValue, {
-      method: "GET",
-      headers: { "Turbo-Frame": "modal" },
-    })
-      .then(response => response.text())
-      .then(html => {
-        const modalEl = document.getElementById("default-modal");
-        if (!modalEl) {
-          console.warn("Modal element not found");
-          return;
-        }
+  display_cropped_image() {
+    const imgSourceInput = document.getElementById(this.imgSourceInputIdValue);
+    const imgDestination = document.getElementById(this.imgDestinationIdValue);
+    imgDestination.src = URL.createObjectURL(imgSourceInput.files[0]);
+    imgDestination.classList.remove("hidden");
+    this.appendFile(imgSourceInput)
+  }
 
-        const modal = new window.Modal(modalEl);
-        modal.show();
-        document.getElementById("modal").innerHTML = html;
-      })
+  appendFile(sourceInput) {
+    const fileUploadInputContainer = document.getElementById(this.fileUploadInputContainerIdValue);
+    fileUploadInputContainer.replaceChildren();
+
+    const file = sourceInput.files[0]
+    if (!file) return;
+
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+
+    const newInput = document.createElement("input");
+    newInput.type = "file";
+    newInput.name = `${this.modelValue}[cover_photo]`;
+    newInput.id = "cover-photo-upload-input";
+    newInput.classList.add("hidden");
+    newInput.files = dataTransfer.files;
+
+    fileUploadInputContainer.appendChild(newInput);
   }
 
   track_upload(event) {

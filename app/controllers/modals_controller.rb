@@ -6,6 +6,10 @@ class ModalsController < ApplicationController
     render partial: "modals/test", locals: { track: @track }
   end
 
+  def image_upload
+    render partial: "modals/image_upload"
+  end
+
   def crop_image
     render partial: "modals/crop_image"
   end

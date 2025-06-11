@@ -26,23 +26,26 @@
       </div>
     <% end %>
 
-    <section class="w-full flex justify-start items-stretch" data-controller="upload" data-upload-crop-modal-url-value="<%= crop_image_modal_path %>">
+    <section class="w-full flex justify-start items-stretch">
       <div class="flex flex-col justify-start items-center gap-3">
         <div class="w-40 h-40 bg-secondary-bg rounded-2xl flex justify-center items-center">
-          <%= icon "photo-scan", class: "w-1/4 h-1/4 #{has_img_attached? ? "hidden" : ""}", data: { upload_target: "imgPlaceholder" } %>
-          <img id="cover-photo-preview"
+          <%= icon "photo-scan", class: "w-1/4 h-1/4 #{has_img_attached? ? "hidden" : ""}" %>
+          <img id="track-cover-photo-preview"
             src="<%= track_image_url %>"
             alt="Cover preview"
-            data-upload-target="imgCover"
             class="object-cover w-full h-full rounded-2xl <%= has_img_attached? ? "" : "hidden" %>" />
         </div>
         <div class="flex justify-center items-center w-full">
-          <label for="cover-photo-upload" class="flex justify-center items-center gap-1 file-upload-chip w-fit">
+          <%= link_to image_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+            data: {
+              turbo_frame: "modal",
+              modal_target: "default-modal",
+              modal_toggle: "default-modal",
+            } do %>
             <%= icon "plus", class: "w-4 h-4" %>
             <%= t("label.upload") %>
-          </label>
-          <%= form.file_field :cover_photo, id: "cover-photo-upload", class: "hidden",
-            data: { upload_target: "imgUpload", action: "change->upload#image_upload" } %>
+          <% end %>
+          <div id="cover-photo-upload-container" class="hidden"></div>
         </div>
       </div>
       <div class="flex flex-col justify-start gap-4 flex-1 ml-8">
