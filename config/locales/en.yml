@@ -33,6 +33,8 @@ en:
     update: "Update"
     edit: "Edit"
     delete: "Delete"
+    continue: "Continue"
+    cancel: "Cancel"
 
   authentication:
     agree_tos: "By signing up, you agree with the "

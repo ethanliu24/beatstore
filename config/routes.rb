@@ -26,4 +26,8 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :tracks, except: [ :show ]
   end
+
+  scope :modal, controller: :modals do
+    get :test, action: "test", as: "test_modal"
+  end
 end

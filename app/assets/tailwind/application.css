@@ -7,6 +7,7 @@
   --color-secondary-bg: #f4f4f4;
   --color-primary-txt: #121212;
   --color-secondary-txt: #888888;
+  --color-hover: #eeeeee;
 
   --color-accent: #9244ff;
   --color-accent-light: #dcd6fb;
@@ -23,10 +24,15 @@
     --color-secondary-bg: #1a1a1a;
     --color-primary-txt: #f4f4f4;
     --color-secondary-txt: #888888;
+    --color-hover: #2b2b2b;
   }
 }
 
 @layer {
+  #modal > * {
+    @apply px-4 py-2;
+  }
+
   .flash {
     @apply px-3 py-2 font-medium rounded w-full border-1;
   }
@@ -62,6 +68,10 @@
     @apply flex justify-around items-center bg-accent hover:bg-accent-dim rounded cursor-pointer text-white;
   }
 
+  .button-secondary {
+    @apply flex justify-around items-center border-1 border-secondary-txt/50 bg-secondary-bg hover:bg-hover rounded cursor-pointer text-primary-txt;
+  }
+
   .avatar {
     @apply rounded-full;
   }
@@ -77,7 +87,7 @@
   }
 
   .nav-dropdown {
-    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-background rounded-full cursor-pointer;
+    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-hover rounded-full cursor-pointer;
   }
 
   .chip {

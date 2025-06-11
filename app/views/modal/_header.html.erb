@@ -1,0 +1,9 @@
+<div class="flex items-center justify-between rounded-t">
+  <h3 class="text-xl font-semibold text-primary">
+    <%= local_assigns[:title].presence || "" %>
+  </h3>
+  <button type="button" class="bg-transparent rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center cursor-pointer hover:bg-hover" data-modal-hide="default-modal">
+    <%= icon "x" %>
+    <span class="sr-only">Close modal</span>
+  </button>
+</div>

@@ -1,0 +1,8 @@
+<div class="flex gap-4 justify-end items-center rounded-b">
+  <button data-modal-hide="default-modal" type="button" class="button px-2 py-1">
+    <%= local_assigns[:continue].presence || t("label.continue") %>
+  </button>
+  <button data-modal-hide="default-modal" type="button" class="button-secondary px-2 py-1 bg-white">
+    <%= local_assigns[:cancel].presence || t("label.cancel") %>
+  </button>
+</div>
