@@ -32,10 +32,10 @@ class ModalsController < ApplicationController
 
   def image_upload_data(model:, img_source_input_id:, img_destination_id:, file_upload_input_container_id:)
     {
-      "data-upload-model-value": model,
-      "data-upload-img-source-input-id-value": img_source_input_id,
-      "data-upload-img-destination-id-value": img_destination_id,
-      "data-upload-file-upload-input-container-id-value": file_upload_input_container_id
+      model:,
+      img_source_input_id:,
+      img_destination_id:,
+      file_upload_input_container_id:
     }
   end
 end
