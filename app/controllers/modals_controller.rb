@@ -1,11 +1,6 @@
 class ModalsController < ApplicationController
   before_action :ensure_turbo_request
 
-  def test
-    @track = Track.first
-    render partial: "modals/test", locals: { track: @track }
-  end
-
   def track_image_upload
     render partial: "modals/image_upload", locals: {
       **image_upload_data(

@@ -2,11 +2,6 @@ require 'rails_helper'
 
 RSpec.describe "Modals", type: :request do
   describe "where requests are from users" do
-    it "does not allow visits to #test" do
-      get test_modal_path
-      expect(response).to redirect_to(root_path)
-    end
-
     it "does not allow visits to #track_image_upload" do
       get track_image_upload_modal_url
       expect(response).to redirect_to(root_path)
@@ -16,12 +11,6 @@ RSpec.describe "Modals", type: :request do
   describe "where request are from turbo frame" do
     before do
       @headers = { "Turbo-Frame" => "modal" }
-    end
-
-    it "fetches modal from #test" do
-      get test_modal_path, headers: @headers
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template(partial: "modals/_test")
     end
 
     it "fetches modal from #track_image_upload" do
