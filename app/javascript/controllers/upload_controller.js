@@ -5,9 +5,8 @@ export default class extends Controller {
   static targets = ["imgUpload", "imgCover", "imgPlaceholder"];
   static values = {
     imgDestinationId: String,
-    imgSourceInputId: String,
     fileUploadInputContainerId: String,
-    model: String,
+    modelField: String,
   }
 
   connect() {
@@ -71,7 +70,7 @@ export default class extends Controller {
 
       const newInput = document.createElement("input");
       newInput.type = "file";
-      newInput.name = `${this.modelValue}[cover_photo]`;
+      newInput.name = this.modelFieldValue;
       newInput.classList.add("hidden");
       newInput.files = dataTransfer.files;
 

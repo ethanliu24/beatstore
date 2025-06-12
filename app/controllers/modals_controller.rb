@@ -4,8 +4,7 @@ class ModalsController < ApplicationController
   def track_image_upload
     render partial: "modals/image_upload", locals: {
       **image_upload_data(
-        model: "track",
-        img_source_input_id: "dropzone-file",
+        model_field: "track[cover_photo]",
         img_destination_id: "track-cover-photo-preview",
         file_upload_input_container_id: "cover-photo-upload-container"
       )
@@ -25,10 +24,9 @@ class ModalsController < ApplicationController
     end
   end
 
-  def image_upload_data(model:, img_source_input_id:, img_destination_id:, file_upload_input_container_id:)
+  def image_upload_data(model_field:, img_destination_id:, file_upload_input_container_id:)
     {
-      model:,
-      img_source_input_id:,
+      model_field:,
       img_destination_id:,
       file_upload_input_container_id:
     }
