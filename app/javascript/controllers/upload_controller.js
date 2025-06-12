@@ -29,6 +29,10 @@ export default class extends Controller {
     this.imgCoverTarget.src = URL.createObjectURL(this.imgUploadTarget.files[0]);
     this.imgCoverTarget.classList.remove("hidden");
     this.imgPlaceholderTarget.classList.add("hidden");
+    this.imgUploadTarget.disabled = true;
+
+    // dispatch event to create cropper tool
+    document.dispatchEvent(new CustomEvent('image:uploaded', {}))
   }
 
   display_cropped_image() {
