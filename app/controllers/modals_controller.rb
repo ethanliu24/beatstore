@@ -11,10 +11,6 @@ class ModalsController < ApplicationController
     }
   end
 
-  def crop_image
-    render partial: "modals/crop_image"
-  end
-
   private
 
   def ensure_turbo_request
