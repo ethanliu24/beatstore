@@ -7,9 +7,8 @@
         <p class="mb-2 text-sm text-secondary-txt"><span class="font-semibold">Click to upload</span> or drag and drop</p>
         <p class="text-xs text-secondary-txt">PNG, JPG or JPEG</p>
       </div>
-      <img id="img-upload-crop" src="" alt=""  data-crop-target="image" data-upload-target="imgCover" style="display:none;" />
       <div id="image-modal-cropper-container" class="w-full h-full absolute top-0 left-0">
-
+        <img id="img-upload-crop" src="" alt=""  data-crop-target="image" data-upload-target="imgCover" />
       </div>
       <input id="dropzone-file" type="file" class="hidden" data-upload-target="imgUpload" data-action="change->upload#image_upload" />
     </label>
