@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="upload"
 export default class extends Controller {
-  static targets = ["imgUpload", "imgCover", "imgPlaceholder", "imageDestination", "imageDestinationPlaceholder"];
+  static targets = ["imgUpload", "imgCover", "imgPlaceholder"];
   static values = {
     imgDestinationId: String,
     imgSourceInputId: String,
@@ -18,6 +18,13 @@ export default class extends Controller {
       "dark:text-white",
       "border-none"
     ];
+
+    this.handleImageCrop = (e) => this.display_cropped_image(e.detail.cropper);
+    document.addEventListener("image:cropped", this.handleImageCrop);
+  }
+
+  disconnect() {
+    document.removeEventListener("image:cropped", this.handleImageCrop);
   }
 
   image_upload() {
@@ -35,32 +42,41 @@ export default class extends Controller {
     document.dispatchEvent(new CustomEvent('image:uploaded', {}))
   }
 
-  display_cropped_image() {
-    const imgSourceInput = document.getElementById(this.imgSourceInputIdValue);
+  display_cropped_image(cropper) {
+    if (!cropper) return;
+
+    // get cropped image
+    const cropperCanvas = cropper.getCroppedCanvas();
+    const croppedImage = cropperCanvas.toDataURL("image/png")
+
     const imgDestination = document.getElementById(this.imgDestinationIdValue);
-    imgDestination.src = URL.createObjectURL(imgSourceInput.files[0]);
+    if (!imgDestination) return;
+    imgDestination.src = croppedImage;
     imgDestination.classList.remove("hidden");
-    this.appendFile(imgSourceInput)
+
+    this.appendFile(cropper);
   }
 
-  appendFile(sourceInput) {
+  appendFile(cropper) {
     const fileUploadInputContainer = document.getElementById(this.fileUploadInputContainerIdValue);
     fileUploadInputContainer.replaceChildren();
 
-    const file = sourceInput.files[0]
-    if (!file) return;
+    cropper.getCroppedCanvas().toBlob((blob) => {
+      if (!blob) return;
 
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(file);
+      const file = new File([blob], 'cropped-image.png', { type: 'image/png' });
 
-    const newInput = document.createElement("input");
-    newInput.type = "file";
-    newInput.name = `${this.modelValue}[cover_photo]`;
-    newInput.id = "cover-photo-upload-input";
-    newInput.classList.add("hidden");
-    newInput.files = dataTransfer.files;
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
 
-    fileUploadInputContainer.appendChild(newInput);
+      const newInput = document.createElement("input");
+      newInput.type = "file";
+      newInput.name = `${this.modelValue}[cover_photo]`;
+      newInput.classList.add("hidden");
+      newInput.files = dataTransfer.files;
+
+      fileUploadInputContainer.appendChild(newInput);
+    }, 'image/png');
   }
 
   track_upload(event) {

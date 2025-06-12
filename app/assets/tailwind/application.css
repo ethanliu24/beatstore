@@ -29,7 +29,11 @@
 }
 
 @layer {
-  #modal > * {
+  .modal-content {
+    @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10
+  }
+
+  .modal-content > * {
     @apply px-4 py-2;
   }
 
