@@ -9,7 +9,6 @@ export default class extends Controller {
 
   connect() {
     this.chips = [];
-    console.log(this.curTagsValue)
     this.curTagsValue.forEach(({id, name}) => {
       this.addChip(name, id);
     })

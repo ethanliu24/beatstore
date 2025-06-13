@@ -28,6 +28,6 @@ Rails.application.routes.draw do
   end
 
   scope :modal, controller: :modals do
-    get :test, action: "test", as: "test_modal"
+    get :track_image_upload, action: "track_image_upload", as: "track_image_upload_modal"
   end
 end

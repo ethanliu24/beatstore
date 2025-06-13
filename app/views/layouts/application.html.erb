@@ -28,14 +28,6 @@
 
     <main><%= render current_page %></main>
 
-    <%# TEMP %>
-    <%= link_to "Open Modal", test_modal_path, class: "button",
-      data: {
-        turbo_frame: "modal",
-        modal_target: "default-modal",
-        modal_toggle: "default-modal",
-      }
-    %>
-    <%= render "modal/skeleton" %>
+    <%= render "modals/skeleton" %>
   </body>
 </html>
