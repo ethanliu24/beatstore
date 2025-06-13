@@ -42,7 +42,7 @@ export default class extends Controller {
 
       const chip = value;
       const chipElement = document.createElement("div");
-      chipElement.classList.add("chip");
+      ["chip", "text-[0.7rem]", "text-primary-txt"].forEach((className) => chipElement.classList.add(className));
       chipElement.innerText = "#" + chip;
 
       const closeButton = document.createElement("button");
