@@ -1,15 +1,48 @@
-<% content_for :title, "Showing track" %>
+<% content_for :title, @track.title %>
 
-<div class="md:w-2/3 w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
+<%# TODO make it responsive %>
+<div class="w-full px-10">
+  <div class="flex justify-start items-stretch gap-8 w-full">
+    <div class="flex justify-center items-center w-50 h-50 min-w-50 min-h-50 bg-secondary-bg rounded-lg">
+      <% if @track.cover_photo.attached? %>
+        <img src="<%= url_for(@track.cover_photo) %>", class="w-full h-full rounded-lg" />
+      <% else %>
+        <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
+      <% end %>
+    </div>
+    <div class="flex-1 flex flex-col justify-between items-start">
+      <div class="flex-1">
+        <h1 class="text-2xl truncate font-bold"><%= @track.title %></h1>
+        <div class="flex justify-start items-center gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
+          <%= render "tracks/track_data", track: @track, icon_size: "5" %>
+        </div>
+        <p class="text-xs mt-2"><%= @track.description %></p>
+      </div>
+      <div class="flex flex-col justify-center items-start gap-2">
+        <div class="flex justify-start items-center gap-2">
+          <% get_tags_for(@track).each do |tag| %>
+            <p class="chip text-[0.6rem] text-secondary-txt"><%= tag %></p>
+          <% end %>
+        </div>
+        <div class="flex justify-start items-stretch gap-2">
+          <%# TODO might look better to show the cheapest license price, whatevs %>
+          <button class="button px-2 py-1">
+            <%= icon "shopping-bag", class: "mr-1" %>
+            <%= t("label.purchase") %>
+          </button>
 
-  <h1 class="font-bold text-4xl">Showing track</h1>
-
-  <%= render @track %>
-
-  <%= link_to "Edit this track", edit_admin_track_path(@track), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to tracks", tracks_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this track", @track, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+          <%# TODO add tool tips for the following %>
+          <button class="track-show-icon-only-btn">
+            <%= icon "heart", class: "text-accent" %>
+          </button>
+          <button class="track-show-icon-only-btn">
+            <%= icon "download", class: "text-accent" %>
+          </button>
+          <button class="track-show-icon-only-btn">
+            <%= icon "share", class: "text-accent" %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

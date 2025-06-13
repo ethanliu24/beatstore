@@ -35,6 +35,7 @@ en:
     delete: "Delete"
     continue: "Continue"
     cancel: "Cancel"
+    purchase: "Purchase"
 
   general:
     upload_instruction: "Click to upload or drag and drop"

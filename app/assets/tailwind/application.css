@@ -30,7 +30,7 @@
 
 @layer {
   .modal-content {
-    @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10
+    @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10;
   }
 
   .modal-content > * {
@@ -124,5 +124,9 @@
 
   .track-form > section {
     @apply py-6;
+  }
+
+  .track-show-icon-only-btn {
+    @apply bg-accent/15 rounded px-1.5 hover:bg-accent/20 cursor-pointer;
   }
 }
