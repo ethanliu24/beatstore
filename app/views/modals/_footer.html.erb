@@ -1,5 +1,5 @@
 <div class="flex gap-4 justify-end items-center rounded-b">
-  <%= yield :modal_continue %>
+  <%= yield :modal_footer_content %>
   <button data-modal-hide="default-modal" type="button" class="button-secondary px-2 py-1 bg-white">
     <%= local_assigns[:cancel].presence || t("label.cancel") %>
   </button>
