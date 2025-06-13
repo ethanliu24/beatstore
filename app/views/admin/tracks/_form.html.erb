@@ -84,7 +84,7 @@
           <%= form.select :key, options_for_select(key_options, track.key), {}, class: "content-input" %>
         </div>
         <div class="field content-input-container">
-          <%= form.label :is_public %>
+          <%= form.label :visibility %>
           <%= form.select :is_public, options_for_select(is_public_options, track.is_public), {}, class: "content-input" %>
         </div>
         <div class="field content-input-container">
