@@ -30,7 +30,7 @@
 
 @layer {
   .modal-content {
-    @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10
+    @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10;
   }
 
   .modal-content > * {
@@ -95,7 +95,7 @@
   }
 
   .chip {
-    @apply rounded-full bg-secondary-bg text-[0.7rem] px-2 py-0.5 w-fit text-primary-txt whitespace-nowrap;
+    @apply rounded-full bg-secondary-bg px-2 py-0.5 w-fit whitespace-nowrap;
   }
 
   .chip > button {
@@ -124,5 +124,9 @@
 
   .track-form > section {
     @apply py-6;
+  }
+
+  .track-show-icon-only-btn {
+    @apply flex justify-center items-center h-full aspect-square bg-accent/15 dark:bg-accent/30 rounded hover:bg-accent/20 dark:hover:bg-accent/35 cursor-pointer;
   }
 }

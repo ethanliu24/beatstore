@@ -17,6 +17,10 @@ class User < ApplicationRecord
   has_many :hearts, dependent: :destroy
   has_many :hearted_tracks, through: :hearts, source: :track
 
+  def hearted?(track)
+    hearted_tracks.exists?(track.id)
+  end
+
   private
 
   def set_default_columns

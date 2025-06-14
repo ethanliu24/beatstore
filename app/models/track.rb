@@ -40,4 +40,8 @@ class Track < ApplicationRecord
   def is_public?
     is_public
   end
+
+  def get_tags
+    tags.map { |t| "##{t.name}" }
+  end
 end

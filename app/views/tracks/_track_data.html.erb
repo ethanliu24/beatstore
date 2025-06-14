@@ -1,0 +1,26 @@
+<% icon_dimension = "w-#{icon_size} h-#{icon_size}" %>
+
+<div class="flex justify-start items-center gap-1">
+  <%= icon "calendar", class: "#{icon_dimension}" %>
+  <p class="whitespace-nowrap"><%= format_date(track.created_at) %></p>
+</div>
+<div class="flex justify-start items-center gap-1">
+  <%= icon "activity-heartbeat", class: "#{icon_dimension}" %>
+  <p class="whitespace-nowrap"><%= track.bpm ? "#{track.bpm} BPM" : "_" %></p>
+</div>
+<div class="flex justify-start items-center gap-1">
+  <%= icon "piano", class: "#{icon_dimension}" %>
+  <p class="whitespace-nowrap"><%= track.key.presence || "_" %></p>
+</div>
+<div class="flex justify-start items-center gap-1">
+  <%= icon "music", class: "#{icon_dimension}" %>
+  <p class="whitespace-nowrap"><%= track.genre %></p>
+</div>
+<div class="flex justify-start items-center gap-1">
+  <%= icon "player-play", class: "#{icon_dimension}" %>
+  <p class="whitespace-nowrap"><%= track.plays %></p>
+</div>
+<div class="flex justify-start items-center gap-1">
+  <%= icon "heart", class: "#{icon_dimension}" %>
+  <p class="whitespace-nowrap"><%= track.hearts.count %></p>
+</div>
