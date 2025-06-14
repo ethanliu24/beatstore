@@ -12,13 +12,12 @@ export default class extends Controller {
   }
 
   toggle() {
-    this.userLiked = !this.userLiked;
-    console.log(this.userLiked)
+    this.userLikedValue = !this.userLikedValue;
     this.showButton();
   }
 
   showButton() {
-    if (this.userLiked) {
+    if (this.userLikedValue) {
       this.likedTarget.classList.remove("hidden")
       this.notLikedTarget.classList.add("hidden")
     } else {

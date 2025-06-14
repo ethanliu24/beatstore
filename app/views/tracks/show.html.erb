@@ -38,7 +38,7 @@
               method: current_user.hearted?(@track) ? :delete : :post,
               data: {
                 controller: "like-button",
-                user_liked_value: current_user.hearted?(@track),
+                like_button_user_liked_value: current_user.hearted?(@track),
                 action: "click->like-button#toggle",
               } do %>
               <%= icon "heart", variant: "filled", class: "text-accent w-5 h-5 cursor-pointer hidden",
