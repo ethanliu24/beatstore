@@ -12,7 +12,7 @@
       model: @track,
       url: @track.persisted? ? admin_track_path(@track) : admin_tracks_path,
       method: @track.persisted? ? :patch : :post,
-      class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/30 w-full h-full"
+      class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/30 w-full"
     ) do |form| %>
     <% if @track.errors.any? %>
       <div id="error_explanation" class="flash flash-error">
