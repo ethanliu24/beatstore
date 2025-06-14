@@ -60,9 +60,16 @@
           <button class="track-show-icon-only-btn">
             <%= icon "download", class: "text-accent" %>
           </button>
+
           <button class="track-show-icon-only-btn">
             <%= icon "share", class: "text-accent" %>
           </button>
+
+          <% if current_user && current_user.admin? %>
+            <%= link_to edit_admin_track_path(@track), class: "track-show-icon-only-btn" do %>
+              <%= icon "pencil", class: "text-accent" %>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>
