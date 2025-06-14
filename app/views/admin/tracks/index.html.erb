@@ -52,6 +52,10 @@
                 <%= icon "pencil", class: "w-3 h-3" %>
                 <%= link_to t("label.edit"), edit_admin_track_path(track) %>
               </li>
+              <li class="dropdown-item">
+                <%= icon "eye", class: "w-3 h-3" %>
+                <%= link_to t("admin.see_track"), track_path(track) %>
+              </li>
               <li class="dropdown-item text-error">
                 <%= icon "trash", class: "w-3 h-3" %>
                 <%= button_to t("label.delete"), admin_track_path(track), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
