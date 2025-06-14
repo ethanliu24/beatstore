@@ -29,6 +29,8 @@ en:
     untagged_mp3: "Untagged MP3"
     untagged_wav: "Untagged WAV"
     track_stems: "Track Stems"
+    open: "Open"
+    close: "Close"
     create: "Create"
     update: "Update"
     edit: "Edit"
@@ -53,6 +55,10 @@ en:
     back_to_sign_in: "Back to sign in"
     back_to_log_in: "Back to log in"
     back_to_sign_up: "Back to sign up"
+    auth_prompt_title: "You need to sign in first"
+    auth_prompt_message: "This feature is for registered members. You can log in or sign up for free now!"
+    auth_prompt_log_in: "If you have an account already, you can log in here"
+    auth_prompt_sign_up: "If you are new, sign up here"
 
   admin:
     track:

@@ -47,6 +47,14 @@
                 data: { like_button_target: "notLiked" } %>
             <% end %>
           <% else %>
+            <%= link_to auth_prompt_modal_path, class: "track-show-icon-only-btn",
+              data: {
+                turbo_frame: "modal",
+                modal_target: "default-modal",
+                modal_toggle: "default-modal",
+              } do %>
+              <%= icon "heart", class: "text-accent w-5 h-5 cursor-pointer" %>
+            <% end %>
           <% end %>
 
           <button class="track-show-icon-only-btn">
