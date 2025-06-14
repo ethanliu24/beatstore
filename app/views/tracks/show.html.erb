@@ -32,9 +32,23 @@
           </button>
 
           <%# TODO add tool tips for the following %>
-          <button class="track-show-icon-only-btn">
-            <%= icon "heart", class: "text-accent" %>
-          </button>
+          <% if current_user %>
+            <%= button_to track_heart_path(@track), form_class: "track-show-icon-only-btn",
+              class: "flex justify-center items-center w-full h-full",
+              method: current_user.hearted?(@track) ? :delete : :post,
+              data: {
+                controller: "like-button",
+                user_liked_value: current_user.hearted?(@track),
+                action: "click->like-button#toggle",
+              } do %>
+              <%= icon "heart", variant: "filled", class: "text-accent w-5 h-5 cursor-pointer hidden",
+                data: { like_button_target: "liked" } %>
+              <%= icon "heart", variant: "outline", class: "text-accent w-5 h-5 cursor-pointer hidden",
+                data: { like_button_target: "notLiked" } %>
+            <% end %>
+          <% else %>
+          <% end %>
+
           <button class="track-show-icon-only-btn">
             <%= icon "download", class: "text-accent" %>
           </button>
