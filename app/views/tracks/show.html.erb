@@ -20,7 +20,7 @@
       </div>
       <div class="flex flex-col justify-center items-start gap-2">
         <div class="flex justify-start items-center gap-2">
-          <% get_tags_for(@track).each do |tag| %>
+          <% @track.get_tags.each do |tag| %>
             <p class="chip text-[0.6rem] text-secondary-txt"><%= tag %></p>
           <% end %>
         </div>
