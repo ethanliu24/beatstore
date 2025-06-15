@@ -102,6 +102,10 @@
     @apply pl-3 rounded-full text-[0.5rem] hover:cursor-pointer;
   }
 
+  .chip-accent {
+    @apply rounded-full text-accent px-2 py-0.5 w-fit whitespace-nowrap bg-accent/15 dark:bg-accent/30 hover:bg-accent/20 dark:hover:bg-accent/35;
+  }
+
   .file-upload-chip {
     @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/30 text-accent hover:bg-accent/50;
   }
