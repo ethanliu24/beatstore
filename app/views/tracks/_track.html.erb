@@ -1,5 +1,22 @@
-<div id="<%= dom_id track %>" class="w-full sm:w-auto my-5 space-y-5">
-  <%= track.title %>
-  <%= track.hearts.count %>
-  <%= button_to "Heart", track_heart_path(track), method: :post, class: "button" %>
+<div id="<%= dom_id track %>" class="flex justify-between items-stretch w-full sm:w-auto rounded p-2 hover:bg-hover cursor-pointer">
+  <div class="flex justify-start itmes-center gap-4">
+    <div class="flex justify-center items-center text-xs text-secondary-txt"><%= list_num %></div>
+    <div class="flex justify-center items-center rounded w-8 h-8 min-w-8 min-h-8 bg-secondary-bg">
+      <% if track.cover_photo.attached? %>
+        <img src="<%= url_for(track.cover_photo) %>" class="flex justify-center items-center w-full h-full rounded">
+      <% else %>
+        <%= icon "photo-scan" %>
+      <% end %>
+    </div>
+    <div class="flex flex-col justify-between items-start">
+      <%= link_to "#{track.title}", track_path(track), class: "text-sm cursor-pointer hover:underline" %>
+      <div class="flex justify-start items-center gap-1 text-[0.6rem] text-secondary-txt">
+        <span class="truncate"><%= "#{track.bpm} BPM" %></span>
+        <span>·</span>
+        <span><%= track.key %></span>
+        <span>·</span>
+        <span><%= track.genre.upcase %></span>
+      </div>
+    </div>
+  </div>
 </div>
