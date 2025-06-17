@@ -77,7 +77,9 @@
       <ul>
         <li class="dropdown-item">
           <%= icon "eye", class: icon_size %>
-          <%= t("track.see_track") %>
+          <%= link_to track_path(track) do %>
+            <%= t("track.see_track") %>
+          <% end %>
         </li>
         <li class="dropdown-item">
           <%= icon "download", class: icon_size %>
