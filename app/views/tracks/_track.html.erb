@@ -62,7 +62,19 @@
       <ul>
         <li class="dropdown-item">
           <%= icon "heart", variant: "filled", class: icon_size %>
-          <%= t("track.heart_track") %>
+          <%# TODO toast to show like successful %>
+          <% if current_user %>
+            <%= button_to t("track.heart_track"), track_heart_path(track), method: :post, class: "cursor-pointer" %>
+          <% else %>
+            <%= link_to auth_prompt_modal_path,
+              data: {
+                turbo_frame: "modal",
+                modal_target: "default-modal",
+                modal_toggle: "default-modal",
+              } do %>
+              <%= t("track.heart_track") %>
+            <% end %>
+          <% end %>
         </li>
         <li class="dropdown-item">
           <%= icon "file-star", variant: "filled", class: icon_size %>
