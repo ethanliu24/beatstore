@@ -39,6 +39,9 @@ en:
     cancel: "Cancel"
     purchase: "Purchase"
     free: "Free"
+    download: "Download"
+    comment: "Comment"
+    play: "Play"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
@@ -60,6 +63,12 @@ en:
     auth_prompt_message: "This feature is for registered members. You can log in or sign up for free now!"
     auth_prompt_log_in: "If you have an account already, you can log in here"
     auth_prompt_sign_up: "If you are new, sign up here"
+
+  track:
+    add_to_cart: "Add to cart"
+    see_track: "See track"
+    heart_track: "Heart track"
+    save_track: "Save track"
 
   admin:
     track:

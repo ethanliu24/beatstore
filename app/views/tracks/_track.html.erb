@@ -36,8 +36,54 @@
       <span class="max-sm:hidden">$19.99</span>
     </button>
 
-    <div>
+    <div id="customer-track-more-dropdown" data-dropdown-toggle=<%= dom_id(track, :track_more) %> data-dropdown-placement="bottom-end">
       <%= icon "dots-vertical", class: "w-4 h-4" %>
+    </div>
+
+    <%# Track more dropdown %>
+    <div id=<%= dom_id(track, :track_more) %> class="dropdown hidden">
+      <% icon_size = "w-3 h-3" %>
+
+      <ul>
+        <li class="dropdown-item">
+          <%= icon "player-play", class: icon_size %>
+          <%= t("label.play") %>
+        </li>
+        <li class="dropdown-item">
+          <%= icon "shopping-bag", class: icon_size %>
+          <%= t("track.add_to_cart") %>
+        </li>
+        <li class="dropdown-item">
+          <%= icon "share", class: icon_size %>
+          <%= t("label.share") %>
+        </li>
+      </ul>
+
+      <ul>
+        <li class="dropdown-item">
+          <%= icon "heart", variant: "filled", class: icon_size %>
+          <%= t("track.heart_track") %>
+        </li>
+        <li class="dropdown-item">
+          <%= icon "file-star", variant: "filled", class: icon_size %>
+          <%= t("track.save_track") %>
+        </li>
+        <li class="dropdown-item">
+          <%= icon "message", variant: "filled", class: icon_size %>
+          <%= t("label.comment") %>
+        </li>
+      </ul>
+
+      <ul>
+        <li class="dropdown-item">
+          <%= icon "eye", class: icon_size %>
+          <%= t("track.see_track") %>
+        </li>
+        <li class="dropdown-item">
+          <%= icon "download", class: icon_size %>
+          <%= t("label.download") %>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

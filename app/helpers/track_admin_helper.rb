@@ -52,6 +52,6 @@ module TrackAdminHelper
   end
 
   def track_more_dropdown_id(track)
-    "track-#{track.id}-more-dropdown"
+    "admin-track-#{track.id}-more-dropdown"
   end
 end
