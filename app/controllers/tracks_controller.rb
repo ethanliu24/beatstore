@@ -1,7 +1,7 @@
 class TracksController < ApplicationController
   def index
     # TODO pagination
-    @tracks = Track.all.filter { |track| track.is_public? }
+    @tracks = Track.where(is_public: true).order(created_at: :desc)
   end
 
   def show

@@ -87,7 +87,7 @@
   }
 
   .dropdown-item {
-    @apply flex justify-start items-center gap-2 px-4 py-2 hover:bg-secondary-bg dark:hover:bg-gray-600 dark:hover:text-white;
+    @apply flex justify-start items-center gap-2 px-4 py-2 w-full hover:bg-secondary-bg dark:hover:bg-gray-600 dark:hover:text-white;
   }
 
   .nav-dropdown {
@@ -100,6 +100,10 @@
 
   .chip > button {
     @apply pl-3 rounded-full text-[0.5rem] hover:cursor-pointer;
+  }
+
+  .chip-accent {
+    @apply rounded-full text-accent px-2 py-0.5 w-fit whitespace-nowrap bg-accent/15 dark:bg-accent/30 hover:bg-accent/20 dark:hover:bg-accent/35;
   }
 
   .file-upload-chip {
