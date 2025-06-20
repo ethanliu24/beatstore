@@ -58,6 +58,7 @@ RSpec.configure do |config|
   config.before(:each, type: :request, admin: true) do
     @admin = User.find_or_initialize_by(email: "admin@example.com") do |user|
       user.email = "admin@example.com"
+      user.display_name = "Admin"
       user.password = "Password1!"
       user.username = "admin"
       user.role = "admin"
@@ -75,6 +76,7 @@ RSpec.configure do |config|
     sign_out @admin
     user = User.find_or_initialize_by(email: "customer@example.com") do |user|
       user.email = "customer@exmaple.com"
+      user.display_name = "Customer"
       user.password = "Password1!"
       user.username = "customer"
       user.role = "customer"
