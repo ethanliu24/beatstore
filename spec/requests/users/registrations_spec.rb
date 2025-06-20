@@ -60,6 +60,47 @@ RSpec.describe Users::RegistrationsController, type: :request do
       expect { created_user.extra_field }.to raise_error(NoMethodError)
     end
 
+    context "username generation" do
+      let(:params) {
+        {
+          email: "generated.username@example.com",
+          display_name: "diddler",
+          password: "Password1!",
+          password_confirmation: "Password1!"
+        }
+      }
+
+      it "should generate a username" do
+        post user_registration_url, params: { user: params }
+        created_user = User.last
+        expect(created_user.username).to eq("generated_username")
+      end
+
+      it "should increment username suffix if it exists" do
+        expect {
+          post user_registration_url, params: { user: params }
+        }.to change(User, :count).by(1)
+
+        expect {
+          params[:email] = "generated,username@example.com"
+          post user_registration_url, params: { user: params }
+        }.to change(User, :count).by(1)
+
+        created_user = User.last
+        expect(created_user.username).to eq("generated_username2")
+      end
+
+      it "should not generate a username if it's passed in the parameter" do
+        expect {
+          params[:username] = "not_generated"
+          post user_registration_url, params: { user: params }
+        }.to change(User, :count).by(1)
+
+        created_user = User.last
+        expect(created_user.username).to eq("not_generated")
+      end
+    end
+
     context 'when the user is valid' do
       it 'sends the welcome email' do
         post user_registration_url(params: { user: attributes_for(:user, email: "sends.email@example.com") })
@@ -76,6 +117,27 @@ RSpec.describe Users::RegistrationsController, type: :request do
 
         expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
+    end
+
+    it "should sanitize the parameters" do
+      expect {
+        post user_registration_path, params: {
+          user: {
+            email: "test@example.com",
+            password: "password123",
+            password_confirmation: "password123",
+            display_name: "Did",
+            username: "did",
+            foo: "bar"
+          }
+        }
+      }.to change(User, :count).by(1)
+
+      user = User.last
+      expect(user.email).to eq("test@example.com")
+      expect(user.display_name).to eq("Did")
+      expect(user.username).to eq("did")
+      expect(user.respond_to?(:foo)).to be false
     end
   end
 
