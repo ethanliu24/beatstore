@@ -13,7 +13,7 @@ en:
     reset: "Reset"
     email: "Email"
     username: "Username"
-    display_name: "Display Name"
+    display_name: "Profile Name"
     password: "Password"
     password_confirmation: "Password Confirmation"
     terms_of_service: "Terms of Service"
