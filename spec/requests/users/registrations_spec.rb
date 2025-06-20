@@ -10,7 +10,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
       params = {
         user: {
           email: "valid.signup.param@example.com",
-          username: "valid.signup.param",
+          display_name: "diddler",
           password: "Password1!",
           password_confirmation: "Password1!"
         }
@@ -28,42 +28,82 @@ RSpec.describe Users::RegistrationsController, type: :request do
       invalid_params = {
         user: {
           email: "invalid_email",
-          username: "",
           password: "a",
           password_confirmation: "a"
         }
       }
 
       expect {
-        post user_registration_path, params: invalid_params
+        post user_registration_url, params: invalid_params
       }.not_to change(User, :count)
 
       expect(response).to have_http_status(:unprocessable_entity)
       expect(assigns(:user).errors).not_to be_empty
     end
 
-    it "should allow fields <email>, <username>, <password>, and <password_confirmation> only" do
+    it "should allow fields <email>, <display_name>, <password>, and <password_confirmation> only" do
       params = {
         user: {
           email: "signup.sanitization@example.com",
-          username: "signup.sanitization",
+          display_name: "signup.sanitization",
           password: "Password1!",
           password_confirmation: "Password1!",
           extra_field: "should_not_be_allowed"
         }
       }
 
-      post user_registration_path, params: params
+      post user_registration_url, params: params
 
       created_user = User.last
       expect(created_user.email).to eq("signup.sanitization@example.com")
-      expect(created_user.username).to eq("signup.sanitization")
+      expect(created_user.display_name).to eq("signup.sanitization")
       expect { created_user.extra_field }.to raise_error(NoMethodError)
+    end
+
+    context "username generation" do
+      let(:params) {
+        {
+          email: "generated.username@example.com",
+          display_name: "diddler",
+          password: "Password1!",
+          password_confirmation: "Password1!"
+        }
+      }
+
+      it "should generate a username" do
+        post user_registration_url, params: { user: params }
+        created_user = User.last
+        expect(created_user.username).to eq("generated_username")
+      end
+
+      it "should increment username suffix if it exists" do
+        expect {
+          post user_registration_url, params: { user: params }
+        }.to change(User, :count).by(1)
+
+        expect {
+          params[:email] = "generated,username@example.com"
+          post user_registration_url, params: { user: params }
+        }.to change(User, :count).by(1)
+
+        created_user = User.last
+        expect(created_user.username).to eq("generated_username2")
+      end
+
+      it "should not generate a username if it's passed in the parameter" do
+        expect {
+          params[:username] = "not_generated"
+          post user_registration_url, params: { user: params }
+        }.to change(User, :count).by(1)
+
+        created_user = User.last
+        expect(created_user.username).to eq("not_generated")
+      end
     end
 
     context 'when the user is valid' do
       it 'sends the welcome email' do
-        post user_registration_path(params: { user: attributes_for(:user, email: "sends.email@example.com") })
+        post user_registration_url(params: { user: attributes_for(:user, email: "sends.email@example.com") })
 
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         email = ActionMailer::Base.deliveries.last
@@ -73,10 +113,31 @@ RSpec.describe Users::RegistrationsController, type: :request do
 
     context 'when the user is not valid' do
       it 'does not send the welcome email' do
-        post user_registration_path(params: { user: attributes_for(:user, email: 'inva@') })
+        post user_registration_url(params: { user: attributes_for(:user, email: 'inva@') })
 
         expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
+    end
+
+    it "should sanitize the parameters" do
+      expect {
+        post user_registration_path, params: {
+          user: {
+            email: "test@example.com",
+            password: "password123",
+            password_confirmation: "password123",
+            display_name: "Did",
+            username: "did",
+            foo: "bar"
+          }
+        }
+      }.to change(User, :count).by(1)
+
+      user = User.last
+      expect(user.email).to eq("test@example.com")
+      expect(user.display_name).to eq("Did")
+      expect(user.username).to eq("did")
+      expect(user.respond_to?(:foo)).to be false
     end
   end
 

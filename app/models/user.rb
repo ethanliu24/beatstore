@@ -5,6 +5,9 @@ class User < ApplicationRecord
   after_initialize :set_default_columns, if: :new_record?
 
   # === Validations ===
+  validates :display_name,
+    presence: true
+
   validates :username,
     presence: true,
     uniqueness: { case_sensitive: false }
@@ -14,6 +17,8 @@ class User < ApplicationRecord
     inclusion: { in: roles }
 
   # === Associations ===
+  has_one_attached :profile_picture, dependent: :destroy
+
   has_many :hearts, dependent: :destroy
   has_many :hearted_tracks, through: :hearts, source: :track
 

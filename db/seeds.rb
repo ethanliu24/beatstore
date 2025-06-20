@@ -1,5 +1,6 @@
 # === Users ===
 User.create(
+  display_name: "Admin",
   username: "admin",
   email: "admin@email.com",
   password: "12345678",
@@ -8,6 +9,7 @@ User.create(
 )
 
 User.create(
+  display_name: "Customer",
   username: "customer",
   email: "customer@email.com",
   password: "12345678",

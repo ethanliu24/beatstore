@@ -57,15 +57,12 @@
         id="user-dropdown-btn" class="nav-dropdown" type="button"
         data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-start"
       >
-        <% unless current_user.profile_picture.blank? %>
-          <img
-            src="<%= current_user.profile_picture %>%"
-            alt="avatar"
-            class="avatar w-6 h-6"
-          >
+        <% avatar_size = "w-6 h-6" %>
+        <% if current_user.profile_picture.attached? %>
+          <%= image_tag track.cover_photo, class: "avatar #{avatar_size}" %>
         <% else %>
-          <div class="relative w-6 h-6 overflow-hidden bg-secondary-bg rounded-full">
-            <svg class="absolute w-6 h-6 text-gray-400 translate-y-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <div class="relative <%= avatar_size %> overflow-hidden bg-secondary-bg rounded-full">
+            <svg class="absolute w-full h-full text-gray-400 translate-y-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
             </svg>
           </div>
@@ -76,8 +73,8 @@
         <!-- User dropdown -->
         <div id="user-dropdown" class="dropdown hidden w-44">
           <div class="px-4 py-3 text-primary-txt truncate text-[0.6rem]">
-            <div><%= current_user.username %></div>
-            <div><%= current_user.email %></div>
+            <div class="text-xs"><%= current_user.display_name %></div>
+            <div class="italic"><%= "@#{current_user.username}" %></div>
           </div>
           <ul class="py-2" aria-labelledby="cart-dropdown-btn">
             <li class="dropdown-item">
