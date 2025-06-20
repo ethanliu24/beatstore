@@ -37,7 +37,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     username = base
     suffix = 1
 
-    while User.where(username: username).any?
+    while User.exists?(username: username)
       suffix += 1
       username = "#{base}#{suffix}"
     end
