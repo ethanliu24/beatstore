@@ -9,5 +9,7 @@
     <%= link_to "Sign up!", new_user_registration_path %>
     <br>
     <%= link_to "Log in!", new_user_session_path %>
+    <br>
+    <%= button_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false } %>
   <% end %>
 </div>
