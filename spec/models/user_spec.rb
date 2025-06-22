@@ -1,3 +1,4 @@
+require 'ostruct'
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -42,6 +43,53 @@ RSpec.describe User, type: :model do
 
       expect(user.hearted_tracks).to include(track1, track2)
       expect(user.hearted_tracks).not_to include(track3)
+    end
+  end
+
+  describe "omniauth" do
+    before do
+      allow(Faraday).to receive(:get).and_return(
+        instance_double(Faraday::Response,
+          success?: true,
+          body: "fake-image-data",
+          headers: { "content-type" => "image/jpeg" }
+        )
+      )
+    end
+
+    let(:auth) {
+      OpenStruct.new(
+        provider: "provider",
+        uid: "123456",
+        info: OpenStruct.new(
+          email: "test@example.com",
+          name: "Test",
+          image: "https://example.com/avatar.jpg"
+        )
+      )
+    }
+
+    it "#from_omniauth creates new user if email doesn't exist" do
+      expect {
+        User.from_omniauth(auth)
+      }.to change(User, :count).by(1)
+    end
+
+    it "#from_omniauth binds user if email already exists" do
+      expect {
+        User.from_omniauth(auth)
+      }.to change(User, :count).by(1)
+
+      expect {
+        User.from_omniauth(auth)
+      }.to change(User, :count).by(0)
+
+      user = User.last
+      expect(user.provider).to eq("provider")
+      expect(user.uid).to eq("123456")
+      expect(user.email).to eq("test@example.com")
+      expect(user.display_name).to eq("Test")
+      expect(user.profile_picture).to be_attached
     end
   end
 end
