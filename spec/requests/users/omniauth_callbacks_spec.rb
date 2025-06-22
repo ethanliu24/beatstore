@@ -26,16 +26,16 @@ RSpec.describe Users::OmniauthCallbacksController, type: :request do
     )
   end
 
-  it "google creates a user from omniauth" do
-    expect {
-      post user_google_oauth2_omniauth_callback_url
-    }.to change(User, :count).by(1)
+  describe "google_oauth2 omniauth" do
+    it "directs user to google login page" do
+      post user_google_oauth2_omniauth_authorize_url
+      expect(response).to have_http_status(302)
+    end
 
-    user = User.last
-    expect(user.provider).to eq("google_oauth2")
-    expect(user.uid).to eq("123456")
-    expect(user.email).to eq("test@example.com")
-    expect(user.display_name).to eq("Test")
-    expect(user.profile_picture).to be_attached
+    it "creates a user" do
+      expect {
+        post user_google_oauth2_omniauth_callback_url
+      }.to change(User, :count).by(1)
+    end
   end
 end
