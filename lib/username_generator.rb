@@ -1,5 +1,5 @@
 module UsernameGenerator
-  def generate_unique_username(email)
+  def generate_from_email(email)
     base = email.to_s.split("@").first.downcase.gsub(/[^a-z0-9]/, "_")
     base = "user" if base.blank?
 
@@ -14,5 +14,5 @@ module UsernameGenerator
     username
   end
 
-  module_function :generate_unique_username
+  module_function :generate_from_email
 end

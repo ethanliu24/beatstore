@@ -8,7 +8,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def configure_sign_up_params
     if params[:user][:username].blank?
-      params[:user][:username] = UsernameGenerator.generate_unique_username(params[:user][:email])
+      params[:user][:username] = UsernameGenerator.generate_from_email(params[:user][:email])
     end
 
     devise_parameter_sanitizer.permit(
