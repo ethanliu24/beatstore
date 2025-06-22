@@ -37,5 +37,13 @@ RSpec.describe Users::OmniauthCallbacksController, type: :request do
         post user_google_oauth2_omniauth_callback_url
       }.to change(User, :count).by(1)
     end
+
+    it "redirects user if login failed" do
+      OmniAuth.config.mock_auth[:google_oauth2] = :invalid_credentials
+
+      post user_google_oauth2_omniauth_callback_url
+
+      expect(response).to redirect_to(new_user_session_path)
+    end
   end
 end
