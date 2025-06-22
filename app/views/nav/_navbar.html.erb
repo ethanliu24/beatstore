@@ -59,7 +59,7 @@
       >
         <% avatar_size = "w-6 h-6" %>
         <% if current_user.profile_picture.attached? %>
-          <%= image_tag track.cover_photo, class: "avatar #{avatar_size}" %>
+          <%= image_tag current_user.profile_picture, class: "avatar #{avatar_size}" %>
         <% else %>
           <div class="relative <%= avatar_size %> overflow-hidden bg-secondary-bg rounded-full">
             <svg class="absolute w-full h-full text-gray-400 translate-y-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -74,7 +74,8 @@
         <div id="user-dropdown" class="dropdown hidden w-44">
           <div class="px-4 py-3 text-primary-txt truncate text-[0.6rem]">
             <div class="text-xs"><%= current_user.display_name %></div>
-            <div class="italic"><%= "@#{current_user.username}" %></div>
+            <div class="italic"><%= current_user.email %></div>
+            <!--- <div class="italic"><%= "@#{current_user.username}" %></div> --->
           </div>
           <ul class="py-2" aria-labelledby="cart-dropdown-btn">
             <li class="dropdown-item">
