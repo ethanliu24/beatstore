@@ -67,6 +67,7 @@ gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.2"
 
 gem "devise", "~> 4.9"
+gem "omniauth-rails_csrf_protection"
 
 group :development do
   gem "letter_opener"

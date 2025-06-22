@@ -1,5 +1,14 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
+  devise \
+    :database_authenticatable,
+    :registerable,
+    :recoverable,
+    :rememberable,
+    :validatable,
+    :confirmable,
+    :omniauthable,
+    omniauth_providers: i%[]
+
   enum :role, [ :customer, :admin ]
 
   after_initialize :set_default_columns, if: :new_record?
