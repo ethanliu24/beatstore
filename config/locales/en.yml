@@ -49,6 +49,7 @@ en:
     accepted_image_types: "PNG, JPG, or JPEG"
 
   authentication:
+    or_continue_with: "Or continue with"
     agree_tos: "By signing up, you agree with the "
     already_signed_up: "Already signed up?"
     already_signed_in: "Already signed in?"

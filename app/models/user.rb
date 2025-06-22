@@ -1,5 +1,14 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
+  devise \
+    :database_authenticatable,
+    :registerable,
+    :recoverable,
+    :rememberable,
+    :validatable,
+    :confirmable,
+    :omniauthable,
+    omniauth_providers: [ :google_oauth2 ]
+
   enum :role, [ :customer, :admin ]
 
   after_initialize :set_default_columns, if: :new_record?
@@ -22,8 +31,52 @@ class User < ApplicationRecord
   has_many :hearts, dependent: :destroy
   has_many :hearted_tracks, through: :hearts, source: :track
 
+  class << self
+    def from_omniauth(auth)
+      user = find_by(provider: auth.provider, uid: auth.uid)
+
+      # try to find by email if no providers
+      if user.nil? && auth.info.email
+        user = find_by(email: auth.info.email)
+        user.update!(provider: auth.provider, uid: auth.uid) if user
+      end
+
+      # create new user if email or providers not found
+      user ||= create!(
+        provider: auth.provider,
+        uid: auth.uid,
+        email: auth.info.email,
+        display_name: auth.info.name,
+        username: UsernameGenerator.generate_from_email(auth.info.email),
+        password: Devise.friendly_token[0, 20],
+        confirmed_at: Time.current
+      )
+
+      # could implement better logic to check if pfp is updated, user manually uploaded pfp, etc.
+      # but this is not important, could be future improvement
+      unless user.profile_picture.attached?
+        user.attach_remote_pfp(auth.info.image)
+      end
+
+      user
+    end
+  end
+
   def hearted?(track)
     hearted_tracks.exists?(track.id)
+  end
+
+  def attach_remote_pfp(url)
+    response = Faraday.get(url)
+    return unless response.success?
+
+    filename = File.basename(URI.parse(url).path)
+
+    profile_picture.attach(
+      io: StringIO.new(response.body),
+      filename: filename,
+      content_type: response.headers["content-type"]
+    )
   end
 
   private

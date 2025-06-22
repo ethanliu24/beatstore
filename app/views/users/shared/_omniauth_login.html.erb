@@ -1,0 +1,11 @@
+<div class="mt-6 mb-2">
+  <p class="w-full text-center text-[0.6rem] text-secondary-txt">
+    <%= t("authentication.or_continue_with") %>
+  </p>
+  <div class="flex justify-center items-center gap-2 mt-1">
+    <% icon_style = "w-4 h-4 hover:text-secondary-txt cursor-pointer" %>
+    <%= button_to user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false } do %>
+      <%= icon "brand-google", variant: "filled", class: "#{icon_style}" %>
+    <% end %>
+  </div>
+</div>
