@@ -9,9 +9,9 @@
     <p class="text-xs text-secondary-txt"><%= t("profile.manage_your_profile_here") %></p>
   </div>
 
-  <div class="flex flex-start items-stretch gap-16 w-full">
+  <div class="flex flex-start items-stretch gap-10 w-full">
     <div class="flex flex-col gap-3">
-      <div class="bg-secondary-bg rounded-full flex justify-center items-center w-40 h-40">
+      <div class="bg-secondary-bg rounded-full flex justify-center items-center w-30 h-30">
         <%= icon "photo-scan", class: "w-1/4 h-1/4 #{current_user.profile_picture.attached? ? "hidden" : ""}" %>
         <img id="user-pfp-preview"
           src="<%= user_pfp_url %>"
@@ -31,10 +31,16 @@
         <div id="pfp-upload-container" class="hidden"></div>
       </div>
     </div>
-    <div class="flex-1 flex flex-col justify-start gap-4">
-      <p class="text-sm text-secondary-txt"><%= t("label.display_name") %></p>
-      <%= form.text_field :display_name, autofocus: true,
-        class: "focus:outline-none focus:ring-0 border-b-1 w-full text-4xl p-2"
+    <div class="flex-1 flex flex-col justify-start gap-4" data-controller="char-count">
+      <div class="flex justify-between items-center">
+        <%= form.label t("label.display_name"), class: "text-xs text-secondary-txt" %>
+        <div class="char-count">
+          <span data-char-count-target="count">0</span><%= "/#{max_display_name_length}" %>
+        </div>
+      </div>
+      <%= form.text_field :display_name, autofocus: true, maxlength: max_display_name_length,
+        data: { char_count_target: "input", action: "input->char-count#count" },
+        class: "focus:outline-none focus:ring-0 border-b-1 w-full text-2xl p-2 cursor-select"
       %>
     </div>
   </div>
@@ -47,7 +53,7 @@
           <span data-char-count-target="count">0</span><%= "/#{max_user_bio_length}" %>
         </div>
       </div>
-      <%= form.text_area :description, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_description_length,
+      <%= form.text_area :description, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_user_bio_length,
         data: { char_count_target: "input", action: "input->char-count#count" } %>
     </div>
   </div>

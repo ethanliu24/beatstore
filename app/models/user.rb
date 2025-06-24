@@ -14,11 +14,13 @@ class User < ApplicationRecord
   after_initialize :set_default_columns, if: :new_record?
 
   # === Constants ===
+  DISPLAY_NAME_LENGTH = 30
   BIOGRAPHY_LENGTH = 200
 
   # === Validations ===
   validates :display_name,
-    presence: true
+    presence: true,
+    length: { maximum: DISPLAY_NAME_LENGTH }
 
   validates :username,
     presence: true,

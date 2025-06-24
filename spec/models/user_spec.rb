@@ -26,7 +26,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context "biography format" do
+    context "biography length" do
       it "allows biography within the limit" do
         user = build(:user, biography: "a" * User::BIOGRAPHY_LENGTH)
         expect(user).to be_valid
@@ -43,6 +43,19 @@ RSpec.describe User, type: :model do
         expect(user).to be_valid
         user = build(:user, biography: nil)
         expect(user).to be_valid
+      end
+    end
+
+    context "display name length" do
+      it "allows display name within the limit" do
+        user = build(:user, display_name: "a" * User::DISPLAY_NAME_LENGTH)
+        expect(user).to be_valid
+      end
+
+      it "does not allow display name over the limit" do
+        user = build(:user, display_name: "a" * (User::DISPLAY_NAME_LENGTH + 1))
+        expect(user).not_to be_valid
+        expect(user.errors.details[:display_name]).to include(hash_including(error: :too_long))
       end
     end
   end
