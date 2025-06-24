@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  namespace :users do
+    resource :profile, only: [ :edit, :update ]
+  end
+
   resources :tracks, only: [ :index, :show ] do
     resource :heart, only: [ :create, :destroy ]
   end
