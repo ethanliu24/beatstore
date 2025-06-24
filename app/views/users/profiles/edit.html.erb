@@ -2,6 +2,8 @@
   model: current_user,
   url: users_profile_path,
   method: :patch,
+  local: true,
+  html: { multipart: true },
   class: "flex flex-col justify-start items-stretch gap-8 w-full mb-10"
 ) do |form| %>
   <div>
@@ -28,8 +30,8 @@
           <%= icon "plus", class: "w-4 h-4" %>
           <%= t("label.upload") %>
         <% end %>
-        <div id="pfp-upload-container" class="hidden"></div>
       </div>
+      <div id="pfp-upload-container" class="hidden"></div>
     </div>
     <div class="flex-1 flex flex-col justify-start gap-4" data-controller="char-count">
       <div class="flex justify-between items-center">
@@ -52,7 +54,7 @@
         <span data-char-count-target="count">0</span><%= "/#{max_user_bio_length}" %>
       </div>
     </div>
-    <%= form.text_area :description, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_user_bio_length,
+    <%= form.text_area :biography, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_user_bio_length,
       data: { char_count_target: "input", action: "input->char-count#count" } %>
   </div>
 
@@ -78,5 +80,8 @@
         <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
       </div>
     </div>
+  </div>
+  <div class="flex flex-row-reverse mt-6">
+    <%= button_to t("label.save"), users_profile_path, method: :put, class: "button px-4 py-1" %>
   </div>
 <% end %>

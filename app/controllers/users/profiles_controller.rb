@@ -4,12 +4,18 @@ class Users::ProfilesController < ApplicationController
   def edit; end
 
   def update
-    # TODO display toast on success
+    if current_user.update(user_params)
+      # TODO display toast on success
+      redirect_to edit_users_profile_path
+    else
+      # TODO display toast on failure
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
 
   def user_params
-    params.require(:user).permit()
+    params.require(:user).permit(:display_name, :biography, :profile_picture)
   end
 end
