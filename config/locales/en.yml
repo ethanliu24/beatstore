@@ -43,6 +43,7 @@ en:
     download: "Download"
     comment: "Comment"
     play: "Play"
+    profile: "Profile"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
@@ -77,3 +78,6 @@ en:
       upload_file: "Upload %{file_for}"
       back_to_tracks: "Back to tracks"
       see_track: "See track"
+
+  profile:
+    manage_your_profile_here: "Manage your profile here"

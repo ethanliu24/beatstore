@@ -35,5 +35,6 @@ Rails.application.routes.draw do
   scope :modal, controller: :modals do
     get :auth_prompt, action: "auth_prompt", as: "auth_prompt_modal"
     get :track_image_upload, action: "track_image_upload", as: "track_image_upload_modal"
+    get :user_pfp_upload, action: "user_pfp_upload", as: "user_pfp_upload_modal"
   end
 end

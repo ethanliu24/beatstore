@@ -1,1 +1,30 @@
-<div><%= current_user.display_name %></div>
+<div class="flex flex-col justify-start items-stretch gap-6">
+  <div>
+    <h1 class="text-2xl font-bold"><%= t("label.profile") %></h1>
+    <p class="text-xs text-secondary-txt"><%= t("profile.manage_your_profile_here") %></p>
+  </div>
+
+  <div>
+    <div class="flex flex-col gap-3">
+      <div class="bg-secondary-bg rounded-full flex justify-center items-center w-40 h-40">
+        <%= icon "photo-scan", class: "w-1/4 h-1/4 #{current_user.profile_picture.attached? ? "hidden" : ""}" %>
+        <img id="user-pfp-preview"
+          src="<%= user_pfp_url %>"
+          alt="Profile picture preview"
+          class="object-cover w-full h-full rounded-full <%= current_user.profile_picture.attached? ? "" : "hidden" %>" />
+      </div>
+      <div class="flex justify-center items-center w-full">
+        <%= link_to user_pfp_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+          data: {
+            turbo_frame: "modal",
+            modal_target: "default-modal",
+            modal_toggle: "default-modal",
+          } do %>
+          <%= icon "plus", class: "w-4 h-4" %>
+          <%= t("label.upload") %>
+        <% end %>
+        <div id="pfp-upload-container" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>
