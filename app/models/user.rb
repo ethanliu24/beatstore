@@ -13,6 +13,9 @@ class User < ApplicationRecord
 
   after_initialize :set_default_columns, if: :new_record?
 
+  # === Constants ===
+  BIOGRAPHY_LENGTH = 200
+
   # === Validations ===
   validates :display_name,
     presence: true
@@ -24,6 +27,9 @@ class User < ApplicationRecord
   validates :role,
     presence: true,
     inclusion: { in: roles }
+
+  validates :biography,
+    length: { maximum: BIOGRAPHY_LENGTH }
 
   # === Associations ===
   has_one_attached :profile_picture, dependent: :destroy

@@ -44,6 +44,7 @@ en:
     comment: "Comment"
     play: "Play"
     profile: "Profile"
+    biography: "Bio"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
