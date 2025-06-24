@@ -71,7 +71,7 @@ en:
   track:
     add_to_cart: "Add to cart"
     see_track: "See track"
-    heart_track: "Heart track"
+    heart_track: "Like track"
     save_track: "Save track"
 
   admin:
