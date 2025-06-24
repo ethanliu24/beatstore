@@ -45,16 +45,38 @@
     </div>
   </div>
 
-  <div>
-    <div class="field content-input-container flex-1" data-controller="char-count">
-      <div class="flex justify-between items-center w-full">
-        <%= form.label :biography %>
-        <div class="char-count">
-          <span data-char-count-target="count">0</span><%= "/#{max_user_bio_length}" %>
-        </div>
+  <div class="field content-input-container" data-controller="char-count">
+    <div class="flex justify-between items-center w-full">
+      <%= form.label :biography %>
+      <div class="char-count">
+        <span data-char-count-target="count">0</span><%= "/#{max_user_bio_length}" %>
       </div>
-      <%= form.text_area :description, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_user_bio_length,
-        data: { char_count_target: "input", action: "input->char-count#count" } %>
+    </div>
+    <%= form.text_area :description, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_user_bio_length,
+      data: { char_count_target: "input", action: "input->char-count#count" } %>
+  </div>
+
+  <div class="flex flex-col justify-start gap-6">
+    <div class="profile-credential-container">
+      <%= form.label :email %>
+        <div class="flex justify-between items-center">
+        <%= form.text_field :email, disabled: true, class: "profile-credential" %>
+        <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
+      </div>
+    </div>
+    <div class="profile-credential-container">
+      <%= form.label :username %>
+      <div class="flex justify-between items-center">
+        <%= form.text_field :username, value: "@" + current_user.username, disabled: true, class: "profile-credential" %>
+        <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
+      </div>
+    </div>
+    <div class="profile-credential-container">
+      <%= form.label :password %>
+      <div class="flex justify-between items-center">
+        <%= form.password_field :encrypted_password, value: "********", disabled: true, class: "profile-credential" %>
+        <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
+      </div>
     </div>
   </div>
 <% end %>

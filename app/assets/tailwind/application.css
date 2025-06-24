@@ -137,4 +137,17 @@
   .track-show-icon-only-btn {
     @apply flex justify-center items-center h-full aspect-square bg-accent/15 dark:bg-accent/30 rounded hover:bg-accent/20 dark:hover:bg-accent/35 cursor-pointer;
   }
+
+  /* Profile */
+  .profile-credential-container {
+    @apply flex flex-col justify-start gap-0.5;
+  }
+
+  .profile-credential {
+    @apply text-secondary-txt text-sm font-light;
+  }
+
+  .profile-credential-action-btn {
+    @apply text-accent text-[0.8rem];
+  }
 }
