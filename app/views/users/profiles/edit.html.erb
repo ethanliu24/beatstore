@@ -2,7 +2,7 @@
   model: current_user,
   url: users_profile_path,
   method: :patch,
-  class: "flex flex-col justify-start items-stretch gap-6 w-full"
+  class: "flex flex-col justify-start items-stretch gap-8 w-full mb-10"
 ) do |form| %>
   <div>
     <h1 class="text-2xl font-bold"><%= t("label.profile") %></h1>
@@ -31,10 +31,10 @@
         <div id="pfp-upload-container" class="hidden"></div>
       </div>
     </div>
-    <div class="flex-1 flex flex-col justify-start gap-8">
+    <div class="flex-1 flex flex-col justify-start gap-4">
       <p class="text-sm text-secondary-txt"><%= t("label.display_name") %></p>
       <%= form.text_field :display_name, autofocus: true,
-        class: "focus:outline-none focus:ring-0 border-b-1 w-full text-5xl p-2"
+        class: "focus:outline-none focus:ring-0 border-b-1 w-full text-4xl p-2"
       %>
     </div>
   </div>
