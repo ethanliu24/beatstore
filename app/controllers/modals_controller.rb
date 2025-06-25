@@ -25,6 +25,10 @@ class ModalsController < ApplicationController
     }
   end
 
+  def delete_account
+    render partial: "modals/delete_account"
+  end
+
   private
 
   def ensure_turbo_request

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "stimulus/delete_modal"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -36,5 +37,6 @@ Rails.application.routes.draw do
     get :auth_prompt, action: "auth_prompt", as: "auth_prompt_modal"
     get :track_image_upload, action: "track_image_upload", as: "track_image_upload_modal"
     get :user_pfp_upload, action: "user_pfp_upload", as: "user_pfp_upload_modal"
+    get :delete_account, action: "delete_account", as: "delete_account_modal"
   end
 end

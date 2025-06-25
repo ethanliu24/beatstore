@@ -33,7 +33,9 @@
     @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10;
   }
 
-  .modal-content > * {
+  .modal-content > .modal-header,
+  .modal-content > .modal-body,
+  .modal-content > .modal-footer {
     @apply px-4 py-2;
   }
 
@@ -74,6 +76,10 @@
 
   .button-secondary {
     @apply flex justify-around items-center border-1 border-secondary-txt/50 bg-secondary-bg hover:bg-hover rounded cursor-pointer text-primary-txt;
+  }
+
+  .button-critical {
+    @apply flex justify-around items-center bg-error hover:bg-error/50 rounded cursor-pointer text-white;
   }
 
   .avatar {

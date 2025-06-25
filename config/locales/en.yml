@@ -76,6 +76,7 @@ en:
     leave_password_confirmation_blank: "Leave blank if not changing password"
     enter_current_password: "Your current password is needed to confirm your changes"
     currently_wating_email_confirmation: "Currently waiting email confirmation for %{email}"
+    delete_account: "Delete Account"
 
   track:
     add_to_cart: "Add to cart"
@@ -92,3 +93,5 @@ en:
   profile:
     manage_your_profile_here: "Manage your profile here"
     display_name: "Display name"
+    delete_account_confirmation_title: "Are you sure?"
+    delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."
