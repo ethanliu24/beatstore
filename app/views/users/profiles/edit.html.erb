@@ -83,7 +83,6 @@
   </div>
   <div class="flex flex-row-reverse gap-4 mt-6">
     <%= button_to t("label.save"), users_profile_path, method: :put, class: "button px-4 py-1" %>
-    <%# <%= button_to t("label.delete"), registration_path(current_user), method: :delete, class: "button-critical px-2 py-1" %> %>
     <%= link_to t("authentication.delete_account"), delete_account_modal_path, class: "button-critical px-4 py-1",
       data: {
         turbo_frame: "modal",
