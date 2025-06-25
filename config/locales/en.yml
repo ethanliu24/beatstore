@@ -73,7 +73,7 @@ en:
     auth_prompt_sign_up: "If you are new, sign up here"
     edit_credentials: "Edit Credentials"
     leave_password_blank: "Leave blank if you don't want to change it"
-    leave_password_confirmation_blank: "Leave blank if are not changing password"
+    leave_password_confirmation_blank: "Leave blank if not changing password"
     enter_current_password: "Your current password is needed to confirm your changes"
     currently_wating_email_confirmation: "Currently waiting email confirmation for %{email}"
 
