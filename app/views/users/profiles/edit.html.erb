@@ -61,7 +61,7 @@
   <div class="flex flex-col justify-start gap-6">
     <div class="profile-credential-container">
       <%= form.label :email %>
-        <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center">
         <%= form.text_field :email, disabled: true, class: "profile-credential" %>
         <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
       </div>
@@ -83,5 +83,6 @@
   </div>
   <div class="flex flex-row-reverse mt-6">
     <%= button_to t("label.save"), users_profile_path, method: :put, class: "button px-4 py-1" %>
+    <div>Unhappy? <%= button_to "Cancel my account", registration_path(current_user), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
   </div>
 <% end %>

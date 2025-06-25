@@ -9,6 +9,7 @@ en:
     resend: "Resend"
     change_password: "Change Password"
     new_password: "New Password"
+    current_password: "Current Password"
     change: "Change"
     reset: "Reset"
     email: "Email"
@@ -47,6 +48,7 @@ en:
     biography: "Bio"
     change: "Change"
     save: "Save"
+    back: "Back"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
@@ -69,6 +71,11 @@ en:
     auth_prompt_message: "This feature is for registered members. You can log in or sign up for free now!"
     auth_prompt_log_in: "If you have an account already, you can log in here"
     auth_prompt_sign_up: "If you are new, sign up here"
+    edit_credentials: "Edit Credentials"
+    leave_password_blank: "Leave blank if you don't want to change it"
+    leave_password_confirmation_blank: "Leave blank if are not changing password"
+    enter_current_password: "Your current password is needed to confirm your changes"
+    currently_wating_email_confirmation: "Currently waiting email confirmation for %{email}"
 
   track:
     add_to_cart: "Add to cart"

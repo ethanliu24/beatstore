@@ -1,43 +1,46 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% title(t("authentication.edit_credentials")) %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+<div class="auth-form">
+  <h2 class="font-bold text-center"><%= t("authentication.edit_credentials") %></h2>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <div class="flash flash-error flex flex-col justify-center items-center gap-0.5 my-4 text-[0.6rem]">
+      <p><%= t("authentication.currently_wating_email_confirmation", email: resource.unconfirmed_email) %></p>
+      <p class="underline"><%= link_to t("authentication.no_confirmation_instructions"), new_confirmation_path(resource_name) %></p>
+    </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
-  </div>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: t("label.email"), field: :email, field_type: :email,
+      value: devise_mapping.confirmable? && resource.pending_reconfirmation? ? resource.email : resource.unconfirmed_email,
+      options: { autofocus: true, autocomplete: "email" }
+    %>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: t("label.username"), field: :username, field_type: :text,
+      options: { autofocus: true, autocomplete: "username" }
+    %>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: "#{t("label.password")} (#{t("authentication.leave_password_blank")})",
+      field: :password, field_type: :password,
+      options: { autofocus: true, autocomplete: "new-password" }
+    %>
 
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: "#{t("label.password_confirmation")} (#{t("authentication.leave_password_confirmation_blank")})",
+      field: :password_confirmation, field_type: :password,
+      options: { autofocus: true, autocomplete: "new-password" }
+    %>
 
-<h3>Cancel my account</h3>
+    <%= render "users/shared/input", form: f, resource: resource,
+      label: "#{t("label.current_password")}",
+      field: :current_password, field_type: :password,
+      options: { autofocus: true, autocomplete: "current-password" }
+    %>
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>
+    <%= f.submit t("label.update"), class: "button mt-8 w-full" %>
+    <%= link_to t("label.back"), edit_users_profile_path, class: "button-secondary mt-2" %>
+  <% end %>
+</div>
