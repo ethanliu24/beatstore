@@ -7,8 +7,9 @@
   </div>
   <% content_for :modal_footer_content do %>
     <div class="button-critical px-2 py-1" data-modal-hide="default-modal"
-      data-controller="delete-modal" data-action="click->delete-modal#delete"
-      data-delete-modal-delete-api-url-value="<%= user_registration_path %>" >
+      data-controller="delete-modal" data-action="click->delete-modal#delete_redirect"
+      data-delete-modal-delete-api-url-value="<%= user_registration_path(current_user) %>"
+      data-delete-modal-redirect-url-value="<%= root_path %>" >
       <%= t("label.delete") %>
     </div>
   <% end %>
