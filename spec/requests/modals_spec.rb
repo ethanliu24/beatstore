@@ -16,6 +16,11 @@ RSpec.describe "Modals", type: :request do
       get auth_prompt_modal_url
       expect(response).to redirect_to(root_path)
     end
+
+    it "does not allow visits to #auth_promp" do
+      get delete_account_modal_url
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "where request are from turbo frame" do
@@ -39,6 +44,12 @@ RSpec.describe "Modals", type: :request do
       get auth_prompt_modal_url, headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_auth_prompt")
+    end
+
+    it "fetches modal from #auth_prompt" do
+      get delete_account_modal_url, headers: @headers
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template(partial: "modals/_delete_account")
     end
   end
 end
