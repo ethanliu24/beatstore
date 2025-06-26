@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Modals", type: :request do
+RSpec.describe ModalsController, type: :request do
   describe "where requests are from users" do
     it "does not allow visits to #track_image_upload" do
       get track_image_upload_modal_url

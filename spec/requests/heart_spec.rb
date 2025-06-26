@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Hearts", type: :request do
+RSpec.describe HeartsController, type: :request do
   let(:user) { create(:user) }
   let(:track) { create(:track) }
 
