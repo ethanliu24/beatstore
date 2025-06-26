@@ -16,7 +16,7 @@ export default class extends Controller {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json"
       }
-    }).then(() => window.location = "");
+    }).then(() => window.location.replace("/"));
     // TODO show toast?
   }
 }
