@@ -11,6 +11,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:hearts) }
     it { should validate_presence_of(:role) }
     it { should define_enum_for(:role).with_values([ :customer, :admin ]) }
+    it { should have_one_attached(:profile_picture) }
 
     context "password format" do
       it "is valid" do
@@ -22,6 +23,39 @@ RSpec.describe User, type: :model do
       it "is invalid if too short" do
         user.password = user.password_confirmation = "1234567"
         expect(user).to be_invalid
+      end
+    end
+
+    context "biography length" do
+      it "allows biography within the limit" do
+        user = build(:user, biography: "a" * User::BIOGRAPHY_LENGTH)
+        expect(user).to be_valid
+      end
+
+      it "does not allow biography over the limit" do
+        user = build(:user, biography: "a" * (User::BIOGRAPHY_LENGTH + 1))
+        expect(user).not_to be_valid
+        expect(user.errors.details[:biography]).to include(hash_including(error: :too_long))
+      end
+
+      it "allows biography to be blank or nil" do
+        user = build(:user, biography: "")
+        expect(user).to be_valid
+        user = build(:user, biography: nil)
+        expect(user).to be_valid
+      end
+    end
+
+    context "display name length" do
+      it "allows display name within the limit" do
+        user = build(:user, display_name: "a" * User::DISPLAY_NAME_LENGTH)
+        expect(user).to be_valid
+      end
+
+      it "does not allow display name over the limit" do
+        user = build(:user, display_name: "a" * (User::DISPLAY_NAME_LENGTH + 1))
+        expect(user).not_to be_valid
+        expect(user.errors.details[:display_name]).to include(hash_including(error: :too_long))
       end
     end
   end

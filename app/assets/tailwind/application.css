@@ -33,7 +33,9 @@
     @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10;
   }
 
-  .modal-content > * {
+  .modal-content > .modal-header,
+  .modal-content > .modal-body,
+  .modal-content > .modal-footer {
     @apply px-4 py-2;
   }
 
@@ -54,7 +56,7 @@
   }
 
   .content-input-container {
-    @apply flex flex-col gap-1 w-full text-nowrap;
+    @apply flex flex-col gap-2 w-full text-nowrap;
   }
 
   .content-input {
@@ -74,6 +76,10 @@
 
   .button-secondary {
     @apply flex justify-around items-center border-1 border-secondary-txt/50 bg-secondary-bg hover:bg-hover rounded cursor-pointer text-primary-txt;
+  }
+
+  .button-critical {
+    @apply flex justify-around items-center bg-error hover:bg-error/50 rounded cursor-pointer text-white;
   }
 
   .avatar {
@@ -110,6 +116,10 @@
     @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/30 text-accent hover:bg-accent/50;
   }
 
+  .char-count {
+    @apply text-[0.6rem] text-secondary-txt;
+  }
+
   /* Authentication */
   .auth-form {
     @apply
@@ -132,5 +142,18 @@
 
   .track-show-icon-only-btn {
     @apply flex justify-center items-center h-full aspect-square bg-accent/15 dark:bg-accent/30 rounded hover:bg-accent/20 dark:hover:bg-accent/35 cursor-pointer;
+  }
+
+  /* Profile */
+  .profile-credential-container {
+    @apply flex flex-col justify-start gap-0.5;
+  }
+
+  .profile-credential {
+    @apply text-secondary-txt text-sm font-light;
+  }
+
+  .profile-credential-action-btn {
+    @apply text-accent text-[0.8rem];
   }
 }

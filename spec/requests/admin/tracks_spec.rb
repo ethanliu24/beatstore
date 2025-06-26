@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "/admin/tracks", type: :request, admin: true do
+RSpec.describe Admin::TracksController, type: :request, admin: true do
   let(:valid_attributes) {
     {
       title: "Valid Track Title",

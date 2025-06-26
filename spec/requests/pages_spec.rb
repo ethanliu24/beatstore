@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Pages", type: :request do
+RSpec.describe PagesController, type: :request do
   describe "GET /" do
     it "returns http success" do
       get root_path

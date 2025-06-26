@@ -1,0 +1,93 @@
+<%= form_with(
+  model: current_user,
+  url: users_profile_path,
+  method: :patch,
+  local: true,
+  html: { multipart: true },
+  class: "flex flex-col justify-start items-stretch gap-8 w-full mb-10"
+) do |form| %>
+  <div>
+    <h1 class="text-2xl font-bold"><%= t("label.profile") %></h1>
+    <p class="text-xs text-secondary-txt"><%= t("profile.manage_your_profile_here") %></p>
+  </div>
+
+  <div class="flex flex-start items-stretch gap-10 w-full">
+    <div class="flex flex-col gap-3">
+      <div class="bg-secondary-bg rounded-full flex justify-center items-center w-30 h-30">
+        <%= icon "photo-scan", class: "w-1/4 h-1/4 #{current_user.profile_picture.attached? ? "hidden" : ""}" %>
+        <img id="user-pfp-preview"
+          src="<%= user_pfp_url %>"
+          alt="Profile picture preview"
+          class="object-cover w-full h-full rounded-full <%= current_user.profile_picture.attached? ? "" : "hidden" %>" />
+      </div>
+      <div class="flex justify-center items-center w-full">
+        <%= link_to user_pfp_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+          data: {
+            turbo_frame: "modal",
+            modal_target: "default-modal",
+            modal_toggle: "default-modal",
+          } do %>
+          <%= icon "plus", class: "w-4 h-4" %>
+          <%= t("label.upload") %>
+        <% end %>
+      </div>
+      <div id="pfp-upload-container" class="hidden"></div>
+    </div>
+    <div class="flex-1 flex flex-col justify-start gap-4" data-controller="char-count">
+      <div class="flex justify-between items-center">
+        <%= form.label t("label.display_name"), class: "text-xs text-secondary-txt" %>
+        <div class="char-count">
+          <span data-char-count-target="count">0</span><%= "/#{max_display_name_length}" %>
+        </div>
+      </div>
+      <%= form.text_field :display_name, autofocus: true, maxlength: max_display_name_length,
+        data: { char_count_target: "input", action: "input->char-count#count" },
+        class: "focus:outline-none focus:ring-0 border-b-1 w-full text-2xl p-2 cursor-select"
+      %>
+    </div>
+  </div>
+
+  <div class="field content-input-container" data-controller="char-count">
+    <div class="flex justify-between items-center w-full">
+      <%= form.label :biography %>
+      <div class="char-count">
+        <span data-char-count-target="count">0</span><%= "/#{max_user_bio_length}" %>
+      </div>
+    </div>
+    <%= form.text_area :biography, autofocus: true, class: "content-input resize-none min-h-40", maxlength: max_user_bio_length,
+      data: { char_count_target: "input", action: "input->char-count#count" } %>
+  </div>
+
+  <div class="flex flex-col justify-start gap-6">
+    <div class="profile-credential-container">
+      <%= form.label :email %>
+      <div class="flex justify-between items-center">
+        <%= form.text_field :email, disabled: true, class: "profile-credential" %>
+        <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
+      </div>
+    </div>
+    <div class="profile-credential-container">
+      <%= form.label :username %>
+      <div class="flex justify-between items-center">
+        <%= form.text_field :username, value: "@" + current_user.username, disabled: true, class: "profile-credential" %>
+        <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
+      </div>
+    </div>
+    <div class="profile-credential-container">
+      <%= form.label :password %>
+      <div class="flex justify-between items-center">
+        <%= form.password_field :encrypted_password, value: "********", disabled: true, class: "profile-credential" %>
+        <%= link_to t("label.change"), edit_user_registration_path, class: "profile-credential-action-btn" %>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row-reverse gap-4 mt-6">
+    <%= button_to t("label.save"), users_profile_path, method: :put, class: "button px-4 py-1" %>
+    <%= link_to t("authentication.delete_account"), delete_account_modal_path, class: "button-critical px-4 py-1",
+      data: {
+        turbo_frame: "modal",
+        modal_target: "default-modal",
+        modal_toggle: "default-modal",
+      } %>
+  </div>
+<% end %>

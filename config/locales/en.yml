@@ -9,6 +9,7 @@ en:
     resend: "Resend"
     change_password: "Change Password"
     new_password: "New Password"
+    current_password: "Current Password"
     change: "Change"
     reset: "Reset"
     email: "Email"
@@ -43,6 +44,11 @@ en:
     download: "Download"
     comment: "Comment"
     play: "Play"
+    profile: "Profile"
+    biography: "Bio"
+    change: "Change"
+    save: "Save"
+    back: "Back"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
@@ -65,11 +71,17 @@ en:
     auth_prompt_message: "This feature is for registered members. You can log in or sign up for free now!"
     auth_prompt_log_in: "If you have an account already, you can log in here"
     auth_prompt_sign_up: "If you are new, sign up here"
+    edit_credentials: "Edit Credentials"
+    leave_password_blank: "Leave blank if you don't want to change it"
+    leave_password_confirmation_blank: "Leave blank if not changing password"
+    enter_current_password: "Your current password is needed to confirm your changes"
+    currently_wating_email_confirmation: "Currently waiting email confirmation for %{email}"
+    delete_account: "Delete Account"
 
   track:
     add_to_cart: "Add to cart"
     see_track: "See track"
-    heart_track: "Heart track"
+    heart_track: "Like track"
     save_track: "Save track"
 
   admin:
@@ -77,3 +89,9 @@ en:
       upload_file: "Upload %{file_for}"
       back_to_tracks: "Back to tracks"
       see_track: "See track"
+
+  profile:
+    manage_your_profile_here: "Manage your profile here"
+    display_name: "Display name"
+    delete_account_confirmation_title: "Are you sure?"
+    delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."

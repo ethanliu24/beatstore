@@ -1,7 +1,7 @@
 <turbo-frame id="modal">
   <%= render "modals/header", title: t("authentication.auth_prompt_title") %>
-  <div class="flex flex-col justify-center items-center gap-10 text-secondary-txt w-full">
-    <p><%= t("authentication.auth_prompt_message") %></p>
+  <div class="flex flex-col justify-center items-center gap-10 text-secondary-txt w-full px-2 py-8">
+    <p class="text-primary-txt"><%= t("authentication.auth_prompt_message") %></p>
     <div class="flex flex-col justify-center items-center gap-2">
       <p><%= t("authentication.auth_prompt_log_in") %></p>
       <a href="<%= new_user_session_path %>" target="_blank" rel="noopener noreferrer" class="button w-fit px-1">

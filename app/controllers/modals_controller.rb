@@ -15,6 +15,20 @@ class ModalsController < ApplicationController
     }
   end
 
+  def user_pfp_upload
+    render partial: "modals/image_upload", locals: {
+      **image_upload_data(
+        model_field: "user[profile_picture]",
+        img_destination_id: "user-pfp-preview",
+        file_upload_input_container_id: "pfp-upload-container"
+      )
+    }
+  end
+
+  def delete_account
+    render partial: "modals/delete_account"
+  end
+
   private
 
   def ensure_turbo_request

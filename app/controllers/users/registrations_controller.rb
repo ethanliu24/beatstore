@@ -4,6 +4,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
 
+  def update
+    super do
+      username = params[:user][:username]
+      current_user.update(username: username) if username && username != current_user.username
+    end
+  end
+
   protected
 
   def configure_sign_up_params
@@ -18,9 +25,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def configure_account_update_params
+    # This is for credential updates. Regular account data updates are in Users::ProfilesController
     devise_parameter_sanitizer.permit(
       :account_update,
-      keys: [ :display_name, :username, :profile_picture ]
-    )
+      keys: [ :email, :username, :password, :password_confirmation, :current_password ]
+      )
   end
 end

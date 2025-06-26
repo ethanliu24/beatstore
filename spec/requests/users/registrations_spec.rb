@@ -17,7 +17,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
       }
 
       expect {
-        post user_registration_path, params: params
+        post user_registration_url, params: params
       }.to change(User, :count).by(1)
 
       expect(response).to have_http_status(:redirect)
@@ -141,49 +141,68 @@ RSpec.describe Users::RegistrationsController, type: :request do
     end
   end
 
-  # describe "PUT #update" do
-  #   let(:user) { create(:user) }
+  describe "PATCH #update" do
+    let(:update_params) {
+      {
+        email: "updated@example.com",
+        password: "12345678",
+        password_confirmation: "12345678",
+        username: "updated",
+        current_password: "Password1!"
+      }
+    }
 
-  #   before do
-  #     sign_in user
-  #   end
+    before do
+      @user = create(:user)
+      sign_in @user, scope: :user
+    end
 
-  #   context "with valid parameters" do
-  #     let(:valid_update_params) do
-  #       {
-  #         user: {
-  #           email: "updated@example.com",
-  #           current_password: "password123"
-  #         }
-  #       }
-  #     end
+    it "should update email and require confirmation" do
+      old_email = @user.email
+      patch user_registration_url, params: { user: update_params }
+      expect(response).to have_http_status(303)
 
-  #     it "updates the user" do
-  #       put :update, params: valid_update_params
-  #       user.reload
+      @user.reload
 
-  #       expect(user.email).to eq("updated@example.com")
-  #       expect(response).to have_http_status(:redirect)
-  #     end
-  #   end
+      expect(@user.pending_reconfirmation?).to be true
+      expect(@user.unconfirmed_email).to eq("updated@example.com")
+      expect(@user.email).to eq(old_email)
 
-  #   context "with invalid parameters" do
-  #     let(:invalid_update_params) do
-  #       {
-  #         user: {
-  #           email: "invalid_email",
-  #           current_password: "wrong_password"
-  #         }
-  #       }
-  #     end
+      @user.confirm
+      @user.reload
 
-  #     it "does not update the user" do
-  #       put :update, params: invalid_update_params
-  #       user.reload
+      expect(@user.email).to eq("updated@example.com")
+    end
 
-  #       expect(user.email).not_to eq("invalid_email")
-  #       expect(response).to have_http_status(:unprocessable_entity)
-  #     end
-  #   end
-  # end
+    it "should update username" do
+      patch user_registration_url, params: { user: update_params }
+      expect(response).to have_http_status(303)
+      @user.reload
+      expect(@user.username).to eq("updated")
+    end
+
+    it "should not cause uniqueness constraint on username if username is the same" do
+      patch user_registration_url, params: {
+        user: {
+          username: "customer",
+          current_password: "Password1!"
+        }
+      }
+
+      expect(response).to have_http_status(303)
+      @user.reload
+      expect(@user.username).to eq("customer")
+    end
+
+    it "should sanitizes parameters" do
+      patch user_registration_url, params: { user: { **update_params, foo: :bar } }
+      expect(response).to have_http_status(303)
+      expect(@user.respond_to?(:email)).to be true
+      expect(@user.respond_to?(:username)).to be true
+      expect(@user.respond_to?(:password)).to be true
+      expect(@user.respond_to?(:password_confirmation)).to be true
+      expect(@user.respond_to?(:current_password)).to be true
+      expect(@user.respond_to?(:foo)).to be false
+    end
+  end
 end
