@@ -79,16 +79,20 @@
           </div>
           <ul class="py-2" aria-labelledby="cart-dropdown-btn">
             <li class="dropdown-item">
-              <%= icon "settings", class: "w-4 h-4" %>
-              <a href="<%= edit_users_profile_path %>"><%= t("label.account_settings") %></a>
-            </li>
-            <li class="dropdown-item">
               <%= icon "currency-dollar", class: "w-4 h-4" %>
               <a href=""><%= t("label.orders") %></a>
             </li>
             <li class="dropdown-item">
               <%= icon "shopping-bag", class: "w-4 h-4" %>
               <a href=""><%= t("label.cart") %></a>
+            </li>
+            <li class="dropdown-item">
+              <%= icon "heart", class: "w-4 h-4" %>
+              <a href="<%= users_hearts_path %>"><%= t("label.liked_tracks") %></a>
+            </li>
+            <li class="dropdown-item">
+              <%= icon "settings", class: "w-4 h-4" %>
+              <a href="<%= edit_users_profile_path %>"><%= t("label.account_settings") %></a>
             </li>
           </ul>
           <div class="py-1">
@@ -107,5 +111,4 @@
       </li>
     <% end %>
   </ul>
-
 </nav>
