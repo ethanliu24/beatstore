@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resource :profile, only: [ :edit, :update ]
+    resources :hearts, only: [ :index ]
   end
 
   resources :tracks, only: [ :index, :show ] do

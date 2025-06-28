@@ -1,0 +1,18 @@
+<div class="w-full">
+  <div>
+    <h1 class="text-2xl font-bold"><%= t("label.liked_tracks") %></h1>
+    <p class="text-xs text-secondary-txt"><%= t("profile.see_tracks_you_liked_here") %></p>
+  </div>
+
+  <div class="mt-4">
+    <% if @liked_tracks.any? %>
+      <% @liked_tracks.each_with_index do |track, i| %>
+        <%= render "tracks/track", track: track, index: i + 1 %>
+      <% end %>
+    <% else %>
+      <p class="text-center font-light text-secondary-txt font-xs mt-8">
+        <%= t("profile.you_havent_liked_any_tracks_yet") %>
+      </p>
+    <% end %>
+  </div>
+</div>

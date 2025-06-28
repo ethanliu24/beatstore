@@ -26,6 +26,7 @@ en:
     playlists: "Playlists"
     contact: "Contact"
     new_track: "New Track"
+    liked_tracks: "Liked Tracks"
     upload: "Upload"
     tagged_mp3: "Tagged MP3"
     untagged_mp3: "Untagged MP3"
@@ -95,3 +96,5 @@ en:
     display_name: "Display name"
     delete_account_confirmation_title: "Are you sure?"
     delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."
+    see_tracks_you_liked_here: "See tracks you liked here"
+    you_havent_liked_any_tracks_yet: "You haven't liked any tracks yet"
