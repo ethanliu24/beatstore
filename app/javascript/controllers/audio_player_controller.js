@@ -51,7 +51,7 @@ export default class extends Controller {
 
   repeatTrack() {
     this.audioTarget.currentTime = 0;
-    this.audioTarget.play();
+    if (!this.audioTarget.paused) this.resumeAudio();
   }
 
   #playAudio(trackId) {
@@ -78,7 +78,6 @@ export default class extends Controller {
       this.bpmTarget.innerText = `${track.bpm} BPM`;
       this.audioTarget.src = track.tagged_mp3;
       this.audioTarget.load();
-      // this.audioTarget.play();
       this.resumeAudio();
     });
   }
