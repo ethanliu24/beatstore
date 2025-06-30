@@ -7,7 +7,7 @@ export default class extends Controller {
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
-    "volumeOnBtn", "volumeOffBtn"
+    "volumeOnBtn", "volumeOffBtn", "volumeBar"
   ];
 
   static values = {
@@ -75,9 +75,26 @@ export default class extends Controller {
     this.audioTarget.currentTime = (value / 100) * duration;
   }
 
+  adjustVolume() {
+    this.audioTarget.volume = this.volumeBarTarget.value / 100;
+    if (this.audioTarget.volume === 0) {
+      this.audioTarget.muted = true;
+      this.volumeOnBtnTarget.classList.add("hidden");
+      this.volumeOffBtnTarget.classList.remove("hidden");
+    } else {
+      this.audioTarget.muted = false;
+      this.volumeOffBtnTarget.classList.add("hidden");
+      this.volumeOnBtnTarget.classList.remove("hidden");
+    }
+  }
+
   toggleVolume() {
+    if (this.volumeBarTarget.value == 0) {
+      return;
+    }
+
     if (this.audioTarget.muted || this.audioTarget.volume === 0) {
-      this.audioTarget.volume = 1;
+      this.audioTarget.volume = this.volumeBarTarget.value / 100;
       this.audioTarget.muted = false;
       this.volumeOffBtnTarget.classList.add("hidden");
       this.volumeOnBtnTarget.classList.remove("hidden");

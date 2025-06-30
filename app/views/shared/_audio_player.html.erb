@@ -27,19 +27,36 @@
       <%= icon "rotate", class: "w-3 h-3 text-secondary-txt hover:text-accent", data: { action: "click->audio-player#repeatTrack", audio_player_target: "repeatBtn" } %>
     </div>
     <input
+      id="audio-player-progress"
       type="range"
       min="0"
       max="100"
       value="0"
       step="0.1"
-      class="custom-range flex-1 h-[2px] cursor-pointer accent-accent"
+      class="flex-1 h-[2px] cursor-pointer accent-accent"
       data-action="change->audio-player#seek"
       data-audio-player-target="progressBar"
     />
     <div class="flex justify-between items-center gap-3 cursor-pointer">
-      <div class="w-fit h-fit" data-action="click->audio-player#toggleVolume">
+      <div class="w-fit h-fit" id="volume-knob" data-action="click->audio-player#toggleVolume"
+        data-dropdown-toggle="volume-slider" data-dropdown-trigger="hover" data-dropdown-placement="top">
         <%= icon "volume", class: "w-4 h-4", data: { audio_player_target: "volumeOnBtn" } %>
         <%= icon "volume-off", class: "w-4 h-4 hidden", data: { audio_player_target: "volumeOffBtn" } %>
+      </div>
+      <div id="volume-slider" class="z-10 hidden p-2 w-32 bg-secondary-bg border-1 border-background rounded">
+        <div class="flex justify-center items-center w-full h-full">
+          <input
+            id="audio-player-volume"
+            type="range"
+            min="0"
+            max="100"
+            value="100"
+            step="1"
+            class="w-full h-1 cursor-pointer accent-primary-txt"
+            data-action="change->audio-player#adjustVolume"
+            data-audio-player-target="volumeBar"
+          />
+        </div>
       </div>
     </div>
   </div>
