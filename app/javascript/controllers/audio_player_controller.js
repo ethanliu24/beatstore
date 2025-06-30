@@ -16,8 +16,9 @@ export default class extends Controller {
 
   connect() {
     this.trackDataApiUrl = this.trackDataApiUrlValue || "api/tracks"
-    this.currentTrackId = null;
-    this.playerMode = "next"
+    this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
+    this.played = false;
+    this.playerMode = "next";
     this.playerModes = ["next", "repeat", "shuffle"];
 
     this.audioTarget.addEventListener("ended", () => this.pauseAudio());
@@ -106,17 +107,28 @@ export default class extends Controller {
     }
   }
 
-  #playAudio(trackId) {
-    if (this.currentTrackId == trackId) {
-      if (this.audioTarget.paused) {
-        this.audioTarget.play();
-      }
+  goToTrack() {
+    Turbo.visit(`/tracks/${this.currentTrackId}`);
+  }
 
-      return;
+  goToEditTrackPage() {
+    Turbo.visit(`/admin/tracks/${this.currentTrackId}/edit`);
+  }
+
+  #playAudio(trackId) {
+    if (this.played) {
+      if (this.currentTrackId == trackId) {
+        if (this.audioTarget.paused) {
+          this.audioTarget.play();
+        }
+
+        return;
+      }
     }
 
     this.audioTarget.pause();
     this.resetAudio();
+    this.played = true;
 
     fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET"
@@ -124,6 +136,7 @@ export default class extends Controller {
     .then(res => res.json())
     .then(track => {
       this.currentTrackId = track.id;
+      localStorage.setItem("cur_player_track", track.id);
       this.coverPhotoTarget.src = track.cover_photo;
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
@@ -132,5 +145,7 @@ export default class extends Controller {
       this.audioTarget.load();
       this.resumeAudio();
     });
+
+    // TODO POST to increment play count
   }
 }

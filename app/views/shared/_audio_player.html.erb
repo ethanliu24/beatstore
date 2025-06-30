@@ -1,6 +1,6 @@
 <div id="audio-player" data-turbo-permanent class="fixed bottom-0 left-0 w-screen py-4 px-8">
   <div class="flex justify-between items-center gap-8 w-full py-2 px-8 rounded-full border-1 border-secondary-txt/30 bg-background/70 backdrop-blur-sm">
-    <audio data-audio-player-target="audio"></audio>
+    <audio id="audio-player-src" data-audio-player-target="audio"></audio>
     <div class="flex justify-between items-stretch gap-4">
       <img data-audio-player-target="coverPhoto" src="" alt="Track image" draggable="false" class="w-7 h-7 rounded">
       <div class="flex flex-col justify-between items-starttruncate">
@@ -38,24 +38,56 @@
       data-audio-player-target="progressBar"
     />
     <div class="flex justify-between items-center gap-3 cursor-pointer">
+      <%# TODO like & unlike %>
+
       <div class="w-fit h-fit" id="volume-knob" data-action="click->audio-player#toggleVolume"
         data-dropdown-toggle="volume-slider" data-dropdown-trigger="hover" data-dropdown-placement="top">
         <%= icon "volume", class: "w-4 h-4", data: { audio_player_target: "volumeOnBtn" } %>
         <%= icon "volume-off", class: "w-4 h-4 hidden", data: { audio_player_target: "volumeOffBtn" } %>
+        <div id="volume-slider" class="z-10 hidden p-2 w-32 bg-secondary-bg border-1 border-background rounded">
+          <div class="flex justify-center items-center w-full h-full">
+            <input
+              id="audio-player-volume"
+              type="range"
+              min="0"
+              max="100"
+              value="100"
+              step="1"
+              class="w-full h-1 cursor-pointer accent-primary-txt"
+              data-action="change->audio-player#adjustVolume"
+              data-audio-player-target="volumeBar"
+            />
+          </div>
+        </div>
       </div>
-      <div id="volume-slider" class="z-10 hidden p-2 w-32 bg-secondary-bg border-1 border-background rounded">
-        <div class="flex justify-center items-center w-full h-full">
-          <input
-            id="audio-player-volume"
-            type="range"
-            min="0"
-            max="100"
-            value="100"
-            step="1"
-            class="w-full h-1 cursor-pointer accent-primary-txt"
-            data-action="change->audio-player#adjustVolume"
-            data-audio-player-target="volumeBar"
-          />
+
+      <div id="audio-player-more-dropdown" data-dropdown-toggle="audio-player-more" data-dropdown-placement="bottom-end" data-action="click->audio-player#stopPropagation">
+        <%= icon "dots", class: "w-4 h-4" %>
+
+        <%# More dropdown %>
+        <div id="audio-player-more" class="dropdown hidden">
+          <% icon_size = "w-3 h-3" %>
+
+          <ul>
+            <li class="dropdown-item" data-action="click->audio-player#goToTrack">
+              <%= icon "eye", class: icon_size %>
+              <%= t("track.see_track") %>
+            </li>
+            <li class="dropdown-item">
+              <%= icon "share",  class: icon_size %>
+              <%= t("label.share") %>
+            </li>
+            <li class="dropdown-item">
+              <%= icon "download", class: icon_size %>
+              <%= t("label.download") %>
+            </li>
+            <% if current_user && current_user.admin? %>
+              <li class="dropdown-item" data-action="click->audio-player#goToEditTrackPage">
+                <%= icon "lock", class: icon_size %>
+                <%= t("label.edit") %>
+              </li>
+            <% end %>
+          </ul>
         </div>
       </div>
     </div>
