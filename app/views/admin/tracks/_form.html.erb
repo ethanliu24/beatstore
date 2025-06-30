@@ -84,12 +84,12 @@
           <%= form.select :key, options_for_select(key_options, track.key), {}, class: "content-input" %>
         </div>
         <div class="field content-input-container">
-          <%= form.label :visibility %>
-          <%= form.select :is_public, options_for_select(is_public_options, track.is_public), {}, class: "content-input" %>
-        </div>
-        <div class="field content-input-container">
           <%= form.label :genre %>
           <%= form.select :genre, options_for_select(genre_options, track.genre), {}, class: "content-input" %>
+        </div>
+        <div class="field content-input-container">
+          <%= form.label :visibility %>
+          <%= form.select :is_public, options_for_select(is_public_options, track.is_public), {}, class: "content-input" %>
         </div>
       </div>
       <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags(@track) %>">
