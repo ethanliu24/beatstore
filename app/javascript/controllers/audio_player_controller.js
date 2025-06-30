@@ -5,9 +5,9 @@ export default class extends Controller {
   static targets = [
     "audio",
     "title", "bpm", "key", "coverPhoto",
-    "pauseBtn", "resumeBtn"
+    "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer"
   ];
-  
+
   static values = {
     trackDataApiUrl: String
   }
@@ -15,6 +15,8 @@ export default class extends Controller {
   connect() {
     this.trackDataApiUrl = this.trackDataApiUrlValue || "api/tracks"
     this.currentTrackId = null;
+    this.playerMode = "next"
+    this.playerModes = ["next", "repeat", "shuffle"];
   }
 
   stopPropagation(e) {
@@ -35,6 +37,21 @@ export default class extends Controller {
     this.audioTarget.play();
     this.resumeBtnTarget.classList.add("hidden");
     this.pauseBtnTarget.classList.remove("hidden");
+  }
+
+  switchMode() {
+    const nextModeIdx = (this.playerModes.indexOf(this.playerMode) + 1) % this.playerModes.length;
+    this.playerMode = this.playerModes[nextModeIdx];
+    Array.from(this.playerModeContainerTarget.children).forEach((element) => {
+      element.dataset.playerMode === this.playerMode
+        ? element.classList.remove("hidden")
+        : element.classList.add("hidden");
+    });
+  }
+
+  repeatTrack() {
+    this.audioTarget.currentTime = 0;
+    this.audioTarget.play();
   }
 
   #playAudio(trackId) {
