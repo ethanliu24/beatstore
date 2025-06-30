@@ -23,7 +23,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="flex flex-col justify-start w-full h-full items-stretch bg-background text-primary-txt">
+  <body class="flex flex-col justify-start w-full h-full items-stretch bg-background text-primary-txt" data-controller="audio-player">
     <%= render "nav/navbar" %>
 
     <main class="flex-1">
@@ -31,9 +31,9 @@
     </main>
 
     <%= render "modals/skeleton" %>
-    
+
     <% unless current_page == "layouts/auth_main" %>
-      <%= render "shared/player" %>
+      <%= render "shared/audio_player" %>
     <% end %>
   </body>
 </html>

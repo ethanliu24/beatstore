@@ -1,6 +1,3 @@
 <div id="audio-player" data-turbo-permanent>
-  <audio controls>
-    <source src="<%= url_for(Track.find(38).tagged_mp3) %>" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <audio data-audio-player-target="audio" controls></audio>
 </div>
