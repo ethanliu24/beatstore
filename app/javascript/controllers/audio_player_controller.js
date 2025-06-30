@@ -2,7 +2,12 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="audio-player"
 export default class extends Controller {
-  static targets = ["audio", "title", "bpm", "key", "coverPhoto"];
+  static targets = [
+    "audio",
+    "title", "bpm", "key", "coverPhoto",
+    "pauseBtn", "resumeBtn"
+  ];
+  
   static values = {
     trackDataApiUrl: String
   }
@@ -17,10 +22,22 @@ export default class extends Controller {
   }
 
   play(e) {
-    this.playAudio(e.currentTarget.dataset.trackId);
+    this.#playAudio(e.currentTarget.dataset.trackId);
   }
 
-  playAudio(trackId) {
+  pauseAudio() {
+    this.audioTarget.pause();
+    this.pauseBtnTarget.classList.add("hidden");
+    this.resumeBtnTarget.classList.remove("hidden");
+  }
+
+  resumeAudio() {
+    this.audioTarget.play();
+    this.resumeBtnTarget.classList.add("hidden");
+    this.pauseBtnTarget.classList.remove("hidden");
+  }
+
+  #playAudio(trackId) {
     if (this.currentTrackId == trackId) {
       if (this.audioTarget.paused) {
         this.audioTarget.play();
@@ -30,6 +47,7 @@ export default class extends Controller {
     }
 
     this.audioTarget.pause();
+    this.audioTarget.currentTime = 0;
 
     fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET"
@@ -43,7 +61,8 @@ export default class extends Controller {
       this.bpmTarget.innerText = `${track.bpm} BPM`;
       this.audioTarget.src = track.tagged_mp3;
       this.audioTarget.load();
-      this.audioTarget.play();
+      // this.audioTarget.play();
+      this.resumeAudio();
     });
   }
 }
