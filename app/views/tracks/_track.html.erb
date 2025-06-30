@@ -38,7 +38,7 @@
       <span class="max-sm:hidden">$19.99</span>
     </button>
 
-    <div id="customer-track-more-dropdown" data-dropdown-toggle=<%= dom_id(track, :track_more) %> data-dropdown-placement="bottom-end">
+    <div id="customer-track-more-dropdown" data-dropdown-toggle=<%= dom_id(track, :track_more) %> data-dropdown-placement="bottom-end" data-action="click->audio-player#stopPropagation">
       <%= icon "dots-vertical", class: "w-4 h-4" %>
     </div>
 

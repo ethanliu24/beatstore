@@ -12,6 +12,10 @@ export default class extends Controller {
     this.currentTrackId = null;
   }
 
+  stopPropagation(e) {
+    e.stopPropagation();
+  }
+
   play(e) {
     // e.stopPropagation();
     this.playAudio(e.currentTarget.dataset.trackId);
