@@ -15,18 +15,20 @@ export default class extends Controller {
   }
 
   connect() {
-    this.trackDataApiUrl = this.trackDataApiUrlValue || "api/tracks"
-    this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
-    this.played = false;
-    this.playerMode = "next";
-    this.playerModes = ["next", "repeat", "shuffle"];
+    requestAnimationFrame(() => {
+      this.trackDataApiUrl = this.trackDataApiUrlValue || "api/tracks"
+      this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
+      this.played = false;
+      this.playerMode = "next";
+      this.playerModes = ["next", "repeat", "shuffle"];
 
-    this.audioTarget.addEventListener("ended", () => this.pauseAudio());
-    this.audioTarget.addEventListener("timeupdate", () => {
-      if (this.audioTarget.duration > 0) {
-        const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
-        this.progressBarTarget.value = percentage;
-      }
+      this.audioTarget.addEventListener("ended", () => this.pauseAudio());
+      this.audioTarget.addEventListener("timeupdate", () => {
+        if (this.audioTarget.duration > 0) {
+          const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
+          this.progressBarTarget.value = percentage;
+        }
+      });
     });
   }
 
