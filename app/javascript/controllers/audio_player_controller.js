@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="audio-player"
 export default class extends Controller {
   static targets = [
-    "audio",
+    "container", "audio",
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
@@ -30,6 +30,18 @@ export default class extends Controller {
         }
       });
     });
+  }
+
+  openPlayer() {
+    this.containerTarget.classList.remove("hidden");
+    this.containerTarget.classList.add("slide-up-fade-in");
+  }
+
+  closePlayer() {
+    this.containerTarget.classList.add("hidden");
+    this.containerTarget.classList.remove("slide-up-fade-in");
+    this.audioTarget.pause();
+    this.resetAudio();
   }
 
   stopPropagation(e) {
@@ -143,6 +155,7 @@ export default class extends Controller {
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
       this.bpmTarget.innerText = `${track.bpm} BPM`;
+      this.openPlayer();
       this.audioTarget.src = track.tagged_mp3;
       this.audioTarget.load();
       this.resumeAudio();
