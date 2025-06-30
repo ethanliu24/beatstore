@@ -6,7 +6,8 @@ export default class extends Controller {
     "audio",
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
-    "progressBar"
+    "progressBar",
+    "volumeOnBtn", "volumeOffBtn"
   ];
 
   static values = {
@@ -19,9 +20,7 @@ export default class extends Controller {
     this.playerMode = "next"
     this.playerModes = ["next", "repeat", "shuffle"];
 
-    this.audioTarget.addEventListener("ended", () => {
-      this.pauseAudio();
-    });
+    this.audioTarget.addEventListener("ended", () => this.pauseAudio());
     this.audioTarget.addEventListener("timeupdate", () => {
       if (this.audioTarget.duration > 0) {
         const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
@@ -74,6 +73,20 @@ export default class extends Controller {
     const value = this.progressBarTarget.value;
     const duration = this.audioTarget.duration;
     this.audioTarget.currentTime = (value / 100) * duration;
+  }
+
+  toggleVolume() {
+    if (this.audioTarget.muted || this.audioTarget.volume === 0) {
+      this.audioTarget.volume = 1;
+      this.audioTarget.muted = false;
+      this.volumeOffBtnTarget.classList.add("hidden");
+      this.volumeOnBtnTarget.classList.remove("hidden");
+    } else {
+      this.audioTarget.volume = 0;
+      this.audioTarget.muted = true;
+      this.volumeOnBtnTarget.classList.add("hidden");
+      this.volumeOffBtnTarget.classList.remove("hidden");
+    }
   }
 
   #playAudio(trackId) {

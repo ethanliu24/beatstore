@@ -36,5 +36,11 @@
       data-action="change->audio-player#seek"
       data-audio-player-target="progressBar"
     />
+    <div class="flex justify-between items-center gap-3 cursor-pointer">
+      <div class="w-fit h-fit" data-action="click->audio-player#toggleVolume">
+        <%= icon "volume", class: "w-4 h-4", data: { audio_player_target: "volumeOnBtn" } %>
+        <%= icon "volume-off", class: "w-4 h-4 hidden", data: { audio_player_target: "volumeOffBtn" } %>
+      </div>
+    </div>
   </div>
 </div>
