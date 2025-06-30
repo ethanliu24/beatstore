@@ -5,7 +5,8 @@ export default class extends Controller {
   static targets = [
     "audio",
     "title", "bpm", "key", "coverPhoto",
-    "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer"
+    "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
+    "progressBar"
   ];
 
   static values = {
@@ -17,6 +18,16 @@ export default class extends Controller {
     this.currentTrackId = null;
     this.playerMode = "next"
     this.playerModes = ["next", "repeat", "shuffle"];
+
+    this.audioTarget.addEventListener("ended", () => {
+      this.pauseAudio();
+    });
+    this.audioTarget.addEventListener("timeupdate", () => {
+      if (this.audioTarget.duration > 0) {
+        const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
+        this.progressBarTarget.value = percentage;
+      }
+    });
   }
 
   stopPropagation(e) {
@@ -39,6 +50,11 @@ export default class extends Controller {
     this.pauseBtnTarget.classList.remove("hidden");
   }
 
+  resetAudio() {
+    this.audioTarget.currentTime = 0;
+    this.progressBarTarget.value = 0;
+  }
+
   switchMode() {
     const nextModeIdx = (this.playerModes.indexOf(this.playerMode) + 1) % this.playerModes.length;
     this.playerMode = this.playerModes[nextModeIdx];
@@ -50,8 +66,14 @@ export default class extends Controller {
   }
 
   repeatTrack() {
-    this.audioTarget.currentTime = 0;
+    this.resetAudio();
     if (!this.audioTarget.paused) this.resumeAudio();
+  }
+
+  seek() {
+    const value = this.progressBarTarget.value;
+    const duration = this.audioTarget.duration;
+    this.audioTarget.currentTime = (value / 100) * duration;
   }
 
   #playAudio(trackId) {
@@ -64,7 +86,7 @@ export default class extends Controller {
     }
 
     this.audioTarget.pause();
-    this.audioTarget.currentTime = 0;
+    this.resetAudio();
 
     fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET"
