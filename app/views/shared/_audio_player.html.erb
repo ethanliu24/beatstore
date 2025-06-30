@@ -1,11 +1,11 @@
 <div id="audio-player" data-turbo-permanent class="fixed bottom-0 left-0 w-screen py-4 px-8">
-  <div class="flex justify-between items-center w-full py-2 px-8 rounded-full border-1 border-secondary-txt/30 bg-background/60 backdrop-blur-sm">
+  <div class="flex justify-between items-center w-full py-2 px-8 rounded-full border-1 border-secondary-txt/30 bg-background/70 backdrop-blur-sm">
     <audio data-audio-player-target="audio"></audio>
     <div class="flex justify-between items-stretch gap-4">
       <img data-audio-player-target="coverPhoto" src="" alt="Track image" class="w-7 h-7 rounded">
       <div class="flex flex-col justify-between items-starttruncate">
         <p class="text-xs" data-audio-player-target="title"></p>
-        <div class="flex justify-start items-center gap-1.5 text-[0.5rem] font-light text-secondary-txt">
+        <div class="flex justify-start items-center gap-1 text-[0.5rem] font-light text-secondary-txt">
           <p data-audio-player-target="bpm"></p>
           <span>·</span>
           <p data-audio-player-target="key"></p>

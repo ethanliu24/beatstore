@@ -40,8 +40,7 @@ export default class extends Controller {
       this.coverPhotoTarget.src = track.cover_photo;
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
-      this.bpmTarget.innerText = track.key;
-      this.bpmTarget.innerText = track.key;
+      this.bpmTarget.innerText = `${track.bpm} BPM`;
       this.audioTarget.src = track.tagged_mp3;
       this.audioTarget.load();
       this.audioTarget.play();
