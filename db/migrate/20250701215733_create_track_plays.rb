@@ -6,5 +6,7 @@ class CreateTrackPlays < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
+
+    remove_column :tracks, :plays, :integer
   end
 end
