@@ -27,7 +27,7 @@ export default class extends Controller {
       }
     }).then(() => {
       if (redirect) {
-        window.location.replace(this.redirectUrlValue || "/");
+        Turbo.visit(this.redirectUrlValue || "/")
       }
     });
     // TODO show toast on success/failure?

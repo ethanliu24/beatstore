@@ -15,15 +15,10 @@
 
   <div class="grid [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))] gap-x-2 gap-y-8 mt-6">
     <% @tracks.each do |track| %>
-      <%# Temporary solution, but the width of the card is width of image + 2 in tailwind %>
+      <%# the width of the card is width of image + 2 in tailwind %>
       <div class="flex flex-col justify-start items-stretch bg-background dark:bg-secondary-bg w-42 h-fit rounded p-1">
-        <div class="flex justify-center items-center bg-secondary-bg dark:bg-background w-40 h-40 rounded">
-          <% if track.cover_photo.attached? %>
-            <%= image_tag track.cover_photo, class: "object-cover w-full h-full rounded" %>
-          <% else %>
-            <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
-          <% end %>
-        </div>
+        <%= render "shared/cover_photo_player", track: track, img_size: "w-40" %>
+
         <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
           <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">
             <p class="truncate mb-2"><%= track.title %></p>
@@ -48,16 +43,20 @@
           <%# More Dropdown %>
           <div id="<%= track_more_dropdown_id(track) %>" class="dropdown hidden">
             <ul>
+              <li class="dropdown-item" data-track-id="<%= track.id %>" data-action="click->audio-player#play">
+                <%= icon "player-play", class: "aspect-square w-3" %>
+                <%= t("label.play") %>
+              </li>
               <li class="dropdown-item">
-                <%= icon "pencil", class: "w-3 h-3" %>
+                <%= icon "pencil", class: "aspect-square w-3" %>
                 <%= link_to t("label.edit"), edit_admin_track_path(track) %>
               </li>
               <li class="dropdown-item">
-                <%= icon "eye", class: "w-3 h-3" %>
+                <%= icon "eye", class: "aspect-square w-3" %>
                 <%= link_to t("admin.see_track"), track_path(track) %>
               </li>
               <li class="dropdown-item text-error">
-                <%= icon "trash", class: "w-3 h-3" %>
+                <%= icon "trash", class: "aspect-square w-3" %>
                 <%= button_to t("label.delete"), admin_track_path(track), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
               </li>
             </ul>

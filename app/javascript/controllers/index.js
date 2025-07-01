@@ -2,3 +2,7 @@
 import { application } from "controllers/application"
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
 eagerLoadControllersFrom("controllers", application)
+
+document.addEventListener("DOMContentLoaded", () => {
+  localStorage.setItem("player_opened", false);
+});

@@ -1,6 +1,6 @@
 <nav
   class="
-    flex justify-between items-center flex-nowrap w-full px-6 py-2
+    flex justify-between items-center flex-nowrap w-full px-6 py-2 z-100
   bg-background/95 backdrop-blur-md sticky top-0 left-0
     shadow-xs dark:shadow-secondary-bg
   "
@@ -20,7 +20,7 @@
     <% if current_user && current_user.admin? %>
       <li>
         <%# TODO replace with path variable %>
-        <a href="<%= "/admin" %>"><%= icon "lock", class: "w-4 h-4" %></a>
+        <a href="<%= admin_tracks_path %>"><%= icon "lock", class: "w-4 h-4" %></a>
       </li>
     <% end %>
     <li data-controller="dark-mode">
