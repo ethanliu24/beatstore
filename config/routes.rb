@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
   resources :tracks, only: [ :index, :show ] do
     resource :heart, only: [ :create, :destroy ], module: :tracks
+    resource :play, only: [ :create ], module: :tracks, as: "increment_plays"
   end
 
   namespace :admin do
