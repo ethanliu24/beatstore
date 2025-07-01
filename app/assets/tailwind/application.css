@@ -28,6 +28,21 @@
   }
 }
 
+@layer utilities {
+  @media (max-width: 600px) {
+    .max-xs\:hidden {
+      display: none;
+    }
+  }
+
+  @media (max-width: 374px) {
+    .max-2xs\:hidden {
+      display: none;
+    }
+  }
+}
+
+
 @layer {
   .modal-content {
     @apply relative rounded-lg shadow-sm bg-background dark:bg-secondary-bg divide-y-2 divide-secondary-txt/10;
