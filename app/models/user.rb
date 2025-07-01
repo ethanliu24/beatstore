@@ -38,6 +38,7 @@ class User < ApplicationRecord
 
   has_many :hearts, class_name: "Track::Heart"
   has_many :hearted_tracks, through: :hearts, source: :track
+  has_many :track_plays, class_name: "Track::Play"
 
   class << self
     def from_omniauth(auth)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_01_170330) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_01_215733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_170330) do
     t.index ["user_id"], name: "index_track_hearts_on_user_id"
   end
 
+  create_table "track_plays", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "track_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["track_id"], name: "index_track_plays_on_track_id"
+    t.index ["user_id"], name: "index_track_plays_on_user_id"
+  end
+
   create_table "track_tags", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "track_id", null: false
@@ -65,7 +74,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_170330) do
     t.string "title", null: false
     t.string "key"
     t.integer "bpm"
-    t.integer "plays", default: 0, null: false
     t.boolean "is_public", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -101,5 +109,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_170330) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "track_hearts", "tracks"
   add_foreign_key "track_hearts", "users"
+  add_foreign_key "track_plays", "tracks"
+  add_foreign_key "track_plays", "users"
   add_foreign_key "track_tags", "tracks"
 end

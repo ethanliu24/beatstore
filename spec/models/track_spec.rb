@@ -7,10 +7,8 @@ RSpec.describe Track, type: :model do
     it { should validate_presence_of(:title) }
     it { should validate_inclusion_of(:is_public).in_array([ true, false ]) }
     it { should validate_numericality_of(:bpm).only_integer.is_greater_than(0).allow_nil }
-    it { should validate_numericality_of(:plays).only_integer.is_greater_than_or_equal_to(0) }
 
     it "is valid with valid attributes" do
-      subject.plays = 0
       subject.bpm = 120
       subject.key = "C MAJOR"
       expect(subject).to be_valid
@@ -91,6 +89,7 @@ RSpec.describe Track, type: :model do
   describe "associations" do
     it { should have_many(:hearts).dependent(:destroy) }
     it { should have_many(:hearted_by_users).through(:hearts).source(:user) }
+    it { should have_many(:plays) }
 
     it { should have_one_attached(:tagged_mp3) }
     it { should have_one_attached(:untagged_mp3) }

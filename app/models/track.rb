@@ -10,7 +10,6 @@ class Track < ApplicationRecord
   validates :title, presence: true
   validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
-  validates :plays, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :is_public, inclusion: { in: [ true, false ] }
   validates :genre, presence: true, inclusion: { in: GENRES }
   validates :key, format: {
@@ -28,6 +27,7 @@ class Track < ApplicationRecord
 
   has_many :hearts, class_name: "Track::Heart", dependent: :destroy
   has_many :hearted_by_users, through: :hearts, source: :user
+  has_many :plays, class_name: "Track::Play"
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
 
@@ -43,5 +43,13 @@ class Track < ApplicationRecord
 
   def get_tags
     tags.map { |t| "##{t.name}" }
+  end
+
+  def num_plays
+    plays.count
+  end
+
+  def num_hearts
+    hearts.count
   end
 end
