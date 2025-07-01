@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_24_043141) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_01_170330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,23 +42,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_043141) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "hearts", force: :cascade do |t|
+  create_table "track_hearts", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "track_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["track_id"], name: "index_hearts_on_track_id"
-    t.index ["user_id", "track_id"], name: "index_hearts_on_user_id_and_track_id", unique: true
-    t.index ["user_id"], name: "index_hearts_on_user_id"
+    t.index ["track_id"], name: "index_track_hearts_on_track_id"
+    t.index ["user_id", "track_id"], name: "index_track_hearts_on_user_id_and_track_id", unique: true
+    t.index ["user_id"], name: "index_track_hearts_on_user_id"
   end
 
-  create_table "tags", force: :cascade do |t|
+  create_table "track_tags", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "track_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["track_id", "name"], name: "index_tags_on_track_id_and_name", unique: true
-    t.index ["track_id"], name: "index_tags_on_track_id"
+    t.index ["track_id", "name"], name: "index_track_tags_on_track_id_and_name", unique: true
+    t.index ["track_id"], name: "index_track_tags_on_track_id"
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -99,7 +99,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_043141) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "hearts", "tracks"
-  add_foreign_key "hearts", "users"
-  add_foreign_key "tags", "tracks"
+  add_foreign_key "track_hearts", "tracks"
+  add_foreign_key "track_hearts", "users"
+  add_foreign_key "track_tags", "tracks"
 end
