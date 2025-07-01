@@ -15,24 +15,10 @@
 
   <div class="grid [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))] gap-x-2 gap-y-8 mt-6">
     <% @tracks.each do |track| %>
-      <%# Temporary solution, but the width of the card is width of image + 2 in tailwind %>
+      <%# the width of the card is width of image + 2 in tailwind %>
       <div class="flex flex-col justify-start items-stretch bg-background dark:bg-secondary-bg w-42 h-fit rounded p-1">
-        <div class="relative flex justify-center items-center bg-secondary-bg dark:bg-background aspect-square w-40 rounded cursor-pointer"
-          data-controller="cover-photo-hover" data-cover-photo-hover-target="container">
-          <% if track.cover_photo.attached? %>
-            <%= image_tag track.cover_photo, class: "object-cover w-full h-full rounded" %>
-          <% else %>
-            <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
-          <% end %>
-          <div class="hidden absolute top-0 left-0 w-full h-full aspect-square bg-black/50"
-            data-cover-photo-hover-target="playTrigger" data-track-id="<%= track.id %>" data-action="click->audio-player#play">
-            <div class="w-full h-full flex justify-center items-center">
-              <span class="w-fit h-fit aspect-square p-2 rounded-full border-1 border-white">
-                <%= icon "player-play", variant: "filled", class: "w-4 h-4 aspect-square" %>
-              </span>
-            </div>
-          </div>
-        </div>
+        <%= render "shared/cover_photo_player", track: track, img_size: "w-40" %>
+
         <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
           <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">
             <p class="truncate mb-2"><%= track.title %></p>
