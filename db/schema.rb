@@ -54,7 +54,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_215733) do
 
   create_table "track_plays", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "track_id"
+    t.bigint "track_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["track_id"], name: "index_track_plays_on_track_id"
