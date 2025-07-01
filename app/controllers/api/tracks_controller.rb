@@ -7,7 +7,7 @@ class Api::TracksController < ApplicationController
   def show
     track = Track.find_by(id: params[:id])
 
-    if track && track.is_public?
+    if track && (current_user&.admin? || track.is_public?)
       render json: {
         id: track.id,
         title: track.title,

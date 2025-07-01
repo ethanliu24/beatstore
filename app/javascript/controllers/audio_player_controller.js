@@ -17,7 +17,7 @@ export default class extends Controller {
   connect() {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
-      this.trackDataApiUrl = this.trackDataApiUrlValue || "api/tracks"
+      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks"
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
@@ -55,7 +55,7 @@ export default class extends Controller {
   }
 
   play(e) {
-    this.#playAudio(e.currentTarget.dataset.trackId);
+    this.#playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   pauseAudio() {
@@ -205,8 +205,8 @@ export default class extends Controller {
       this.audioTarget.src = track.tagged_mp3;
       this.audioTarget.load();
       this.resumeAudio();
+      // TODO Toast if track audio src is empty
     });
-
     // TODO POST to increment play count
   }
 }
