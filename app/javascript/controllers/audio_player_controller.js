@@ -209,6 +209,14 @@ export default class extends Controller {
       this.resumeAudio();
       // TODO Toast if track audio src is empty
     });
-    // TODO POST to increment play count
+
+    if (!this.currentTrackId) return;
+    fetch(`/tracks/${this.currentTrackId}/play`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Content-Type": "application/json"
+      }
+    })
   }
 }

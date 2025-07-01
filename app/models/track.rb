@@ -44,4 +44,8 @@ class Track < ApplicationRecord
   def get_tags
     tags.map { |t| "##{t.name}" }
   end
+
+  def num_plays
+    plays.count
+  end
 end
