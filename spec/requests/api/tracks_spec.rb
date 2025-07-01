@@ -7,7 +7,7 @@ RSpec.describe "Api::Tracks", type: :request do
       # RSpec.configure do |config|
       #   ActiveStorage::Current.url_options = {host: "https://www.example.com"}
       # end
-      pending "attach object files to test for #{__FILE__}"
+      skip "attach object files to test for #{__FILE__}"
     end
   end
 end
