@@ -30,6 +30,7 @@ class Track < ApplicationRecord
   has_many :hearted_by_users, through: :hearts, source: :user
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
+  has_many :plays, class_name: "Track::Play"
 
   # def adjust_visibility
   #   # mark track private if not all links are available
