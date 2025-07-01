@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Tag, type: :model do
+RSpec.describe Track::Tag, type: :model do
   let(:track) { create(:track) }
-  subject { build(:tag, track: track) }
+  subject { build(:track_tag, track: track) }
 
   describe 'validations' do
     it { should validate_presence_of(:name) }
@@ -27,18 +27,18 @@ RSpec.describe Tag, type: :model do
 
     context 'uniqueness scoped to track_id' do
       before do
-        create(:tag, name: 'trap', track: track)
+        create(:track_tag, name: 'trap', track: track)
       end
 
       it 'is invalid with duplicate name for the same track' do
-        duplicate_tag = build(:tag, name: 'trap', track: track)
+        duplicate_tag = build(:track_tag, name: 'trap', track: track)
         expect(duplicate_tag).not_to be_valid
         expect(duplicate_tag.errors.details[:name]).to include(hash_including(error: :taken))
       end
 
       it 'is valid with same name for different tracks' do
         other_track = create(:track)
-        tag = build(:tag, name: 'trap', track: other_track)
+        tag = build(:track_tag, name: 'trap', track: other_track)
         expect(tag).to be_valid
       end
     end

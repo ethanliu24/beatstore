@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :heart do
+  factory :track_heart, class: "Track::Heart" do
     association :user
     association :track
   end

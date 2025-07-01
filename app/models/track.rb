@@ -26,9 +26,9 @@ class Track < ApplicationRecord
   has_one_attached :project_file
   has_one_attached :cover_photo
 
-  has_many :hearts, dependent: :destroy
+  has_many :hearts, class_name: "Track::Heart", dependent: :destroy
   has_many :hearted_by_users, through: :hearts, source: :user
-  has_many :tags, dependent: :destroy
+  has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
 
   # def adjust_visibility

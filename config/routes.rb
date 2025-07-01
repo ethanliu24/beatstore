@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   end
 
   resources :tracks, only: [ :index, :show ] do
-    resource :heart, only: [ :create, :destroy ]
+    resource :heart, only: [ :create, :destroy ], module: :tracks
   end
 
   namespace :admin do
