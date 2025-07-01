@@ -48,4 +48,8 @@ class Track < ApplicationRecord
   def num_plays
     plays.count
   end
+
+  def num_hearts
+    hearts.count
+  end
 end
