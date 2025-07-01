@@ -40,12 +40,14 @@ export default class extends Controller {
 
     localStorage.setItem("player_opened", true);
     this.containerTarget.classList.remove("hidden");
+    document.getElementById("main").firstElementChild.classList.add("pb-20");
   }
 
   closePlayer() {
     localStorage.setItem("player_opened", false);
     this.containerTarget.classList.add("hidden");
     this.containerTarget.classList.remove("slide-up-fade-in");
+    document.getElementById("main").classList.remove("pb-20");
     this.audioTarget.pause();
     this.resetAudio();
   }
