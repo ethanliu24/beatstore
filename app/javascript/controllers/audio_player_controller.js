@@ -7,7 +7,7 @@ export default class extends Controller {
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
-    "volumeOnBtn", "volumeOffBtn", "volumeBar"
+    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar"
   ];
 
   static values = {
@@ -129,6 +129,44 @@ export default class extends Controller {
     Turbo.visit(`/admin/tracks/${this.currentTrackId}/edit`);
   }
 
+  toggleLikeButton(liked) {
+    if (liked) {
+      this.unlikeBtnTarget.classList.remove("hidden");
+      this.likeBtnTarget.classList.add("hidden");
+    } else {
+      this.unlikeBtnTarget.classList.add("hidden");
+      this.likeBtnTarget.classList.remove("hidden");
+    }
+  }
+
+  likeTrack() {
+    fetch(`/tracks/${this.currentTrackId}/heart`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Content-Type": "application/json"
+      }
+    })
+    .then();
+    // TODO add toast on success
+
+    this.toggleLikeButton(true);
+  }
+
+  unlikeTrack() {
+    fetch(`/tracks/${this.currentTrackId}/heart`, {
+      method: "DELETE",
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Content-Type": "application/json"
+      }
+    })
+    .then();
+    // TODO add toast on success
+
+    this.toggleLikeButton(false);
+  }
+
   #playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
@@ -155,6 +193,7 @@ export default class extends Controller {
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
       this.bpmTarget.innerText = `${track.bpm} BPM`;
+      this.toggleLikeButton(track.liked_by_user);
       this.openPlayer();
       this.audioTarget.src = track.tagged_mp3;
       this.audioTarget.load();
