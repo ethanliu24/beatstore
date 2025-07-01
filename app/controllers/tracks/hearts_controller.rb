@@ -1,4 +1,4 @@
-class HeartsController < ApplicationController
+class Tracks::HeartsController < ApplicationController
   before_action :authenticate_user!
 
   def create
