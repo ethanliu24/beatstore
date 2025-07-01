@@ -16,6 +16,7 @@ export default class extends Controller {
 
   connect() {
     requestAnimationFrame(() => {
+      this.containerTarget.classList.remove("slide-up-fade-in");
       this.trackDataApiUrl = this.trackDataApiUrlValue || "api/tracks"
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
@@ -33,11 +34,16 @@ export default class extends Controller {
   }
 
   openPlayer() {
+    if (localStorage.getItem("player_opened") !== "true") {
+      this.containerTarget.classList.add("slide-up-fade-in");
+    }
+
+    localStorage.setItem("player_opened", true);
     this.containerTarget.classList.remove("hidden");
-    this.containerTarget.classList.add("slide-up-fade-in");
   }
 
   closePlayer() {
+    localStorage.setItem("player_opened", false);
     this.containerTarget.classList.add("hidden");
     this.containerTarget.classList.remove("slide-up-fade-in");
     this.audioTarget.pause();
@@ -171,9 +177,10 @@ export default class extends Controller {
     if (this.played) {
       if (this.currentTrackId == trackId) {
         if (this.audioTarget.paused) {
-          this.audioTarget.play();
+          this.resumeAudio();
         }
 
+        this.openPlayer();
         return;
       }
     }
