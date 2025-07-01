@@ -131,13 +131,13 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
     it "destroys all tags when the track is destroyed" do
       track = create(:track)
-      tag1 = create(:tag, track: track, name: "t1")
-      tag2 = create(:tag, track: track, name: "t2")
+      tag1 = create(:track_tag, track: track, name: "t1")
+      tag2 = create(:track_tag, track: track, name: "t2")
 
       expect(track.reload.tags.where(name: "t1").count).to eq(1)
       expect(track.reload.tags.where(name: "t2").count).to eq(1)
-      expect { track.destroy }.to change { Tag.count }.by(-2)
-      expect(Tag.where(id: [ tag1.id, tag2.id ])).to be_empty
+      expect { track.destroy }.to change { Track::Tag.count }.by(-2)
+      expect(Track::Tag.where(id: [ tag1.id, tag2.id ])).to be_empty
     end
   end
 
@@ -173,7 +173,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
 
     it "rejects a duplicate tag name" do
-      create(:tag, track: track, name: "duplicate")
+      create(:track_tag, track: track, name: "duplicate")
 
       patch admin_track_url(track), params: {
         track: {
@@ -199,7 +199,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
 
     it "deletes an existing tag" do
-      tag = create(:tag, track: track, name: "trap")
+      tag = create(:track_tag, track: track, name: "trap")
 
       patch admin_track_path(track), params: {
         track: {
@@ -216,9 +216,9 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
 
     it "does not delete a tag not associated with the track" do
-      create(:tag, track: track, name: "tag")
+      create(:track_tag, track: track, name: "tag")
       other_track = create(:track)
-      other_tag = create(:tag, track: other_track, name: "other")
+      other_tag = create(:track_tag, track: other_track, name: "other")
 
       patch admin_track_path(track), params: {
         track: {
@@ -231,7 +231,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         }
       }
 
-      expect(Tag.find_by(id: other_tag.id)).not_to be_nil
+      expect(Track::Tag.find_by(id: other_tag.id)).not_to be_nil
     end
   end
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe HeartsController, type: :request do
+RSpec.describe Tracks::HeartsController, type: :request do
   let(:user) { create(:user) }
   let(:track) { create(:track) }
 
@@ -11,7 +11,7 @@ RSpec.describe HeartsController, type: :request do
       it "creates a new heart for the track" do
         expect {
           post track_heart_path(track)
-        }.to change(Heart, :count).by(1)
+        }.to change(Track::Heart, :count).by(1)
 
         expect(user.hearts.last.track).to eq(track)
         expect(response).to have_http_status(:no_content)
@@ -22,7 +22,7 @@ RSpec.describe HeartsController, type: :request do
 
         expect {
           post track_heart_path(non_existent_track_id)
-        }.not_to change(Heart, :count)
+        }.not_to change(Track::Heart, :count)
 
         expect(response).to have_http_status(:not_found)
       end
@@ -37,7 +37,7 @@ RSpec.describe HeartsController, type: :request do
 
         expect {
           delete track_heart_path(track)
-        }.to change(Heart, :count).by(-1)
+        }.to change(Track::Heart, :count).by(-1)
 
         expect(user.hearts.exists?(track_id: track.id)).to be_falsey
         expect(response).to have_http_status(:no_content)
@@ -48,7 +48,7 @@ RSpec.describe HeartsController, type: :request do
 
         expect {
           delete track_heart_path(non_existent_track_id)
-        }.not_to change(Heart, :count)
+        }.not_to change(Track::Heart, :count)
 
         expect(response).to have_http_status(:not_found)
       end

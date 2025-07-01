@@ -72,8 +72,8 @@ RSpec.describe User, type: :model do
       track1 = build(:track)
       track2 = build(:track)
       track3 = build(:track)
-      create(:heart, user: user, track: track1)
-      create(:heart, user: user, track: track2)
+      create(:track_heart, user: user, track: track1)
+      create(:track_heart, user: user, track: track2)
 
       expect(user.hearted_tracks).to include(track1, track2)
       expect(user.hearted_tracks).not_to include(track3)
