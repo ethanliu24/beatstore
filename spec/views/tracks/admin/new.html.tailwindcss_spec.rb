@@ -13,7 +13,6 @@ RSpec.describe "admin/tracks/new", type: :view do
       # assert_select "input[name=?]", "track[key]"
       # assert_select "input[name=?]", "track[bpm]"
       # assert_select "input[name=?]", "track[hearts]"
-      # assert_select "input[name=?]", "track[plays]"
       # assert_select "input[name=?]", "track[is_public]"
     end
   end
