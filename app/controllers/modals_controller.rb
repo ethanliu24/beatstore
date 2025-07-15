@@ -33,7 +33,7 @@ class ModalsController < ApplicationController
 
   def ensure_turbo_request
     # For Turbo Frames or Turbo Streams, request is xhr? or format.turbo_stream
-    unless turbo_frame_request? || request.xhr? || request.format.turbo_stream?
+    unless turbo_or_xhr_request?
       redirect_back(fallback_location: root_path)
     end
   end

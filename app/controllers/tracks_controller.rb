@@ -5,8 +5,7 @@ class TracksController < ApplicationController
     @q = base_scope.ransack(params[:q])
     @tracks = @q.result.includes(:tags)
 
-    # TODO refactor to concern or application ctrller method
-    if turbo_frame_request? || request.xhr? || request.format.turbo_stream?
+    if turbo_or_xhr_request?
       render partial: "tracks/track_list", locals: { tracks: @tracks }
     end
   end
