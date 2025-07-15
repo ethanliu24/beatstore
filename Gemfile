@@ -88,3 +88,5 @@ group :development, :test do
 end
 
 gem "rails_icons", "~> 1.3"
+
+gem "ransack"
