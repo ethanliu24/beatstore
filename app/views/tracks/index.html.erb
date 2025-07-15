@@ -3,8 +3,9 @@
 <div class="w-full">
   <h1 class="page-title">Tracks</h1>
 
-  <%= link_to "Reload Tracks", tracks_path, data: { turbo_frame: "track-list" } %>
-  <div id="tracks" class="min-w-full">
+  <%= render "tracks/filter" %>
+
+  <div id="tracks" class="min-w-full mt-8">
     <turbo-frame id="track-list">
       <%= render partial: "tracks/track_list", locals: { tracks: @tracks } %>
     </turbo-frame>

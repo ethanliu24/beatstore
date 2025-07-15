@@ -31,6 +31,29 @@ class Track < ApplicationRecord
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
 
+  class << self
+    def ransackable_attributes(auth_object = nil)
+      base = [
+        "title",
+        "description",
+        "bpm",
+        "key",
+        "genre",
+        "tags",
+        "created_at",
+        "updated_at"
+      ]
+
+      base << "is_public" if auth_object&.admin?
+      puts "HIHIHI"
+      base
+    end
+
+    def ransackable_associations(auth_object = nil)
+      [ "tags" ]
+    end
+  end
+
   # def adjust_visibility
   #   # mark track private if not all links are available
   #   required_files = [ tagged_mp3, untagged_mp3, untagged_wav, track_stems, project ]

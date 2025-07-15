@@ -1,0 +1,20 @@
+<%= search_form_for @q,
+  class: "w-full",
+  html: {
+    data: {
+      controller: "track-filter",
+      turbo_frame: "track-list",
+      turbo_action: "replace",
+    }
+  } do |f| %>
+  <div class="flex justify-start items-stretch gap-3 relative w-full">
+    <%= icon "search", class: "absolute w-4 aspect-square top-1/2 left-0 -translate-y-1/2 ml-2" %>
+    <%= f.search_field :title_or_description_or_tags_name_i_cont, autocomplete: "off", class:
+      "flex-1 pl-9 py-1 border-1 border-secondary-txt/50 focus:outline-none focus:ring-1 focus:ring-accent rounded" %>
+    <%= f.submit t("label.search"), class: "border-1 border-primary-txt rounded cursor-pointer px-2" %>
+    <%= f.submit t("label.clear"), class: "border-1 border-secondary-txt text-secondary-txt rounded cursor-pointer px-2" %>
+    <%# TODO hook to controller %>
+  </div>
+  <div>
+  </div>
+<% end %>
