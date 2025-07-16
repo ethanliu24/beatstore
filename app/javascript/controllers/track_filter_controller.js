@@ -15,8 +15,16 @@ export default class extends Controller {
     this.#updateSelection(this.genreDropdownTarget, this.genreChipTarget, 3);
   }
 
+  updateKey() {
+    this.#updateSelection(this.keyDropdownTarget, this.keyChipTarget, 2);
+  }
+
   clearGenre() {
     this.#clearSelection(this.genreDropdownTarget, this.genreChipTarget);
+  }
+
+  clearKey() {
+    this.#clearSelection(this.keyDropdownTarget, this.keyChipTarget);
   }
 
   #updateSelection(dropdown, chip, showLength = 3) {
