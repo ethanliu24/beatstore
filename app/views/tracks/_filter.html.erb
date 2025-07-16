@@ -15,8 +15,8 @@
         class: "w-full min-w-20 pl-9 py-2 text-xs border-1 border-secondary-txt/50 focus:outline-none focus:ring-1 focus:ring-accent rounded" %>
     </span>
     <%= f.submit t("label.search"), class: "border-1 border-primary-txt rounded cursor-pointer px-2" %>
-    <%= f.submit t("label.clear"), data: { action: "click->track-filter#clearFilter" },
-      class: "border-1 border-secondary-txt text-secondary-txt rounded cursor-pointer px-2" %>
+    <%= link_to t("label.clear"), url, data: { action: "click->track-filter#clearFilter" },
+      class: "flex justify-center items-center border-1 border-secondary-txt text-secondary-txt rounded cursor-pointer px-2" %>
   </div>
 
   <div class="flex justify-start flex-stretch flex-wrap gap-4 text-xs text-secondary-txt font-light select-none mb-2">
