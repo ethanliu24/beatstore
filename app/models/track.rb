@@ -45,7 +45,6 @@ class Track < ApplicationRecord
       ]
 
       base << "is_public" if auth_object&.admin?
-      puts "HIHIHI"
       base
     end
 

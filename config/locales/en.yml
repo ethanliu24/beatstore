@@ -95,6 +95,7 @@ en:
     title: "Title"
     created_at: "Uploaded time"
     updated_at: "Last updated"
+    visibility: "Visibility"
 
   admin:
     track:

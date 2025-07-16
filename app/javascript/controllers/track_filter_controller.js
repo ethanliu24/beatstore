@@ -8,6 +8,7 @@ export default class extends Controller {
     "bpmDropdown", "bpmChip",
     "keyDropdown", "keyChip",
     "tagDropdown", "tagChip",
+    "visibilityDropdown", "visibilityChip",
   ];
 
   connect() {
@@ -15,6 +16,7 @@ export default class extends Controller {
     this.updateBPM();
     this.updateKeys();
     this.updateTags();
+    this.updateVisibility();
   }
 
   clearFilter() {
@@ -22,6 +24,7 @@ export default class extends Controller {
     this.clearBPM();
     this.clearKeys();
     this.clearTags();
+    this.clearVisibility();
     this.formTarget.reset();
   }
 
@@ -41,6 +44,10 @@ export default class extends Controller {
     this.#updateSelection(this.tagDropdownTarget, this.tagChipTarget, 5);
   }
 
+  updateVisibility() {
+    this.#updateSelection(this.visibilityDropdownTarget, this.visibilityChipTarget, 2);
+  }
+
   clearGenres() {
     this.#clearSelection(this.genreDropdownTarget, this.genreChipTarget);
   }
@@ -55,6 +62,10 @@ export default class extends Controller {
 
   clearTags() {
     this.#clearSelection(this.tagDropdownTarget, this.tagChipTarget);
+  }
+
+  clearVisibility() {
+    this.#clearSelection(this.visibilityDropdownTarget, this.visibilityChipTarget);
   }
 
   #updateSelection(dropdown, chip, showLength = 3) {

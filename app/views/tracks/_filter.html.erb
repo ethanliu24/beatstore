@@ -24,24 +24,35 @@
       {
         field: t("track.genres"),
         dropdown_id: "genre-selection-dropdown",
+        for_admin: false,
       },
       {
         field: "BPM",
         dropdown_id: "bpm-selection-range",
+        for_admin: false,
       },
       {
         field: t("track.keys"),
         dropdown_id: "key-selection-dropdown",
+        for_admin: false,
       },
       {
         field: t("track.tags"),
         dropdown_id: "tag-selection-dropdown",
+        for_admin: false,
       },
       {
         field: t("track.order_by"),
         dropdown_id: "sort-dropdown",
+        for_admin: false,
+      },
+      {
+        field: t("track.visibility"),
+        dropdown_id: "visibility-selection-dropdown",
+        for_admin: true,
       },
     ].each do |data| %>
+      <% next if data[:for_admin] && !current_user&.admin? %>
       <button id="<%= "#{data[:dropdown_id]}-btn" %>" data-dropdown-toggle="<%= data[:dropdown_id] %>" type="button"
         class="flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none">
         <%= data[:field] %>
@@ -56,20 +67,31 @@
         label: "genre",
         query: :genre_cont_any,
         click_action: "change->track-filter#updateGenres",
+        for_admin: false,
       },
       {
         options: key_options.drop(1),  # assumes key_options starts with nil
         label: "key",
         query: :key_cont_any,
         click_action: "change->track-filter#updateKeys",
+        for_admin: false,
       },
       {
         options: tag_options,
         label: "tag",
         query: :tags_name_cont_any,
         click_action: "change->track-filter#updateTags",
+        for_admin: false,
+      },
+      {
+        options: [ "true", "false" ],
+        label: "visibility",
+        query: :is_public_in,
+        click_action: "change->track-filter#updateVisibility",
+        for_admin: true,
       },
     ].each do |dropdown| %>
+      <% next if dropdown[:for_admin] && !current_user&.admin? %>
       <div id="<%= "#{dropdown[:label]}-selection-dropdown" %>" class="z-10 max-h-60 overflow-y-auto hidden bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
         <ul class="p-1" aria-labelledby="<%= "#{dropdown[:label]}-selection-dropdown-btn" %>" data-track-filter-target="<%= "#{dropdown[:label]}Dropdown" %>">
           <% dropdown[:options].each do |option| %>
@@ -80,7 +102,11 @@
                   class: "w-3 h-3 cursor-pointer rounded accent-accent",
                   data: { action: dropdown[:click_action] } %>
                 <label for="<%= "#{dropdown[:label]}-selection-#{snake_case(option)}" %>" class="w-full h-full ms-2 cursor-pointer font-medium">
-                  <%= option %>
+                  <% unless dropdown[:label] == "visibility" %>
+                    <%= option %>
+                  <% else %>
+                    <%= if option == "true" then "public" else "private" end %>
+                  <% end %>
                 </label>
               </div>
             </li>
@@ -126,11 +152,13 @@
 
   <div class="flex justify-start items-stretch gap-2">
     <% [
-      { title: t("track.genres"), label: "genre", action: "click->track-filter#clearGenres" },
-      { title: "BPM", label: "bpm", action: "click->track-filter#clearBPM" },
-      { title: t("track.keys"), label: "key", action: "click->track-filter#clearKeys" },
-      { title: t("track.tags"), label: "tag", action: "click->track-filter#clearTags" },
+      { title: t("track.genres"), label: "genre", action: "click->track-filter#clearGenres", for_admin: false },
+      { title: "BPM", label: "bpm", action: "click->track-filter#clearBPM", for_admin: false },
+      { title: t("track.keys"), label: "key", action: "click->track-filter#clearKeys", for_admin: false },
+      { title: t("track.tags"), label: "tag", action: "click->track-filter#clearTags", for_admin: false },
+      { title: t("track.visibility"), label: "visibility", action: "click->track-filter#clearVisibility", for_admin: true },
     ].each do |chip| %>
+      <% next if chip[:for_admin] && !current_user&.admin? %>
       <div class="hidden w-fit h-fit bg-secondary-bg rounded-full px-2 py-0.5"
         data-track-filter-target="<%= "#{chip[:label]}Chip" %>">
         <span class="flex justify-center items-center gap-1">
