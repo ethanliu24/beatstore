@@ -25,6 +25,10 @@
         dropdown_id: "genre-selection-dropdown",
       },
       {
+        field: "BPM",
+        dropdown_id: "bpm-selection-range",
+      },
+      {
         field: t("track.keys"),
         dropdown_id: "key-selection-dropdown",
       },
@@ -34,13 +38,13 @@
       },
     ].each do |data| %>
       <button id="<%= "#{data[:dropdown_id]}-btn" %>" data-dropdown-toggle="<%= data[:dropdown_id] %>" type="button"
-        class="flex justify-center items-center gap-1 bg-none cursor-pointer">
+        class="flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none">
         <%= data[:field] %>
         <%= icon "chevron-down", class: "w-3 aspect-square" %>
       </button>
     <% end %>
 
-    <%# Dropdowns %>
+    <%# Checkboxes %>
     <% [
       {
         options: genre_options,
@@ -81,9 +85,30 @@
     <% end %>
   </div>
 
+  <%# Ranges %>
+  <% [
+    {
+      label: "bpm",
+      lowerbound_query: :bpm_gteq,
+      upperbound_query: :bpm_lteq,
+      change_action: "change->track-filter#updateBPM",
+    }
+  ].each do |dropdown| %>
+    <div id="<%= "#{dropdown[:label]}-selection-range" %>" class="z-10 hidden p-2 bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
+      <span class="flex justify-center items-stretch gap-2 text-[0.8rem]" data-track-filter-target="<%= "#{dropdown[:label]}Dropdown" %>">
+        <%= f.number_field dropdown[:lowerbound_query], data: { action: dropdown[:change_action] },
+          class: "hide-incr-decr-arrows w-8 border-b-1 border-b-secondary-txt focus:border-b-accent focus:outline-none focus:ring-0" %>
+        <p><%= t("label.to").downcase %></p>
+        <%= f.number_field dropdown[:upperbound_query], data: { action: dropdown[:change_action] },
+          class: "hide-incr-decr-arrows w-8 border-b-1 border-b-secondary-txt focus:border-b-accent focus:outline-none focus:ring-0" %>
+      </span>
+    </div>
+  <% end %>
+
   <div class="flex justify-start items-stretch gap-2">
     <% [
       { title: t("track.genres"), label: "genre", action: "click->track-filter#clearGenres" },
+      { title: "BPM", label: "bpm", action: "click->track-filter#clearBPM" },
       { title: t("track.keys"), label: "key", action: "click->track-filter#clearKeys" },
       { title: t("track.tags"), label: "tag", action: "click->track-filter#clearTags" },
     ].each do |chip| %>

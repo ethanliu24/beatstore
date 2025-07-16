@@ -17,6 +17,18 @@
   scrollbar-width: none;  /* Firefox */
 }
 
+/* Hide increment and decrement arrows for number inputs */
+.hide-incr-decr-arrows::-webkit-inner-spin-button,
+.hide-incr-decr-arrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.hide-incr-decr-arrows {
+  -moz-appearance: textfield; /* For Firefox */
+}
+
+/* Animations */
 .slide-up-fade-in {
   animation: slideUpFadeIn 300ms ease-out forwards;
 }

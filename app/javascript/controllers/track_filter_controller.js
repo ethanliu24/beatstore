@@ -3,16 +3,25 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="track-filter"
 export default class extends Controller {
   static targets = [
-    "genreDropdown", "keyDropdown", "tagDropdown",
-    "genreChip", "keyChip", "tagChip",
+    "genreDropdown", "genreChip",
+    "bpmDropdown", "bpmChip",
+    "keyDropdown", "keyChip",
+    "tagDropdown", "tagChip",
   ];
 
   connect() {
-    this.updateGenre();
+    this.updateGenres();
+    this.updateBPM();
+    this.updateKeys();
+    this.updateTags();
   }
 
   updateGenres() {
     this.#updateSelection(this.genreDropdownTarget, this.genreChipTarget, 3);
+  }
+
+  updateBPM() {
+    this.#updateRange(this.bpmDropdownTarget, this.bpmChipTarget);
   }
 
   updateKeys() {
@@ -25,6 +34,10 @@ export default class extends Controller {
 
   clearGenres() {
     this.#clearSelection(this.genreDropdownTarget, this.genreChipTarget);
+  }
+
+  clearBPM() {
+    this.#clearRange(this.bpmDropdownTarget, this.bpmChipTarget);
   }
 
   clearKeys() {
@@ -43,7 +56,7 @@ export default class extends Controller {
       if (checkbox.checked) acc.push(label.innerText.trim());
       return acc;
     }, []);
-    console.log(selections)
+
     let str = "";
     if (selections.length > showLength) {
       const remainingLength = selections.length - showLength;
@@ -51,15 +64,26 @@ export default class extends Controller {
     } else if (selections.length > 0) {
       str = selections.join(", ");
     }
-    str = str.trim()
-    const display = chip.querySelector(".track-filter-chip-text");
-    display.innerText = str;
 
-    if (str === "") {
-      chip.classList.add("hidden");
+    this.#updateChip(chip, str);
+  }
+
+  #updateRange(dropdown, chip) {
+    const lowerbound = dropdown.firstElementChild.value;
+    const upperbound = dropdown.lastElementChild.value;
+
+    let str;
+    if (!upperbound && !lowerbound) {
+      str = "";
+    } else if (!lowerbound) {
+      str = `≤ ${upperbound}`;
+    } else if (!upperbound) {
+      str = `≥ ${lowerbound}`;
     } else {
-      chip.classList.remove("hidden");
+      str = `${lowerbound} - ${upperbound}`;
     }
+
+    this.#updateChip(chip, str);
   }
 
   #clearSelection(dropdown, chip) {
@@ -71,5 +95,20 @@ export default class extends Controller {
     });
 
     chip.classList.add("hidden");
+  }
+
+  #clearRange(dropdown, chip) {
+    chip.classList.add("hidden");
+  }
+
+  #updateChip(chip, str) {
+    const display = chip.querySelector(".track-filter-chip-text");
+    display.innerText = str;
+
+    if (str === "") {
+      chip.classList.add("hidden");
+    } else {
+      chip.classList.remove("hidden");
+    }
   }
 }
