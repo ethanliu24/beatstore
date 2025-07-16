@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="track-filter"
 export default class extends Controller {
   static targets = [
+    "form",
     "genreDropdown", "genreChip",
     "bpmDropdown", "bpmChip",
     "keyDropdown", "keyChip",
@@ -14,6 +15,14 @@ export default class extends Controller {
     this.updateBPM();
     this.updateKeys();
     this.updateTags();
+  }
+
+  clearFilter() {
+    this.clearGenres();
+    this.clearBPM();
+    this.clearKeys();
+    this.clearTags();
+    this.formTarget.reset();
   }
 
   updateGenres() {
@@ -98,6 +107,9 @@ export default class extends Controller {
   }
 
   #clearRange(dropdown, chip) {
+    const defaultValue = "";
+    dropdown.firstElementChild.value = defaultValue;
+    dropdown.lastElementChild.value = defaultValue;
     chip.classList.add("hidden");
   }
 

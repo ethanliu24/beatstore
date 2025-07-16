@@ -3,6 +3,7 @@
   html: {
     data: {
       controller: "track-filter",
+      track_filter_target: "form",
       turbo_frame: "track-list",
       turbo_action: "replace",
     }
@@ -14,8 +15,8 @@
         class: "w-full min-w-20 pl-9 py-2 text-xs border-1 border-secondary-txt/50 focus:outline-none focus:ring-1 focus:ring-accent rounded" %>
     </span>
     <%= f.submit t("label.search"), class: "border-1 border-primary-txt rounded cursor-pointer px-2" %>
-    <%= f.submit t("label.clear"), class: "border-1 border-secondary-txt text-secondary-txt rounded cursor-pointer px-2" %>
-    <%# TODO hook to controller %>
+    <%= f.submit t("label.clear"), data: { action: "click->track-filter#clearFilter" },
+      class: "border-1 border-secondary-txt text-secondary-txt rounded cursor-pointer px-2" %>
   </div>
 
   <div class="flex justify-start flex-stretch gap-4 text-xs text-secondary-txt font-light select-none mb-2">
@@ -35,6 +36,10 @@
       {
         field: t("track.tags"),
         dropdown_id: "tag-selection-dropdown",
+      },
+      {
+        field: t("track.order_by"),
+        dropdown_id: "sort-dropdown",
       },
     ].each do |data| %>
       <button id="<%= "#{data[:dropdown_id]}-btn" %>" data-dropdown-toggle="<%= data[:dropdown_id] %>" type="button"
@@ -96,14 +101,28 @@
   ].each do |dropdown| %>
     <div id="<%= "#{dropdown[:label]}-selection-range" %>" class="z-10 hidden p-2 bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
       <span class="flex justify-center items-stretch gap-2 text-[0.8rem]" data-track-filter-target="<%= "#{dropdown[:label]}Dropdown" %>">
-        <%= f.number_field dropdown[:lowerbound_query], data: { action: dropdown[:change_action] },
+        <%= f.number_field dropdown[:lowerbound_query], value: params.dig(:q, dropdown[:lowerbound_query]), data: { action: dropdown[:change_action] },
           class: "hide-incr-decr-arrows w-8 border-b-1 border-b-secondary-txt focus:border-b-accent focus:outline-none focus:ring-0" %>
         <p><%= t("label.to").downcase %></p>
-        <%= f.number_field dropdown[:upperbound_query], data: { action: dropdown[:change_action] },
+        <%= f.number_field dropdown[:upperbound_query], value: params.dig(:q, dropdown[:upperbound_query]), data: { action: dropdown[:change_action] },
           class: "hide-incr-decr-arrows w-8 border-b-1 border-b-secondary-txt focus:border-b-accent focus:outline-none focus:ring-0" %>
       </span>
     </div>
   <% end %>
+
+  <%# Sort dropdown %>
+  <div id="sort-dropdown" class="z-10 p-3 hidden bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
+    <span class="flex flex-col justify-start items-start gap-2 text-[0.7rem]">
+      <% [
+        { field: :title, title: t("track.title") },
+        { field: :bpm, title: "BPM" },
+        { field: :created_at, title: t("track.created_at") },
+        { field: :updated, title: t("track.updated_at") },
+      ].each do |option| %>
+        <%= sort_link(@q, option[:field], option[:title]) %>
+      <% end %>
+    </span>
+  </div>
 
   <div class="flex justify-start items-stretch gap-2">
     <% [

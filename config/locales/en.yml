@@ -87,10 +87,14 @@ en:
     see_track: "See track"
     heart_track: "Like track"
     save_track: "Save track"
+    filter_placeholder: "Enter track names, description or tags"
     genres: "Genres"
     keys: "Keys"
     tags: "Tags"
-    filter_placeholder: "Enter track names, description or tags"
+    order_by: "Order By"
+    title: "Title"
+    created_at: "Uploaded time"
+    updated_at: "Last updated"
 
   admin:
     track:
