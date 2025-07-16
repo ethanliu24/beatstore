@@ -53,6 +53,29 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     expect(permitted[:tags_attributes]["0"].keys).to contain_exactly("id", "name", "_destroy")
   end
 
+  describe "GET /index" do
+    it "renders public tracks only" do
+      Track.create! valid_attributes.merge({ title: "Public Track", is_public: true })
+      Track.create! valid_attributes.merge({ title: "Private Track", is_public: false })
+
+      get admin_tracks_url
+      expect(response).to be_successful
+      expect(response.body).to include("Public Track", "Private Track")
+    end
+
+    context "renders track list if request is turbo frame request" do
+      it "renders only the partial" do
+        get admin_tracks_url
+        assert_response :success
+
+        get admin_tracks_url, headers: { "Turbo-Frame" => "track-list" }, params: { q: { title_cont: "test" } }
+
+        assert_response :success
+        expect(response).to render_template(partial: "admin/tracks/_track_list")
+      end
+    end
+  end
+
   describe "GET /new" do
     it "renders a successful response" do
       get new_admin_track_url

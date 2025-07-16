@@ -18,4 +18,8 @@ class ApplicationController < ActionController::Base
   def store_previous_location
     store_location_for(:user, request.fullpath)
   end
+
+  def turbo_or_xhr_request?
+    turbo_frame_request? || request.xhr? || request.format.turbo_stream?
+  end
 end

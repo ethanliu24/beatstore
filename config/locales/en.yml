@@ -50,6 +50,9 @@ en:
     change: "Change"
     save: "Save"
     back: "Back"
+    search: "Search"
+    clear: "Clear"
+    to: "To"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
@@ -84,6 +87,15 @@ en:
     see_track: "See track"
     heart_track: "Like track"
     save_track: "Save track"
+    filter_placeholder: "Enter track names, description or tags"
+    genres: "Genres"
+    keys: "Keys"
+    tags: "Tags"
+    order_by: "Order By"
+    title: "Title"
+    created_at: "Uploaded time"
+    updated_at: "Last updated"
+    visibility: "Visibility"
 
   admin:
     track:

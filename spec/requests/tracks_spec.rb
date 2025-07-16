@@ -23,6 +23,28 @@ RSpec.describe TracksController, type: :request do
       get tracks_url
       expect(response).to be_successful
     end
+
+    it "renders public tracks only" do
+      Track.create! valid_attributes.merge({ title: "Public Track", is_public: true })
+      Track.create! valid_attributes.merge({ title: "Private Track", is_public: false })
+
+      get tracks_url
+      expect(response).to be_successful
+      expect(response.body).to include("Public Track")
+      expect(response.body).not_to include("Private Track")
+    end
+
+    context "renders track list if request is turbo frame request" do
+      it "renders only the partial" do
+        get tracks_url
+        assert_response :success
+
+        get tracks_url, headers: { "Turbo-Frame" => "track-list" }, params: { q: { title_cont: "test" } }
+
+        assert_response :success
+        expect(response).to render_template(partial: "tracks/_track_list")
+      end
+    end
   end
 
   describe "GET /show" do

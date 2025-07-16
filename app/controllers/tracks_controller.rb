@@ -1,7 +1,13 @@
 class TracksController < ApplicationController
   def index
     # TODO pagination
-    @tracks = Track.where(is_public: true).order(created_at: :desc)
+    base_scope = Track.where(is_public: true)
+    @q = base_scope.ransack(params[:q], auth_object: current_user)
+    @tracks = @q.result.includes(:tags)
+
+    if turbo_or_xhr_request?
+      render partial: "tracks/track_list", locals: { tracks: @tracks }
+    end
   end
 
   def show
