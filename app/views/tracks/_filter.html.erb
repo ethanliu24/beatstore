@@ -21,12 +21,16 @@
   <div class="flex justify-start flex-stretch gap-4 text-xs text-secondary-txt font-light select-none mb-2">
     <% [
       {
-        field: t("track.genre"),
+        field: t("track.genres"),
         dropdown_id: "genre-selection-dropdown",
       },
       {
-        field: t("track.key"),
+        field: t("track.keys"),
         dropdown_id: "key-selection-dropdown",
+      },
+      {
+        field: t("track.tags"),
+        dropdown_id: "tag-selection-dropdown",
       },
     ].each do |data| %>
       <button id="<%= "#{data[:dropdown_id]}-btn" %>" data-dropdown-toggle="<%= data[:dropdown_id] %>" type="button"
@@ -42,13 +46,19 @@
         options: genre_options,
         label: "genre",
         query: :genre_cont_any,
-        click_action: "change->track-filter#updateGenre",
+        click_action: "change->track-filter#updateGenres",
       },
       {
-        options: key_options.drop(1),
+        options: key_options.drop(1),  # assumes key_options starts with nil
         label: "key",
         query: :key_cont_any,
-        click_action: "change->track-filter#updateKey",
+        click_action: "change->track-filter#updateKeys",
+      },
+      {
+        options: tag_options,
+        label: "tag",
+        query: :tags_name_cont_any,
+        click_action: "change->track-filter#updateTags",
       },
     ].each do |dropdown| %>
       <div id="<%= "#{dropdown[:label]}-selection-dropdown" %>" class="z-10 max-h-60 overflow-y-auto hidden bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
@@ -73,8 +83,9 @@
 
   <div class="flex justify-start items-stretch gap-2">
     <% [
-      { title: t("track.genre"), label: "genre", action: "click->track-filter#clearGenre" },
-      { title: t("track.key"), label: "key", action: "click->track-filter#clearKey" },
+      { title: t("track.genres"), label: "genre", action: "click->track-filter#clearGenres" },
+      { title: t("track.keys"), label: "key", action: "click->track-filter#clearKeys" },
+      { title: t("track.tags"), label: "tag", action: "click->track-filter#clearTags" },
     ].each do |chip| %>
       <div class="hidden w-fit h-fit bg-secondary-bg rounded-full px-2 py-0.5"
         data-track-filter-target="<%= "#{chip[:label]}Chip" %>">

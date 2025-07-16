@@ -3,28 +3,36 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="track-filter"
 export default class extends Controller {
   static targets = [
-    "genreDropdown", "keyDropdown",
-    "genreChip", "keyChip",
+    "genreDropdown", "keyDropdown", "tagDropdown",
+    "genreChip", "keyChip", "tagChip",
   ];
 
   connect() {
     this.updateGenre();
   }
 
-  updateGenre() {
+  updateGenres() {
     this.#updateSelection(this.genreDropdownTarget, this.genreChipTarget, 3);
   }
 
-  updateKey() {
+  updateKeys() {
     this.#updateSelection(this.keyDropdownTarget, this.keyChipTarget, 2);
   }
 
-  clearGenre() {
+  updateTags() {
+    this.#updateSelection(this.tagDropdownTarget, this.tagChipTarget, 5);
+  }
+
+  clearGenres() {
     this.#clearSelection(this.genreDropdownTarget, this.genreChipTarget);
   }
 
-  clearKey() {
+  clearKeys() {
     this.#clearSelection(this.keyDropdownTarget, this.keyChipTarget);
+  }
+
+  clearTags() {
+    this.#clearSelection(this.tagDropdownTarget, this.tagChipTarget);
   }
 
   #updateSelection(dropdown, chip, showLength = 3) {

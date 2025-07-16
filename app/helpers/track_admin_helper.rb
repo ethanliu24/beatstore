@@ -37,6 +37,10 @@ module TrackAdminHelper
     Track::GENRES
   end
 
+  def tag_options
+    Track::Tag.distinct.order(:name).pluck(:name)
+  end
+
   def max_description_length
     Track::MAX_DESCRIPTION_LENGTH
   end
