@@ -6,63 +6,16 @@
   <%= render "shared/flash_notice" %>
   <%= render "shared/flash_error" %>
 
-  <a href=<%= new_admin_track_path %> class="button w-fit px-2 py-1">
+  <a href=<%= new_admin_track_path %> class="button w-fit px-2 py-1 mb-4">
     <%= icon "plus", class: "w-4 h-4" %>
     <span class="ml-2"><%= t("label.create") %></span>
   </a>
 
-  <%# TODO add filter later %>
+  <%= render "tracks/filter", url: admin_tracks_path %>
 
-  <div class="grid [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))] gap-x-2 gap-y-8 mt-6">
-    <% @tracks.each do |track| %>
-      <%# the width of the card is width of image + 2 in tailwind %>
-      <div class="flex flex-col justify-start items-stretch bg-background dark:bg-secondary-bg w-42 h-fit rounded p-1">
-        <%= render "shared/cover_photo_player", track: track, img_size: "w-40" %>
-
-        <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
-          <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">
-            <p class="truncate mb-2"><%= track.title %></p>
-            <p class="mx-1">·</p>
-            <p class="<%= track.is_public? ? "text-success" : "text-error" %>"><%= track.is_public? ? "Public" : "Private" %></p>
-          </div>
-          <%= render "tracks/track_data", track: track, icon_size: "3" %>
-        </div>
-
-        <div class="flex justify-between items-center text-[0.6rem] px-1 mt-4">
-          <div class="<%= track_file_upload_indicator_styles(track.tagged_mp3) %>">Tagged</div>
-          <div class="<%= track_file_upload_indicator_styles(track.untagged_mp3) %>">MP3</div>
-          <div class="<%= track_file_upload_indicator_styles(track.untagged_wav) %>">WAV</div>
-          <div class="<%= track_file_upload_indicator_styles(track.track_stems) %>">ZIP</div>
-        </div>
-
-        <div class="flex justify-end items-center p-2 mt-1">
-          <button data-dropdown-toggle="<%= track_more_dropdown_id(track) %>" data-dropdown-placement="bottom-end" class="w-fit h-fit">
-            <%= icon "dots", class: "cursor-pointer w-4 h-4" %>
-          </button>
-
-          <%# More Dropdown %>
-          <div id="<%= track_more_dropdown_id(track) %>" class="dropdown hidden">
-            <ul>
-              <li class="dropdown-item" data-track-id="<%= track.id %>" data-action="click->audio-player#play">
-                <%= icon "player-play", class: "aspect-square w-3" %>
-                <%= t("label.play") %>
-              </li>
-              <li class="dropdown-item">
-                <%= icon "pencil", class: "aspect-square w-3" %>
-                <%= link_to t("label.edit"), edit_admin_track_path(track) %>
-              </li>
-              <li class="dropdown-item">
-                <%= icon "eye", class: "aspect-square w-3" %>
-                <%= link_to t("admin.see_track"), track_path(track) %>
-              </li>
-              <li class="dropdown-item text-error">
-                <%= icon "trash", class: "aspect-square w-3" %>
-                <%= button_to t("label.delete"), admin_track_path(track), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    <% end %>
+  <div id="tracks" class="min-w-full mt-8">
+    <turbo-frame id="track-list">
+      <%= render partial: "admin/tracks/track_list", locals: { tracks: @tracks } %>
+    </turbo-frame>
   </div>
 </div>
