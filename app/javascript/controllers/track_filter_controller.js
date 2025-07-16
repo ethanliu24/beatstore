@@ -28,9 +28,14 @@ export default class extends Controller {
       genreStr = selectedGenres.join(", ");
     }
 
-    const genreDisplay = this.genreChipTarget.querySelector(".track-filter-chip-text");
-    genreDisplay.innerText = genreStr;
-    this.genreChipTarget.classList.remove("hidden");
+    if (genreStr === "") {
+      this.genreChipTarget.classList.add("hidden");
+    } else {
+      const genreDisplay = this.genreChipTarget.querySelector(".track-filter-chip-text");
+      genreDisplay.innerText = genreStr;
+      this.genreChipTarget.classList.remove("hidden");
+    }
+
   }
 
   clearGenre() {
