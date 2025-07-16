@@ -52,7 +52,6 @@ en:
     back: "Back"
     search: "Search"
     clear: "Clear"
-    genre: "Genre"
 
   general:
     upload_instruction: "Click to upload or drag and drop"
@@ -87,6 +86,8 @@ en:
     see_track: "See track"
     heart_track: "Like track"
     save_track: "Save track"
+    genre: "Genre"
+    key: "Key"
 
   admin:
     track:
