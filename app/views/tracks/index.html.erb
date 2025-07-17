@@ -1,7 +1,7 @@
-<% content_for :title, "Tracks" %>
+<% content_for :title, "Explore Tracks" %>
 
 <div class="w-full">
-  <h1 class="page-title">Tracks</h1>
+  <%= render "shared/page_title", title: t("label.tracks"), subtitle: t("tracks.explore_tracks_here") %>
 
   <%= render "tracks/filter", url: tracks_path %>
 

@@ -1,3 +1,5 @@
+<% title(t("label.account_settings")) %>
+
 <%= form_with(
   model: current_user,
   url: users_profile_path,
@@ -6,10 +8,8 @@
   html: { multipart: true },
   class: "flex flex-col justify-start items-stretch gap-8 w-full mb-10"
 ) do |form| %>
-  <div>
-    <h1 class="text-2xl font-bold"><%= t("label.profile") %></h1>
-    <p class="text-xs text-secondary-txt"><%= t("profile.manage_your_profile_here") %></p>
-  </div>
+  <%= render "shared/page_title", title: t("label.profile"), subtitle: t("profile.manage_your_profile_here") %>
+
 
   <div class="flex flex-start items-stretch gap-10 w-full">
     <div class="flex flex-col gap-3">
