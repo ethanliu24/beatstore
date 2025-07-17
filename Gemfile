@@ -90,3 +90,4 @@ end
 gem "rails_icons", "~> 1.3"
 
 gem "ransack"
+gem 'pagy', '~> 9.3'
