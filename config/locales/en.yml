@@ -96,12 +96,14 @@ en:
     created_at: "Uploaded time"
     updated_at: "Last updated"
     visibility: "Visibility"
+    explore_tracks_here: "Explore tracks here"
 
   admin:
     track:
       upload_file: "Upload %{file_for}"
       back_to_tracks: "Back to tracks"
       see_track: "See track"
+      manage_tracks_here: "Manage tracks here"
 
   profile:
     manage_your_profile_here: "Manage your profile here"

@@ -1,7 +1,11 @@
 <% title("All Tracks") %>
 
 <div class="w-full">
-  <h1 class="page-title"><%= t("label.tracks") %></h1>
+  <%= render "shared/page_title",
+    title: t("label.tracks"),
+    subtitle: t("admin.track.manage_tracks_here")
+  %>
+
 
   <%= render "shared/flash_notice" %>
   <%= render "shared/flash_error" %>
