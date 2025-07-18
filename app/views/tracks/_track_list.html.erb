@@ -1,6 +1,6 @@
 <% if tracks.any? %>
   <% tracks.each_with_index do |t, i| %>
-    <%= render "tracks/track", track: t, index: i + 1 %>
+    <%= render "tracks/track", track: t %>
   <% end %>
 <% else %>
   <p class="text-center my-10"><%= t("track.no_tracks_found") %></p>
