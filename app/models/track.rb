@@ -25,7 +25,7 @@ class Track < ApplicationRecord
   has_one_attached :project_file
   has_one_attached :cover_photo
 
-  has_many :hearts, class_name: "Track::Heart", dependent: :destroy
+  has_many :hearts, class_name: "Track::Heart"
   has_many :hearted_by_users, through: :hearts, source: :user
   has_many :plays, class_name: "Track::Play"
   has_many :tags, class_name: "Track::Tag", dependent: :destroy

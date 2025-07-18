@@ -84,10 +84,27 @@ RSpec.describe Track, type: :model do
     end
   end
 
+  describe "destroy" do
+    it "should successfully destroy track and nullify its play and hearts" do
+      user = create(:user)
+      track = create(:track)
+      heart = create(:track_heart, track_id: track.id, user_id: user.id)
+      play = create(:track_play, track_id: track.id, user_id: user.id)
 
+      expect { track.destroy }.to change { Track.count }.by(-1)
+
+      heart.reload
+      play.reload
+
+      expect(heart.track_id).to be_nil
+      expect(play.track_id).to be_nil
+      expect(heart.user_id).to eq(user.id)
+      expect(play.user_id).to eq(user.id)
+    end
+  end
 
   describe "associations" do
-    it { should have_many(:hearts).dependent(:destroy) }
+    it { should have_many(:hearts) }
     it { should have_many(:hearted_by_users).through(:hearts).source(:user) }
     it { should have_many(:plays) }
 
