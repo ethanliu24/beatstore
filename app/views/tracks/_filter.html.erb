@@ -4,8 +4,6 @@
     data: {
       controller: "track-filter",
       track_filter_target: "form",
-      turbo_frame: "track-list",
-      turbo_action: "replace",
     }
   } do |f| %>
   <div class="flex justify-start items-stretch flex-nowrap gap-3 w-full mb-4">
@@ -153,7 +151,7 @@
     </div>
   <% end %>
 
-  <div class="flex justify-start items-stretch gap-2">
+  <div class="flex justify-start items-stretch flex-wrap gap-2">
     <% [
       { title: t("track.genres"), label: "genre", action: "click->track-filter#clearGenres", for_admin: false },
       { title: "BPM", label: "bpm", action: "click->track-filter#clearBPM", for_admin: false },
@@ -164,7 +162,7 @@
       <% next if chip[:for_admin] && !current_user&.admin? %>
       <div class="hidden w-fit h-fit bg-secondary-bg rounded-full px-2 py-0.5"
         data-track-filter-target="<%= "#{chip[:label]}Chip" %>">
-        <span class="flex justify-center items-center gap-1">
+        <span class="flex justify-center items-center flex-nowrap gap-1">
           <span id="<% "#{chip[:label]}-chip" %>" class="text-secondary-txt text-[0.6rem]">
             <%= "#{chip[:title]}:" %>
           </span>
