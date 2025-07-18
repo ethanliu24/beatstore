@@ -163,6 +163,10 @@
     @apply text-[0.6rem] text-secondary-txt;
   }
 
+  .loader {
+    @apply w-8 aspect-square rounded-full border-4 border-secondary-txt border-y-transparent;
+  }
+
   /* Authentication */
   .auth-form {
     @apply

@@ -9,5 +9,7 @@
     <turbo-frame id="track-list">
       <%= render partial: "tracks/track_list", locals: { tracks: @tracks } %>
     </turbo-frame>
+
+    <%= render "shared/load_more", pagy: @pagy %>
   </div>
 </div>
