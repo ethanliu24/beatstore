@@ -52,7 +52,8 @@
         for_admin: true,
       },
     ].each do |data| %>
-      <% next if data[:for_admin] && !current_user&.admin? %>
+      <%# Temp solution, shuold refactor these into reuseable components %>
+      <% next if (data[:for_admin] && !current_user&.admin?) || (data[:dropdown_id] == "sort-dropdown" && request.path == tracks_path) %>
       <button id="<%= "#{data[:dropdown_id]}-btn" %>" data-dropdown-toggle="<%= data[:dropdown_id] %>" type="button"
         class="flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none">
         <%= data[:field] %>
@@ -137,18 +138,20 @@
   <% end %>
 
   <%# Sort dropdown %>
-  <div id="sort-dropdown" class="z-10 p-3 hidden bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
-    <span class="flex flex-col justify-start items-start gap-2 text-[0.7rem]">
-      <% [
-        { field: :title, title: t("track.title") },
-        { field: :bpm, title: "BPM" },
-        { field: :created_at, title: t("track.created_at") },
-        { field: :updated, title: t("track.updated_at") },
-      ].each do |option| %>
-        <%= sort_link(@q, option[:field], option[:title]) %>
-      <% end %>
-    </span>
-  </div>
+  <% unless request.path == tracks_path %>
+    <div id="sort-dropdown" class="z-10 p-3 hidden bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
+      <span class="flex flex-col justify-start items-start gap-2 text-[0.7rem]">
+        <% [
+          { field: :title, title: t("track.title") },
+          { field: :bpm, title: "BPM" },
+          { field: :created_at, title: t("track.created_at") },
+          { field: :updated, title: t("track.updated_at") },
+        ].each do |option| %>
+          <%= sort_link(@q, option[:field], option[:title]) %>
+        <% end %>
+      </span>
+    </div>
+  <% end %>
 
   <div class="flex justify-start items-stretch gap-2">
     <% [

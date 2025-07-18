@@ -87,6 +87,7 @@ en:
     see_track: "See track"
     heart_track: "Like track"
     save_track: "Save track"
+    no_tracks_found: "No tracks found"
     filter_placeholder: "Enter track names, description or tags"
     genres: "Genres"
     keys: "Keys"

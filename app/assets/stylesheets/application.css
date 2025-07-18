@@ -44,3 +44,13 @@
     opacity: 1;
   }
 }
+
+.loader {
+  animation: loadSpin1 1s infinite;
+}
+
+@keyframes loadSpin1 {
+  to{
+    transform: rotate(.5turn)
+  }
+}
