@@ -6,9 +6,9 @@
   <%= render "tracks/filter", url: tracks_path %>
 
   <div id="tracks" class="min-w-full mt-8">
-    <turbo-frame id="track-list">
+    <%= turbo_frame_tag "track-list", target: "_top" do %>
       <%= render partial: "tracks/track_list", locals: { tracks: @tracks } %>
-    </turbo-frame>
+    <% end %>
 
     <%= render "shared/load_more", pagy: @pagy %>
   </div>

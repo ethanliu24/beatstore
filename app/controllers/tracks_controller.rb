@@ -16,8 +16,11 @@ class TracksController < ApplicationController
     queried_tracks = @q.result.includes(:tags).reorder(sorts)
     @pagy, @tracks = pagy_keyset(queried_tracks, limit: 20)
 
-    if turbo_or_xhr_request?
-      render partial: "tracks/track_list", locals: { tracks: @tracks }
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        render :index, formats: :turbo_stream
+      end
     end
   end
 

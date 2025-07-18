@@ -1,9 +1,7 @@
-<turbo-frame id="track-list">
-  <% if tracks.any? %>
-    <% tracks.each_with_index do |t, i| %>
-      <%= render "tracks/track", track: t, index: i + 1 %>
-    <% end %>
-  <% else %>
-    <p class="text-center my-10">No tracks found.</p>
+<% if tracks.any? %>
+  <% tracks.each_with_index do |t, i| %>
+    <%= render "tracks/track", track: t, index: i + 1 %>
   <% end %>
-</turbo-frame>
+<% else %>
+  <p class="text-center my-10"><%= t("track.no_tracks_found") %></p>
+<% end %>

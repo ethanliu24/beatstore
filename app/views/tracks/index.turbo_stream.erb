@@ -1,0 +1,11 @@
+<% if @tracks.any? %>
+  <%= turbo_stream.append "track-list" do %>
+    <%= render partial: "tracks/track_list", locals: { tracks: @tracks } %>
+  <% end %>
+
+  <%= turbo_stream.replace "load-more" do %>
+    <%= render "shared/load_more", pagy: @pagy %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.remove "load-more" %>
+<% end %>
