@@ -7,6 +7,6 @@ class CreateHearts < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :hearts, [ :user_id, :track_id ], unique: true
+    add_index :hearts, [ :user_id, :track_id ]
   end
 end

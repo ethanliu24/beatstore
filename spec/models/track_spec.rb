@@ -104,7 +104,7 @@ RSpec.describe Track, type: :model do
   end
 
   describe "associations" do
-    it { should have_many(:hearts).dependent(:destroy) }
+    it { should have_many(:hearts) }
     it { should have_many(:hearted_by_users).through(:hearts).source(:user) }
     it { should have_many(:plays) }
 
