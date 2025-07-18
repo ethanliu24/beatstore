@@ -1,4 +1,4 @@
-<div class="<%= "relative flex justify-center items-center bg-secondary-bg dark:bg-background aspect-square #{img_size} rounded cursor-pointer" %>"
+<div class="<%= "relative flex justify-center items-center bg-secondary-bg aspect-square #{img_size} rounded cursor-pointer" %>"
   data-controller="cover-photo-hover" data-cover-photo-hover-target="container">
   <% if track.cover_photo.attached? %>
     <%= image_tag track.cover_photo, class: "object-cover w-full h-full rounded" %>
