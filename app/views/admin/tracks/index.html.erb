@@ -6,7 +6,6 @@
     subtitle: t("admin.track.manage_tracks_here")
   %>
 
-
   <%= render "shared/flash_notice" %>
   <%= render "shared/flash_error" %>
 
@@ -21,5 +20,10 @@
     <turbo-frame id="track-list">
       <%= render partial: "admin/tracks/track_list", locals: { tracks: @tracks } %>
     </turbo-frame>
+  </div>
+
+  <div class="flex justify-center items-center w-full mt-8">
+    <%== pagy_nav(@pagy) %>
+    <%== pagy_info(@pagy) %>
   </div>
 </div>

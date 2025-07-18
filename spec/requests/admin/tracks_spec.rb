@@ -54,7 +54,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   end
 
   describe "GET /index" do
-    it "renders public tracks only" do
+    it "renders all tracks" do
       Track.create! valid_attributes.merge({ title: "Public Track", is_public: true })
       Track.create! valid_attributes.merge({ title: "Private Track", is_public: false })
 

@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+
   def title(input = nil)
     content_for(:title) { "#{input}" } if input
   end
