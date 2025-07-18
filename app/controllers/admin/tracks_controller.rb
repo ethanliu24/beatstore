@@ -3,10 +3,10 @@ module Admin
     before_action :set_track, except: [ :index, :new, :create ]
 
     def index
-      # TODO pagination
       base_scope = Track.order(created_at: :desc)
       @q = base_scope.ransack(params[:q], auth_object: current_user)
-      @tracks = @q.result(distinct: true).includes(:tags)
+      queried_tracks = @q.result(distinct: true).includes(:tags)
+      @pagy, @tracks = pagy(queried_tracks, limit: 10)
 
       if turbo_or_xhr_request?
         render partial: "admin/tracks/track_list", locals: { tracks: @tracks }

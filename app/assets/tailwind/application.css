@@ -42,6 +42,34 @@
   }
 }
 
+/* Pagy styles */
+@layer {
+  .pagy {
+    @apply flex space-x-1 font-semibold text-sm;
+    a:not(.gap) {
+      @apply block rounded px-3 py-1 bg-background dark:bg-secondary-bg;
+      &:hover {
+        @apply bg-hover;
+      }
+      &:not([href]) { /* disabled links */
+        @apply bg-background dark:bg-secondary-bg cursor-pointer;
+      }
+      &.current {
+        @apply text-primary-txt bg-gray-300 dark:bg-gray-600;
+      }
+    }
+    label {
+      @apply inline-block whitespace-nowrap bg-secondary-bg rounded-lg px-3 py-0.5;
+      input {
+        @apply bg-gray-100 border-none rounded-md;
+      }
+    }
+  }
+
+  .pagy.info {
+    @apply font-light text-[0.7rem] italic;
+  }
+}
 
 @layer {
   .modal-content {
