@@ -43,8 +43,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_195632) do
   end
 
   create_table "track_hearts", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "track_id", null: false
+    t.bigint "user_id"
+    t.bigint "track_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["track_id"], name: "index_track_hearts_on_track_id"

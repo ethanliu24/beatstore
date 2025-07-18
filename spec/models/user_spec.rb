@@ -126,5 +126,22 @@ RSpec.describe User, type: :model do
       expect(user.display_name).to eq("Test")
       expect(user.profile_picture).to be_attached
     end
+
+    it "should successfully destroy user account and nullify its play and hearts" do
+      user = create(:user)
+      track = create(:track)
+      heart = create(:track_heart, track_id: track.id, user_id: user.id)
+      play = create(:track_play, track_id: track.id, user_id: user.id)
+
+      expect { user.destroy }.to change { User.count }.by(-1)
+
+      heart.reload
+      play.reload
+
+      expect(heart.user_id).to be_nil
+      expect(play.user_id).to be_nil
+      expect(heart.track_id).to eq(track.id)
+      expect(play.track_id).to eq(track.id)
+    end
   end
 end
