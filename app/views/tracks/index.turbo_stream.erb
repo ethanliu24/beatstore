@@ -6,6 +6,4 @@
   <%= turbo_stream.replace "load-more" do %>
     <%= render "shared/load_more", pagy: @pagy %>
   <% end %>
-<% else %>
-  <%= turbo_stream.remove "load-more" %>
 <% end %>
