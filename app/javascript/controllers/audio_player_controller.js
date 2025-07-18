@@ -210,7 +210,7 @@ export default class extends Controller {
       // TODO Toast if track audio src is empty
     });
 
-    if (!this.currentTrackId) return;
+    // if (!this.currentTrackId) return;
     fetch(`/tracks/${this.currentTrackId}/play`, {
       method: "POST",
       headers: {

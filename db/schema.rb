@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_01_215733) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_18_195632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,7 +54,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_215733) do
 
   create_table "track_plays", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "track_id", null: false
+    t.bigint "track_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["track_id"], name: "index_track_plays_on_track_id"
@@ -107,9 +107,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_215733) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "track_hearts", "tracks"
-  add_foreign_key "track_hearts", "users"
-  add_foreign_key "track_plays", "tracks"
-  add_foreign_key "track_plays", "users"
+  add_foreign_key "track_hearts", "tracks", on_delete: :nullify
+  add_foreign_key "track_hearts", "users", on_delete: :nullify
+  add_foreign_key "track_plays", "tracks", on_delete: :nullify
+  add_foreign_key "track_plays", "users", on_delete: :nullify
   add_foreign_key "track_tags", "tracks"
 end
