@@ -21,12 +21,6 @@
   </div>
 
   <div id="tracks" class="min-w-full">
-    <turbo-frame id="track-list">
-      <%= render partial: "admin/tracks/track_list", locals: { tracks: @tracks } %>
-    </turbo-frame>
-  </div>
-
-  <div class="flex justify-center items-center w-full mt-8">
-    <%== pagy_nav(@pagy) %>
+    <%= render partial: "admin/tracks/track_list", locals: { tracks: @tracks } %>
   </div>
 </div>
