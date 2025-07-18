@@ -16,7 +16,11 @@
 
   <%= render "tracks/filter", url: admin_tracks_path %>
 
-  <div id="tracks" class="min-w-full mt-8">
+  <div class="w-full flex justify-start mt-8 mb-2">
+    <%== pagy_info(@pagy) %>
+  </div>
+
+  <div id="tracks" class="min-w-full">
     <turbo-frame id="track-list">
       <%= render partial: "admin/tracks/track_list", locals: { tracks: @tracks } %>
     </turbo-frame>
@@ -24,6 +28,5 @@
 
   <div class="flex justify-center items-center w-full mt-8">
     <%== pagy_nav(@pagy) %>
-    <%== pagy_info(@pagy) %>
   </div>
 </div>

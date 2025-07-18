@@ -1,6 +1,6 @@
 <turbo-frame id="track-list">
   <% if tracks.any? %>
-    <div class="grid [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))] gap-x-2 gap-y-8 mt-6">
+    <div class="grid [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))] gap-x-2 gap-y-8">
       <% @tracks.each do |track| %>
         <%# the width of the card is width of image + 2 in tailwind %>
         <div class="flex flex-col justify-start items-stretch bg-background dark:bg-secondary-bg w-42 h-fit rounded p-1">

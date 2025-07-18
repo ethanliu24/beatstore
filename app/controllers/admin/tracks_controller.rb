@@ -3,7 +3,6 @@ module Admin
     before_action :set_track, except: [ :index, :new, :create ]
 
     def index
-      # TODO pagination
       base_scope = Track.order(created_at: :desc)
       @q = base_scope.ransack(params[:q], auth_object: current_user)
       queried_tracks = @q.result(distinct: true).includes(:tags)
