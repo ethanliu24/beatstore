@@ -9,7 +9,7 @@ class Track < ApplicationRecord
   # === Validations ===
   validates :title, presence: true
   validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
-  validates :bpm, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :bpm, numericality: { only_integer: true, greater_than: 0 }, precense: true
   validates :is_public, inclusion: { in: [ true, false ] }
   validates :genre, presence: true, inclusion: { in: GENRES }
   validates :key, format: {
@@ -30,6 +30,16 @@ class Track < ApplicationRecord
   has_many :plays, class_name: "Track::Play"
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
+
+  scope :similar_tracks, ->(base_track) {
+    where(is_public: true, genre: base_track.genre, bpm: (base_track.bpm - 10)..(base_track.bpm + 10))
+      .where.not(id: base_track.id)
+      .joins(:tags)
+      .where(tags: { name: base_track.tags.pluck(:name) })
+      .select("tracks.*, COUNT(tags.name) AS tag_match_count")
+      .group("tracks.id")
+      .order("tag_match_count DESC, tracks.created_at DESC")
+  }
 
   class << self
     def ransackable_attributes(auth_object = nil)
