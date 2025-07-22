@@ -1,6 +1,6 @@
 <% if tracks.any? %>
   <% tracks.each do |t| %>
-    <%= render "tracks/track", track: t %>
+    <%= render partial: "tracks/track", locals: { track: t } %>
   <% end %>
 <% else %>
   <p class="text-center my-10"><%= t("track.no_tracks_found") %></p>

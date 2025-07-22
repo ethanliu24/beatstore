@@ -11,7 +11,7 @@
             <p class="mx-1">·</p>
             <p class="<%= track.is_public? ? "text-success" : "text-error" %>"><%= track.is_public? ? "Public" : "Private" %></p>
           </div>
-          <%= render "tracks/track_data", track: track, icon_size: "3" %>
+          <%= render partial: "tracks/track_data", locals: { track: track, icon_size: "3" } %>
         </div>
 
         <div class="flex justify-between items-center text-[0.6rem] px-1 mt-4">

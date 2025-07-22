@@ -6,7 +6,7 @@
   <div>
     <% if @liked_tracks.any? %>
       <% @liked_tracks.each_with_index do |track, i| %>
-        <%= render "tracks/track", track: track, index: i + 1 %>
+        <%= render partial: "tracks/track", locals: { track: track, index: i + 1 } %>
       <% end %>
     <% else %>
       <p class="text-center font-light text-secondary-txt font-xs mt-8">
