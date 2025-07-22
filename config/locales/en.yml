@@ -98,6 +98,7 @@ en:
     updated_at: "Last updated"
     visibility: "Visibility"
     explore_tracks_here: "Explore tracks here"
+    similar_tracks: "Similar tracks"
 
   admin:
     track:

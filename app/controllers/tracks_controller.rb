@@ -1,4 +1,6 @@
 class TracksController < ApplicationController
+  SIMILAR_TRACKS_RECOMMENDATION_LIMIT = 10
+
   def index
     base_scope = Track.where(is_public: true)
     @q = base_scope.ransack(params[:q], auth_object: current_user)
@@ -9,5 +11,26 @@ class TracksController < ApplicationController
   def show
     # TODO redirect to not_found if invalid id
     @track = Track.find(params.expect(:id))
+    @similar_tracks = find_similar_tracks(@track)
+  end
+
+  private
+
+  def find_similar_tracks(base_track)
+    similar_tracks = Track.similar_tracks(base_track)
+
+    if similar_tracks.size < SIMILAR_TRACKS_RECOMMENDATION_LIMIT
+      extra_tracks = Track
+        .where(is_public: true)
+        .where.not(id: base_track.id)
+        .where.not(id: similar_tracks.pluck(:id))
+        .order(created_at: :desc)
+        .limit(SIMILAR_TRACKS_RECOMMENDATION_LIMIT - similar_tracks.size)
+        .to_a
+
+      similar_tracks + extra_tracks
+    else
+      similar_tracks.first(SIMILAR_TRACKS_RECOMMENDATION_LIMIT)
+    end
   end
 end
