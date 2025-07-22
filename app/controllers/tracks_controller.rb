@@ -26,10 +26,11 @@ class TracksController < ApplicationController
         .where.not(id: similar_tracks.pluck(:id))
         .order(created_at: :desc)
         .limit(SIMILAR_TRACKS_RECOMMENDATION_LIMIT - similar_tracks.size)
+        .to_a
 
       similar_tracks + extra_tracks
     else
-      similar_tracks.limit(SIMILAR_TRACKS_RECOMMENDATION_LIMIT)
+      similar_tracks.first(SIMILAR_TRACKS_RECOMMENDATION_LIMIT)
     end
   end
 end
