@@ -165,13 +165,14 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   end
 
   describe "tags" do
-    let!(:track) { create(:track, title: "Duplicate", genre: Track::GENRES[0]) }
+    let!(:track) { create(:track, title: "Duplicate", genre: Track::GENRES[0], bpm: 111) }
 
     it "adds a new tag on #create" do
       post admin_tracks_url(track), params: {
         track: {
           title: "Test",
           genre: Track::GENRES[0],
+          bpm: 111,
           tags_attributes: {
             "0" => { name: "test" }
           }

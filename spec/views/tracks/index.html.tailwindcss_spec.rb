@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe "tracks/index", type: :view do
   before(:each) do
     assign(:tracks, [
-      Track.create!(title: "Index Title 1", genre: Track::GENRES[0]),
-      Track.create!(title: "Index Title 2", genre: Track::GENRES[0])
+      Track.create!(title: "Index Title 1", genre: Track::GENRES[0], bpm: 111),
+      Track.create!(title: "Index Title 2", genre: Track::GENRES[0], bpm: 111)
     ])
   end
 

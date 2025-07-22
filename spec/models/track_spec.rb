@@ -6,7 +6,8 @@ RSpec.describe Track, type: :model do
 
     it { should validate_presence_of(:title) }
     it { should validate_inclusion_of(:is_public).in_array([ true, false ]) }
-    it { should validate_numericality_of(:bpm).only_integer.is_greater_than(0).allow_nil }
+    it { should validate_presence_of(:bpm) }
+    it { should validate_numericality_of(:bpm).only_integer.is_greater_than(0) }
 
     it "is valid with valid attributes" do
       subject.bpm = 120
@@ -14,10 +15,7 @@ RSpec.describe Track, type: :model do
       expect(subject).to be_valid
     end
 
-    it "allows nil bpm but only accepts positive integers if present" do
-      subject.bpm = nil
-      expect(subject).to be_valid
-
+    it "only accepts positive integers" do
       subject.bpm = 0
       expect(subject).to be_invalid
 
@@ -114,5 +112,75 @@ RSpec.describe Track, type: :model do
     it { should have_one_attached(:track_stems) }
     it { should have_one_attached(:project_file) }
     it { should have_one_attached(:cover_photo) }
+  end
+
+  describe "scopes" do
+    context "similar_tracks" do
+      it "should recommend tracks other than the current track that's public and same genre/matching tags/within a bpm range" do
+        track = Track.create!(title: "T", genre: Track::GENRES[0], bpm: 100, is_public: true)
+        Track::Tag.create!(name: "a", track_id: track.id)
+
+        recommended_track = Track.create!(title: "T", genre: Track::GENRES[0], bpm: 100, is_public: true)
+        Track::Tag.create!(name: "a", track_id: recommended_track.id)
+
+        unmatching_track = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: 1, is_public: true)
+        Track::Tag.create!(name: "c", track_id: unmatching_track.id)
+
+        _private_track = Track.create!(title: "T", genre: Track::GENRES[0], bpm: 100, is_public: false)
+        _not_recommended_track = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: 1, is_public: true)
+
+        similar_tracks = Track.similar_tracks(track)
+
+        expect(similar_tracks.size).to eq(1)
+        expect(similar_tracks.first).to eq(recommended_track)
+      end
+
+      it "should order tracks based on the most tags matched" do
+        track = create(:track)
+        rec_1 = create(:track)
+        rec_2 = create(:track)
+
+        [ "a", "b", "c" ].each do |name|
+          Track::Tag.create!(name:, track_id: track.id)
+          Track::Tag.create!(name:, track_id: rec_1.id)
+        end
+
+        Track::Tag.create(name: "a", track_id: rec_2.id)
+
+        similar_tracks = Track.similar_tracks(track)
+        expect(similar_tracks.size).to eq(2)
+        expect(similar_tracks[0]).to eq(rec_1)
+        expect(similar_tracks[1]).to eq(rec_2)
+      end
+
+      it "should order tracks by the same genres first after matching tags" do
+        track = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+        rec_1 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[-1], is_public: true)
+        rec_2 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+
+        [ "a", "b" ].each do |name|
+          Track::Tag.create!(name:, track_id: track.id)
+          Track::Tag.create!(name:, track_id: rec_1.id)
+        end
+
+        Track::Tag.create!(name: "a", track_id: rec_2.id)
+
+        similar_tracks = Track.similar_tracks(track)
+        expect(similar_tracks.size).to eq(2)
+        expect(similar_tracks[0]).to eq(rec_1)
+        expect(similar_tracks[1]).to eq(rec_2)
+      end
+
+      it "should order tracks by created date after matching tags and genres" do
+        track = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+        rec_1 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+        rec_2 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true, created_at: Time.current - 1.days)
+
+        similar_tracks = Track.similar_tracks(track)
+        expect(similar_tracks.size).to eq(2)
+        expect(similar_tracks[0]).to eq(rec_1)
+        expect(similar_tracks[1]).to eq(rec_2)
+      end
+    end
   end
 end
