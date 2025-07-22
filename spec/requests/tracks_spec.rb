@@ -53,5 +53,16 @@ RSpec.describe TracksController, type: :request do
       get track_url(track)
       expect(response).to be_successful
     end
+
+    it "caps the number of similar tracks recommended" do
+      track.create! valid_attributes
+      (TracksController::SIMILAR_TRAKCS_RECOMMENDED_RANGE + 1).times do |i|
+        valid_attributes[:title] = "RECOMMENDED_TRACK"
+        Track.create! valid_attributes
+      end
+
+      get track_url(track)
+      expect(response.body.scan("RECOMMENDED_TRACK").size).to eq(TracksController::SIMILAR_TRAKCS_RECOMMENDED_RANGE)
+    end
   end
 end

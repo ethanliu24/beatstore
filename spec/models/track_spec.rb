@@ -135,6 +135,21 @@ RSpec.describe Track, type: :model do
         expect(similar_tracks.first).to eq(recommended_track)
       end
 
+      it "should recommend tracks within a bpm range" do
+        bpm = 100
+        track = Track.create!(title: "T", genre: Track::GENRES[0], bpm:, is_public: true)
+        t1 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm - Track::SIMILAR_TRACKS_BPM_RANGE, is_public: true)
+        t2 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm + Track::SIMILAR_TRACKS_BPM_RANGE, is_public: true)
+        _t3 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm - Track::SIMILAR_TRACKS_BPM_RANGE - 1, is_public: true)
+        _t4 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm + Track::SIMILAR_TRACKS_BPM_RANGE + 1, is_public: true)
+
+        similar_tracks = Track.similar_tracks(track)
+        expect(similar_tracks.size).to eq(2)
+        similar_tracks.each do |track|
+          expect([ t1, t2 ]).to include(track)
+        end
+      end
+
       it "should order tracks based on the most tags matched" do
         track = create(:track)
         rec_1 = create(:track)
