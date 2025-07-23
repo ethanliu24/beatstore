@@ -87,7 +87,7 @@ group :development, :test do
   gem "rails-controller-testing"
 end
 
-gem "rails_icons", "~> 1.3"
+gem "rails_icons", "~> 1.4"
 
 gem "ransack"
 gem "pagy", "~> 9.3"
