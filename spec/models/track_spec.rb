@@ -83,9 +83,10 @@ RSpec.describe Track, type: :model do
   end
 
   describe "destroy" do
+    let(:user) { create(:user) }
+    let(:track) { create(:track) }
+
     it "should successfully destroy track and nullify its play and hearts" do
-      user = create(:user)
-      track = create(:track)
       heart = create(:track_heart, track_id: track.id, user_id: user.id)
       play = create(:track_play, track_id: track.id, user_id: user.id)
 
@@ -99,12 +100,24 @@ RSpec.describe Track, type: :model do
       expect(heart.user_id).to eq(user.id)
       expect(play.user_id).to eq(user.id)
     end
+
+    it "should delete all comments associated with it" do
+      create(:comment, entity: track, user: user)
+      create(:comment, entity: track, user: user)
+
+      expect(track.comments.size).to eq(2)
+
+      track.destroy!
+
+      expect(track.comments.size).to eq(0)
+    end
   end
 
   describe "associations" do
     it { should have_many(:hearts) }
     it { should have_many(:hearted_by_users).through(:hearts).source(:user) }
     it { should have_many(:plays) }
+    it { should have_many(:comments) }
 
     it { should have_one_attached(:tagged_mp3) }
     it { should have_one_attached(:untagged_mp3) }

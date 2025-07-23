@@ -31,6 +31,7 @@ class Track < ApplicationRecord
   has_many :plays, class_name: "Track::Play"
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
+  has_many :comments, as: :entity, dependent: :destroy
 
   scope :similar_tracks, ->(base_track) {
     find_by_sql([
