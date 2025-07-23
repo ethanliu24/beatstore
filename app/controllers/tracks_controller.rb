@@ -9,9 +9,9 @@ class TracksController < ApplicationController
   end
 
   def show
-    # TODO redirect to not_found if invalid id
     @track = Track.find(params.expect(:id))
     @similar_tracks = find_similar_tracks(@track)
+    @comments = @track.comments
   end
 
   private
