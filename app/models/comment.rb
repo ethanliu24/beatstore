@@ -3,8 +3,8 @@
 class Comment < ApplicationRecord
   MAX_COMMENT_LENGTH = 200
 
-  belongs_to :entity, polymorphic: true
-  belongs_to :user
+  validates :content, presence: true, length: { maximum: Comment::MAX_COMMENT_LENGTH }
 
-  validates :content, presence: true, length: { maximum: MAX_COMMENT_LENGTH }
+  belongs_to :entity, polymorphic: true
+  belongs_to :user, optional: false
 end

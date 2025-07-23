@@ -10,6 +10,7 @@ RSpec.describe User, type: :model do
     it { should validate_uniqueness_of(:username).case_insensitive }
     it { should have_many(:hearts) }
     it { should have_many(:track_plays) }
+    it { should have_many(:comments) }
     it { should validate_presence_of(:role) }
     it { should define_enum_for(:role).with_values([ :customer, :admin ]) }
     it { should have_one_attached(:profile_picture) }
@@ -68,7 +69,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'hearted_tracks association' do
+  describe "hearted_tracks association" do
     it 'returns tracks liked by the user' do
       track1 = build(:track)
       track2 = build(:track)
@@ -78,6 +79,26 @@ RSpec.describe User, type: :model do
 
       expect(user.hearted_tracks).to include(track1, track2)
       expect(user.hearted_tracks).not_to include(track3)
+    end
+  end
+
+  describe "comments association" do
+    let(:user) { create(:user) }
+
+    it "should remove all comment the user commented when account is deleted" do
+      t1 = create(:track)
+      t2 = create(:track)
+      _c1 = create(:comment, entity: t1, user: user)
+      _c2 = create(:comment, entity: t2, user: user)
+
+      expect(user.comments.size).to eq(2)
+      expect(t1.comments.size).to eq(1)
+      expect(t2.comments.size).to eq(1)
+
+      user.destroy!
+
+      expect(t1.comments.size).to eq(0)
+      expect(t2.comments.size).to eq(0)
     end
   end
 
