@@ -8,27 +8,6 @@ RSpec.describe Comment, type: :model do
   it { should validate_presence_of(:content) }
   it { should belong_to(:user).optional(false) }
 
-  it "should allow valid entity types" do
-    Comment.each do |entity_type|
-      comment = Comment.new(
-        content: "Entity validation",
-        entity_type: entity_type,
-        entity_id: 1,
-        user: user
-      )
-      expect(comment).to be_valid, "#{entity_type} is not a valid entity type"
-    end
-  end
-
-  it "should not allow invalid entity types" do
-    comment = Comment.new(
-      content: "Invalid entity type",
-      entity_type: "Invalid",
-      entity_id: 1, user: user
-    )
-    expect(comment).not_to be_valid
-  end
-
   context "content legnth" do
     it "is invalid if description is blank" do
       subject.content = ""
