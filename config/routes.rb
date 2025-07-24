@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     resource :play, only: [ :create ], module: :tracks, as: "increment_plays"
   end
 
+  resources :comments, only: [ :create, :update, :destroy ]
+
   namespace :admin do
     resources :tracks, except: [ :show ]
   end

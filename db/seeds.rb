@@ -8,7 +8,7 @@ User.create(
   confirmed_at: Time.now
 )
 
-User.create(
+customer = User.create(
   display_name: "Customer",
   username: "customer",
   email: "customer@email.com",
@@ -18,7 +18,7 @@ User.create(
 )
 
 # === Tracks ===
-Track.create(
+track_1 = Track.create(
   title: "Pinis",
   bpm: 69,
   key: "A MINOR",
@@ -32,4 +32,12 @@ Track.create(
   key: "C# MAJOR",
   is_public: false,
   genre: Track::GENRES[-1]
+)
+
+
+# === Comments ===
+Comment.create(
+  content: "This is shit",
+  entity: track_1,
+  user: customer
 )
