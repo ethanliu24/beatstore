@@ -53,6 +53,14 @@ RSpec.describe "Comments", type: :request do
       expect(comment.respond_to?(:foo)).to be false
     end
 
+    it "should throw a 404 error if entity type is invalid" do
+      expect {
+        post comments_url, params: { comment: params.merge(entity_type: "Invalid") }
+      }.to change(Comment, :count).by(0)
+
+      expect(response).to have_http_status(422)
+    end
+
     it "should delete the comment made by the current user" do
       expect {
         post comments_url, params: { comment: params }

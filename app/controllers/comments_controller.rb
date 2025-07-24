@@ -4,7 +4,12 @@ class CommentsController < ApplicationController
   before_action :user_can_manage?, except: [ :create ]
 
   def create
-    entity_class = params[:comment][:entity_type].constantize
+    entity_class = resolve_entity_class(params[:comment][:entity_type])
+    if entity_class.nil?
+      head :unprocessable_entity
+      return
+    end
+    
     entity = entity_class.find(params[:comment][:entity_id])
 
     @comment = Comment.create!(
@@ -23,6 +28,15 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def resolve_entity_class(entity_type)
+    case entity_type
+    when Track.name
+      Track
+    else
+      nil
+    end
+  end
 
   def user_can_manage?
     unless current_user.admin? || current_user.id == @comment.user.id
