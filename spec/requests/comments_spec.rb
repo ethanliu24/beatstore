@@ -23,7 +23,7 @@ RSpec.describe "Comments", type: :request do
       }.to change(Comment, :count).by(1)
 
       comment = Comment.last
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(204)
       expect(comment.content).to eq("Comment.")
       expect(comment.entity_type).to eq("Track")
       expect(comment.entity_id).to eq(track.id)

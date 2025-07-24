@@ -80,7 +80,15 @@
     <div class="flex justify-start items-stretch gap-4 my-8">
       <%= render partial: "users/shared/avatar", locals: { size: 10 } %>
 
-      <%= form_with(model: Comment.new, url: comments_path, method: :post) do |f| %>
+      <%= form_with(
+        model: Comment.new,
+        url: comments_path,
+        method: :post,
+        data: {
+          controller: "comment-form",
+          comment_form_target: "form",
+          action: "turbo:submit-end->comment-form#submitForm",
+        }) do |f| %>
         <%= f.hidden_field :entity_type, value: Track.name %>
         <%= f.hidden_field :entity_id, value: @track.id %>
 
@@ -99,10 +107,12 @@
       <% end %>
     </div>
 
-    <div class="flex flex-col justify-start items-center gap-4">
-      <% @comments.each do |comment| %>
-        <%= render partial: "comments/comment", locals: { comment: comment } %>
+    <div>
+      <%= turbo_frame_tag "track-comments", target: "_top", data: { turbo_cache: false } do %>
+        <%= render partial: "comments/list", locals: { comments: @comments } %>
       <% end %>
+
+      <%= render "shared/load_more", pagy: @pagy %>
     </div>
   </section>
 </div>

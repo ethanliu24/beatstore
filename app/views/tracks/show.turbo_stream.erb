@@ -1,0 +1,9 @@
+<% if @comments.any? %>
+  <%= turbo_stream.append "track-comments" do %>
+    <%= render partial: "comments/list", locals: { comments: @comments } %>
+  <% end %>
+
+  <%= turbo_stream.replace "load-more" do %>
+    <%= render "shared/load_more", pagy: @pagy %>
+  <% end %>
+<% end %>
