@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
       head :unprocessable_entity
       return
     end
-    
+
     entity = entity_class.find(params[:comment][:entity_id])
 
     @comment = Comment.create!(
