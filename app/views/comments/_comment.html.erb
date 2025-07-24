@@ -2,7 +2,7 @@
   <%= render partial: "users/shared/avatar", locals: { size: 6 } %>
   <div class="flex flex-col justify-start items-start truncate">
     <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem] font-light">
-      <p><%= "@#{comment.user.username}" %></p>
+      <p><%= comment.user.display_name %></p>
       <span>·</span>
       <p><%= format_date(comment.created_at) %></p>
     </div>

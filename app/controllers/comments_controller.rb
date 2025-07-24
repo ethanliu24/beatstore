@@ -12,6 +12,8 @@ class CommentsController < ApplicationController
       entity:,
       user: current_user
     )
+
+    redirect_to polymorphic_path(entity)
   end
 
   def update
