@@ -100,9 +100,21 @@
           <div class="char-count">
             <span data-char-count-target="count">0</span><%= "/#{Comment::MAX_COMMENT_LENGTH}" %>
           </div>
-          <button type="submit" class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
-            <%= icon "send", class: "w-4 h-4 aspect-square text-accent" %>
-          </button>
+
+          <% if current_user %>
+            <button type="submit" class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
+              <%= icon "send", class: "w-4 h-4 aspect-square text-accent" %>
+            </button>
+          <% else %>
+            <%= link_to auth_prompt_modal_path,
+              data: {
+                turbo_frame: "modal",
+                modal_target: "default-modal",
+                modal_toggle: "default-modal",
+              } do %>
+              <%= icon "send", class: "w-4 h-4 aspect-square text-accent" %>
+            <% end %>
+          <% end %>
         </div>
       <% end %>
     </div>

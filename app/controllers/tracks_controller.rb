@@ -12,7 +12,11 @@ class TracksController < ApplicationController
     @track = Track.find(params.expect(:id))
     @similar_tracks = find_similar_tracks(@track)
     @pagy, page_comments = pagy_keyset(@track.comments.order(created_at: :desc), limit: 10)
-    @comments = page_comments.partition { |c| c.user_id == current_user.id }.flatten
+    @comments = if current_user
+      page_comments.partition { |c| c.user_id == current_user.id }.flatten
+    else
+      page_comments
+    end
   end
 
   private
