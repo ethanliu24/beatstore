@@ -3,6 +3,7 @@ class CreateCommentInteractions < ActiveRecord::Migration[8.0]
     create_table :comment_interactions do |t|
       t.string :type, default: "like"
       t.references :comment, null: false, foreign_key: true
+      t.references :user, null: true, foreign_key: true
       t.timestamps
     end
   end

@@ -40,6 +40,7 @@ class User < ApplicationRecord
   has_many :hearted_tracks, through: :hearts, source: :track
   has_many :track_plays, class_name: "Track::Play"
   has_many :comments, dependent: :destroy
+  has_many :comment_interactions, class_name: "Comment::Interaction"
 
   class << self
     def from_omniauth(auth)
