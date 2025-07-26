@@ -12,6 +12,8 @@ class Comment < ApplicationRecord
   belongs_to :entity, polymorphic: true
   belongs_to :user, optional: false
 
+  has_many :interactions, class_name: "Comment::Interaction"
+
   class << self
     def valid_entity_types
       [ Track ].map { |cls| cls.name }
