@@ -46,7 +46,7 @@ RSpec.describe Comments::InteractionsController, type: :request do
         end
 
         it "should delete dislike interaction if current user disliked the comment already" do
-          dislike = create(:comment_interaction, interaction_type: "dislike", comment:, user:)
+          dislike = create(:comment_dislike, comment:, user:)
 
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(dislike.id)
@@ -67,7 +67,7 @@ RSpec.describe Comments::InteractionsController, type: :request do
 
       context "#unlike" do
         it "should remove the like interaction if there is one" do
-          like = create(:comment_interaction, comment:, user:)
+          like = create(:comment_like, comment:, user:)
 
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(like.id)
@@ -127,7 +127,7 @@ RSpec.describe Comments::InteractionsController, type: :request do
         end
 
         it "should delete like interaction if current user liked the comment already" do
-          like = create(:comment_interaction, comment:, user:)
+          like = create(:comment_like, comment:, user:)
 
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(like.id)
@@ -148,7 +148,7 @@ RSpec.describe Comments::InteractionsController, type: :request do
 
       context "#undislike" do
         it "should remove the dislike interaction if there is one" do
-          dislike = create(:comment_interaction, interaction_type: "dislike", comment:, user:)
+          dislike = create(:comment_dislike, comment:, user:)
 
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(dislike.id)

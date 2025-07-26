@@ -4,7 +4,7 @@ RSpec.describe Comment::Interaction, type: :model do
   let(:user) { create(:user) }
   let(:track) { create(:track) }
   let(:comment) { create(:comment, entity: track, user: user) }
-  subject(:interaction) { build(:comment_interaction, comment:, user:) }
+  subject(:interaction) { build(:comment_like, comment:, user:) }
 
   it { should belong_to(:comment).optional(false) }
   it { should belong_to(:user).optional(true) }
@@ -18,9 +18,9 @@ RSpec.describe Comment::Interaction, type: :model do
   end
 
   it "should only allow one interaction per user" do
-    _like = create(:comment_interaction, comment:, user:)
-    like_2 = build(:comment_interaction, comment:, user:)
-    dislike = build(:comment_interaction, interaction_type: "dislike", comment:, user:)
+    _like = create(:comment_like, comment:, user:)
+    like_2 = build(:comment_like, comment:, user:)
+    dislike = build(:comment_dislike, comment:, user:)
 
     expect(comment.liked_by?(user)).to be(true)
     expect(like_2).not_to be_valid

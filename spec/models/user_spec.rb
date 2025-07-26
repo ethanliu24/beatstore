@@ -109,7 +109,7 @@ RSpec.describe User, type: :model do
 
     it "should destroy all comments and interactions created by the user when account is deleted" do
       comment = create(:comment, entity: track, user:)
-      interaction_1 = create(:comment_interaction, comment:, user:)
+      interaction_1 = create(:comment_like, comment:, user:)
 
       expect(user.comment_interactions.size).to eq(1)
       expect(Comment::Interaction.count).to eq(1)
@@ -122,7 +122,7 @@ RSpec.describe User, type: :model do
 
     it "should nullify all user's interaction user_id where the comment is not create by the user when account is deleted" do
       comment = create(:comment, entity: track, user: admin)
-      interaction = create(:comment_interaction, comment:, user:)
+      interaction = create(:comment_like, comment:, user:)
 
       expect(user.comment_interactions.size).to eq(1)
       expect(interaction.user).to be(user)
