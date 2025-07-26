@@ -52,4 +52,33 @@ RSpec.describe Comment, type: :model do
     expect(Comment.find_by(id: interaction_1.id)).to be_nil
     expect(Comment.find_by(id: interaction_2.id)).to be_nil
   end
+
+  describe "interaction methods" do
+    let!(:like) { create(:comment_interaction, comment:, user:) }
+    let!(:dislike) { create(:comment_interaction, interaction_type: "dislike", comment:, user:) }
+
+    it "#likes should return all liked interactions" do
+      expect(comment.likes.size).to eq(1)
+      expect(comment.likes.first.id).to eq(like.id)
+    end
+
+    it "#dislikes should return all disliked interactions" do
+      expect(comment.dislikes.size).to eq(1)
+      expect(comment.dislikes.first.id).to eq(dislike.id)
+    end
+
+    it "#liked_by? should return whether the user liked it or not" do
+      user_2 = create(:admin)
+
+      expect(comment.liked_by?(user)).to be(true)
+      expect(comment.liked_by?(user_2)).to be(false)
+    end
+
+    it "#liked_by? should return whether the user liked it or not" do
+      user_2 = create(:admin)
+
+      expect(comment.liked_by?(user)).to be(true)
+      expect(comment.liked_by?(user_2)).to be(false)
+    end
+  end
 end

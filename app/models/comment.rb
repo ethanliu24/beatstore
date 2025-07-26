@@ -20,6 +20,22 @@ class Comment < ApplicationRecord
     end
   end
 
+  def likes
+    interactions.likes
+  end
+
+  def dislikes
+    interactions.dislikes
+  end
+
+  def liked_by?(user)
+    likes.exists?(user_id: user.id)
+  end
+
+  def disliked_by?(user)
+    dislikes.exists?(user_id: user.id)
+  end
+
   private
 
   def valid_entity_types

@@ -7,4 +7,7 @@ class Comment::Interaction < ApplicationRecord
 
   belongs_to :comment, optional: false
   belongs_to :user, optional: true
+
+  scope :likes, -> { where(interaction_type: "like") }
+  scope :dislikes, -> { where(interaction_type: "dislike") }
 end
