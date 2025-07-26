@@ -16,4 +16,14 @@ RSpec.describe Comment::Interaction, type: :model do
       expect(subject).to be_valid, "Interaction type #{interaction_type} is not valid"
     end
   end
+
+  it "should only allow one interaction per user" do
+    _like = create(:comment_interaction, comment:, user:)
+    like_2 = build(:comment_interaction, comment:, user:)
+    dislike = build(:comment_interaction, interaction_type: "dislike", comment:, user:)
+
+    expect(comment.liked_by?(user)).to be(true)
+    expect(like_2).not_to be_valid
+    expect(dislike).not_to be_valid
+  end
 end
