@@ -31,7 +31,14 @@ Rails.application.routes.draw do
     resource :play, only: [ :create ], module: :tracks, as: "increment_plays"
   end
 
-  resources :comments, only: [ :create, :update, :destroy ]
+  resources :comments, only: [ :create, :update, :destroy ] do
+    member do
+      post "like", to: "comments/interactions#like"
+      post "dislike", to: "comments/interactions#dislike"
+      delete "like", to: "comments/interactions#unlike"
+      delete "dislike", to: "comments/interactions#undislike"
+    end
+  end
 
   namespace :admin do
     resources :tracks, except: [ :show ]
