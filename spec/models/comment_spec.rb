@@ -7,6 +7,7 @@ RSpec.describe Comment, type: :model do
 
   it { should validate_presence_of(:content) }
   it { should belong_to(:user).optional(false) }
+  it { should have_many(:interactions).dependent(:destroy) }
 
   context "content legnth" do
     it "is invalid if description is blank" do
@@ -37,5 +38,18 @@ RSpec.describe Comment, type: :model do
     comment = build(:comment, entity: nil, user: create(:user))
     expect(comment).not_to be_valid
     expect(comment.errors[:entity]).to include("must exist")
+  end
+
+  it "should delete all of its interactions when deleted" do
+    comment = create(:comment, entity: track, user: user)
+    interaction_1 = create(:comment_interaction, comment: comment, user: user)
+    interaction_2 = create(:comment_interaction, comment: comment, user: user)
+
+    expect(comment.interactions.count).to eq(2)
+
+    comment.destroy!
+
+    expect(Comment.find_by(id: interaction_1.id)).to be_nil
+    expect(Comment.find_by(id: interaction_2.id)).to be_nil
   end
 end

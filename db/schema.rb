@@ -43,7 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_043925) do
   end
 
   create_table "comment_interactions", force: :cascade do |t|
-    t.string "type", default: "like"
+    t.string "interaction_type", default: "like"
     t.bigint "comment_id", null: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
@@ -129,7 +129,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_043925) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comment_interactions", "comments"
-  add_foreign_key "comment_interactions", "users"
+  add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
   add_foreign_key "track_hearts", "tracks", on_delete: :nullify
   add_foreign_key "track_hearts", "users", on_delete: :nullify

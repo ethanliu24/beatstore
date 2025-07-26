@@ -1,9 +1,9 @@
 class Comment::Interaction < ApplicationRecord
   self.table_name = "comment_interactions"
 
-  enum type: { like: "like", dislike: "dislike" }
+  enum :interaction_type, { like: "like", dislike: "dislike" }
 
-  validates :type, inclusion: { in: types }
+  validates :interaction_type, presence: true
 
   belongs_to :comment, optional: false
   belongs_to :user, optional: true

@@ -70,7 +70,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "hearted_tracks association" do
-    it 'returns tracks liked by the user' do
+    it "returns tracks liked by the user" do
       track1 = build(:track)
       track2 = build(:track)
       track3 = build(:track)
@@ -99,6 +99,39 @@ RSpec.describe User, type: :model do
 
       expect(t1.comments.size).to eq(0)
       expect(t2.comments.size).to eq(0)
+    end
+  end
+
+  describe "comments_interactions associate" do
+    let(:user) { create(:user) }
+    let(:admin) { create(:admin) }
+    let(:track) { create(:track) }
+
+    it "should destroy all comments and interactions created by the user when account is deleted" do
+      comment = create(:comment, entity: track, user:)
+      interaction_1 = create(:comment_interaction, comment:, user:)
+
+      expect(user.comment_interactions.size).to eq(1)
+      expect(Comment::Interaction.count).to eq(1)
+      expect(interaction_1.user).to be(user)
+
+      user.destroy!
+
+      expect(Comment::Interaction.count).to eq(0)
+    end
+
+    it "should nullify all user's interaction user_id where the comment is not create by the user when account is deleted" do
+      comment = create(:comment, entity: track, user: admin)
+      interaction = create(:comment_interaction, comment:, user:)
+
+      expect(user.comment_interactions.size).to eq(1)
+      expect(interaction.user).to be(user)
+
+      user.destroy!
+      interaction.reload
+
+      expect(comment.user_id).to be(admin.id)
+      expect(interaction.user_id).to be_nil
     end
   end
 
