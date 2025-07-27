@@ -136,7 +136,7 @@
   }
 
   .dropdown-item {
-    @apply flex justify-start items-center gap-2 px-4 py-2 w-full hover:bg-secondary-bg dark:hover:bg-gray-600 dark:hover:text-white;
+    @apply flex justify-start items-center gap-2 px-4 py-2 w-full hover:bg-secondary-bg dark:hover:bg-hover dark:hover:text-white;
   }
 
   .nav-dropdown {
@@ -202,5 +202,10 @@
 
   .profile-credential-action-btn {
     @apply text-accent text-[0.8rem];
+  }
+
+  /* Comment */
+  .interaction-icon {
+    @apply w-3 h-3 aspect-square cursor-pointer;
   }
 }

@@ -7,6 +7,7 @@ RSpec.describe Comment, type: :model do
 
   it { should validate_presence_of(:content) }
   it { should belong_to(:user).optional(false) }
+  it { should have_many(:interactions).dependent(:destroy) }
 
   context "content legnth" do
     it "is invalid if description is blank" do
@@ -37,5 +38,67 @@ RSpec.describe Comment, type: :model do
     comment = build(:comment, entity: nil, user: create(:user))
     expect(comment).not_to be_valid
     expect(comment.errors[:entity]).to include("must exist")
+  end
+
+  it "should delete all of its interactions when deleted" do
+    user_2 = create(:admin)
+    comment = create(:comment, entity: track, user: user)
+    interaction_1 = create(:comment_like, comment: comment, user: user)
+    interaction_2 = create(:comment_dislike, comment: comment, user: user_2)
+
+    expect(comment.interactions.count).to eq(2)
+
+    comment.destroy!
+
+    expect(Comment.find_by(id: interaction_1.id)).to be_nil
+    expect(Comment.find_by(id: interaction_2.id)).to be_nil
+  end
+
+  describe "interaction methods" do
+    context "#like" do
+      let!(:like) { create(:comment_like, comment:, user:) }
+
+      it "should return all liked interactions" do
+        expect(comment.likes.size).to eq(1)
+        expect(comment.likes.first.id).to eq(like.id)
+      end
+
+      it "#liked_by? should return whether the user liked it or not" do
+        user_2 = create(:admin)
+
+        expect(comment.liked_by?(user)).to be(true)
+        expect(comment.liked_by?(user_2)).to be(false)
+      end
+
+      it "#liked_by? should return whether the user liked it or not" do
+        user_2 = create(:admin)
+
+        expect(comment.liked_by?(user)).to be(true)
+        expect(comment.liked_by?(user_2)).to be(false)
+      end
+    end
+
+    context "#dislike" do
+      let!(:dislike) { create(:comment_dislike, comment:, user:) }
+
+      it "should return all disliked interactions" do
+        expect(comment.dislikes.size).to eq(1)
+        expect(comment.dislikes.first.id).to eq(dislike.id)
+      end
+
+      it "#disliked_by? should return whether the user liked it or not" do
+        user_2 = create(:admin)
+
+        expect(comment.disliked_by?(user)).to be(true)
+        expect(comment.disliked_by?(user_2)).to be(false)
+      end
+
+      it "#disliked_by? should return whether the user liked it or not" do
+        user_2 = create(:admin)
+
+        expect(comment.disliked_by?(user)).to be(true)
+        expect(comment.disliked_by?(user_2)).to be(false)
+      end
+    end
   end
 end

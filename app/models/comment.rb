@@ -12,10 +12,28 @@ class Comment < ApplicationRecord
   belongs_to :entity, polymorphic: true
   belongs_to :user, optional: false
 
+  has_many :interactions, class_name: "Comment::Interaction", dependent: :destroy
+
   class << self
     def valid_entity_types
       [ Track ].map { |cls| cls.name }
     end
+  end
+
+  def likes
+    interactions.likes
+  end
+
+  def dislikes
+    interactions.dislikes
+  end
+
+  def liked_by?(user)
+    likes.exists?(user_id: user.id)
+  end
+
+  def disliked_by?(user)
+    dislikes.exists?(user_id: user.id)
   end
 
   private
