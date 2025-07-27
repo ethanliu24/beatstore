@@ -6,15 +6,11 @@
       <span>·</span>
       <p><%= format_date(comment.created_at) %></p>
     </div>
-    <p class="text-sm font-light w-full text-wrap mb-1"><%= comment.content %></p>
 
-    <div class="flex justify-start items-center gap-4 text-secondary-txt">
-      <%= render partial: "comments/interaction", locals: {
-        url: like_comment_path(comment),
-        interacted: comment.liked_by?(current_user),
-        interaction_count: comment.likes.count,
-        icon_name: "thumb-up",
-      } %>
-    </div>
+    <%= render partial: "comments/interactions", locals: {
+      comment: comment,
+      likes: comment.likes,
+      dislikes: comment.dislikes,
+    } %>
   </div>
 </div>

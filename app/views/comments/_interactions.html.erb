@@ -1,0 +1,38 @@
+<div class="flex justify-start items-center gap-4 text-secondary-txt"
+  data-controller="comment-interactions"
+  data-comment-interactions-authorized-value="<%= current_user.present? %>">
+  <div class="flex justify-start items-center text-xs">
+    <% if current_user %>
+      <% liked = comment.liked_by?(current_user) %>
+
+      <%= button_to like_comment_path(comment), method: :post,
+        form_class: "#{liked ? "hidden" : ""}", class: "flex justify-center items-center",
+        data: {
+          action: "click->comment-interactions#like",
+          comment_interactions_target: "like",
+        } do %>
+        <%= icon "thumb-up", class: "interaction-icon" %>
+      <% end %>
+
+      <%= button_to like_comment_path(comment), method: :delete,
+        form_class: "#{liked ? "" : "hidden"}", class: "flex justify-center items-center",
+        data: {
+          action: "click->comment-interactions#unlike",
+          comment_interactions_target: "unlike",
+        } do %>
+        <%= icon "thumb-up", variant: "filled", class: "interaction-icon text-accent" %>
+      <% end %>
+    <% else %>
+      <%= link_to auth_prompt_modal_path,
+        data: {
+          turbo_frame: "modal",
+          modal_target: "default-modal",
+          modal_toggle: "default-modal",
+        } do %>
+        <%= icon "thumb-up", class: "interaction-icon" %>
+      <% end %>
+    <% end %>
+
+    <p class="ml-2" data-comment-interactions-target="likeCount"><%= likes.size %></p>
+  </div>
+</div>
