@@ -7,6 +7,8 @@
       <p><%= format_date(comment.created_at) %></p>
     </div>
 
+    <p class="text-sm font-light w-full text-wrap"><%= comment.content %></p>
+
     <%= render partial: "comments/interactions", locals: {
       comment: comment,
       likes: comment.likes,
