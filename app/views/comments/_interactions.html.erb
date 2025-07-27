@@ -33,7 +33,7 @@
       <% end %>
     <% end %>
 
-    <p class="ml-2" data-comment-interactions-target="likeCount"><%= likes.size %></p>
+    <p class="ml-1" data-comment-interactions-target="likeCount"><%= likes.size %></p>
   </div>
 
   <div class="flex justify-start items-center text-xs">
@@ -46,7 +46,7 @@
           action: "click->comment-interactions#dislike",
           comment_interactions_target: "dislike",
         } do %>
-        <%= icon "thumb-up", class: "interaction-icon" %>
+        <%= icon "thumb-down", class: "interaction-icon" %>
       <% end %>
 
       <%= button_to dislike_comment_path(comment), method: :delete,
@@ -55,7 +55,7 @@
           action: "click->comment-interactions#undislike",
           comment_interactions_target: "undislike",
         } do %>
-        <%= icon "thumb-up", variant: "filled", class: "interaction-icon text-accent" %>
+        <%= icon "thumb-down", variant: "filled", class: "interaction-icon text-accent" %>
       <% end %>
     <% else %>
       <%= link_to auth_prompt_modal_path,
@@ -64,10 +64,21 @@
           modal_target: "default-modal",
           modal_toggle: "default-modal",
         } do %>
-        <%= icon "thumb-up", class: "interaction-icon" %>
+        <%= icon "thumb-down", class: "interaction-icon" %>
       <% end %>
     <% end %>
 
-    <p class="ml-2" data-comment-interactions-target="dislikeCount"><%= dislikes.size %></p>
+    <p class="ml-1" data-comment-interactions-target="dislikeCount"><%= dislikes.size %></p>
   </div>
+
+  <% if current_user.id == comment.user.id || current_user.admin? %>
+    <%= link_to delete_comment_modal_path(comment),
+      data: {
+        turbo_frame: "modal",
+        modal_target: "default-modal",
+        modal_toggle: "default-modal",
+      } do %>
+      <%= icon "trash", class: "interaction-icon hover:text-error" %>
+    <% end %>
+  <% end %>
 </div>

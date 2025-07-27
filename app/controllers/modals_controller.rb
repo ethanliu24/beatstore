@@ -29,6 +29,11 @@ class ModalsController < ApplicationController
     render partial: "modals/delete_account"
   end
 
+  def delete_comment
+    comment = Comment.find(params[:id])
+    render partial: "modals/delete_comment", locals: { comment: }
+  end
+
   private
 
   def ensure_turbo_request

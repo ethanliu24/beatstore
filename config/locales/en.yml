@@ -115,3 +115,8 @@ en:
     delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."
     see_tracks_you_liked_here: "See tracks you liked here"
     you_havent_liked_any_tracks_yet: "You haven't liked any tracks yet"
+
+  comment:
+    delete_comment: "Delete Comment"
+    comment_deletion_confirmation: "Are you sure you want to delete this comment?"
+    action_cannot_be_undone: "This action can't be undone."
