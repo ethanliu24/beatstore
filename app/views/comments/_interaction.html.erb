@@ -1,0 +1,34 @@
+<div class="flex justify-start items-center text-xs">
+  <% if current_user %>
+    <div data-controller="comment-interaction" data-comment-interaction-target="interactionContainer">
+      <%= button_to url, method: :post,
+        form_class: "#{interacted ? "hidden" : ""}", class: "flex justify-center items-center",
+        data: {
+          action: "click->comment-interaction#interact",
+          comment_interaction_target: "interact",
+        } do %>
+        <%= icon icon_name, class: "interaction-icon" %>
+      <% end %>
+
+      <%= button_to url, method: :delete,
+        form_class: "#{interacted ? "" : "hidden"}", class: "flex justify-center items-center",
+        data: {
+          action: "click->comment-interaction#uninteract",
+          comment_interaction_target: "uninteract",
+        } do %>
+        <%= icon icon_name, variant: "filled", class: "interaction-icon text-accent" %>
+      <% end %>
+    </div>
+  <% else %>
+    <%= link_to auth_prompt_modal_path,
+      data: {
+        turbo_frame: "modal",
+        modal_target: "default-modal",
+        modal_toggle: "default-modal",
+      } do %>
+      <%= icon "thumb-up", class: "interaction-icon" %>
+    <% end %>
+  <% end %>
+
+  <p class="ml-2"><%= interaction_count %></p>
+</div>
