@@ -7,7 +7,11 @@
   <% content_for :modal_footer_content do %>
     <%= button_to comment_path(comment), method: :delete,
       class: "button-critical px-2 py-1",
-      data: { modal_hide: "default-modal" } do %>
+      data: {
+        controller: "comment-delete",
+        action: "click->comment-delete#delete",
+        modal_hide: "default-modal",
+      } do %>
       <p><%= t("label.delete") %></p>
     <% end %>
   <% end %>
