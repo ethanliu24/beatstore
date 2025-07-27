@@ -25,12 +25,14 @@ export default class extends Controller {
     this.likeBtn.classList.add("hidden");
     this.unlikeBtn.classList.remove("hidden");
     this.likeCountTarget.innerText = `${this.#getLikeCount() + 1}`;
+    if (this.dislikeBtn.classList.contains("hidden")) this.undislike();
   }
 
   dislike() {
     this.dislikeBtn.classList.add("hidden");
     this.undislikeBtn.classList.remove("hidden");
     this.dislikeCountTarget.innerText = `${this.#getDislikeCount() + 1}`;
+    if (this.likeBtn.classList.contains("hidden")) this.unlike();
   }
 
   unlike() {
