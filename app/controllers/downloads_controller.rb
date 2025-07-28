@@ -3,12 +3,14 @@ class DownloadsController < ApplicationController
 
   def free_download
     unless file_exists?(@track.tagged_mp3)
-      head :not_found
+      # TODO should log error if track not exist
+      redirect_back fallback_location: root_path
+      return
     end
 
     send_data @track.tagged_mp3.download,
       filename: set_file_name(@track, "mp3"),
-      type: "mp3",
+      type: :mp3,
       disposition: "attachment"
   end
 
