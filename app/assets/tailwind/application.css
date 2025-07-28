@@ -136,7 +136,7 @@
   }
 
   .dropdown-item {
-    @apply flex justify-start items-center gap-2 px-4 py-2 w-full hover:bg-secondary-bg dark:hover:bg-hover dark:hover:text-white;
+    @apply flex justify-start items-center flex-nowrap gap-2 px-4 py-2 w-full hover:bg-secondary-bg dark:hover:bg-hover dark:hover:text-white;
   }
 
   .nav-dropdown {

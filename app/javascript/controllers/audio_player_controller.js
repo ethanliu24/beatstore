@@ -175,6 +175,45 @@ export default class extends Controller {
     this.toggleLikeButton(false);
   }
 
+  async downloadTrack() {
+    try {
+      const url = `/download/track/${this.currentTrackId}/free`;
+      const response = await fetch(url, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Download failed with status ${response.status}`);
+      }
+
+      const contentDisposition = response.headers.get("Content-Disposition");
+      if (!contentDisposition || !contentDisposition.includes("filename=")) {
+        throw new Error("Filename missing from response");
+      }
+
+      const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+      if (!filenameMatch || !filenameMatch[1]) {
+        throw new Error("Could not extract filename");
+      }
+
+      const filename = filenameMatch[1];
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download error:", error);
+      alert("Could not download the file.");
+    }
+  }
+
   #playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
