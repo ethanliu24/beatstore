@@ -179,7 +179,7 @@ export default class extends Controller {
     try {
       const url = `/download/track/${this.currentTrackId}/free`;
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (!response.ok) {
@@ -190,7 +190,7 @@ export default class extends Controller {
       if (!contentDisposition || !contentDisposition.includes("filename=")) {
         throw new Error("Filename missing from response");
       }
-      
+
       const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
       if (!filenameMatch || !filenameMatch[1]) {
         throw new Error("Could not extract filename");
@@ -200,7 +200,7 @@ export default class extends Controller {
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
 
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = blobUrl;
       a.download = filename;
       document.body.appendChild(a);
@@ -209,8 +209,8 @@ export default class extends Controller {
 
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error('Download error:', error);
-      alert('Could not download the file.');
+      console.error("Download error:", error);
+      alert("Could not download the file.");
     }
   }
 
