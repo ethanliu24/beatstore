@@ -64,7 +64,7 @@ export default class extends Controller {
       if (!blob) return;
 
       const filename = `${crypto.randomUUID().replace(/-/g, '')}.png`;
-      const file = new File([blob], filename, { type: "image/jpeg" });
+      const file = new File([blob], filename, { type: "image/png" });
 
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(file);
