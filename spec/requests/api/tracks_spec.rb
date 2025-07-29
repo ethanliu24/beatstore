@@ -14,8 +14,8 @@ RSpec.describe "Api::Tracks", type: :request do
       expect(json["bpm"]).to eq(track.bpm)
       expect(json["key"]).to eq(track.key)
       expect(json["liked_by_user"]).to be(false)
-      expect(json["cover_photo"]).to eq("")
-      expect(json["preview"]).not_to eq("")
+      expect(json["cover_photo_url"]).to eq("")
+      expect(json["preview_url"]).not_to eq("")
     end
 
     it "should return track data if track is private but user is admin" do
@@ -30,8 +30,8 @@ RSpec.describe "Api::Tracks", type: :request do
       expect(json["bpm"]).to eq(track.bpm)
       expect(json["key"]).to eq(track.key)
       expect(json["liked_by_user"]).to be(false)
-      expect(json["cover_photo"]).to eq("")
-      expect(json["preview"]).not_to eq("")
+      expect(json["cover_photo_url"]).to eq("")
+      expect(json["preview_url"]).not_to eq("")
     end
 
     it "should return 404 if track id is invalid" do

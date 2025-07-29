@@ -253,10 +253,10 @@ export default class extends Controller {
       this.currentTrackId = track.id;
       localStorage.setItem("cur_player_track", track.id);
 
-      if (track.cover_photo === "") {
+      if (track.cover_photo_url === "") {
         this.coverPhotoTarget.classList.add("hidden");
       } else {
-        this.coverPhotoTarget.src = track.cover_photo;
+        this.coverPhotoTarget.src = track.cover_photo_url;
         this.coverPhotoTarget.classList.remove("hidden");
       }
       this.titleTarget.innerText = track.title;
@@ -266,7 +266,7 @@ export default class extends Controller {
       this.pauseAudio();
       this.resetAudio();
       this.openPlayer();
-      this.audioTarget.src = track.preview;
+      this.audioTarget.src = track.preview_url;
       this.audioTarget.load();
       this.resumeAudio();
       this.played = true;

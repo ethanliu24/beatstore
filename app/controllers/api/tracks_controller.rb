@@ -14,8 +14,8 @@ class Api::TracksController < ApplicationController
         bpm: track.bpm,
         key: track.key,
         liked_by_user: current_user ? current_user.hearted?(track) : false,
-        cover_photo: track.cover_photo.attached? ? track.cover_photo.url(expires_in: 5.minutes) : "",
-        preview: track.tagged_mp3.url(expires_in: 5.minutes)
+        cover_photo_url: track.cover_photo.attached? ? track.cover_photo.url(expires_in: 5.minutes) : "",
+        preview_url: track.tagged_mp3.url(expires_in: 5.minutes)
       }
     else
       head :not_found
