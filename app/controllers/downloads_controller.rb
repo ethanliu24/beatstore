@@ -9,15 +9,15 @@ class DownloadsController < ApplicationController
     end
 
     send_data @track.tagged_mp3.download,
-      filename: set_file_name(@track, "mp3"),
-      type: :mp3,
+      filename: set_file_name(@track.tagged_mp3),
+      type: "audio/mpeg",
       disposition: "attachment"
   end
 
   private
 
-  def set_file_name(track, extension)
-    "#{track.title} - #{track.bpm}bpm #{track.key.downcase}.#{extension}"
+  def set_file_name(file)
+    file.filename.to_s
   end
 
   def file_exists?(file)

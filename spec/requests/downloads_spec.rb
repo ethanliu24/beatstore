@@ -12,21 +12,20 @@ RSpec.describe DownloadsController, type: :request do
       end
 
       it "#free_download returns the file as attachment for track" do
-        get download_track_free_url(track.id)
+        get download_track_free_url(track)
 
         expect(response).to have_http_status(:ok)
         expect(response.headers["Content-Disposition"]).to include("attachment")
-        expect(response.headers['Content-Disposition']).to include("filename=\"#{"Track with files - 111bpm c major.mp3"}\"")
+        expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
         expect(response.content_type).to eq("audio/mpeg")
       end
 
       it "#free_download should let unauthed users download" do
-        get download_track_free_url(track.id)
+        get download_track_free_url(track)
 
         expect(response).to have_http_status(:ok)
         expect(response.headers["Content-Disposition"]).to include("attachment")
-        # TODO replace with track.tagged_mp3.blob.filename when frontend is updated to take the original file name uploaded
-        expect(response.headers['Content-Disposition']).to include("filename=\"#{"Track with files - 111bpm c major.mp3"}\"")
+        expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
         expect(response.content_type).to eq("audio/mpeg")
       end
     end
