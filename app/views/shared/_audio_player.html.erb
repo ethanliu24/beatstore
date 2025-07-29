@@ -1,8 +1,11 @@
 <div id="audio-player" data-turbo-permanent class="hidden fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2" data-audio-player-target="container">
   <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background/80 backdrop-blur-sm">
     <audio id="audio-player-src" data-audio-player-target="audio"></audio>
-    <div class="flex justify-between items-stretch gap-4 min-w-15">
-      <img data-audio-player-target="coverPhoto" src="" alt="Track image" draggable="false" class="w-7 aspect-square rounded">
+    <div class="relative flex justify-between items-stretch gap-4 min-w-15">
+      <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
+        <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
+        <img data-audio-player-target="coverPhoto" src="" draggable="false" class="w-7 aspect-square rounded hidden absolute top-0 left-0">
+      </div>
       <div class="flex flex-col justify-between items-start truncate whitespace-nowrap">
         <p class="text-xs" data-audio-player-target="title"></p>
         <div class="flex justify-start items-center gap-1 text-[0.5rem] font-light text-secondary-txt">

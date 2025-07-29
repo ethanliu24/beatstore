@@ -238,7 +238,6 @@ export default class extends Controller {
           console.error(`Error fetching track: ${res.statusText}`);
         }
 
-        this.resumeAudio();
         this.played = false;
         return false;
       }
@@ -247,7 +246,13 @@ export default class extends Controller {
 
       this.currentTrackId = track.id;
       localStorage.setItem("cur_player_track", track.id);
-      this.coverPhotoTarget.src = track.cover_photo;
+
+      if (track.cover_photo === "") {
+        this.coverPhotoTarget.classList.add("hidden");
+      } else {
+        this.coverPhotoTarget.src = track.cover_photo;
+        this.coverPhotoTarget.classList.remove("hidden");
+      }
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
       this.bpmTarget.innerText = `${track.bpm} BPM`;
