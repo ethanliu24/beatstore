@@ -56,8 +56,8 @@ export default class extends Controller {
     e.stopPropagation();
   }
 
-  play(e) {
-    this.#playAudio(parseInt(e.currentTarget.dataset.trackId));
+  async play(e) {
+    await this.#playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   pauseAudio() {
@@ -175,6 +175,12 @@ export default class extends Controller {
     this.toggleLikeButton(false);
   }
 
+  navToTrack(e) {
+    const navTrackId = parseInt(e.currentTarget.dataset.trackId);
+    Turbo.visit(`/tracks/${navTrackId}`);
+    this.stopPropagation(e);
+  }
+
   async downloadTrack() {
     try {
       const url = `/download/track/${this.currentTrackId}/free`;
@@ -214,7 +220,7 @@ export default class extends Controller {
     }
   }
 
-  #playAudio(trackId) {
+  async #playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
         if (this.audioTarget.paused) {
@@ -226,30 +232,52 @@ export default class extends Controller {
       }
     }
 
-    this.audioTarget.pause();
-    this.resetAudio();
-    this.played = true;
-
-    fetch(`${this.trackDataApiUrl}/${trackId}`, {
+    const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET"
     })
-    .then(res => res.json())
-    .then(track => {
+    .then(async res => {
+      if (!res.ok) {
+        // Use toast instead
+        if (res.status === 404) {
+          console.error("No preview available");
+        } else {
+          console.error(`Error fetching track: ${res.statusText}`);
+        }
+
+        this.played = false;
+        return false;
+      }
+
+      const track = await res.json();
+
       this.currentTrackId = track.id;
       localStorage.setItem("cur_player_track", track.id);
-      this.coverPhotoTarget.src = track.cover_photo;
+
+      if (track.cover_photo_url === "") {
+        this.coverPhotoTarget.classList.add("hidden");
+      } else {
+        this.coverPhotoTarget.src = track.cover_photo_url;
+        this.coverPhotoTarget.classList.remove("hidden");
+      }
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
       this.bpmTarget.innerText = `${track.bpm} BPM`;
       this.toggleLikeButton(track.liked_by_user);
+      this.pauseAudio();
+      this.resetAudio();
       this.openPlayer();
-      this.audioTarget.src = track.tagged_mp3;
+      this.audioTarget.src = track.preview_url;
       this.audioTarget.load();
       this.resumeAudio();
-      // TODO Toast if track audio src is empty
+      this.played = true;
+      return true;
+    })
+    .catch(error => {
+      alert("Error fetching track: " + error.message);
+      return false;
     });
 
-    if (!this.currentTrackId) return;
+    if (!playable || !this.currentTrackId) return;
     fetch(`/tracks/${this.currentTrackId}/play`, {
       method: "POST",
       headers: {

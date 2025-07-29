@@ -7,17 +7,15 @@ class Api::TracksController < ApplicationController
   def show
     track = Track.find_by(id: params[:id])
 
-    if track && (current_user&.admin? || track.is_public?)
+    if track && track.tagged_mp3.attached? && (current_user&.admin? || track.is_public?)
       render json: {
         id: track.id,
         title: track.title,
         bpm: track.bpm,
         key: track.key,
         liked_by_user: current_user ? current_user.hearted?(track) : false,
-        cover_photo: track.cover_photo.attached? ? track.cover_photo.url(expires_in: 5.minutes) : "",
-        tagged_mp3: track.tagged_mp3.attached? \
-          ? track.tagged_mp3.url(expires_in: 5.minutes)
-          : ""
+        cover_photo_url: track.cover_photo.attached? ? track.cover_photo.url(expires_in: 5.minutes) : "",
+        preview_url: track.tagged_mp3.url(expires_in: 5.minutes)
       }
     else
       head :not_found
