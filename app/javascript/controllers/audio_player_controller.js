@@ -175,6 +175,12 @@ export default class extends Controller {
     this.toggleLikeButton(false);
   }
 
+  navToTrack(e) {
+    const navTrackId = parseInt(e.currentTarget.dataset.trackId);
+    Turbo.visit(`/tracks/${navTrackId}`);
+    this.stopPropagation(e);
+  }
+
   async downloadTrack() {
     try {
       const url = `/download/track/${this.currentTrackId}/free`;
@@ -271,7 +277,7 @@ export default class extends Controller {
       return false;
     });
 
-    if (!playable) return;
+    if (!playable || !this.currentTrackId) return;
     fetch(`/tracks/${this.currentTrackId}/play`, {
       method: "POST",
       headers: {
