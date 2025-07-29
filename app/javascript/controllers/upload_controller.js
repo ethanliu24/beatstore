@@ -63,7 +63,8 @@ export default class extends Controller {
     cropper.getCroppedCanvas().toBlob((blob) => {
       if (!blob) return;
 
-      const file = new File([blob], "cropped-image.png", { type: "image/jpeg" });
+      const filename = `${crypto.randomUUID().replace(/-/g, '')}.png`;
+      const file = new File([blob], filename, { type: "image/png" });
 
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(file);

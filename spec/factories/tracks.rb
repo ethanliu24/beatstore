@@ -20,19 +20,19 @@ FactoryBot.define do
         filename: "tagged_mp3.mp3",
         content_type: "audio/mpeg"
       )
-      track.tagged_mp3.attach(
+      track.untagged_mp3.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "untagged_mp3.mp3")),
         filename: "untagged_mp3.mp3",
         content_type: "audio/mpeg"
       )
-      track.tagged_mp3.attach(
+      track.untagged_wav.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "untagged_wav.wav")),
-        filename: "untagged_wav.mp3",
+        filename: "untagged_wav.wav",
         content_type: "audio/wav"
       )
-      track.tagged_mp3.attach(
+      track.track_stems.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "track_stems.zip")),
-        filename: "track_stems.mp3",
+        filename: "track_stems.zip",
         content_type: "application/zip"
       )
     end
