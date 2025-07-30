@@ -19,6 +19,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   }
 
   it "sanitizes parameters" do
+    # TODO add project file when available
     controller = Admin::TracksController.new
     controller.params = ActionController::Parameters.new(
       track: {
