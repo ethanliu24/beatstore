@@ -91,3 +91,5 @@ gem "rails_icons", "~> 1.4"
 
 gem "ransack"
 gem "pagy", "~> 9.3"
+
+gem "active_storage_validations", "~> 3.0"

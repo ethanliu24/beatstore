@@ -80,6 +80,57 @@ RSpec.describe Track, type: :model do
         expect(subject.errors.details[:description]).to include(hash_including(error: :too_long))
       end
     end
+
+    context "file attachments" do
+      let(:track_with_files) { build(:track_with_files) }
+
+      it "is valid if no files are attached" do
+        expect(subject).to be_valid
+      end
+
+      it "is valid if the mime types are correct" do
+        expect(track_with_files.tagged_mp3.content_type).to eq("audio/mpeg")
+        expect(track_with_files.untagged_mp3.content_type).to eq("audio/mpeg")
+        expect(track_with_files.untagged_wav.content_type).to eq("audio/x-wav")
+        expect(track_with_files.track_stems.content_type).to eq("application/zip")
+        expect(track_with_files.cover_photo.content_type).to eq("image/png")
+        expect(track_with_files).to be_valid
+      end
+
+      it "is invalid if mime types are incorrect" do
+        track_with_files.tagged_mp3.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "track_stems.zip")),
+          filename: "track_stems.zip",
+          content_type: "application/zip"
+        )
+
+        track_with_files.cover_photo.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "cover_photo.png")),
+          filename: "cover_photo.png",
+          content_type: "image/png"
+        )
+
+        track_with_files.untagged_wav.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "untagged_mp3.mp3")),
+          filename: "untagged_mp3.mp3",
+          content_type: "audio/mpeg"
+        )
+
+        track_with_files.track_stems.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "untagged_wav.wav")),
+          filename: "untagged_wav.wav",
+          content_type: "audio/x-wav"
+        )
+
+        track_with_files.cover_photo.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
+          filename: "tagged_mp3.mp3",
+          content_type: "audio/mpeg"
+        )
+
+        expect(track_with_files).not_to be_valid
+      end
+    end
   end
 
   describe "destroy" do

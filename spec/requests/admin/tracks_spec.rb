@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::TracksController, type: :request, admin: true do
+  include ActionDispatch::TestProcess::FixtureFile
+
   let(:valid_attributes) {
     {
       title: "Valid Track Title",
@@ -17,7 +19,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   }
 
   it "sanitizes parameters" do
-    skip "Add attachment test later"
+    # TODO add project file when available
     controller = Admin::TracksController.new
     controller.params = ActionController::Parameters.new(
       track: {
@@ -25,13 +27,13 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         bpm: 140,
         key: "A MINOR",
         is_public: true,
-        tagged_mp3: "",
-        untagged_mp3: "",
-        untagged_wav: "",
-        track_stems: "",
-        project: "",
-        cover_photo: "",
-        tag_attributes: { "0" => { id: 1, name: "test", _destroy: "false" } },
+        tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg"),
+        untagged_mp3: fixture_file_upload("tracks/untagged_mp3.mp3", "audio/mpeg"),
+        untagged_wav: fixture_file_upload("tracks/untagged_wav.wav", "audio/x-wav"),
+        track_stems: fixture_file_upload("tracks/track_stems.zip", "audio/mpeg"),
+        project: nil,
+        cover_photo: fixture_file_upload("tracks/cover_photo.png", "image/png"),
+        tags_attributes: { "0" => { id: 1, name: "test", _destroy: "false" } },
         foo: "bar"
       }
     )
@@ -48,7 +50,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       "track_stems",
       "project",
       "cover_photo",
-      "tag_attributes"
+      "tags_attributes"
     )
     expect(permitted[:tags_attributes]["0"].keys).to contain_exactly("id", "name", "_destroy")
   end

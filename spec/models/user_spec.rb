@@ -60,6 +60,20 @@ RSpec.describe User, type: :model do
         expect(user.errors.details[:display_name]).to include(hash_including(error: :too_long))
       end
     end
+
+    context "avatar type" do
+      it "should be valid if no pfp is attached" do
+        expect(user).to be_valid
+      end
+
+      it "should be valid if pfp is a png" do
+        user_with_pfp = build(:user_with_pfp)
+
+        expect(user_with_pfp.profile_picture).to be_attached
+        expect(user_with_pfp.profile_picture.content_type).to eq("image/png")
+        expect(user_with_pfp).to be_valid
+      end
+    end
   end
 
   describe "default values on model creation" do
@@ -141,7 +155,7 @@ RSpec.describe User, type: :model do
         instance_double(Faraday::Response,
           success?: true,
           body: "fake-image-data",
-          headers: { "content-type" => "image/jpeg" }
+          headers: { "content-type" => "image/png" }
         )
       )
     end

@@ -14,7 +14,7 @@ RSpec.describe "Api::Tracks", type: :request do
       expect(json["bpm"]).to eq(track.bpm)
       expect(json["key"]).to eq(track.key)
       expect(json["liked_by_user"]).to be(false)
-      expect(json["cover_photo_url"]).to eq("")
+      expect(json["cover_photo_url"]).not_to eq("")
       expect(json["preview_url"]).not_to eq("")
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "Api::Tracks", type: :request do
       expect(json["bpm"]).to eq(track.bpm)
       expect(json["key"]).to eq(track.key)
       expect(json["liked_by_user"]).to be(false)
-      expect(json["cover_photo_url"]).to eq("")
+      expect(json["cover_photo_url"]).not_to eq("")
       expect(json["preview_url"]).not_to eq("")
     end
 

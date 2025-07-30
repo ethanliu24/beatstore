@@ -33,6 +33,10 @@ class User < ApplicationRecord
   validates :biography,
     length: { maximum: BIOGRAPHY_LENGTH }
 
+  validates :profile_picture,
+    content_type: [ "image/png" ],
+    if: -> { profile_picture.attached? }
+
   # === Associations ===
   has_one_attached :profile_picture, dependent: :destroy
 
