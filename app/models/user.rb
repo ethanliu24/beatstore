@@ -58,7 +58,7 @@ class User < ApplicationRecord
         uid: auth.uid,
         email: auth.info.email,
         display_name: auth.info.name,
-        username: UsernameGenerator.generate_from_email(auth.info.email),
+        username: Users::GenerateUsernameService.new.generate_from_display_name(auth.info.name),
         password: Devise.friendly_token[0, 20],
         confirmed_at: Time.current
       )
