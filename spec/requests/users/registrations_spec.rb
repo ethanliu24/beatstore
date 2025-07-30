@@ -70,24 +70,10 @@ RSpec.describe Users::RegistrationsController, type: :request do
         }
       }
 
-      it "should generate a username" do
+      it "should generate a username from display name" do
         post user_registration_url, params: { user: params }
         created_user = User.last
-        expect(created_user.username).to eq("generated_username")
-      end
-
-      it "should increment username suffix if it exists" do
-        expect {
-          post user_registration_url, params: { user: params }
-        }.to change(User, :count).by(1)
-
-        expect {
-          params[:email] = "generated,username@example.com"
-          post user_registration_url, params: { user: params }
-        }.to change(User, :count).by(1)
-
-        created_user = User.last
-        expect(created_user.username).to eq("generated_username2")
+        expect(created_user.username).to eq("diddler")
       end
 
       it "should not generate a username if it's passed in the parameter" do
