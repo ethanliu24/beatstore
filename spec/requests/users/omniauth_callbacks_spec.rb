@@ -36,6 +36,12 @@ RSpec.describe Users::OmniauthCallbacksController, type: :request do
       expect {
         post user_google_oauth2_omniauth_callback_url
       }.to change(User, :count).by(1)
+
+      user = User.last
+      expect(user.email).to eq("test@example.com")
+      expect(user.display_name).to eq("Test")
+      expect(user.username).to eq("test")
+      expect(user.encrypted_password).not_to be(nil)
     end
 
     it "redirects user if login failed" do
