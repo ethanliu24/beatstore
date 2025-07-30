@@ -1,4 +1,4 @@
-module UsernameGenerator
+module UsernameGenrateService
   def generate_from_email(email)
     base = sanitize(email.to_s.split("@").first)
     generate(base)
