@@ -1,31 +1,31 @@
-module GenerateUsernameService
-  def generate_from_email(email)
-    base = sanitize(email.to_s.split("@").first)
-    generate(base)
-  end
-
-  def generate_from_display_name(display_name)
-    base = sanitize(display_name)
-    generate_base(base)
-  end
-
-  private
-
-  def generate(base)
-    username = base.blank ? "user" : base
-    suffix = 1
-
-    while User.exists?(username: username)
-      suffix += 1
-      username = "#{base}#{suffix}"
+module Users
+  class GenerateUsernameService
+    def generate_from_email(email)
+      base = sanitize(email.to_s.split("@").first)
+      generate(base)
     end
 
-    username
-  end
+    def generate_from_display_name(display_name)
+      base = sanitize(display_name)
+      generate_base(base)
+    end
 
-  def sanitize(base)
-    base.downcase.gsub.(/[^a-z0-9]/, "_")
-  end
+    private
 
-  module_function :generate_from_email, :generate_from_display_name
+    def generate(base)
+      username = base.blank ? "user" : base
+      suffix = 1
+
+      while User.exists?(username: username)
+        suffix += 1
+        username = "#{base}#{suffix}"
+      end
+
+      username
+    end
+
+    def sanitize(base)
+      base.downcase.gsub.(/[^a-z0-9]/, "_")
+    end
+  end
 end
