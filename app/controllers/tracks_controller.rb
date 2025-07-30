@@ -22,7 +22,7 @@ class TracksController < ApplicationController
   private
 
   def find_similar_tracks(base_track)
-    similar_tracks = Track.similar_tracks(base_track)
+    similar_tracks = Tracks::FindSimilarTracksService.new(track: base_track).call
 
     if similar_tracks.size < SIMILAR_TRACKS_RECOMMENDATION_LIMIT
       extra_tracks = Track
