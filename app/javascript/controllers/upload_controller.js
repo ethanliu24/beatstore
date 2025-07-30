@@ -87,6 +87,7 @@ export default class extends Controller {
 
     if (
       (inputId.includes("mp3") && fileType === "audio/mpeg") ||
+      // Check other wav types such as x-wav or vnd.wave
       (inputId.includes("wav") && fileType === "audio/wav") ||
       (inputId.includes("stems") && fileType === "application/zip")
     ) {

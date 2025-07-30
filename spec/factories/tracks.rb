@@ -14,7 +14,7 @@ FactoryBot.define do
     is_public { true }
     genre { "Hip Hop" }
 
-    after(:create) do |track|
+    after(:build) do |track|
       track.tagged_mp3.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
         filename: "tagged_mp3.mp3",
@@ -28,7 +28,7 @@ FactoryBot.define do
       track.untagged_wav.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "untagged_wav.wav")),
         filename: "untagged_wav.wav",
-        content_type: "audio/wav"
+        content_type: "audio/x-wav"
       )
       track.track_stems.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "track_stems.zip")),

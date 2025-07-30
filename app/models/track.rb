@@ -17,6 +17,11 @@ class Track < ApplicationRecord
     message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
   }, allow_blank: true
 
+  validates :tagged_mp3, content_type: [ "audio/mpeg" ], if: -> { tagged_mp3.attached? }
+  validates :untagged_mp3, content_type: [ "audio/mpeg" ], if: -> { untagged_mp3.attached? }
+  validates :untagged_wav, content_type: [ "audio/x-wav", "audio/vnd.wave" ], if: -> { untagged_wav.attached? }
+  validates :track_stems, content_type: [ "application/zip" ], if: -> { track_stems.attached? }
+
   # === Relationships ===
   has_one_attached :tagged_mp3
   has_one_attached :untagged_mp3
