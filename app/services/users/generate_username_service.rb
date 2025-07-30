@@ -25,7 +25,7 @@ module Users
     end
 
     def sanitize(base)
-      base.downcase.gsub.(/[^a-z0-9]/, "_")
+      return base.downcase.gsub.(/[^a-z0-9]/, "_")
     end
   end
 end
