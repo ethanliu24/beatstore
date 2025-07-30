@@ -41,7 +41,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :request do
       expect(user.email).to eq("test@example.com")
       expect(user.display_name).to eq("Test")
       expect(user.username).to eq("test")
-      expect(user.password).to be(nil)
+      expect(user.encrypted_password).not_to be(nil)
     end
 
     it "redirects user if login failed" do
