@@ -5,7 +5,7 @@ FactoryBot.define do
     email { "customer@example.com" }
     password { "Password1!" }
     password_confirmation { "Password1!" }
-    confirmed_at { Time.now } # skip email confirmation for tests
+    confirmed_at { Time.now }
     role { :customer }
   end
 
@@ -15,7 +15,25 @@ FactoryBot.define do
     email { "admin@example.com" }
     password { "Password1!" }
     password_confirmation { "Password1!" }
-    confirmed_at { Time.now } # skip email confirmation for tests
+    confirmed_at { Time.now }
     role { :admin }
+  end
+
+  factory :user_with_pfp, class: "User" do
+    display_name { "PFP" }
+    username { "with_pfp" }
+    email { "pfp@example.com" }
+    password { "Password1!" }
+    password_confirmation { "Password1!" }
+    confirmed_at { Time.now }
+    role { :customer }
+
+    after(:build) do |user|
+      user.profile_picture.attach(
+        io: File.open(Rails.root.join("spec", "fixtures", "files", "users", "profile_picture.png")),
+        filename: "profile_picture.png",
+        content_type: "image/png"
+      )
+    end
   end
 end

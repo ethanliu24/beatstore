@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Users::ProfilesController, type: :request do
+  include ActionDispatch::TestProcess::FixtureFile
+
   let(:user) { build(:user) }
 
   describe "GET #edit" do
@@ -55,15 +57,37 @@ RSpec.describe Users::ProfilesController, type: :request do
     end
 
     it "should upload profile picture" do
-      skip "add active storage for user pfp upload test #{__FILE__}"
+      expect(@user.profile_picture).not_to be_attached
+
+      patch users_profile_url, params: {
+        user: {
+          profile_picture: fixture_file_upload("users/profile_picture.png", "image/png")
+        }
+      }
+
+      expect(response).to have_http_status(302)
+
+      @user.reload
+      expect(@user.profile_picture).to be_attached
     end
 
     it "should sanitize parameters" do
-      patch users_profile_url, params: { user: { **update_params, foo: :bar } }
-      expect(response).to have_http_status(302)
-      expect(@user.respond_to?(:display_name)).to be true
-      expect(@user.respond_to?(:biography)).to be true
-      expect(@user.respond_to?(:foo)).to be false
+      controller = Users::ProfilesController.new
+      controller.params = ActionController::Parameters.new(
+        user: {
+          **update_params,
+          profile_picture: fixture_file_upload("users/profile_picture.png", "image/png"),
+          foo: :bar
+        }
+      )
+
+      permitted = controller.send(:user_params)
+      expect(permitted).not_to have_key("foo")
+      expect(permitted.keys).to contain_exactly(
+        "display_name",
+        "biography",
+        "profile_picture",
+      )
     end
   end
 end
