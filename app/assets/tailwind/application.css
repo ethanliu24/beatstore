@@ -143,6 +143,14 @@
     @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-hover rounded-full cursor-pointer;
   }
 
+  .nav-responsive {
+    @apply max-sm:hidden;
+  }
+
+  .nav-menu-item {
+    @apply flex justify-start items-center gap-4 w-full;
+  }
+
   .chip {
     @apply rounded-full bg-secondary-bg px-2 py-0.5 w-fit whitespace-nowrap;
   }

@@ -6,15 +6,15 @@
   "
 >
   <div class="text-amber-300"><a href="<%= root_path %>">Temporary logo</a></div>
-  <ul class="flex items-center gap-4 text-xs">
-    <li>
+  <ul class="flex items-center gap-4 flex-nowrap text-xs">
+    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.tracks") %></a>
     </li>
     <%# TODO add path to these patges when available %>
-    <li>
+    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.playlists") %></a>
     </li>
-    <li>
+    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
     </li>
     <% if current_user && current_user.admin? %>
@@ -30,8 +30,8 @@
       </span>
     </li>
     <li
-      id="cart-dropdown-btn" class="nav-dropdown"
-      data-dropdown-toggle="cart-dropdown" data-dropdown-placement="bottom-end"
+      id="navbar-cart-dropdown-btn" class="nav-dropdown nav-responsive"
+      data-dropdown-toggle="navbar-cart-dropdown" data-dropdown-placement="bottom-end"
     >
       <%# TODO add actual amount in cart %>
       <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
@@ -40,7 +40,7 @@
 
       <!-- Cart Dropdown -->
       <div
-        id="cart-dropdown"
+        id="navbar-cart-dropdown"
         class="
           dropdown absolute top-full rounded-lg shadow-sm hidden w-auto select-none
           text-primary-txt bg-background divide-y
@@ -54,15 +54,15 @@
     </li>
     <% if current_user %>
       <li
-        id="user-dropdown-btn" class="nav-dropdown" type="button"
-        data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-start"
+        id="navbar-user-dropdown-btn" class="nav-dropdown" type="button"
+        data-dropdown-toggle="navbar-user-dropdown" data-dropdown-placement="bottom-start"
       >
         <%= render partial: "users/shared/avatar", locals: { size: 6 } %>
 
         <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
 
         <!-- User dropdown -->
-        <div id="user-dropdown" class="dropdown hidden w-44">
+        <div id="navbar-user-dropdown" class="dropdown hidden w-44">
           <div class="px-4 py-3 text-primary-txt truncate text-[0.6rem]">
             <div class="text-xs"><%= current_user.display_name %></div>
             <div class="italic"><%= current_user.email %></div>
@@ -101,5 +101,40 @@
         <a href="<%= new_user_registration_path %>" class="hover:text-primary-txt"><%= t(".auth.sign_up") %></a>
       </li>
     <% end %>
+
+    <button id="navbar-menu-dropdown-btn" data-dropdown-toggle="navbar-menu-dropdown" type="menu"
+      class="sm:hidden cursor-pointer hover:bg-hover rounded-full p-1">
+      <%= icon "menu-deep", class: "w-5 h-5 aspect-square" %>
+    </button>
+
+    <%# Menu dropdown %>
+    <div id="navbar-menu-dropdown" class="dropdown hidden sm:hidden w-36">
+      <ul class="py-2">
+        <li class="dropdown-item">
+          <%= link_to tracks_path, class: "nav-menu-item" do %>
+            <%= icon "vinyl", class: "w-4 h-4 aspect-square" %>
+            <%= t("label.tracks") %>
+          <% end %>
+        </li>
+        <li class="dropdown-item">
+          <%= link_to tracks_path, class: "nav-menu-item" do %>
+            <%= icon "playlist", class: "w-4 h-4 aspect-square" %>
+            <%= t("label.playlists") %>
+          <% end %>
+        </li>
+        <li class="dropdown-item">
+          <%= link_to tracks_path, class: "nav-menu-item" do %>
+            <%= icon "shopping-bag", class: "w-4 h-4 aspect-square" %>
+            <%= t("label.cart") %>
+          <% end %>
+        </li>
+        <li class="dropdown-item">
+          <%= link_to tracks_path, class: "nav-menu-item" do %>
+            <%= icon "address-book", class: "w-4 h-4 aspect-square" %>
+            <%= t("label.contacts") %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
   </ul>
 </nav>
