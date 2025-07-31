@@ -140,7 +140,15 @@
   }
 
   .nav-dropdown {
-    @apply flex justify-center items-center gap-2 p-0.5 pr-1 hover:bg-hover rounded-full cursor-pointer;
+    @apply flex justify-center items-center flex-nowrap gap-2 p-0.5 pr-1 hover:bg-hover rounded-full cursor-pointer;
+  }
+
+  .nav-responsive {
+    @apply max-sm:hidden;
+  }
+
+  .nav-menu-item {
+    @apply flex justify-start items-center gap-4 w-full;
   }
 
   .chip {

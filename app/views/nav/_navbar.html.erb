@@ -1,20 +1,20 @@
 <nav
   class="
-    flex justify-between items-center flex-nowrap w-full px-6 py-2 z-100
+    flex justify-between items-center flex-nowrap w-full px-6 max-sm:px-3 py-2 z-100
   bg-background/95 backdrop-blur-md sticky top-0 left-0
     shadow-xs dark:shadow-secondary-bg
   "
 >
-  <div class="text-amber-300"><a href="<%= root_path %>">Temporary logo</a></div>
-  <ul class="flex items-center gap-4 text-xs">
-    <li>
+  <div class="text-amber-300"><a href="<%= root_path %>">Temperary Logo</a></div>
+  <ul class="flex items-center gap-4 flex-nowrap text-xs">
+    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.tracks") %></a>
     </li>
     <%# TODO add path to these patges when available %>
-    <li>
+    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.playlists") %></a>
     </li>
-    <li>
+    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
     </li>
     <% if current_user && current_user.admin? %>
@@ -26,21 +26,21 @@
     <li data-controller="dark-mode">
       <span
         data-dark-mode-target="icon" data-action="click->dark-mode#toggle"
-        class="w-full h-full rounded-full cursor-pointer hover:bg-secondary-bg">
+        class="w-full h-full rounded-full cursor-pointer">
       </span>
     </li>
-    <li
-      id="cart-dropdown-btn" class="nav-dropdown"
-      data-dropdown-toggle="cart-dropdown" data-dropdown-placement="bottom-end"
-    >
+    <li class="nav-responsive">
       <%# TODO add actual amount in cart %>
-      <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
-      $0.00
-      <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+      <button id="navbar-cart-dropdown-btn" type="button" data-dropdown-toggle="navbar-cart-dropdown"
+        data-dropdown-placement="bottom-end" class="nav-dropdown">
+        <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
+        $0.00
+        <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+      </button>
 
       <!-- Cart Dropdown -->
       <div
-        id="cart-dropdown"
+        id="navbar-cart-dropdown"
         class="
           dropdown absolute top-full rounded-lg shadow-sm hidden w-auto select-none
           text-primary-txt bg-background divide-y
@@ -53,16 +53,15 @@
       </div>
     </li>
     <% if current_user %>
-      <li
-        id="user-dropdown-btn" class="nav-dropdown" type="button"
-        data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-start"
-      >
-        <%= render partial: "users/shared/avatar", locals: { size: 6 } %>
-
-        <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+      <li>
+        <button id="navbar-user-dropdown-btn" type="button" class="nav-dropdown"
+          data-dropdown-toggle="navbar-user-dropdown" data-dropdown-placement="bottom-start">
+          <%= render partial: "users/shared/avatar", locals: { size: 6 } %>
+          <%= icon "chevron-down", class: "w-3 h-3 min-w-3 min-h-3 aspect-square text-secondary-txt" %>
+        </button>
 
         <!-- User dropdown -->
-        <div id="user-dropdown" class="dropdown hidden w-44">
+        <div id="navbar-user-dropdown" class="dropdown hidden w-44 whitespace-nowrap">
           <div class="px-4 py-3 text-primary-txt truncate text-[0.6rem]">
             <div class="text-xs"><%= current_user.display_name %></div>
             <div class="italic"><%= current_user.email %></div>
@@ -101,5 +100,42 @@
         <a href="<%= new_user_registration_path %>" class="hover:text-primary-txt"><%= t(".auth.sign_up") %></a>
       </li>
     <% end %>
+
+    <div class="sm:hidden -ml-2">
+      <button id="navbar-menu-dropdown-btn" data-dropdown-toggle="navbar-menu-dropdown" type="menu"
+        class="cursor-pointer hover:bg-hover rounded-full p-1">
+        <%= icon "menu-deep", class: "w-5 h-5 aspect-square" %>
+      </button>
+
+      <%# Menu dropdown %>
+      <div id="navbar-menu-dropdown" class="dropdown hidden sm:hidden w-36">
+        <ul class="py-2">
+          <li class="dropdown-item">
+            <%= link_to tracks_path, class: "nav-menu-item" do %>
+              <%= icon "vinyl", class: "w-4 h-4 aspect-square" %>
+              <%= t("label.tracks") %>
+            <% end %>
+          </li>
+          <li class="dropdown-item">
+            <%= link_to tracks_path, class: "nav-menu-item" do %>
+              <%= icon "playlist", class: "w-4 h-4 aspect-square" %>
+              <%= t("label.playlists") %>
+            <% end %>
+          </li>
+          <li class="dropdown-item">
+            <%= link_to tracks_path, class: "nav-menu-item" do %>
+              <%= icon "shopping-bag", class: "w-4 h-4 aspect-square" %>
+              <%= t("label.cart") %>
+            <% end %>
+          </li>
+          <li class="dropdown-item">
+            <%= link_to tracks_path, class: "nav-menu-item" do %>
+              <%= icon "address-book", class: "w-4 h-4 aspect-square" %>
+              <%= t("label.contacts") %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
   </ul>
 </nav>
