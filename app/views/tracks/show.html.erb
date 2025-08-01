@@ -16,7 +16,7 @@
       <div class="flex flex-col justify-center items-start gap-2 w-full">
         <div class="flex justify-start items-center gap-2">
           <% @track.tags.each do |tag| %>
-            <%= render Tags::TagComponent.new(tag:) %>
+            <%= render TagComponent.new(name: tag.name) %>
           <% end %>
         </div>
         <div class="flex justify-start items-stretch gap-2">
