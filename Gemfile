@@ -87,6 +87,8 @@ group :development, :test do
   gem "rails-controller-testing"
 end
 
+gem "view_component"
+
 gem "rails_icons", "~> 1.4"
 
 gem "ransack"
