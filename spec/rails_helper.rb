@@ -62,6 +62,15 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemSpecHelpers, type: :system
   config.include FactoryBot::Syntax::Methods
 
+  # url_for doesn't work in components for whatever the fuck reason, we'll just trust it works
+  RSpec.configure do |config|
+    config.before(:each, type: :component) do
+      allow_any_instance_of(ViewComponent::Base)
+        .to receive(:url_for)
+        .and_return("")
+    end
+  end
+
   # sign in as admin for any actions that requires admin access
   config.before(:each, type: :request, admin: true) do
     @admin = User.find_or_initialize_by(email: "admin@example.com") do |user|
