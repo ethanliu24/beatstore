@@ -26,8 +26,8 @@
   </div>
   <div class="flex justify-end items-center gap-4 shrink-0 cursor-pointer">
     <div class="flex justify-start items-center gap-1 text-[0.6rem] max-w-60 max-lg:max-w-40 overflow-x-auto hide-scrollbar">
-      <% track.get_tags.each do |tag| %>
-        <div class="chip text-secondary-txt max-md:hidden"><%= tag %></div>
+      <% track.tags.each do |tag| %>
+        <%= render Tags::TagComponent.new(name: tag.name) %>
       <% end %>
     </div>
 

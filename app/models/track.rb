@@ -70,10 +70,6 @@ class Track < ApplicationRecord
     is_public
   end
 
-  def get_tags
-    tags.map { |t| "##{t.name}" }
-  end
-
   def num_plays
     plays.count
   end

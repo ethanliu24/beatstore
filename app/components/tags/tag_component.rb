@@ -2,8 +2,8 @@
 
 module Tags
   class TagComponent < ViewComponent::Base
-    def initialize(tag:)
-      @tag = "##{tag.name}"
+    def initialize(name:)
+      @tag = "##{name}"
     end
 
     private
