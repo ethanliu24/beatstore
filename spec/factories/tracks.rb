@@ -5,6 +5,14 @@ FactoryBot.define do
     bpm { 111 }
     is_public { true }
     genre { "Trap" }
+
+    after(:build) do |track|
+      track.cover_photo.attach(
+        io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "cover_photo.png")),
+        filename: "cover_photo.png",
+        content_type: "image/png"
+      )
+    end
   end
 
   factory :track_with_files, class: "Track" do

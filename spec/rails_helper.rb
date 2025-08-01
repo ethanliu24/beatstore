@@ -1,5 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require "view_component/test_helpers"
+require "view_component/system_test_helpers"
+require "capybara/rspec"
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
@@ -52,7 +55,21 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include ViewComponent::TestHelpers, type: :component
+  config.include ViewComponent::SystemTestHelpers, type: :component
+  config.include Capybara::RSpecMatchers, type: :component
+  config.include ViewComponent::SystemSpecHelpers, type: :feature
+  config.include ViewComponent::SystemSpecHelpers, type: :system
   config.include FactoryBot::Syntax::Methods
+
+  # url_for doesn't work in components for whatever the fuck reason, we'll just trust it works
+  RSpec.configure do |config|
+    config.before(:each, type: :component) do
+      allow_any_instance_of(ViewComponent::Base)
+        .to receive(:url_for)
+        .and_return("")
+    end
+  end
 
   # sign in as admin for any actions that requires admin access
   config.before(:each, type: :request, admin: true) do
