@@ -2,9 +2,9 @@
 
 module Tracks
   class TrackComponent < ViewComponent::Base
-    def initialize(track:, current_user:)
+    def initialize(track:, user:)
       @track = track
-      @user = current_user
+      @user = user
     end
   end
 end
