@@ -2,9 +2,13 @@
 
 module Tracks
   class TrackComponent < ViewComponent::Base
-    def initialize(track:, user:)
+    def initialize(track:, current_user:)
       @track = track
-      @user = user
+      @current_user = current_user
     end
+
+    private
+
+    attr_reader :track, :current_user
   end
 end
