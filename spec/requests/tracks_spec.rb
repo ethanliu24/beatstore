@@ -42,7 +42,7 @@ RSpec.describe TracksController, type: :request do
         get tracks_url, headers: { "Turbo-Frame" => "track-list" }, params: { q: { title_cont: "test" } }
 
         assert_response :success
-        expect(response).to render_template(partial: "tracks/_track_list")
+        expect(response.body).to include("id=\"no-tracks-message\"")
       end
     end
   end
