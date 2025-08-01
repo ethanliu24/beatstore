@@ -1,7 +1,0 @@
-<% if tracks.any? %>
-  <% tracks.each do |track| %>
-    <%= render Tracks::TrackComponent.new(track:, current_user:) %>
-  <% end %>
-<% else %>
-  <p class="text-center my-10"><%= t("track.no_tracks_found") %></p>
-<% end %>
