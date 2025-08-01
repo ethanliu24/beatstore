@@ -40,5 +40,12 @@ RSpec.describe Tracks::TrackComponent, type: :component do
     expect(rendered.text).to include("#lebron")
   end
 
+  it "renders a dropdown" do
+    expect(rendered).to have_css("#customer-track-more-dropdown")
+    expect(rendered).to have_css("#track_more_track_#{track.id}")
+    expect(rendered.css("div.dropdown").count).to eq(1)
+    expect(rendered.css("li.dropdown-item").count).to eq(8)
+  end
+
   # TODO test shopping cart
 end
