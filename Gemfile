@@ -49,47 +49,36 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-end
 
-group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
-end
-
-group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-end
-
-gem "tailwindcss-ruby", "~> 4.1"
-
-gem "tailwindcss-rails", "~> 4.3"
-
-gem "devise", "~> 4.9"
-gem "omniauth"
-gem "omniauth-rails_csrf_protection"
-gem "omniauth-google-oauth2"
-
-group :development do
-  gem "letter_opener"
-end
-
-group :test do
-  gem "simplecov", require: false
-  gem "simplecov-lcov", require: false
-end
-
-group :development, :test do
   gem "rspec-rails", "~> 8.0.1"
   gem "factory_bot_rails"
   gem "shoulda-matchers"
   gem "rails-controller-testing"
 end
 
+group :development do
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
+  gem "letter_opener"
+end
+
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "simplecov", require: false
+  gem "simplecov-lcov", require: false
+end
+
+gem "tailwindcss-ruby", "~> 4.1"
+gem "tailwindcss-rails", "~> 4.3"
+gem "rails_icons", "~> 1.4"
 gem "view_component"
 
-gem "rails_icons", "~> 1.4"
+gem "devise", "~> 4.9"
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-google-oauth2"
 
 gem "ransack"
 gem "pagy", "~> 9.3"
