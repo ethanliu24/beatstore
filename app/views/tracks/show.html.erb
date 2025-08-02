@@ -71,9 +71,11 @@
   </section>
   <section class="w-full">
     <h1 class="font-bold text-lg mb-2"><%= t("track.similar_tracks") %></h1>
-    <% @similar_tracks.each do |track| %>
-      <%= render Tracks::TrackComponent.new(track:, current_user: current_user) %>
-    <% end %>
+    <%= render Tracks::ListComponent.new(
+      tracks: @similar_tracks,
+      current_user:,
+      options: { render_message_if_empty: false }
+    ) %>
   </section>
   <section id="comments" class="w-full">
     <h1 class="font-bold text-lg mb-2"><%= t("label.comments") %></h1>
