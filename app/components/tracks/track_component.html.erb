@@ -17,9 +17,9 @@
         } %>
       <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
         <span><%= "#{track.bpm} BPM" %></span>
-        <span>·</span>
+        <%= helpers.seperator_char_ui %>
         <span><%= track.key %></span>
-        <span>·</span>
+        <%= helpers.seperator_char_ui %>
         <span><%= track.genre %></span>
       </div>
     </div>
