@@ -77,50 +77,7 @@
   </section>
   <section id="comments" class="w-full">
     <h1 class="font-bold text-lg mb-2"><%= t("label.comments") %></h1>
-    <div class="flex justify-start items-stretch gap-4 my-8">
-      <%= render Users::AvatarComponent.new(user: current_user, size: 10) %>
-
-      <%= form_with(
-        model: Comment.new,
-        url: comments_path,
-        method: :post,
-        data: {
-          controller: "comment-create",
-          comment_create_target: "form",
-          action: "turbo:submit-end->comment-create#submitForm",
-        }) do |f| %>
-        <%= f.hidden_field :entity_type, value: Track.name %>
-        <%= f.hidden_field :entity_id, value: @track.id %>
-
-        <div class="flex-1 flex justify-center items-center gap-2" data-controller="char-count">
-          <%= f.text_field :content, autofocus: false, maxlength: Comment::MAX_COMMENT_LENGTH,
-            autocomplete: "off", required: true, data: { char_count_target: "input", action: "input->char-count#count" },
-            class: "focus:outline-none focus:ring-0 focus:border-b-primary-txt border-b-secondary-txt/60 border-b-1 w-full text-md p-2 cursor-select"
-          %>
-          <div class="char-count">
-            <span data-char-count-target="count">0</span><%= "/#{Comment::MAX_COMMENT_LENGTH}" %>
-          </div>
-
-          <% if current_user %>
-            <button type="submit" class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
-              <%= icon "send", class: "w-4 h-4 aspect-square text-accent" %>
-            </button>
-          <% else %>
-            <div class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
-              <%= link_to auth_prompt_modal_path,
-                data: {
-                  turbo_frame: "modal",
-                  modal_target: "default-modal",
-                  modal_toggle: "default-modal",
-                } do %>
-                <%= icon "send", class: "w-4 h-4 aspect-square text-accent" %>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-
+    <%= render Comments::FormComponent.new(entity: @track, current_user:) %>
     <div>
       <%= turbo_frame_tag "track-comments", target: "_top", data: { turbo_temporary: false } do %>
         <%= render partial: "comments/list", locals: { comments: @comments } %>
