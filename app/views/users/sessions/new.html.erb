@@ -3,35 +3,34 @@
 <div class="auth-form">
   <h2 class="font-bold text-center">Sign in</h2>
 
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.email"), field: :email, field_type: :email,
-      options: { autofocus: true, autocomplete: "email" }
-    %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |form| %>
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :email, label: t("label.email"), type: :email,
+      options: { autofocus: true, autocomplete: "email" },
+    ) %>
 
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.password"), field: :password, field_type: :password,
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :password, label: t("label.password"), type: :password,
       options: { autocomplete: "current-password" }
-    %>
+    ) %>
 
     <div class="flex justify-between items-center mt-6 mb-1">
       <% if devise_mapping.rememberable? %>
         <div class="field text-[0.8rem] font-light">
-          <%= f.check_box :remember_me, class: "accent-accent" %>
-          <%= f.label :remember_me %>
+          <%= form.check_box :remember_me, class: "accent-accent" %>
+          <%= form.label :remember_me %>
         </div>
       <% end %>
       <a href=<%= new_password_path(resource_name) %> class="external-link"><%= t("authentication.forgot_password") %></a>
     </div>
 
     <div class="actions button py-0.5">
-      <%= f.submit t("label.sign_in"), class: "w-full cursor-pointer" %>
+      <%= form.submit t("label.sign_in"), class: "w-full cursor-pointer" %>
     </div>
 
     <a href=<%= new_confirmation_path(resource_name) %> class="external-link" target="_blank" rel="noopener noreferrer">
       <%= t("authentication.no_confirmation_instructions") %>
     </a>
-
   <% end %>
 
   <%= render "users/shared/omniauth_login" %>

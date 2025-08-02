@@ -7,6 +7,7 @@ module Ui
       @resource = resource
       @field = field
       @label = label
+      @type = type
       @options = options
     end
 
@@ -15,13 +16,13 @@ module Ui
     attr_reader :form, :resource, :field, :label, :options
 
     def field_type
-      case @field
+      case @type
       when :email
-        :email_field
+        "email_field"
       when :password
-        :password_field
+        "password_field"
       else
-        :text_field
+        "text_field"
       end
     end
 
