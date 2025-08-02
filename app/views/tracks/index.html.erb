@@ -10,7 +10,11 @@
 
   <div id="tracks" class="min-w-full mt-8">
     <%= turbo_frame_tag "track-list", target: "_top" do %>
-      <%= render Tracks::ListComponent.new(tracks: @tracks, current_user:) %>
+      <%= render Tracks::ListComponent.new(
+        tracks: @tracks,
+        current_user:,
+        options: { empty_message: t("track.no_tracks_found") }
+      ) %>
     <% end %>
 
     <%= render "shared/load_more", pagy: @pagy %>
