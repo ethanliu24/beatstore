@@ -1,7 +1,10 @@
 <% content_for :title, "Explore Tracks" %>
 
 <div class="w-full">
-  <%= render "shared/page_title", title: t("label.tracks"), subtitle: t("tracks.explore_tracks_here") %>
+  <%= render PageTitleComponent.new(
+    title: t("label.tracks"),
+    subtitle: t("tracks.explore_tracks_here")
+  ) %>
 
   <%= render "tracks/filter", url: tracks_path %>
 

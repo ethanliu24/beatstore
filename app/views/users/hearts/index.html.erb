@@ -1,7 +1,10 @@
 <% title(t("label.liked_tracks")) %>
 
 <div class="w-full">
-  <%= render "shared/page_title", title: t("label.liked_tracks"), subtitle: t("profile.see_tracks_you_liked_here") %>
+  <%= render PageTitleComponent.new(
+    title: t("label.liked_tracks"),
+    subtitle: t("profile.see_tracks_you_liked_here")
+  ) %>
 
   <div>
     <% if @liked_tracks.any? %>
