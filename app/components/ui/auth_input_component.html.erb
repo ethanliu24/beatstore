@@ -1,0 +1,7 @@
+<div class="field text-input w-full mb-2">
+  <%= form.label label, class: "text-[0.7rem]" %><br />
+  <%= form.send(field_type, field, options.merge(class: "auth-input")) %>
+  <% errors.each do |error| %>
+    <p class="text-error text-[0.6rem] mt-1"><%= error %></p>
+  <% end %>
+</div>

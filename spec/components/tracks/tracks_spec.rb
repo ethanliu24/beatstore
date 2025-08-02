@@ -9,10 +9,10 @@ RSpec.describe Tracks::TrackComponent, type: :component do
   subject(:rendered) { render_inline(described_class.new(track:, current_user:)) }
 
   it "renders the neccessary track fields" do
-    expect(rendered.text).to include("Track 1")
-    expect(rendered.text).to include("C MAJOR")
-    expect(rendered.text).to include("111")
-    expect(rendered.text).to include("Trap")
+    expect(rendered.text).to have_content("Track 1")
+    expect(rendered.text).to have_content("C MAJOR")
+    expect(rendered.text).to have_content("111")
+    expect(rendered.text).to have_content("Trap")
   end
 
   it "renders the cover photo if one is attached" do
@@ -29,9 +29,9 @@ RSpec.describe Tracks::TrackComponent, type: :component do
     expect(rendered.css("svg.cover-photo").count).to eq(1)
   end
 
-  # it "renders all tags" do
-  #   expect(rendered.text).to include("#lebron")
-  # end
+  it "renders all tags" do
+    expect(rendered.text).to have_content("#lebron")
+  end
 
   it "renders a dropdown" do
     expect(rendered).to have_css("#customer-track-more-dropdown")
