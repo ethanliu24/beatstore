@@ -34,8 +34,8 @@ Rails.application.routes.draw do
   resources :comments, only: [ :create, :update, :destroy ] do
     member do
       post "like", to: "comments/interactions#like"
-      post "dislike", to: "comments/interactions#dislike"
       delete "like", to: "comments/interactions#unlike"
+      post "dislike", to: "comments/interactions#dislike"
       delete "dislike", to: "comments/interactions#undislike"
     end
   end

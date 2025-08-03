@@ -1,0 +1,23 @@
+<div class="flex justify-start items-center text-xs">
+  <% if current_user %>
+    <%= button_to url,
+      method: user_interacted? ? :delete : :post,
+      class: "flex justify-center items-center"
+    do %>
+      <%= helpers.icon icon_name,
+        variant: "#{user_interacted ? "filled" : "outline"}",
+        class: "interaction-icon #{"text-accent" if user_interacted?}" %>
+    <% end %>
+  <% else %>
+    <%= link_to auth_prompt_modal_path,
+      data: {
+        turbo_frame: "modal",
+        modal_target: "default-modal",
+        modal_toggle: "default-modal",
+      } do %>
+      <%= helpers.icon "thumb-up", class: "interaction-icon" %>
+    <% end %>
+  <% end %>
+
+  <p class="ml-1"><%= interaction_count %></p>
+</div>
