@@ -4,7 +4,7 @@
     <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem] font-light">
       <p><%= comment.user.display_name %></p>
       <%= helpers.seperator_char_ui %>
-      <p><%= helpers.format_date(comment.created_at) %></p>
+      <p><%= helpers.times_ago(comment.created_at) %></p>
     </div>
 
     <p class="text-sm font-light w-full text-wrap"><%= comment.content %></p>
