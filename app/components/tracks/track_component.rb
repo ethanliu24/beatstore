@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tracks
-  class TrackComponent < ViewComponent::Base
+  class TrackComponent < ApplicationComponent
     def initialize(track:, current_user:)
       @track = track
       @current_user = current_user
