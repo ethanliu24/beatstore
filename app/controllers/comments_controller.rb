@@ -17,6 +17,10 @@ class CommentsController < ApplicationController
       entity:,
       user: current_user
     )
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 
   def update

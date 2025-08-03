@@ -1,16 +1,16 @@
 <div class="flex justify-start items-stretch gap-4 my-8 w-full">
   <%= render AvatarComponent.new(user: current_user, size: 10) %>
 
-  <%# TODO remove controller, use turbo stream instead %>
   <%= form_with(
     model: Comment.new,
     url: comments_path,
     method: :post,
     data: {
-      controller: "comment-create",
-      comment_create_target: "form",
-      action: "turbo:submit-end->comment-create#submitForm",
-    }) do |f| %>
+      controller: "comment-form",
+      comment_form_target: "form",
+      action: "turbo:submit-end->comment-form#reset"
+    }
+  ) do |f| %>
     <%= f.hidden_field :entity_type, value: entity_class %>
     <%= f.hidden_field :entity_id, value: entity_id %>
 
@@ -20,7 +20,7 @@
         class: "focus:outline-none focus:ring-0 focus:border-b-primary-txt border-b-secondary-txt/60 border-b-1 w-full text-md p-2 cursor-select"
       %>
       <div class="char-count">
-        <span data-char-count-target="count">0</span><%= "/#{Comment::MAX_COMMENT_LENGTH}" %>
+        <span data-char-count-target="count" data-comment-form-target="charCount">0</span><%= "/#{Comment::MAX_COMMENT_LENGTH}" %>
       </div>
 
       <% if current_user %>
