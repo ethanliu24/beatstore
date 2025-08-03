@@ -37,7 +37,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
         post user_registration_url, params: invalid_params
       }.not_to change(User, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(assigns(:user).errors).not_to be_empty
     end
 

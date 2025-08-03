@@ -9,7 +9,7 @@ class Users::ProfilesController < ApplicationController
       redirect_to edit_users_profile_path
     else
       # TODO display toast on failure
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
