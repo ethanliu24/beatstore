@@ -58,6 +58,8 @@ en:
   general:
     upload_instruction: "Click to upload or drag and drop"
     accepted_image_types: "PNG, JPG, or JPEG"
+    just_now: "Just now"
+    times_ago: "ago"
 
   authentication:
     or_continue_with: "Or continue with"

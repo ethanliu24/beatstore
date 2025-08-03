@@ -17,14 +17,26 @@ class CommentsController < ApplicationController
       entity:,
       user: current_user
     )
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 
   def update
     @comment.update!(params.require(:comment).permit(:content))
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 
   def destroy
     @comment.destroy!
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 
   private

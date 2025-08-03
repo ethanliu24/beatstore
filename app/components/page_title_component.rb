@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PageTitleComponent < ViewComponent::Base
+class PageTitleComponent < ApplicationComponent
   def initialize(title:, subtitle:)
     @title = title
     @subtitle = subtitle

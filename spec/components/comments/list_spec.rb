@@ -9,13 +9,16 @@ RSpec.describe Comments::ListComponent, type: :component do
   let(:comment_2) { create(:comment, user: user_2) }
 
   it "renders the comment contents if there are comments" do
-    rendered = render_inline(described_class.new(comments: [ comment_1, comment_2 ]))
+    rendered = render_inline(described_class.new(
+      comments: [ comment_1, comment_2 ],
+      current_user: user_1
+    ))
 
     expect(rendered).to have_css(".comment", count: 2)
   end
 
   it "renders no comments if there are no comments" do
-    rendered = render_inline(described_class.new(comments: []))
+    rendered = render_inline(described_class.new(comments: [], current_user: user_1))
 
     expect(rendered).to have_css(".comment", count: 0)
   end

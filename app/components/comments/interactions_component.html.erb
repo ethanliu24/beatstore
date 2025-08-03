@@ -1,0 +1,30 @@
+<div class="flex justify-start items-center gap-4 text-secondary-txt">
+  <%= render Comments::InteractionComponent.new(
+    comment:,
+    action: like_comment_path(comment),
+    current_user:,
+    user_interacted: comment.liked_by?(current_user),
+    interaction_count: comment.likes.size,
+    icon_name: "thumb-up",
+  ) %>
+
+  <%= render Comments::InteractionComponent.new(
+    comment:,
+    action: dislike_comment_path(comment),
+    current_user:,
+    user_interacted: comment.disliked_by?(current_user),
+    interaction_count: comment.dislikes.size,
+    icon_name: "thumb-down",
+  ) %>
+
+  <% if current_user && (current_user.id == comment.user.id || current_user.admin?) %>
+    <%= link_to delete_comment_modal_path(comment), class: "comment-interaction",
+      data: {
+        turbo_frame: "modal",
+        modal_target: "default-modal",
+        modal_toggle: "default-modal",
+      } do %>
+      <%= icon "trash", class: "comment-delete-btn interaction-icon hover:text-error" %>
+    <% end %>
+  <% end %>
+</div>

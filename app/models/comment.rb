@@ -29,11 +29,11 @@ class Comment < ApplicationRecord
   end
 
   def liked_by?(user)
-    likes.exists?(user_id: user.id)
+    user.nil? ? false : likes.exists?(user_id: user.id)
   end
 
   def disliked_by?(user)
-    dislikes.exists?(user_id: user.id)
+    user.nil? ? false : dislikes.exists?(user_id: user.id)
   end
 
   private

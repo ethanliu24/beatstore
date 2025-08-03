@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tracks
-  class PlayableCoverPhoto < ViewComponent::Base
+  class PlayableCoverPhoto < ApplicationComponent
     def initialize(track:, size:)
       @track = track
       @size = size
