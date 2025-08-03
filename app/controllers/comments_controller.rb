@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
   def create
     entity_class = resolve_entity_class(params[:comment][:entity_type])
     if entity_class.nil?
-      head :unprocessable_entity
+      head :unprocessable_content
       return
     end
 

@@ -27,7 +27,7 @@ RSpec.describe Users::SessionsController, type: :request do
       }
 
       post new_user_session_path, params: { user: params }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include(I18n.t("authentication.email_does_not_exist"))
     end
 
@@ -38,13 +38,13 @@ RSpec.describe Users::SessionsController, type: :request do
       }
 
       post new_user_session_path, params: { user: params }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include(I18n.t("authentication.incorrect_password"))
     end
 
     it "should allow sign in after first submission is unsuccessful" do
       post new_user_session_path, params: { user: { email: "customer@email.com", password: "incorrect" } }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       post new_user_session_path, params: { user: valid_params }
       expect(response).to have_http_status(:see_other)
     end

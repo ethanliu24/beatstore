@@ -27,7 +27,7 @@ module Admin
         if @track.save
           format.html { redirect_to admin_tracks_path, notice: "Track was successfully created." }
         else
-          format.html { render :new, status: :unprocessable_entity }
+          format.html { render :new, status: :unprocessable_content }
         end
       end
     end
@@ -37,7 +37,7 @@ module Admin
         if @track.update(sanitize_track_params)
           format.html { redirect_to admin_tracks_path, notice: "Track was successfully updated." }
         else
-          format.html { render :edit, status: :unprocessable_entity }
+          format.html { render :edit, status: :unprocessable_content }
         end
       end
     end
