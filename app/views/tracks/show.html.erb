@@ -3,7 +3,7 @@
 <%# TODO make it responsive %>
 <div class="flex flex-col justify-center items-center gap-12 w-full">
   <section class="flex justify-start items-stretch gap-8 w-full">
-    <%= render "shared/cover_photo_player", track: @track, img_size: "w-50" %>
+    <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 50) %>
 
     <div class="flex-1 flex flex-col justify-between items-start">
       <div class="flex-1">

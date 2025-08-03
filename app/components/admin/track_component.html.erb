@@ -1,6 +1,6 @@
 <%# the width of the card is width of image + 2 in tailwind %>
 <div id="<%= dom_id track %>" class="flex flex-col justify-start items-stretch bg-background dark:bg-secondary-bg w-42 h-fit rounded p-1">
-  <%# <%= render "shared/cover_photo_player", track: track, img_size: "w-40" %> %>
+  <%= render Tracks::PlayableCoverPhoto.new(track:, size: 40) %>
 
   <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
     <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="cover-photo-hover"
+// Connects to data-controller="playable-cover-photo"
 export default class extends Controller {
   static targets = ["container", "playTrigger"];
 

@@ -17,20 +17,6 @@ RSpec.describe Admin::TrackComponent, type: :component do
     expect(rendered).to have_css("#track_#{track.id}")
   end
 
-  # it "renders the cover photo if one is attached" do
-  #   expect(rendered).to have_css("img.cover-photo")
-  #   expect(rendered.css("img.cover-photo").count).to eq(1)
-  # end
-
-  # it "renders an icon if cover photo is not attached" do
-  #   track.cover_photo.purge
-  #   track.reload
-  #   rendered = render_inline(Tracks::TrackComponent.new(track:, current_user:))
-
-  #   expect(rendered).to have_css("svg.cover-photo")
-  #   expect(rendered.css("svg.cover-photo").count).to eq(1)
-  # end
-
   it "renders a dropdown" do
     expect(rendered).to have_css("#admin_more_dropdown_btn_track_#{track.id}")
     expect(rendered).to have_css("#admin_more_dropdown_track_#{track.id}")
