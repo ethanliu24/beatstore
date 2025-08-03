@@ -16,31 +16,33 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.size).to eq(0)
 
           expect {
-            post like_comment_url(comment)
+            post like_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(1)
 
           user.reload
           created_like = Comment::Interaction.last
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(created_like.id)
         end
 
         it "should do nothing if current user already liked comment" do
           expect {
-            post like_comment_url(comment)
+            post like_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(1)
 
           created_like = Comment::Interaction.last
 
           expect {
-            post like_comment_url(comment)
+            post like_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(0)
 
           user.reload
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(created_like.id)
         end
@@ -52,13 +54,14 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.first.id).to eq(dislike.id)
 
           expect {
-            post like_comment_url(comment)
+            post like_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(0)
 
           user.reload
           created_like = Comment::Interaction.last
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(created_like.id)
           expect(Comment::Interaction.where(interaction_type: "dislike").size).to eq(0)
@@ -73,19 +76,21 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.first.id).to eq(like.id)
 
           expect {
-            delete like_comment_url(comment)
+            delete like_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(-1)
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(0)
         end
 
         it "should do nothing if current user doesn't have any likes on comment" do
           expect {
-            delete like_comment_url(comment)
+            delete like_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(0)
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(0)
         end
       end
@@ -97,31 +102,33 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.size).to eq(0)
 
           expect {
-            post dislike_comment_url(comment)
+            post dislike_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(1)
 
           user.reload
           created_dislike = Comment::Interaction.last
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(created_dislike.id)
         end
 
         it "should do nothing if current user already disliked comment" do
           expect {
-            post dislike_comment_url(comment)
+            post dislike_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(1)
 
           created_dislike = Comment::Interaction.last
 
           expect {
-            post dislike_comment_url(comment)
+            post dislike_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(0)
 
           user.reload
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(created_dislike.id)
         end
@@ -133,13 +140,14 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.first.id).to eq(like.id)
 
           expect {
-            post dislike_comment_url(comment)
+            post dislike_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(0)
 
           user.reload
           created_dislike = Comment::Interaction.last
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(1)
           expect(user.comment_interactions.first.id).to eq(created_dislike.id)
           expect(Comment::Interaction.where(interaction_type: "like").size).to eq(0)
@@ -154,19 +162,21 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.first.id).to eq(dislike.id)
 
           expect {
-            delete dislike_comment_url(comment)
+            delete dislike_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(-1)
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(0)
         end
 
         it "should do nothing if current user doesn't have any dislikes on comment" do
           expect {
-            delete dislike_comment_url(comment)
+            delete dislike_comment_url(comment, format: :turbo_stream)
           }.to change(Comment::Interaction, :count).by(0)
 
-          expect(response).to have_http_status(:no_content)
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(0)
         end
       end

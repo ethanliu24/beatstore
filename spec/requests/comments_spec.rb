@@ -42,10 +42,11 @@ RSpec.describe "Comments", type: :request do
       expect(comment.entity_id).to eq(track.id)
       expect(comment.user_id).to eq(user.id)
 
-      put comment_url(comment), params: { comment: { content: "updated", foo: "bar" } }
+      put comment_url(comment, format: :turbo_stream), params: { comment: { content: "updated", foo: "bar" } }
 
       comment.reload
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("text/vnd.turbo-stream.html")
       expect(comment.content).to eq("updated")
       expect(comment.entity_type).to eq("Track")
       expect(comment.entity_id).to eq(track.id)
@@ -87,10 +88,11 @@ RSpec.describe "Comments", type: :request do
     end
 
     it "should let admin update a comment" do
-      put comment_url(comment), params: { comment: { content: "updated by admin" } }
+      put comment_url(comment, format: :turbo_stream), params: { comment: { content: "updated by admin" } }
 
       comment.reload
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("text/vnd.turbo-stream.html")
       expect(comment.content).to eq("updated by admin")
       expect(comment.entity_type).to eq("Track")
       expect(comment.entity_id).to eq(track.id)
