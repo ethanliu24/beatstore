@@ -19,11 +19,12 @@ RSpec.describe "Comments", type: :request do
 
     it "should create a comment with the current user" do
       expect {
-        post comments_url, params: { comment: params.merge(foo: "bar") }
+        post comments_url(format: :turbo_stream), params: { comment: params.merge(foo: "bar") }
       }.to change(Comment, :count).by(1)
 
       comment = Comment.last
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("text/vnd.turbo-stream.html")
       expect(comment.content).to eq("Comment.")
       expect(comment.entity_type).to eq("Track")
       expect(comment.entity_id).to eq(track.id)
@@ -33,7 +34,7 @@ RSpec.describe "Comments", type: :request do
 
     it "should update a comment's content only made by the current user" do
       expect {
-        post comments_url, params: { comment: params }
+        post comments_url(format: :turbo_stream), params: { comment: params }
       }.to change(Comment, :count).by(1)
 
       comment = Comment.last
@@ -64,17 +65,18 @@ RSpec.describe "Comments", type: :request do
 
     it "should delete the comment made by the current user" do
       expect {
-        post comments_url, params: { comment: params }
+        post comments_url(format: :turbo_stream), params: { comment: params }
       }.to change(Comment, :count).by(1)
 
       comment = Comment.last
       expect(comment.content).to eq("Comment.")
 
       expect {
-        delete comment_url(comment)
+        delete comment_url(comment, format: :turbo_stream)
       }.to change(Comment, :count).by(-1)
 
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("text/vnd.turbo-stream.html")
     end
   end
 
@@ -101,10 +103,11 @@ RSpec.describe "Comments", type: :request do
 
     it "should let admin delete a comment" do
       expect {
-        delete comment_url(comment)
+        delete comment_url(comment, format: :turbo_stream)
       }.to change(Comment, :count).by(-1)
 
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("text/vnd.turbo-stream.html")
     end
   end
 
