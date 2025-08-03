@@ -26,7 +26,7 @@
       <% if current_user %>
         <button type="submit" class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
           <%# disable turbo maybe to trigger full refresh?, data turbo false %>
-          <%= helpers.icon "send", class: "send-comment w-4 h-4 aspect-square text-accent" %>
+          <%= icon "send", class: "send-comment w-4 h-4 aspect-square text-accent" %>
         </button>
       <% else %>
         <div class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
@@ -36,7 +36,7 @@
               modal_target: "default-modal",
               modal_toggle: "default-modal",
             } do %>
-            <%= helpers.icon "send", class: "send-comment w-4 h-4 aspect-square text-accent" %>
+            <%= icon "send", class: "send-comment w-4 h-4 aspect-square text-accent" %>
           <% end %>
         </div>
       <% end %>

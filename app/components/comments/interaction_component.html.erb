@@ -3,7 +3,7 @@
     <%= button_to url,
       method: user_interacted? ? :delete : :post,
       class: "flex justify-center items-center" do %>
-      <%= helpers.icon icon_name,
+      <%= icon icon_name,
         variant: "#{user_interacted? ? "filled" : "outline"}",
         class: "interaction-icon #{"text-accent" if user_interacted?}" %>
     <% end %>
@@ -14,7 +14,7 @@
         modal_target: "default-modal",
         modal_toggle: "default-modal",
       } do %>
-      <%= helpers.icon "thumb-up", class: "interaction-icon" %>
+      <%= icon icon_name, class: "interaction-icon" %>
     <% end %>
   <% end %>
 
