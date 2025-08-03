@@ -82,7 +82,7 @@
     <%= render Comments::FormComponent.new(entity: @track, current_user:) %>
     <div>
       <%= turbo_frame_tag "track-comments", target: "_top", data: { turbo_temporary: false } do %>
-        <%= render partial: "comments/list", locals: { comments: @comments } %>
+        <%= render Comments::ListComponent.new(comments: @comments, current_user:) %>
       <% end %>
 
       <%= render "shared/load_more", pagy: @pagy %>

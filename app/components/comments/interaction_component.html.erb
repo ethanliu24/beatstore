@@ -2,10 +2,9 @@
   <% if current_user %>
     <%= button_to url,
       method: user_interacted? ? :delete : :post,
-      class: "flex justify-center items-center"
-    do %>
+      class: "flex justify-center items-center" do %>
       <%= helpers.icon icon_name,
-        variant: "#{user_interacted ? "filled" : "outline"}",
+        variant: "#{user_interacted? ? "filled" : "outline"}",
         class: "interaction-icon #{"text-accent" if user_interacted?}" %>
     <% end %>
   <% else %>

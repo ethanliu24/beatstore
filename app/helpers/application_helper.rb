@@ -16,7 +16,7 @@ module ApplicationHelper
     if diff < 1.minute
       t("general.just_now")
     else
-      "#{time_ago_in_words(time)} #{t("general.times_ago")}"
+      "#{time_ago_in_words(time).gsub(/^about /, "")} #{t("general.times_ago")}"
     end
   end
 

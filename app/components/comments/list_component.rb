@@ -2,12 +2,13 @@
 
 module Comments
   class ListComponent < ViewComponent::Base
-    def initialize(comments:)
+    def initialize(comments:, current_user:)
       @comments = comments
+      @current_user = current_user
     end
 
     private
 
-    attr_reader :comments
+    attr_reader :comments, :current_user
   end
 end
