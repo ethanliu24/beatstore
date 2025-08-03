@@ -2,9 +2,9 @@
 
 module Comments
   class InteractionComponent < ApplicationComponent
-    def initialize(comment:, url:, interaction_count:, current_user:, user_interacted:, icon_name:)
+    def initialize(comment:, action:, interaction_count:, current_user:, user_interacted:, icon_name:)
       @comment = comment
-      @url = url
+      @action = action
       @interaction_count = interaction_count
       @current_user = current_user
       @user_interacted = user_interacted
@@ -13,7 +13,11 @@ module Comments
 
     private
 
-    attr_reader :comment, :url, :interaction_count, :current_user, :icon_name
+    attr_reader :comment, :interaction_count, :current_user, :icon_name
+
+    def action_url
+      @action
+    end
 
     def user_interacted?
       @user_interacted

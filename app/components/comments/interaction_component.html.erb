@@ -1,6 +1,6 @@
-<div class="flex justify-start items-center text-xs">
+<div class="comment-interaction flex justify-start items-center text-xs">
   <% if current_user %>
-    <%= button_to url,
+    <%= button_to action_url,
       method: user_interacted? ? :delete : :post,
       class: "flex justify-center items-center" do %>
       <%= icon icon_name,
