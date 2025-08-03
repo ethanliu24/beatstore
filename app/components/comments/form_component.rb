@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  class FormComponent < ViewComponent::Base
+  class FormComponent < ApplicationComponent
     def initialize(entity:, current_user:)
       @entity_id = entity.id
       @entity_class = entity.class.name

@@ -1,5 +1,6 @@
 class Comments::InteractionsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_comment
 
   LIKE_INTERACTION = Comment::Interaction.interaction_types[:like]
   DISLIKE_INTERACTION = Comment::Interaction.interaction_types[:dislike]
@@ -12,7 +13,15 @@ class Comments::InteractionsController < ApplicationController
 
     dislike.destroy! unless dislike.nil?
     create_interaction(LIKE_INTERACTION) if like.nil?
-    head :no_content
+
+    update_comment_view
+  end
+
+  def unlike
+    like = find_interaction("like")
+    like&.destroy!
+
+    update_comment_view
   end
 
   def dislike
@@ -21,24 +30,22 @@ class Comments::InteractionsController < ApplicationController
 
     like.destroy! unless like.nil?
     create_interaction(DISLIKE_INTERACTION) if dislike.nil?
-    head :no_content
-  end
 
-  def unlike
-    like = find_interaction("like")
-
-    like&.destroy!
-    head :no_content
+    update_comment_view
   end
 
   def undislike
     dislike = find_interaction(Comment::Interaction.interaction_types[:dislike])
-
     dislike&.destroy!
-    head :no_content
+
+    update_comment_view
   end
 
   private
+
+  def set_comment
+    @comment = Comment.find(params[:id])
+  end
 
   def create_interaction(interaction_type)
     Comment::Interaction.create!(
@@ -53,5 +60,11 @@ class Comments::InteractionsController < ApplicationController
       interaction_type:,
       comment_id: params[:id]
     )
+  end
+
+  def update_comment_view
+    respond_to do |format|
+      format.turbo_stream { render "comments/update" }
+    end
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  class CommentComponent < ViewComponent::Base
+  class CommentComponent < ApplicationComponent
     def initialize(comment:, current_user:)
       @comment = comment
       @current_user = current_user

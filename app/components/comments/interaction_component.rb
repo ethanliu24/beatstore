@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  class InteractionComponent < ViewComponent::Base
+  class InteractionComponent < ApplicationComponent
     def initialize(comment:, url:, interaction_count:, current_user:, user_interacted:, icon_name:)
       @comment = comment
       @url = url

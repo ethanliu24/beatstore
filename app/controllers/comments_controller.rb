@@ -21,6 +21,10 @@ class CommentsController < ApplicationController
 
   def update
     @comment.update!(params.require(:comment).permit(:content))
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 
   def destroy
