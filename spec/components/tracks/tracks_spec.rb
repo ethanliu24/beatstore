@@ -34,7 +34,7 @@ RSpec.describe Tracks::TrackComponent, type: :component do
   end
 
   it "renders a dropdown" do
-    expect(rendered).to have_css("#customer-track-more-dropdown")
+    expect(rendered).to have_css("#customer_more_dropdown_btn_track_#{track.id}")
     expect(rendered).to have_css("#track_more_track_#{track.id}")
     expect(rendered.css("div.dropdown").count).to eq(1)
     expect(rendered.css("li.dropdown-item").count).to eq(8)

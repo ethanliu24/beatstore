@@ -1,7 +1,7 @@
 <div class="<%= "relative flex justify-center items-center bg-secondary-bg aspect-square #{img_size} rounded cursor-pointer" %>"
   data-controller="cover-photo-hover" data-cover-photo-hover-target="container">
   <% if track.cover_photo.attached? %>
-    <%= image_tag track.cover_photo, class: "object-cover w-full h-full rounded" %>
+    <%= image_tag url_for(track.cover_photo), class: "object-cover w-full h-full rounded" %>
   <% else %>
     <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
   <% end %>
