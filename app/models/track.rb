@@ -1,5 +1,8 @@
 class Track < ApplicationRecord
   # before_validation :adjust_visibility
+  before_validation do
+    self.is_public = false if is_public.nil?
+  end
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
@@ -10,7 +13,6 @@ class Track < ApplicationRecord
   validates :title, presence: true
   validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, presence: true
-  validates :is_public, inclusion: { in: [ true, false ] }
   validates :genre, presence: true, inclusion: { in: GENRES }
   validates :key, format: {
     with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,

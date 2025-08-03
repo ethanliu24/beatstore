@@ -5,7 +5,6 @@ RSpec.describe Track, type: :model do
     subject(:track) { build(:track) }
 
     it { should validate_presence_of(:title) }
-    it { should validate_inclusion_of(:is_public).in_array([ true, false ]) }
     it { should validate_presence_of(:bpm) }
     it { should validate_numericality_of(:bpm).only_integer.is_greater_than(0) }
 
@@ -24,6 +23,26 @@ RSpec.describe Track, type: :model do
 
       subject.bpm = 100
       expect(subject).to be_valid
+    end
+
+    context "is_public validation" do
+      it "coerces non-boolean values to boolean" do
+        track = Track.new(is_public: true)
+        expect(track.is_public).to be(true)
+
+        track.is_public = nil
+        track.save
+        expect(track.is_public).to be(false)
+
+        track.is_public = "string"
+        expect(track.is_public).to be(true)
+
+        track.is_public = 1
+        expect(track.is_public).to be(true)
+
+        track.is_public = false
+        expect(track.is_public).to be(false)
+      end
     end
 
     context "key validation" do
