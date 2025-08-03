@@ -1,14 +1,14 @@
 <div class="auth-form">
   <h2 class="font-bold text-center"><%= t("authentication.change_password") %></h2>
 
-  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.email"), field: :email, field_type: :email,
-      options: { autofocus: true, autocomplete: "email" }
-    %>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |form| %>
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :email, label: t("label.email"), type: :email,
+      options: { autofocus: true, autocomplete: "email" },
+    ) %>
 
     <div class="actions button py-0.5 mt-8">
-      <%= f.submit t("label.change"), class: "w-full cursor-pointer" %>
+      <%= form.submit t("label.change"), class: "w-full cursor-pointer" %>
     </div>
 
     <div class="flex flex-col justify-start items-stretch w-full mt-2">

@@ -1,17 +1,14 @@
 <% title(t("label.liked_tracks")) %>
 
 <div class="w-full">
-  <%= render "shared/page_title", title: t("label.liked_tracks"), subtitle: t("profile.see_tracks_you_liked_here") %>
+  <%= render PageTitleComponent.new(
+    title: t("label.liked_tracks"),
+    subtitle: t("profile.see_tracks_you_liked_here")
+  ) %>
 
-  <div>
-    <% if @liked_tracks.any? %>
-      <% @liked_tracks.each do |track| %>
-        <%= render Tracks::TrackComponent.new(track:, current_user:) %>
-      <% end %>
-    <% else %>
-      <p class="text-center font-light text-secondary-txt font-xs mt-8">
-        <%= t("profile.you_havent_liked_any_tracks_yet") %>
-      </p>
-    <% end %>
-  </div>
+  <%= render Tracks::ListComponent.new(
+    tracks: @liked_tracks,
+    current_user:,
+    options: { empty_message: t("profile.no_tracks_liked") }
+  ) %>
 </div>

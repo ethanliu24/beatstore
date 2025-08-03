@@ -12,4 +12,8 @@ module ApplicationHelper
   def snake_case(s)
     s.downcase.split(" ").join("_")
   end
+
+  def seperator_char_ui(class: "")
+    content_tag(:span, "·", class:)
+  end
 end

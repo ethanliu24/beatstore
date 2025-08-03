@@ -1,6 +1,10 @@
 <% if @tracks.any? %>
   <%= turbo_stream.append "track-list" do %>
-    <%= render Tracks::ListComponent.new(tracks: @tracks, current_user:) %>
+    <%= render Tracks::ListComponent.new(
+      tracks: @tracks,
+      current_user:,
+      options: { empty_message: t("track.no_tracks_found") }
+    ) %>
   <% end %>
 
   <%= turbo_stream.replace "load-more" do %>

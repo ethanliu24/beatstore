@@ -1,10 +1,10 @@
 <% title("All Tracks") %>
 
 <div class="w-full">
-  <%= render "shared/page_title",
+  <%= render PageTitleComponent.new(
     title: t("label.tracks"),
     subtitle: t("admin.track.manage_tracks_here")
-  %>
+  ) %>
 
   <%= render "shared/flash_notice" %>
   <%= render "shared/flash_error" %>

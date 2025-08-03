@@ -1,0 +1,5 @@
+<div class="flex flex-col justify-start items-center gap-6 w-full py-3">
+  <% comments.each do |comment| %>
+    <%= render Comments::CommentComponent.new(comment:) %>
+  <% end %>
+</div>

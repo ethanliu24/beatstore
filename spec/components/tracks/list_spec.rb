@@ -13,9 +13,49 @@ RSpec.describe Tracks::ListComponent, type: :component do
     expect(rendered.css("div.track").count).to eq(3)
   end
 
-  it "renders a text that indicates no tracks if there are none" do
+  it "renders a message that indicates no tracks if there are none as default" do
     rendered = render_inline(described_class.new(tracks: [], current_user:))
 
     expect(rendered).to have_css("p#no-tracks-message")
+  end
+
+  it "renders a message that indicates no tracks if there are none as configured" do
+    rendered = render_inline(described_class.new(
+      tracks: [],
+      current_user:,
+      options: { render_message_if_empty: true }
+    ))
+
+    expect(rendered).to have_css("p#no-tracks-message")
+  end
+
+  it "doesn't render a message when configured not to" do
+    rendered = render_inline(described_class.new(
+      tracks: [],
+      current_user:,
+      options: { render_message_if_empty: false }
+    ))
+
+    expect(rendered).not_to have_css("p#no-tracks-message")
+  end
+
+  it "renders empty string as default empty message" do
+    rendered = render_inline(described_class.new(
+      tracks: [],
+      current_user:,
+    ))
+
+    expect(rendered).to have_css("p#no-tracks-message", text: "")
+  end
+
+  it "renders custom message when there's no tracks if provided" do
+    custom_message = "Custom message"
+    rendered = render_inline(described_class.new(
+      tracks: [],
+      current_user:,
+      options: { empty_message: custom_message }
+    ))
+
+    expect(rendered).to have_css("p#no-tracks-message", text: custom_message)
   end
 end

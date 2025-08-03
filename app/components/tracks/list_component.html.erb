@@ -2,6 +2,8 @@
   <% tracks.each do |track| %>
     <%= render Tracks::TrackComponent.new(track:, current_user:) %>
   <% end %>
-<% else %>
-  <p id="no-tracks-message" class="text-center my-10"><%= t("track.no_tracks_found") %></p>
+<% elsif render_message_if_empty %>
+  <p id="no-tracks-message" class="text-center my-16 text-secondary-txt font-light">
+    <%= empty_message %>
+  </p>
 <% end %>

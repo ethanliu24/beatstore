@@ -114,7 +114,7 @@ en:
     delete_account_confirmation_title: "Are you sure?"
     delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."
     see_tracks_you_liked_here: "See tracks you liked here"
-    you_havent_liked_any_tracks_yet: "You haven't liked any tracks yet"
+    no_tracks_liked: "You haven't liked any tracks yet"
 
   comment:
     delete_comment: "Delete Comment"

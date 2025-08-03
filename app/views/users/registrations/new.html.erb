@@ -3,26 +3,26 @@
 <div class="auth-form">
   <h2 class="font-bold text-center"><%= t("label.sign_up") %></h2>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.email"), field: :email, field_type: :email,
-      options: { autofocus: true, autocomplete: "email" }
-    %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :email, label: t("label.email"), type: :email,
+      options: { autofocus: true, autocomplete: "email" },
+    ) %>
 
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.display_name"), field: :display_name, field_type: :text,
-      options: { autofocus: true, autocomplete: "display_name" }
-    %>
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :display_name, label: t("label.display_name"), type: :text,
+      options: { autocomplete: "display_name" },
+    ) %>
 
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.password"), field: :password, field_type: :password,
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :password, label: t("label.password"), type: :password,
       options: { autocomplete: "new-password" }
-    %>
+    ) %>
 
-    <%= render "users/shared/input", form: f, resource: resource,
-      label: t("label.password_confirmation"), field: :password_confirmation, field_type: :password,
+    <%= render Ui::AuthInputComponent.new(
+      form:, resource:, field: :password_confirmation, label: t("label.password_confirmation"), type: :password,
       options: { autocomplete: "new-password" }
-    %>
+    ) %>
 
     <%# TODO link to tos page %>
     <p class="text-[0.55rem] mt-12 mb-1 font-light text-center">
@@ -31,7 +31,7 @@
     </p>
 
     <div class="actions button py-0.5">
-      <%= f.submit t("label.sign_up"), class: "w-full cursor-pointer" %>
+      <%= form.submit t("label.sign_up"), class: "w-full cursor-pointer" %>
     </div>
 
     <a href=<%= new_confirmation_path(resource_name) %> class="external-link" target="_blank" rel="noopener noreferrer">
