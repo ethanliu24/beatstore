@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Users::AvatarComponent, type: :component do
+RSpec.describe AvatarComponent, type: :component do
   it "renders a profile picture if user is has one" do
     user = create(:user_with_pfp)
     rendered = render_inline(described_class.new(user:, size: 6))

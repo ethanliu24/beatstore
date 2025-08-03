@@ -1,5 +1,5 @@
 <div class="flex justify-start items-stretch gap-4 my-8 w-full">
-  <%= render Users::AvatarComponent.new(user: current_user, size: 10) %>
+  <%= render AvatarComponent.new(user: current_user, size: 10) %>
 
   <%# TODO remove controller, use turbo stream instead %>
   <%= form_with(
