@@ -46,7 +46,7 @@ export default class extends Controller {
 
     // get cropped image
     const cropperCanvas = cropper.getCroppedCanvas();
-    const croppedImage = cropperCanvas.toDataURL("image/jpeg")
+    const croppedImage = cropperCanvas.toDataURL("image/png")
 
     const imgDestination = document.getElementById(this.imgDestinationIdValue);
     if (!imgDestination) return;
@@ -76,7 +76,7 @@ export default class extends Controller {
       newInput.files = dataTransfer.files;
 
       fileUploadInputContainer.appendChild(newInput);
-    }, "image/jpeg", 1);
+    }, "image/png", 1);
   }
 
   track_upload(event) {
