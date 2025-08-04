@@ -12,7 +12,7 @@ module Tracks
     attr_reader :track, :image_size
 
     def image_size
-      "w-#{@size} h-#{@size} aspect-square"
+      "w-#{@size} h-#{@size}"
     end
   end
 end
