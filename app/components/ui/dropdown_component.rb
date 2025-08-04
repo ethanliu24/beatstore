@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Ui
-  class DropdownComponent < ViewComponent::Base
+  class DropdownComponent < ApplicationComponent
     renders_one :trigger_button, Dropdown::TriggerComponent
     renders_many :sections
 

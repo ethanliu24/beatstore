@@ -31,7 +31,7 @@
       <%= render current_page %>
     </main>
 
-    <%= render "modals/skeleton" %>
+    <%= turbo_frame_tag "modal" %>
 
     <% unless current_page == "layouts/auth_main" %>
       <%= render "shared/audio_player" %>

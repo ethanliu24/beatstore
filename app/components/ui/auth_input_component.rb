@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Ui
-  class AuthInputComponent < ViewComponent::Base
+  class AuthInputComponent < ApplicationComponent
     def initialize(form:, resource:, field:, label:, type:, options: {})
       @form = form
       @resource = resource
