@@ -26,7 +26,7 @@ class ModalsController < ApplicationController
   end
 
   def delete_account
-    render partial: "modals/delete_account"
+    render_modal(partial: "modals/delete_account")
   end
 
   def delete_comment
@@ -35,6 +35,12 @@ class ModalsController < ApplicationController
   end
 
   private
+
+  def render_modal(partial:, locals: {})
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.update("modal", partial:, locals:,) }
+    end
+  end
 
   def ensure_turbo_request
     # For Turbo Frames or Turbo Streams, request is xhr? or format.turbo_stream

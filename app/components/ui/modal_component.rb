@@ -12,18 +12,20 @@ module Ui
 
     private
 
+    attr_reader :size_class
+
     def resolve_size_class(size)
       case size
       when :xs
-        ""
+        "max-w-[30vw] max-h-[30vh]"
       when :sm
-        ""
+        "max-w-[40vw] max-h-[40vh]"
       when :md
-        ""
+        "max-w-[60vw] max-h-[60vh]"
       when :xl
-        ""
+        "max-w-[80vw] max-h-[80vh]"
       else
-        "max-w-2xl max-h-4/5"
+        "max-w-[95vw] max-h-[95vh]"
       end
     end
   end

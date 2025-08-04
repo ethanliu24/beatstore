@@ -18,16 +18,16 @@
       <div class="bg-secondary-bg rounded-full flex justify-center items-center w-30 h-30">
         <%= icon "photo-scan", class: "w-1/4 h-1/4 #{current_user.profile_picture.attached? ? "hidden" : ""}" %>
         <img id="user-pfp-preview"
-          src="<%= user_pfp_url %>"
+          src="<%= current_user.profile_picture.attached? ? url_for(current_user.profile_picture) : "" %>"
           alt="Profile picture preview"
           class="object-cover w-full h-full rounded-full <%= current_user.profile_picture.attached? ? "" : "hidden" %>" />
       </div>
       <div class="flex justify-center items-center w-full">
         <%= link_to user_pfp_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
           data: {
-            turbo_frame: "modal",
-            modal_target: "default-modal",
-            modal_toggle: "default-modal",
+            # turbo_frame: "modal",
+            # modal_target: "default-modal",
+            # modal_toggle: "default-modal",
           } do %>
           <%= icon "plus", class: "w-4 h-4" %>
           <%= t("label.upload") %>
@@ -85,11 +85,6 @@
   </div>
   <div class="flex flex-row-reverse gap-4 mt-6">
     <%= button_to t("label.save"), users_profile_path, method: :put, class: "button px-4 py-1" %>
-    <%= link_to t("authentication.delete_account"), delete_account_modal_path, class: "button-critical px-4 py-1",
-      data: {
-        turbo_frame: "modal",
-        modal_target: "default-modal",
-        modal_toggle: "default-modal",
-      } %>
+    <%= link_to t("authentication.delete_account"), delete_account_modal_path, class: "button-critical px-4 py-1", data: { turbo_stream: true }%>
   </div>
 <% end %>

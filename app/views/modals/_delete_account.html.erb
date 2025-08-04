@@ -1,16 +1,22 @@
-<turbo-frame id="modal">
-  <%= render "modals/header", title: t("authentication.delete_account") %>
-  <div class="py-8 px-4">
-    <h1 class="text-xl font-bold"><%= t("profile.delete_account_confirmation_title") %></h1>
-    <h2 class="font-light mt-2"><%= t("profile.delete_account_confirmation_explaination") %></h2>
-    <%# TODO link to TOS and privacy page %>
-  </div>
-  <% content_for :modal_footer_content do %>
-    <%= button_to user_registration_path(current_user), method: :delete,
-      class: "button-critical px-2 py-1",
-      data: { modal_hide: "default-modal", turbo: false } do %>
-      <%= t("label.delete") %>
+<%= render Ui::ModalComponent.new(size: :md) do |modal| %>
+  <%= modal.with_header(title: t("authentication.delete_account")) %>
+
+  <%= modal.with_body do %>
+    <div class="py-8 px-4">
+      <h1 class="text-xl font-bold"><%= t("profile.delete_account_confirmation_title") %></h1>
+      <h2 class="font-light mt-2"><%= t("profile.delete_account_confirmation_explaination") %></h2>
+      <%# TODO link to TOS and privacy page %>
+    </div>
+  <% end %>
+
+  <%= modal.with_footer do |footer| %>
+    <%= footer.with_primary_action do %>
+      <%= button_to user_registration_path(current_user), method: :delete,
+        class: "button-critical px-2 py-1",
+        data: { turbo: false } do %>
+        <%= t("label.delete") %>
+      <% end %>
     <% end %>
   <% end %>
-  <%= render "modals/footer" %>
-</turbo-frame>
+<% end %>
+
