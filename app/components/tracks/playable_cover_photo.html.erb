@@ -1,4 +1,4 @@
-<div class="<%= "relative flex justify-center items-center bg-secondary-bg aspect-square #{image_size} rounded cursor-pointer" %>"
+<div class="<%= "relative flex justify-center items-center bg-secondary-bg #{image_size} rounded cursor-pointer" %>"
   data-controller="playable-cover-photo" data-playable-cover-photo-target="container">
   <% if track.cover_photo.attached? %>
     <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover w-full h-full rounded" %>

@@ -147,8 +147,8 @@
     @apply max-sm:hidden;
   }
 
-  .nav-menu-item {
-    @apply flex justify-start items-center gap-4 w-full;
+  .dropdown-link {
+    @apply flex justify-start items-center gap-2 w-full flex-nowrap cursor-pointer;
   }
 
   .chip {

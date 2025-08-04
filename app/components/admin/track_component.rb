@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class TrackComponent < ViewComponent::Base
+  class TrackComponent < ApplicationComponent
     def initialize(track:)
       @track = track
     end
