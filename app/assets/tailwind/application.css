@@ -132,7 +132,7 @@
   .dropdown {
     @apply
       z-10 rounded-lg shadow-sm text-xs text-primary-txt bg-background divide-y
-      divide-gray-100 dark:divide-gray-800 dark:bg-secondary-bg;
+      divide-gray-100 dark:divide-hover dark:bg-secondary-bg;
   }
 
   .dropdown-item {
