@@ -4,7 +4,6 @@ module Ui
   module Dropdown
     class TriggerComponent < ApplicationComponent
       def initialize(id:, classes: "", data: {})
-        # You should not pass in id if rendering with DropdownComponent
         @id = "#{id}-dropdown-toggle"
         @classes = classes
         @data = { dropdown_placement: "bottom-end" }
