@@ -5,6 +5,6 @@
   <%= image_tag url_for(user.profile_picture), class: "avatar #{avatar_size}" %>
 <% else %>
   <div class="flex justify-center items-center <%= avatar_size %> bg-secondary-bg rounded-full">
-    <%= helpers.icon "user", class: "avatar #{icon_size} text-secondary-txt"%>
+    <%= icon "user", class: "avatar #{icon_size} text-secondary-txt"%>
   </div>
 <% end %>
