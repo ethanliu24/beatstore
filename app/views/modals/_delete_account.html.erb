@@ -1,5 +1,5 @@
 <%= render Ui::ModalComponent.new(size: :md) do |modal| %>
-  <%= modal.with_header(title: t("authentication.delete_account")) %>
+  <%= modal.with_header(title: t("authentication.delete_account"), size: :md) %>
 
   <%= modal.with_body do %>
     <div class="py-8 px-4">
@@ -9,7 +9,7 @@
     </div>
   <% end %>
 
-  <%= modal.with_footer do |footer| %>
+  <%= modal.with_footer(size: :md) do |footer| %>
     <%= footer.with_primary_action do %>
       <%= button_to user_registration_path(current_user), method: :delete,
         class: "button-critical px-2 py-1",

@@ -1,8 +1,7 @@
-<div class="modal-footer flex gap-4 justify-end items-center rounded-b">
+<%= content_tag :div, class: "modal-footer flex gap-4 justify-end items-center rounded-b #{size_class}" do %>
   <button type="button" class="button-secondary px-2 py-1 bg-white">
     <%= cancel_label.empty? ? t("label.cancel") : cancel_label %>
   </button>
-
-  <%= primary_action %>
   <%= secondary_action %>
-</div>
+  <%= primary_action %>
+<% end %>
