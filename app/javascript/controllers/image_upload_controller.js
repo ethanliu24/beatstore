@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="upload"
+// Connects to data-controller="image-upload"
 export default class extends Controller {
   static targets = ["imgUpload", "imgCover", "imgPlaceholder"];
   static values = {
@@ -10,14 +10,6 @@ export default class extends Controller {
   }
 
   connect() {
-    this.track_uploaded_classes = [
-      "bg-accent",
-      "dark:bg-accent",
-      "text-white",
-      "dark:text-white",
-      "border-none"
-    ];
-
     this.handleImageCrop = (e) => this.display_cropped_image(e.detail.cropper);
     document.addEventListener("image:cropped", this.handleImageCrop);
   }
@@ -26,7 +18,7 @@ export default class extends Controller {
     document.removeEventListener("image:cropped", this.handleImageCrop);
   }
 
-  image_upload() {
+  upload() {
     if (!["image/png", "image/jpeg", "image/jpg"].includes(this.imgUploadTarget.files[0].type)) {
       alert("Accepted file types: PNG, JPEG, JPG");
       return;
@@ -77,26 +69,5 @@ export default class extends Controller {
 
       fileUploadInputContainer.appendChild(newInput);
     }, "image/png", 1);
-  }
-
-  track_upload(event) {
-    const label = event.target.closest("label");
-    const inputId = event.target.id;
-    const uploadedFile = event.target.files[0];
-    const fileType = uploadedFile ? uploadedFile.type : null;
-
-    if (
-      (inputId.includes("mp3") && fileType === "audio/mpeg") ||
-      // Check other wav types such as x-wav or vnd.wave
-      (inputId.includes("wav") && fileType === "audio/wav") ||
-      (inputId.includes("stems") && fileType === "application/zip")
-    ) {
-      label.classList.remove("dark:bg-secondary-bg");
-      this.track_uploaded_classes.forEach((className) => {
-        label.classList.add(className);
-      });
-    } else {
-      alert("Invalid file type.");
-    }
   }
 }
