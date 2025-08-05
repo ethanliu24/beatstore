@@ -38,7 +38,7 @@ RSpec.describe Ui::Dropdown::TriggerComponent, type: :component do
 
     expect(rendered).to have_selector(
       "button[id='id-dropdown-toggle']" \
-      "[data-dropdown-toggle='id']" 
+      "[data-dropdown-toggle='id']"
     )
   end
 end
