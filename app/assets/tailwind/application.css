@@ -55,7 +55,7 @@
         @apply bg-background dark:bg-secondary-bg cursor-pointer;
       }
       &.current {
-        @apply text-primary-txt bg-gray-300 dark:bg-gray-600;
+        @apply text-primary-txt bg-hover;
       }
     }
     label {
