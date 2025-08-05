@@ -73,7 +73,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         get admin_tracks_url, headers: { "Turbo-Frame" => "track-list" }, params: { q: { title_cont: "test" } }
 
         assert_response :success
-        expect(response).to render_template(partial: "admin/tracks/list")
+        expect(response).to render_template(partial: "admin/tracks/_list")
       end
     end
   end

@@ -32,30 +32,26 @@ RSpec.describe ModalsController, type: :request do
   end
 
   describe "where request are from turbo frame" do
-    before do
-      @headers = { "Turbo-Frame" => "modal" }
-    end
-
     it "fetches modal from #track_image_upload" do
-      get track_image_upload_modal_url, headers: @headers
+      get track_image_upload_modal_url(format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_image_upload")
     end
 
     it "fetches modal from #track_image_upload" do
-      get user_pfp_upload_modal_url, headers: @headers
+      get user_pfp_upload_modal_url(format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_image_upload")
     end
 
     it "fetches modal from #auth_prompt" do
-      get auth_prompt_modal_url, headers: @headers
+      get auth_prompt_modal_url(format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_auth_prompt")
     end
 
     it "fetches modal from #delete_account" do
-      get delete_account_modal_url, headers: @headers
+      get delete_account_modal_url(format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_delete_account")
     end
@@ -65,7 +61,7 @@ RSpec.describe ModalsController, type: :request do
       track = create(:track)
       comment = create(:comment, entity: track, user:)
 
-      get delete_comment_modal_url(comment), headers: @headers
+      get delete_comment_modal_url(comment, format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_delete_comment")
     end
