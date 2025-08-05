@@ -82,12 +82,7 @@
             <% if @user %>
               <%= button_to t("track.heart_track"), track_heart_path(@track), method: :post, class: "cursor-pointer" %>
             <% else %>
-              <%= link_to auth_prompt_modal_path,
-                data: {
-                  turbo_frame: "modal",
-                  modal_target: "default-modal",
-                  modal_toggle: "default-modal",
-                } do %>
+              <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
                 <%= t("track.heart_track") %>
               <% end %>
             <% end %>

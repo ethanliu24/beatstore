@@ -2,7 +2,7 @@ class ModalsController < ApplicationController
   before_action :ensure_turbo_request
 
   def auth_prompt
-    render partial: "modals/auth_prompt"
+    render_modal(partial: "modals/auth_prompt")
   end
 
   def track_image_upload

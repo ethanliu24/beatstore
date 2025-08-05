@@ -8,12 +8,7 @@
         class: "interaction-icon #{"text-accent" if user_interacted?}" %>
     <% end %>
   <% else %>
-    <%= link_to auth_prompt_modal_path,
-      data: {
-        turbo_frame: "modal",
-        modal_target: "default-modal",
-        modal_toggle: "default-modal",
-      } do %>
+    <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
       <%= icon icon_name, class: "interaction-icon" %>
     <% end %>
   <% end %>

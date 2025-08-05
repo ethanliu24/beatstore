@@ -30,12 +30,7 @@
         </button>
       <% else %>
         <div class="aspect-square rounded-full p-1.5 bg-secondary-bg hover:bg-hover cursor-pointer">
-          <%= link_to auth_prompt_modal_path,
-            data: {
-              turbo_frame: "modal",
-              modal_target: "default-modal",
-              modal_toggle: "default-modal",
-            } do %>
+          <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
             <%= icon "send", class: "send-comment w-4 h-4 aspect-square text-accent" %>
           <% end %>
         </div>
