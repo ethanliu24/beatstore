@@ -6,13 +6,13 @@ class ModalsController < ApplicationController
   end
 
   def track_image_upload
-    render partial: "modals/image_upload", locals: {
+    render_modal(partial: "modals/image_upload", locals: {
       **image_upload_data(
         model_field: "track[cover_photo]",
         img_destination_id: "track-cover-photo-preview",
         file_upload_input_container_id: "cover-photo-upload-container"
       )
-    }
+    })
   end
 
   def user_pfp_upload
