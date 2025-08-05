@@ -3,7 +3,7 @@
 module Ui
   module Modal
     class HeaderComponent < ApplicationComponent
-      def initialize(title: "", size: :lg)
+      def initialize(title: "", size: :md)
         @title = title
         @size_class = resolve_size_class(size)
       end

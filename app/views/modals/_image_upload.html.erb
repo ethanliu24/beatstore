@@ -1,9 +1,14 @@
-<turbo-frame id="modal">
-  <div class="modal-content" data-controller="upload crop"
-    data-upload-model-field-value="<%= model_field %>"
-    data-upload-img-destination-id-value="<%= img_destination_id %>"
-    data-upload-file-upload-input-container-id-value="<%= file_upload_input_container_id %>">
-    <%= render "modals/header", title: "Upload file" %>
+<%= render Ui::ModalComponent.new(size: :lg,
+  data: {
+    controller: "upload crop",
+    upload_model_field_value: model_field,
+    upload_img_destination_id_value: img_destination_id,
+    upload_file_upload_input_container_id_value: file_upload_input_container_id
+  }
+) do |modal| %>
+  <%= modal.with_header(title: t("authentication.delete_account"), size: :md) %>
+
+  <%= modal.with_body do %>
     <div class="flex items-center justify-center w-full modal-body">
       <label for="dropzone-file" class="relative flex flex-col items-center justify-center w-full h-64 cursor-pointer bg-secondary-bg hover:bg-hover">
         <div class="flex flex-col items-center justify-center pt-5 pb-6 w-full h-full rounded-lg border-2 border-dashed border-secondary-txt" data-upload-target="imgPlaceholder">
@@ -17,12 +22,17 @@
         <input id="dropzone-file" type="file" class="hidden" data-upload-target="imgUpload" data-action="change->upload#image_upload" />
       </label>
     </div>
+  <% end %>
 
-    <% content_for :modal_footer_content do %>
-      <button data-modal-hide="default-modal" type="button" class="button px-2 py-1" data-action="click->crop#cropImage">
+  <%= modal.with_footer do |footer| %>
+    <%= footer.with_primary_action do %>
+      <button type="button" class="button px-2 py-1" data-action="click->crop#cropImage">
         <%= t("label.upload") %>
       </button>
     <% end %>
-    <%= render "modals/footer" %>
-  </div>
+  <% end %>
+<% end %>
+
+<turbo-frame id="modal">
+
 </turbo-frame>

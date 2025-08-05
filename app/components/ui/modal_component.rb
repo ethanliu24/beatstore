@@ -6,13 +6,14 @@ module Ui
     renders_one :body
     renders_one :footer, Modal::FooterComponent
 
-    def initialize(size: :lg)
+    def initialize(size: :lg, data: {})
       @size_class = resolve_size_class(size)
+      @data = data.merge({ action: "click->modal-manager#stopPropagation" })
     end
 
     private
 
-    attr_reader :size_class
+    attr_reader :size_class, :data
 
     def resolve_size_class(size)
       case size
