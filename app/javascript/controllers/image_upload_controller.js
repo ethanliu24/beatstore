@@ -18,7 +18,7 @@ export default class extends Controller {
     document.removeEventListener("image:cropped", this.handleImageCrop);
   }
 
-  image_upload() {
+  upload() {
     if (!["image/png", "image/jpeg", "image/jpg"].includes(this.imgUploadTarget.files[0].type)) {
       alert("Accepted file types: PNG, JPEG, JPG");
       return;
