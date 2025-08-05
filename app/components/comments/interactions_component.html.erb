@@ -19,11 +19,7 @@
 
   <% if current_user && (current_user.id == comment.user.id || current_user.admin?) %>
     <%= link_to delete_comment_modal_path(comment), class: "comment-interaction",
-      data: {
-        turbo_frame: "modal",
-        modal_target: "default-modal",
-        modal_toggle: "default-modal",
-      } do %>
+      data: { turbo_stream: true } do %>
       <%= icon "trash", class: "comment-delete-btn interaction-icon hover:text-error" %>
     <% end %>
   <% end %>

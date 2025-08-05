@@ -1,18 +1,17 @@
-<turbo-frame id="modal">
-  <%= render "modals/header", title: t("comment.delete_comment") %>
+<%= render Ui::ModalComponent.new(size: :xs) do |modal| %>
+  <%= modal.with_header(title: t("comment.delete_comment"), size: :sm) %>
 
-  <div class="py-8 px-4">
-    <p><%= t("comment.comment_deletion_confirmation") %></p>
-    <p><%= t("comment.action_cannot_be_undone") %></p>
-  </div>
+  <%= modal.with_body do %>
+    <div class="py-6 px-4 text-[0.8rem] font-light">
+      <p><%= "#{t("comment.comment_deletion_confirmation")} #{t("comment.action_cannot_be_undone")}" %></p>
+    </div>
+  <% end %>
 
-  <% content_for :modal_footer_content do %>
-    <%= button_to comment_path(comment), method: :delete,
-      class: "button-critical px-2 py-1",
-      data: { modal_hide: "default-modal" } do %>
-      <p><%= t("label.delete") %></p>
+  <%= modal.with_footer(size: :sm) do |footer| %>
+    <%= footer.with_primary_action do %>
+      <%= button_to comment_path(comment), method: :delete, class: "button-critical px-2 py-1" do %>
+        <p><%= t("label.delete") %></p>
+      <% end %>
     <% end %>
   <% end %>
-  
-  <%= render "modals/footer" %>
-</turbo-frame>
+<% end %>

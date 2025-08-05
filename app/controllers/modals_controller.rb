@@ -31,7 +31,7 @@ class ModalsController < ApplicationController
 
   def delete_comment
     comment = Comment.find(params[:id])
-    render partial: "modals/delete_comment", locals: { comment: }
+    render_modal(partial: "modals/delete_comment", locals: { comment: })
   end
 
   private

@@ -9,6 +9,6 @@ export default class extends Controller {
 
   reset() {
     this.formTarget.reset();
-    this.charCount.innerText = "0";
+    this.charCountTarget.innerText = "0";
   }
 }
