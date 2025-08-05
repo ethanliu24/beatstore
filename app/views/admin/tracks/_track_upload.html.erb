@@ -1,4 +1,5 @@
-<div class="flex justify-center items-center w-full flex-1">
+<%= content_tag :div, class: "flex justify-center items-center w-full flex-1",
+  data: { controller: "track-upload", track_upload_accepted_file_types_value: accepted_file_types } do %>
   <label
     for=<%= generate_id(file_for) %>
     class="
@@ -7,6 +8,6 @@
     ">
     <p><%= t("admin.track.upload_file", file_for: file_for) %></p>
     <%= form.file_field field, id: generate_id(file_for), class: "hidden",
-      data: { upload_target: "upload", action: "change->upload#track_upload" } %>
+      data: { upload_target: "upload", action: "change->track-upload#upload" } %>
   </label>
-</div>
+<% end %>

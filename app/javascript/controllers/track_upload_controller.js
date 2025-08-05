@@ -16,12 +16,12 @@ export default class extends Controller {
     ];
   }
 
-  track_upload(event) {
+  upload(event) {
     const label = event.target.closest("label");
     const uploadedFile = event.target.files[0];
     const fileType = uploadedFile ? uploadedFile.type : null;
 
-    if (acceptedFileTypes.includes(fileType)) {
+    if (this.acceptedFileTypesValue.includes(fileType)) {
       label.classList.remove("dark:bg-secondary-bg");
       this.track_uploaded_classes.forEach((className) => {
         label.classList.add(className);
