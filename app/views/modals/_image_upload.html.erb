@@ -26,7 +26,7 @@
 
   <%= modal.with_footer do |footer| %>
     <%= footer.with_primary_action do %>
-      <button type="button" class="button px-2 py-1" data-action="click->crop#cropImage">
+      <button type="button" class="button px-2 py-1" data-action="click->crop#cropImage click->modal-manager#close">
         <%= t("label.upload") %>
       </button>
     <% end %>
