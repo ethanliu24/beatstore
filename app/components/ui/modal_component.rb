@@ -17,15 +17,15 @@ module Ui
     def resolve_size_class(size)
       case size
       when :xs
-        "max-w-[30vw] max-h-[30vh]"
+        "max-w-1/3 max-h-1/3 max-sm:max-w-[90vw]"
       when :sm
-        "max-w-[40vw] max-h-[40vh]"
+        "max-w-md max-h-2/5 max-sm:max-w-[90vw]"
       when :md
-        "max-w-[60vw] max-h-[60vh]"
+        "max-w-xl max-h-4/5 max-sm:max-w-[90vw]"
       when :xl
-        "max-w-[80vw] max-h-[80vh]"
+        "max-w-4xl max-h-[95vh] max-md:max-w-[90vw]"
       else
-        "max-w-[95vw] max-h-[95vh]"
+        "max-w-2xl max-h-[80vh] max-md:max-w-[90vw]"
       end
     end
   end
