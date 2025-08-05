@@ -47,12 +47,12 @@
   .pagy {
     @apply flex space-x-1 font-semibold text-sm;
     a:not(.gap) {
-      @apply block rounded px-3 py-1 bg-background dark:bg-secondary-bg;
+      @apply block rounded px-3 py-1 bg-secondary-bg/60;
       &:hover {
         @apply bg-hover;
       }
       &:not([href]) { /* disabled links */
-        @apply bg-background dark:bg-secondary-bg cursor-pointer;
+        @apply bg-secondary-bg cursor-pointer;
       }
       &.current {
         @apply text-primary-txt bg-hover;

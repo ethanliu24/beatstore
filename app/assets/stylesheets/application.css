@@ -17,6 +17,15 @@
   scrollbar-width: none;  /* Firefox */
 }
 
+.transparent-scrollbar-background::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transparent-scrollbar-background {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
+
 /* Hide increment and decrement arrows for number inputs */
 .hide-incr-decr-arrows::-webkit-inner-spin-button,
 .hide-incr-decr-arrows::-webkit-outer-spin-button {
