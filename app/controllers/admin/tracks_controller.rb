@@ -9,7 +9,7 @@ module Admin
       @pagy, @tracks = pagy(queried_tracks, limit: 10)
 
       if turbo_or_xhr_request?
-        render partial: "admin/tracks/track_list", locals: { tracks: @tracks }
+        render partial: "admin/tracks/list", locals: { tracks: @tracks }
       end
     end
 

@@ -5,69 +5,81 @@
   <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
     <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">
       <p class="truncate mb-2"><%= track.title %></p>
-      <%= helpers.seperator_char_ui(class: "px-1") %>
+      <%= seperator_char_ui(class: "px-1") %>
       <p class="<%= track.is_public? ? "text-success" : "text-error" %>"><%= track.is_public? ? "Public" : "Private" %></p>
     </div>
 
     <div class="flex justify-start items-center gap-1">
-      <%= helpers.icon "calendar", class: "#{icon_dimension}" %>
-      <p class="whitespace-nowrap"><%= helpers.format_date(track.created_at) %></p>
+      <%= icon "calendar", class: "#{icon_dimension}" %>
+      <p class="whitespace-nowrap"><%= format_date(track.created_at) %></p>
     </div>
     <div class="flex justify-start items-center gap-1">
-      <%= helpers.icon "activity-heartbeat", class: "#{icon_dimension}" %>
+      <%= icon "activity-heartbeat", class: "#{icon_dimension}" %>
       <p class="whitespace-nowrap"><%= track.bpm ? "#{track.bpm} BPM" : "_" %></p>
     </div>
     <div class="flex justify-start items-center gap-1">
-      <%= helpers.icon "piano", class: "#{icon_dimension}" %>
+      <%= icon "piano", class: "#{icon_dimension}" %>
       <p class="whitespace-nowrap"><%= track.key.presence || "_" %></p>
     </div>
     <div class="flex justify-start items-center gap-1">
-      <%= helpers.icon "music", class: "#{icon_dimension}" %>
+      <%= icon "music", class: "#{icon_dimension}" %>
       <p class="whitespace-nowrap"><%= track.genre %></p>
     </div>
     <div class="flex justify-start items-center gap-1">
-      <%= helpers.icon "player-play", class: "#{icon_dimension}" %>
+      <%= icon "player-play", class: "#{icon_dimension}" %>
       <p class="whitespace-nowrap"><%= track.num_plays %></p>
     </div>
     <div class="flex justify-start items-center gap-1">
-      <%= helpers.icon "heart", class: "#{icon_dimension}" %>
+      <%= icon "heart", class: "#{icon_dimension}" %>
       <p class="whitespace-nowrap"><%= track.num_hearts %></p>
     </div>
   </div>
 
   <div class="flex justify-between items-center text-[0.6rem] px-1 mt-4">
-    <div class="<%= helpers.track_file_upload_indicator_styles(track.tagged_mp3) %>">Free</div>
-    <div class="<%= helpers.track_file_upload_indicator_styles(track.untagged_mp3) %>">MP3</div>
-    <div class="<%= helpers.track_file_upload_indicator_styles(track.untagged_wav) %>">WAV</div>
-    <div class="<%= helpers.track_file_upload_indicator_styles(track.track_stems) %>">ZIP</div>
+    <div class="<%= track_file_upload_indicator_styles(track.tagged_mp3) %>">Free</div>
+    <div class="<%= track_file_upload_indicator_styles(track.untagged_mp3) %>">MP3</div>
+    <div class="<%= track_file_upload_indicator_styles(track.untagged_wav) %>">WAV</div>
+    <div class="<%= track_file_upload_indicator_styles(track.track_stems) %>">ZIP</div>
   </div>
 
+  <%# More Dropdown %>
   <div class="flex justify-end items-center p-2 mt-1">
-    <button id="<%= dom_id(track, :admin_more_dropdown_btn) %>" data-dropdown-toggle="<%= dom_id(track, :admin_more_dropdown) %>"
-      data-dropdown-placement="bottom-end" class="w-fit h-fit">
-      <%= helpers.icon "dots", class: "cursor-pointer w-4 h-4" %>
-    </button>
+    <%= render Ui::DropdownComponent.new(id: dom_id(track, :admin_track_more)) do |dropdown| %>
+      <% dropdown.with_trigger_button(id: dom_id(track, :admin_track_more)) do %>
+        <%= icon "dots", class: "cursor-pointer w-4 h-4" %>
+      <% end %>
 
-    <%# More Dropdown %>
-    <div id="<%= dom_id(track, :admin_more_dropdown) %>" class="dropdown hidden">
-      <ul>
-        <li class="dropdown-item" data-track-id="<%= track.id %>" data-action="click->audio-player#play">
-          <%= helpers.icon "player-play", class: "aspect-square w-3" %>
-          <%= t("label.play") %>
-        </li>
-        <li class="dropdown-item">
-          <%= helpers.icon "pencil", class: "aspect-square w-3" %>
-          <%= link_to t("label.edit"), edit_admin_track_path(track) %>
-        </li>
-        <li class="dropdown-item">
-          <%= helpers.icon "eye", class: "aspect-square w-3" %>
-          <%= link_to t("admin.see_track"), track_path(track) %>
-        </li>
-        <li class="dropdown-item text-error">
-          <%= helpers.icon "trash", class: "aspect-square w-3" %>
-          <%= button_to t("label.delete"), admin_track_path(track), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
-        </li>
-      </ul>
-    </div>
+      <% dropdown.with_section do %>
+        <ul>
+          <li class="dropdown-item" data-track-id="<%= track.id %>" data-action="click->audio-player#play">
+            <%= icon "player-play", class: "aspect-square w-3" %>
+            <%= t("label.play") %>
+          </li>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: edit_admin_track_path(track),
+              text: t("label.edit"),
+              icon: "pencil",
+              icon_size: 3
+            ) %>
+          </li>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: track_path(track),
+              text: t("admin.see_track"),
+              icon: "eye",
+              icon_size: 3
+            ) %>
+          </li>
+          <li class="dropdown-item text-error">
+            <%= button_to admin_track_path(track), method: :delete,
+              class: "dropdown-link gap-2", data: { turbo_confirm: "Are you sure?" } do %>
+              <%= icon "trash", class: "aspect-square w-3" %>
+              <%= t("label.delete") %>
+            <% end %>
+          </li>
+        </ul>
+      <% end %>
+    <% end %>
   </div>
 </div>

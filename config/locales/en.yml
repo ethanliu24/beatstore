@@ -20,6 +20,7 @@ en:
     terms_of_service: "Terms of Service"
     account_settings: "Account Settings"
     orders: "Orders"
+    purchases: "Purchases"
     cart: "Cart"
     your_cart: "Your Cart"
     tracks: "Tracks"
@@ -56,6 +57,7 @@ en:
     comments: "Comments"
 
   general:
+    upload_file: "Upload File"
     upload_instruction: "Click to upload or drag and drop"
     accepted_image_types: "PNG, JPG, or JPEG"
     just_now: "Just now"

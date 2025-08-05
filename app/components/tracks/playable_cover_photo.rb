@@ -9,7 +9,7 @@ module Tracks
 
     private
 
-    attr_reader :track, :image_size
+    attr_reader :track
 
     def image_size
       "w-#{@size} h-#{@size} aspect-square"

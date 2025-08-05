@@ -6,7 +6,7 @@
       <% if track.cover_photo.attached? %>
         <img src="<%= url_for(track.cover_photo) %>" class="cover-photo flex justify-center items-center w-full h-full rounded">
       <% else %>
-        <%= helpers.icon "photo-scan", class: "cover-photo" %>
+        <%= icon "photo-scan", class: "cover-photo" %>
       <% end %>
     </div>
     <div class="flex flex-col justify-between items-start">
@@ -17,15 +17,15 @@
         } %>
       <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
         <span><%= "#{track.bpm} BPM" %></span>
-        <%= helpers.seperator_char_ui %>
+        <%= seperator_char_ui %>
         <span><%= track.key %></span>
-        <%= helpers.seperator_char_ui %>
+        <%= seperator_char_ui %>
         <span><%= track.genre %></span>
       </div>
     </div>
   </div>
   <div class="flex justify-end items-center gap-4 shrink-0 cursor-pointer">
-    <div class="flex justify-start items-center gap-1 text-[0.6rem] max-w-60 max-lg:max-w-40 overflow-x-auto hide-scrollbar">
+    <div class="flex justify-start items-center gap-1 text-[0.6rem] max-w-60 max-lg:max-w-40 overflow-x-auto hide-scrollbar max-md:hidden">
       <% track.tags.each do |tag| %>
         <%= render TagComponent.new(name: tag.name) %>
       <% end %>
@@ -33,83 +33,89 @@
 
     <%= link_to download_track_free_path(track), target: "_blank", rel: "noopener", class: "flex justify-center items-center gap-1 chip-accent text-[0.6rem]",
       data: { action: "click->audio-player#stopPropagation" } do %>
-      <%= helpers.icon "download", class: "w-3 h-3" %>
+      <%= icon "download", class: "w-3 h-3" %>
       <span class="max-sm:hidden"><%= t("label.free").downcase %></span>
     <% end %>
 
     <%# TODO get the lowest price of the track %>
     <button class="button text-xs px-2 py-1.5 flex justify-center items-center gap-1.5">
-      <%= helpers.icon "shopping-bag", class: "w-4 h-4" %>
+      <%= icon "shopping-bag", class: "w-4 h-4" %>
       <span class="max-sm:hidden">$19.99</span>
     </button>
 
-    <div id="<%= dom_id(track, :customer_more_dropdown_btn) %>" data-dropdown-toggle=<%= dom_id(track, :track_more) %>
-      data-dropdown-placement="bottom-end" data-action="click->audio-player#stopPropagation">
-      <button class="cursor-pointer">
-        <%= helpers.icon "dots-vertical", class: "w-4 h-4" %>
-      </button>
-    </div>
-
     <%# Track more dropdown %>
-    <div id=<%= dom_id(@track, :track_more) %> class="dropdown hidden">
+    <%= render Ui::DropdownComponent.new(
+      id: dom_id(@track, :track_more),
+      data: { action: "click->audio-player#stopPropagation" }
+    ) do |dropdown| %>
+      <%= dropdown.with_trigger_button(
+        id: dom_id(@track, :track_more),
+        data: { action: "click->audio-player#stopPropagation" }
+      ) do %>
+        <%= icon "dots-vertical", class: "w-4 h-4 cursor-pointer" %>
+      <% end %>
+
       <% icon_size = "w-3 h-3" %>
 
-      <ul>
-        <li class="dropdown-item" data-track-id="<%= @track.id %>" data-action="click->audio-player#play">
-          <%= helpers.icon "player-play", class: icon_size %>
-          <%= t("label.play") %>
-        </li>
-        <li class="dropdown-item">
-          <%= helpers.icon "shopping-bag", class: icon_size %>
-          <%= t("track.add_to_cart") %>
-        </li>
-        <li class="dropdown-item">
-          <%= helpers.icon "share", class: icon_size %>
-          <%= t("label.share") %>
-        </li>
-      </ul>
+      <%= dropdown.with_section do %>
+        <ul>
+          <li class="dropdown-item" data-track-id="<%= @track.id %>" data-action="click->audio-player#play">
+            <%= icon "player-play", class: icon_size %>
+            <%= t("label.play") %>
+          </li>
+          <li class="dropdown-item">
+            <%= icon "shopping-bag", class: icon_size %>
+            <%= t("track.add_to_cart") %>
+          </li>
+          <li class="dropdown-item">
+            <%= icon "share", class: icon_size %>
+            <%= t("label.share") %>
+          </li>
+        </ul>
+      <% end %>
 
-      <ul>
-        <li class="dropdown-item">
-          <%= helpers.icon "heart", variant: "filled", class: icon_size %>
-          <%# TODO toast to show like successful %>
-          <% if @user %>
-            <%= button_to t("track.heart_track"), track_heart_path(@track), method: :post, class: "cursor-pointer" %>
-          <% else %>
-            <%= link_to auth_prompt_modal_path,
-              data: {
-                turbo_frame: "modal",
-                modal_target: "default-modal",
-                modal_toggle: "default-modal",
-              } do %>
-              <%= t("track.heart_track") %>
+      <%= dropdown.with_section do %>
+        <ul>
+          <li class="dropdown-item">
+            <%= icon "heart", variant: "filled", class: icon_size %>
+            <%# TODO toast to show like successful %>
+            <% if @user %>
+              <%= button_to t("track.heart_track"), track_heart_path(@track), method: :post, class: "cursor-pointer" %>
+            <% else %>
+              <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
+                <%= t("track.heart_track") %>
+              <% end %>
             <% end %>
-          <% end %>
-        </li>
-        <li class="dropdown-item">
-          <%= helpers.icon "file-star", variant: "filled", class: icon_size %>
-          <%= t("track.save_track") %>
-        </li>
-        <li class="dropdown-item">
-          <%= helpers.icon "message", variant: "filled", class: icon_size %>
-          <%= t("label.comment") %>
-        </li>
-      </ul>
+          </li>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: "#{track_path(@track)}#comments",
+              text: t("label.comment"),
+              icon: "message",
+              icon_size: 3
+            ) %>
+          </li>
+        </ul>
+      <% end %>
 
-      <ul>
-        <li class="dropdown-item">
-          <%= helpers.icon "eye", class: icon_size %>
-          <%= link_to track_path(@track) do %>
-            <%= t("track.see_track") %>
-          <% end %>
-        </li>
-        <li class="dropdown-item" data-action="click->audio-player#stopPropagation">
-          <%= helpers.icon "download", class: icon_size %>
-          <%= link_to download_track_free_path(@track), target: "_blank", rel: "noopener" do %>
-            <%= t("label.download") %>
-          <% end %>
-        </li>
-      </ul>
-    </div>
+      <%= dropdown.with_section do %>
+        <ul>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: track_path(@track),
+              text: t("track.see_track"),
+              icon: "eye",
+              icon_size: 3
+            ) %>
+          </li>
+          <li class="dropdown-item" data-action="click->audio-player#stopPropagation">
+            <%= link_to download_track_free_path(@track), target: "_blank", rel: "noopener", class: "dropdown-link" do %>
+              <%= icon "download", class: icon_size %>
+              <%= t("label.download") %>
+            <% end %>
+          </li>
+        </ul>
+      <% end %>
+    <% end %>
   </div>
 </div>
