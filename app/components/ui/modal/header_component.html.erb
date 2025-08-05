@@ -2,7 +2,8 @@
   <%= content_tag :h3, class: "font-semibold text-primary #{size_class}" do %>
     <%= title %>
   <% end %>
-  <button type="button" class="bg-transparent rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center cursor-pointer hover:bg-hover">
+  <button type="button" class="bg-transparent rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center cursor-pointer hover:bg-hover"
+    data-action="click->modal-manager#close">
     <%= icon "x" %>
     <span class="sr-only">Close modal</span>
   </button>
