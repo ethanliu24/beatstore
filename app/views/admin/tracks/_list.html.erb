@@ -10,5 +10,7 @@
     <%= render partial: "shared/pagy", locals: { pagy: @pagy } %>
   </div>
 <% else %>
-  <p class="text-center my-10">No tracks found.</p>
+  <p class="text-center my-10 font-light italic text-secondary-txt">
+    <%= t("admin.tracks.no_tracks_found") %>
+  </p>
 <% end %>
