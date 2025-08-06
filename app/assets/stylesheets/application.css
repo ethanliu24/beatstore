@@ -39,7 +39,7 @@
 
 /* Animations */
 .slide-up-fade-in {
-  animation: slideUpFadeIn 300ms ease-out forwards;
+  animation: slideUpFadeIn 200ms ease-out forwards;
 }
 
 @keyframes slideUpFadeIn {
@@ -51,6 +51,16 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+.fade-out {
+  animation: fadeOut 100ms ease-in forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
   }
 }
 
