@@ -156,7 +156,6 @@ export default class extends Controller {
       }
     })
     .then();
-    // TODO add toast on success
 
     this.toggleLikeButton(true);
   }
@@ -170,7 +169,6 @@ export default class extends Controller {
       }
     })
     .then();
-    // TODO add toast on success
 
     this.toggleLikeButton(false);
   }
@@ -237,7 +235,6 @@ export default class extends Controller {
     })
     .then(async res => {
       if (!res.ok) {
-        // Use toast instead
         if (res.status === 404) {
           console.error("No preview available");
         } else {

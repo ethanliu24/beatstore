@@ -5,11 +5,9 @@ class Users::ProfilesController < ApplicationController
 
   def update
     if current_user.update(user_params)
-      # TODO display toast on success
-      redirect_to edit_users_profile_path
+      redirect_to edit_users_profile_path, notice: t("profile.update_success")
     else
-      # TODO display toast on failure
-      render :edit, status: :unprocessable_content
+      render :edit, status: :unprocessable_content, alert: t("profile.update_fail")
     end
   end
 

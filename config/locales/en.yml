@@ -86,6 +86,8 @@ en:
     enter_current_password: "Your current password is needed to confirm your changes"
     currently_wating_email_confirmation: "Currently waiting email confirmation for %{email}"
     delete_account: "Delete Account"
+    authentication_failed: "Authentication failed, please try again."
+    not_authorized_message: "You are not authorized to access this page."
 
   track:
     add_to_cart: "Add to cart"
@@ -112,6 +114,10 @@ en:
       see_track: "See track"
       manage_tracks_here: "Manage tracks here"
       no_tracks_found: "No tracks found."
+      success:
+        create: "Track was successfully created."
+        update: "Track was successfully updated."
+        destroy: "Track was successfully destroyed."
 
   profile:
     manage_your_profile_here: "Manage your profile here"
@@ -119,7 +125,9 @@ en:
     delete_account_confirmation_title: "Are you sure?"
     delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."
     see_tracks_you_liked_here: "See tracks you liked here"
-    no_tracks_liked: "You haven't liked any tracks yet"
+    no_tracks_liked: "You haven't liked any tracks yet."
+    update_success: "Profile updated successfully."
+    update_failed: "Failed to update profile."
 
   comment:
     delete_comment: "Delete Comment"
