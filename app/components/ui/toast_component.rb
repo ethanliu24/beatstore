@@ -14,9 +14,9 @@ module Ui
     def backgrond_class
       case type
       when :notice
-        "bg-[#5dc968] dark:bg-[#55b560]"
+        "bg-[#5dc968] dark:bg-[#55b560] notice-toast"
       else
-        "bg-[#e84235]"
+        "bg-[#e84235] alert-toast"
       end
     end
 
