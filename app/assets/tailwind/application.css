@@ -47,15 +47,15 @@
   .pagy {
     @apply flex space-x-1 font-semibold text-sm;
     a:not(.gap) {
-      @apply block rounded px-3 py-1 bg-background dark:bg-secondary-bg;
+      @apply block rounded px-3 py-1 bg-secondary-bg/60;
       &:hover {
         @apply bg-hover;
       }
       &:not([href]) { /* disabled links */
-        @apply bg-background dark:bg-secondary-bg cursor-pointer;
+        @apply bg-secondary-bg/60 cursor-pointer;
       }
       &.current {
-        @apply text-primary-txt bg-gray-300 dark:bg-gray-600;
+        @apply text-primary-txt bg-hover;
       }
     }
     label {
@@ -215,5 +215,40 @@
   /* Comment */
   .interaction-icon {
     @apply w-3 h-3 aspect-square cursor-pointer;
+  }
+}
+
+/* Admin tracks page layout */
+@layer {
+  .admin-track-list-container {
+    display: grid;
+    row-gap: 40px;
+    column-gap: 2rem;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media (max-width: 1279px) {
+    .admin-track-list-container {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .admin-track-list-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .admin-track-list-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 539px) {
+    .admin-track-list-container {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
   }
 }
