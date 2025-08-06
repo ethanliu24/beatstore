@@ -1,0 +1,15 @@
+<div class="rounded-md mb-4 p-3 max-w-80 max-sm:max-w-60 text-white <%= backgrond_class %>">
+  <div class="flex justify-between">
+    <div class="flex gap-3">
+      <%= icon icon_name, class: "w-5 h-5" %>
+      <div class="text-xs">
+        <p class="block text-sm max-sm:text-[0.7rem] font-light <%= %>"><%= message %></p>
+      </div>
+    </div>
+
+    <button type="button" class="inline-flex ml-2 pt-0.5 rounded-md focus:outline-hidden cursor-pointer" data-action="click->flash#dismiss">
+      <span class="sr-only">Dismiss</span>
+      <%= icon "x", class: "w-4 h-4" %>
+    </button>
+  </div>
+</div>
