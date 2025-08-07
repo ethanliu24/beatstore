@@ -1,7 +1,7 @@
-<div class="<%= "relative flex justify-center items-center bg-secondary-bg #{image_size} rounded cursor-pointer" %>"
+<div class="<%= "relative flex justify-center items-center bg-secondary-bg rounded cursor-pointer #{image_size}" %>"
   data-controller="playable-cover-photo" data-playable-cover-photo-target="container">
   <% if track.cover_photo.attached? %>
-    <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover w-full h-full rounded" %>
+    <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
   <% else %>
     <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
   <% end %>
