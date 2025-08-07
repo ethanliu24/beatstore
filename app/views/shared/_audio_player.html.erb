@@ -50,9 +50,9 @@
             <%= icon "heart", class: "w-3 h-3", data: { audio_player_target: "likeBtn" } %>
           <% end %>
         <% end %>
-      </div>
       <%= icon "heart", variant: "filled", class: "w-3 h-3",
         data: { action: "click->audio-player#unlikeTrack", audio_player_target: "unlikeBtn" } %>
+      </div>
 
       <%= render Ui::DropdownComponent.new(
         id: "volume-slider",
