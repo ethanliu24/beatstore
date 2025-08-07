@@ -184,6 +184,10 @@ export default class extends Controller {
       const url = `/download/track/${this.currentTrackId}/free`;
       const response = await fetch(url, {
         method: "GET",
+        headers: {
+          "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+          "Content-Type": "audio/mpeg"
+        }
       });
 
       if (!response.ok) {
