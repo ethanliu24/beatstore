@@ -23,7 +23,7 @@ export default class extends Controller {
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
 
-      this.audioTarget.addEventListener("ended", () => this.repeatTrack());
+      this.audioTarget.addEventListener("ended", () => this.pauseAudio());
       this.audioTarget.addEventListener("timeupdate", () => {
         if (this.audioTarget.duration > 0) {
           const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
