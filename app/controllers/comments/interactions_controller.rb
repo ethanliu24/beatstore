@@ -5,8 +5,6 @@ class Comments::InteractionsController < ApplicationController
   LIKE_INTERACTION = Comment::Interaction.interaction_types[:like]
   DISLIKE_INTERACTION = Comment::Interaction.interaction_types[:dislike]
 
-  # TODO add toast for each of the following actions
-
   def like
     like = find_interaction(LIKE_INTERACTION)
     dislike = find_interaction(DISLIKE_INTERACTION)

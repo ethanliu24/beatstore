@@ -33,6 +33,10 @@
 
     <%= turbo_frame_tag "modal" %>
 
+    <%= turbo_frame_tag "toasts" do %>
+      <%= render "shared/toasts", flash: flash %>
+    <% end %>
+
     <% unless current_page == "layouts/auth_main" %>
       <%= render "shared/audio_player" %>
     <% end %>
