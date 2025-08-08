@@ -21,7 +21,7 @@ export default class extends Controller {
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
-      this.playerModes = ["next", "repeat", "shuffle"];
+      this.PLAYER_MODES = ["next", "repeat", "shuffle"];
 
       this.audioTarget.addEventListener("ended", () => this.pauseAudio());
       this.audioTarget.addEventListener("timeupdate", () => {
@@ -78,8 +78,8 @@ export default class extends Controller {
   }
 
   switchMode() {
-    const nextModeIdx = (this.playerModes.indexOf(this.playerMode) + 1) % this.playerModes.length;
-    this.playerMode = this.playerModes[nextModeIdx];
+    const nextModeIdx = (this.PLAYER_MODES.indexOf(this.playerMode) + 1) % this.PLAYER_MODES.length;
+    this.playerMode = this.PLAYER_MODES[nextModeIdx];
     Array.from(this.playerModeContainerTarget.children).forEach((element) => {
       element.dataset.playerMode === this.playerMode
         ? element.classList.remove("hidden")
@@ -184,6 +184,10 @@ export default class extends Controller {
       const url = `/download/track/${this.currentTrackId}/free`;
       const response = await fetch(url, {
         method: "GET",
+        headers: {
+          "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+          "Content-Type": "audio/mpeg"
+        }
       });
 
       if (!response.ok) {
@@ -231,7 +235,11 @@ export default class extends Controller {
     }
 
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
-      method: "GET"
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Content-Type": "application/json",
+      }
     })
     .then(async res => {
       if (!res.ok) {
