@@ -1,0 +1,7 @@
+<%= content_tag :div, class: "flex justify-center items-stretch gap-2 text-[0.8rem]", data: container_data do %>
+  <%= form.number_field lowerbound_query, value: params.dig(:q, lowerbound_query), data: range_data,
+    class: "hide-incr-decr-arrows w-8 border-b-1 border-b-secondary-txt focus:border-b-accent focus:outline-none focus:ring-0" %>
+  <p><%= t("label.to").downcase %></p>
+  <%= form.number_field upperbound_query, value: params.dig(:q, upperbound_query), data: range_data,
+    class: "hide-incr-decr-arrows w-8 border-b-1 border-b-secondary-txt focus:border-b-accent focus:outline-none focus:ring-0" %>
+<% end %>
