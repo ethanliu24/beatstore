@@ -11,9 +11,13 @@ module Ui
         @render = render
       end
 
+      def render?
+        @render
+      end
+
       private
 
-      attr_reader :title, :label, :data, :close_action, :render
+      attr_reader :title, :data, :close_action
 
       def chip_id
         "#{@label}-chip"
