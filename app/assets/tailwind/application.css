@@ -195,6 +195,10 @@
     @apply z-10 p-2 bg-background dark:bg-secondary-bg rounded-lg shadow-sm;
   }
 
+  .filter-sort-container {
+    @apply z-10 p-3 bg-background dark:bg-secondary-bg rounded-lg shadow-sm;
+  }
+
   /* Track */
   .track-form label {
     @apply font-bold text-xs;

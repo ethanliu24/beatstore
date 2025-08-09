@@ -1,4 +1,4 @@
-<%= search_form_for @q, url: url,
+<%= search_form_for q, url: url,
   class: "w-full",
   html: {
     data: {
@@ -24,7 +24,8 @@
   <div class="flex justify-start flex-stretch flex-wrap gap-4 text-xs text-secondary-txt font-light select-none mb-2">
     <% [
       {
-        field: t("track.genres"),
+        title: t("track.genres"),
+        label: "genre",
         classes: "filter-checkbox-container",
         component: Ui::Filter::CheckboxComponent,
         component_variables: {
@@ -37,7 +38,8 @@
         },
       },
       {
-        field: "BPM",
+        title: "BPM",
+        label: "bpm",
         classes: "filter-range-container",
         component: Ui::Filter::RangeComponent,
         component_variables: {
@@ -50,7 +52,8 @@
         },
       },
       {
-        field: t("track.keys"),
+        title: t("track.keys"),
+        label: "key",
         classes: "filter-checkbox-container",
         component: Ui::Filter::CheckboxComponent,
         component_variables: {
@@ -63,7 +66,8 @@
         },
       },
       {
-        field: t("track.tags"),
+        title: t("track.tags"),
+        label: "tag",
         classes: "filter-checkbox-container",
         component: Ui::Filter::CheckboxComponent,
         component_variables: {
@@ -75,12 +79,25 @@
           checkbox_data: { action: "change->track-filter#updateTags" },
         },
       },
-      # {
-      #   field: t("track.order_by"),
-      #   render: current_user&.admin? || request.path != tracks_path  # TODO fix infinite load sorting
-      # },
       {
-        field: t("track.visibility"),
+        title: t("track.order_by"),
+        label: "sort",
+        classes: "filter-sort-container",
+        render: current_user&.admin? || request.path != tracks_path,  # TODO fix infinite load sorting
+        component: Ui::Filter::SortComponent,
+        component_variables: {
+          q:,
+          sort_data: [
+            { field: :title, title: t("track.title") },
+            { field: :bpm, title: "BPM" },
+            { field: :created_at, title: t("track.created_at") },
+            { field: :updated_at, title: t("track.updated_at") },
+          ],
+        },
+      },
+      {
+        title: t("track.visibility"),
+        label: "visibility",
         classes: "filter-checkbox-container",
         render: current_user&.admin?,
         component: Ui::Filter::CheckboxComponent,
@@ -97,15 +114,15 @@
       <% next unless data.fetch(:render, true) %>
 
       <%= render Ui::DropdownComponent.new(
-        id: filter_dropdown_id(data[:field]),
+        id: filter_dropdown_id(data[:label]),
         classes: data[:classes],
       ) do |dropdown| %>
         <% dropdown.with_trigger_button(
-          id: filter_dropdown_id(data[:field]),
+          id: filter_dropdown_id(data[:label]),
           classes: "flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none",
-          data: { dropdown_toggle: filter_dropdown_id(data[:field]) }
+          data: { dropdown_placement: "bottom" },
         ) do %>
-          <%= data[:field] %>
+          <%= data[:title] %>
           <%= icon "chevron-down", class: "w-3 aspect-square" %>
         <% end %>
 
@@ -115,22 +132,6 @@
       <% end %>
     <% end %>
   </div>
-
-  <%# Sort dropdown %>
-  <% unless request.path == tracks_path %>
-    <div id="sort-dropdown" class="z-10 p-3 hidden bg-background dark:bg-secondary-bg rounded-lg shadow-sm">
-      <span class="flex flex-col justify-start items-start gap-2 text-[0.7rem]">
-        <% [
-          { field: :title, title: t("track.title") },
-          { field: :bpm, title: "BPM" },
-          { field: :created_at, title: t("track.created_at") },
-          { field: :updated, title: t("track.updated_at") },
-        ].each do |option| %>
-          <%= sort_link(@q, option[:field], option[:title]) %>
-        <% end %>
-      </span>
-    </div>
-  <% end %>
 
   <div class="flex justify-start items-stretch flex-wrap gap-2">
     <% [

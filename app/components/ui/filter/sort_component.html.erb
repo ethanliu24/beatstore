@@ -1,0 +1,5 @@
+<div class="flex flex-col justify-start items-start gap-2 text-[0.7rem]">
+  <% sort_data.each do |data| %>
+    <%= sort_link(q, data[:field], data[:title]) %>
+  <% end %>
+</div>
