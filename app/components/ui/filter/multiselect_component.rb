@@ -2,7 +2,7 @@
 
 module Ui
   module Filter
-    class CheckboxComponent < ApplicationComponent
+    class MultiselectComponent < ApplicationComponent
       def initialize(label:, query:, options:, values:, container_data: {}, checkbox_data: {}, render: true)
         @label = label
         @query = query
