@@ -1,5 +1,5 @@
 export function updateChip(chip, str) {
-  const display = chip.querySelector(".track-filter-chip-text");
+  const display = chip.querySelector(".filter-chip-text");
   display.innerText = str;
 
   if (str === "") {

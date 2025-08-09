@@ -17,7 +17,7 @@ export default class extends Controller {
     this.updateBPM();
     this.updateKeys();
     this.updateTags();
-    this.updateVisibility();
+    if (this.hasVisibilityDropdownTarget && this.hasVisibilityChipTarget) this.updateVisibility();
   }
 
   clearFilter() {
@@ -25,7 +25,7 @@ export default class extends Controller {
     this.clearBPM();
     this.clearKeys();
     this.clearTags();
-    this.clearVisibility();
+    if (this.hasVisibilityDropdownTarget && this.hasVisibilityChipTarget) this.clearVisibility();
     this.formTarget.reset();
   }
 

@@ -133,7 +133,7 @@
     <% end %>
   </div>
 
-  <div class="filter-chips-container">
+  <div id="filter-chips-container">
     <% [
       { title: t("track.genres"), label: "genre", data: { track_filter_target: "genreChip" }, close_action: "click->track-filter#clearGenres" },
       { title: "BPM", label: "bpm", data: { track_filter_target: "bpmChip" }, close_action: "click->track-filter#clearBPM" },
