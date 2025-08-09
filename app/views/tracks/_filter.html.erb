@@ -135,25 +135,13 @@
 
   <div class="flex justify-start items-stretch flex-wrap gap-2">
     <% [
-      { title: t("track.genres"), label: "genre", action: "click->track-filter#clearGenres", for_admin: false },
-      { title: "BPM", label: "bpm", action: "click->track-filter#clearBPM", for_admin: false },
-      { title: t("track.keys"), label: "key", action: "click->track-filter#clearKeys", for_admin: false },
-      { title: t("track.tags"), label: "tag", action: "click->track-filter#clearTags", for_admin: false },
-      { title: t("track.visibility"), label: "visibility", action: "click->track-filter#clearVisibility", for_admin: true },
-    ].each do |chip| %>
-      <% next if chip[:for_admin] && !current_user&.admin? %>
-      <div class="hidden w-fit h-fit bg-secondary-bg rounded-full px-2 py-0.5"
-        data-track-filter-target="<%= "#{chip[:label]}Chip" %>">
-        <span class="flex justify-center items-center flex-nowrap gap-1">
-          <span id="<% "#{chip[:label]}-chip" %>" class="text-secondary-txt text-[0.6rem]">
-            <%= "#{chip[:title]}:" %>
-          </span>
-          <p class="track-filter-chip-text text-nowrap text-[0.6rem]"></p>
-          <div class="w-fit h-fit cursor-pointer" data-action="<%= chip[:action] %>">
-            <%= icon "x", class: "w-3 h-3 aspect-square" %>
-          </div>
-        </span>
-      </div>
+      { title: t("track.genres"), label: "genre", data: { track_filter_target: "bpmChip" }, close_action: "click->track-filter#clearGenres" },
+      { title: "BPM", label: "bpm", data: { track_filter_target: "bpmChip" }, close_action: "click->track-filter#clearBPM" },
+      { title: t("track.keys"), label: "key", data: { track_filter_target: "keyChip" }, close_action: "click->track-filter#clearKeys" },
+      { title: t("track.tags"), label: "tag", data: { track_filter_target: "tagChip" }, close_action: "click->track-filter#clearTags" },
+      { title: t("track.visibility"), label: "visibility", data: { track_filter_target: "visibilityChip" }, close_action: "click->track-filter#clearVisibility" },
+    ].each do |data| %>
+      <%= render Ui::Filter::ChipComponent.new(**data) %>
     <% end %>
   </div>
 <% end %>
