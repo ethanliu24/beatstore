@@ -99,7 +99,7 @@
         title: t("track.visibility"),
         label: "visibility",
         classes: "filter-checkbox-container",
-        render: current_user&.admin?,
+        render: options.fetch(:render_visibility, true),
         component: Ui::Filter::MultiselectComponent,
         component_variables: {
           label: "visibility",

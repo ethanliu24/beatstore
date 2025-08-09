@@ -11,7 +11,7 @@
     <span class="ml-2"><%= t("label.create") %></span>
   </a>
 
-  <%= render "filters/tracks", q: @q, url: admin_tracks_path, options: { render_sort: true } %>
+  <%= render "filters/tracks", q: @q, url: admin_tracks_path, options: { render_sort: true, render_visibility: true } %>
 
   <div class="w-full flex justify-start mt-8 mb-3">
     <%== pagy_info(@pagy) %>

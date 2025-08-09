@@ -11,8 +11,8 @@ class TracksController < ApplicationController
   end
 
   def show
-    default_scope = Track.where(is_public: true)
-    @track = default_scope.find(params.expect(:id))
+    base_scope = current_user&.admin? ? Track : Track.where(is_public: true)
+    @track = base_scope.find(params.expect(:id))
     @similar_tracks = find_similar_tracks(@track)
     @pagy, page_comments = pagy_keyset(@track.comments.order(created_at: :desc), limit: 10)
     @comments = if current_user
