@@ -83,7 +83,7 @@
         title: t("track.order_by"),
         label: "sort",
         classes: "filter-sort-container",
-        render: current_user&.admin? || request.path != tracks_path,  # TODO fix infinite load sorting
+        render: options.fetch(:render_sort, true),
         component: Ui::Filter::SortComponent,
         component_variables: {
           q:,
@@ -133,7 +133,7 @@
     <% end %>
   </div>
 
-  <div class="flex justify-start items-stretch flex-wrap gap-2">
+  <div class="filter-chips-container">
     <% [
       { title: t("track.genres"), label: "genre", data: { track_filter_target: "genreChip" }, close_action: "click->track-filter#clearGenres" },
       { title: "BPM", label: "bpm", data: { track_filter_target: "bpmChip" }, close_action: "click->track-filter#clearBPM" },

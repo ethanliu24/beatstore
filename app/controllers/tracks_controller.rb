@@ -5,11 +5,14 @@ class TracksController < ApplicationController
     base_scope = Track.where(is_public: true)
     @q = base_scope.ransack(params[:q], auth_object: current_user)
     queried_tracks = @q.result(distinct: true).includes(:tags).order(created_at: :desc)
+    # Sorting is disabled due to incompatibilty with ransack and pagy_keyset.
+    # If really need to sort, use pagy(...)
     @pagy, @tracks = pagy_keyset(queried_tracks, limit: 20)
   end
 
   def show
-    @track = Track.find(params.expect(:id))
+    default_scope = Track.where(is_public: true)
+    @track = default_scope.find(params.expect(:id))
     @similar_tracks = find_similar_tracks(@track)
     @pagy, page_comments = pagy_keyset(@track.comments.order(created_at: :desc), limit: 10)
     @comments = if current_user

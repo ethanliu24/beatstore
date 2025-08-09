@@ -199,6 +199,10 @@
     @apply z-10 p-3 bg-background dark:bg-secondary-bg rounded-lg shadow-sm;
   }
 
+  .filter-chips-container {
+    @apply flex justify-start items-stretch flex-wrap gap-2;
+  }
+
   /* Track */
   .track-form label {
     @apply font-bold text-xs;
