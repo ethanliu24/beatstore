@@ -1,0 +1,147 @@
+<%= search_form_for q, url: url,
+  class: "w-full",
+  html: {
+    data: {
+      controller: "track-filter",
+      track_filter_target: "form",
+    }
+  } do |form| %>
+  <%= render Ui::Filter::SearchBarComponent.new(
+    form:,
+    query: :title_or_description_or_tags_name_i_cont,
+    placeholder: t("track.filter_placeholder")
+  ) do |search| %>
+    <%= search.with_submit_button do %>
+      <%= form.submit t("label.search"), class: "border-1 border-primary-txt rounded cursor-pointer px-2" %>
+    <% end %>
+
+    <%= search.with_clear_button do %>
+      <%= link_to t("label.clear"), url, data: { action: "click->track-filter#clearFilter" },
+        class: "flex justify-center items-center border-1 border-secondary-txt text-secondary-txt rounded cursor-pointer px-2" %>
+    <% end %>
+  <% end %>
+
+  <div class="flex justify-start flex-stretch flex-wrap gap-4 text-xs text-secondary-txt font-light select-none mb-2">
+    <% [
+      {
+        title: t("track.genres"),
+        label: "genre",
+        classes: "filter-checkbox-container",
+        component: Ui::Filter::MultiselectComponent,
+        component_variables: {
+          label: "genre",
+          query: :genre_cont_any,
+          options: genre_options,
+          values: genre_options,
+          container_data: { track_filter_target: "genreDropdown" },
+          checkbox_data: { action: "change->track-filter#updateGenres" },
+        },
+      },
+      {
+        title: "BPM",
+        label: "bpm",
+        classes: "filter-range-container",
+        component: Ui::Filter::RangeComponent,
+        component_variables: {
+          form:,
+          label: "bpm",
+          lb_query: :bpm_gteq,
+          ub_query: :bpm_lteq,
+          container_data: { track_filter_target: "bpmDropdown" },
+          range_data: { action: "change->track-filter#updateBPM" },
+        },
+      },
+      {
+        title: t("track.keys"),
+        label: "key",
+        classes: "filter-checkbox-container",
+        component: Ui::Filter::MultiselectComponent,
+        component_variables: {
+          label: "key",
+          query: :key_cont_any,
+          options: key_options.drop(1),  # assumes key_options starts with nil
+          values: key_options.drop(1),
+          container_data: { track_filter_target: "keyDropdown" },
+          checkbox_data: { action: "change->track-filter#updateKeys" },
+        },
+      },
+      {
+        title: t("track.tags"),
+        label: "tag",
+        classes: "filter-checkbox-container",
+        component: Ui::Filter::MultiselectComponent,
+        component_variables: {
+          label: "tag",
+          query: :tags_name_cont_any,
+          options: tag_options,
+          values: tag_options,
+          container_data: { track_filter_target: "tagDropdown" },
+          checkbox_data: { action: "change->track-filter#updateTags" },
+        },
+      },
+      {
+        title: t("track.order_by"),
+        label: "sort",
+        classes: "filter-sort-container",
+        render: options.fetch(:render_sort, true),
+        component: Ui::Filter::SortComponent,
+        component_variables: {
+          q:,
+          sort_data: [
+            { field: :title, title: t("track.title") },
+            { field: :bpm, title: "BPM" },
+            { field: :created_at, title: t("track.created_at") },
+            { field: :updated_at, title: t("track.updated_at") },
+          ],
+        },
+      },
+      {
+        title: t("track.visibility"),
+        label: "visibility",
+        classes: "filter-checkbox-container",
+        render: options.fetch(:render_visibility, true),
+        component: Ui::Filter::MultiselectComponent,
+        component_variables: {
+          label: "visibility",
+          query: :is_public_in,
+          options: [ "Public", "Private" ],
+          values: [ "true", "false" ],
+          container_data: { track_filter_target: "visibilityDropdown" },
+          checkbox_data: { action: "change->track-filter#updateVisibility" },
+        },
+      },
+    ].each do |data| %>
+      <% next unless data.fetch(:render, true) %>
+
+      <%= render Ui::DropdownComponent.new(
+        id: filter_dropdown_id(data[:label]),
+        classes: data[:classes],
+      ) do |dropdown| %>
+        <% dropdown.with_trigger_button(
+          id: filter_dropdown_id(data[:label]),
+          classes: "flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none",
+          data: { dropdown_placement: "bottom" },
+        ) do %>
+          <%= data[:title] %>
+          <%= icon "chevron-down", class: "w-3 aspect-square" %>
+        <% end %>
+
+        <% dropdown.with_section do %>
+          <%= render data[:component].new(**data[:component_variables]) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div id="filter-chips-container">
+    <% [
+      { title: t("track.genres"), label: "genre", data: { track_filter_target: "genreChip" }, close_action: "click->track-filter#clearGenres" },
+      { title: "BPM", label: "bpm", data: { track_filter_target: "bpmChip" }, close_action: "click->track-filter#clearBPM" },
+      { title: t("track.keys"), label: "key", data: { track_filter_target: "keyChip" }, close_action: "click->track-filter#clearKeys" },
+      { title: t("track.tags"), label: "tag", data: { track_filter_target: "tagChip" }, close_action: "click->track-filter#clearTags" },
+      { title: t("track.visibility"), label: "visibility", data: { track_filter_target: "visibilityChip" }, close_action: "click->track-filter#clearVisibility" },
+    ].each do |data| %>
+      <%= render Ui::Filter::ChipComponent.new(**data) %>
+    <% end %>
+  </div>
+<% end %>

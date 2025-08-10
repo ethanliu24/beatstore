@@ -186,6 +186,23 @@
     @apply text-[0.6rem] italic underline font-light text-accent-text;
   }
 
+  /* Filter */
+  .filter-checkbox-container {
+    @apply z-10 max-h-60 overflow-y-auto bg-background dark:bg-secondary-bg rounded-lg shadow-sm;
+  }
+
+  .filter-range-container {
+    @apply z-10 p-2 bg-background dark:bg-secondary-bg rounded-lg shadow-sm;
+  }
+
+  .filter-sort-container {
+    @apply z-10 p-3 bg-background dark:bg-secondary-bg rounded-lg shadow-sm;
+  }
+
+  .filter-chips-container {
+    @apply flex justify-start items-stretch flex-wrap gap-2;
+  }
+
   /* Track */
   .track-form label {
     @apply font-bold text-xs;

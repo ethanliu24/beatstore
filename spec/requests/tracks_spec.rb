@@ -48,6 +48,8 @@ RSpec.describe TracksController, type: :request do
   end
 
   describe "GET /show" do
+    let(:private_track) { create(:track, is_public: false) }
+
     it "renders a successful response" do
       track = Track.create! valid_attributes
       get track_url(track)
@@ -64,6 +66,22 @@ RSpec.describe TracksController, type: :request do
 
       get track_url(track)
       expect(response.body.scan("RECOMMENDED_TRACK").size).to eq(TracksController::SIMILAR_TRACKS_RECOMMENDATION_LIMIT)
+    end
+
+    it "doesn't allow non admins to see private tracks" do
+      user = create(:user)
+      sign_in user, scope: :user
+
+      get track_url(private_track)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "allows admins to see private tracks" do
+      admin = create(:admin)
+      sign_in admin, scope: :user
+
+      get track_url(private_track)
+      expect(response).to be_successful
     end
   end
 end

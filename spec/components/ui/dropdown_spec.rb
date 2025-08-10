@@ -23,7 +23,7 @@ RSpec.describe Ui::DropdownComponent, type: :component do
     end
 
     expect(rendered).to have_selector(
-      "div[id='tracks'][class='dropdown hidden track'][data-controller='tracks']"
+      "div[id='tracks'][class='dropdown hidden transparent-scrollbar-background track'][data-controller='tracks']"
     )
     expect(rendered).to have_selector(
       "button[id='tracks-dropdown-toggle']",
