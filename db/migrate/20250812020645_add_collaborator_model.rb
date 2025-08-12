@@ -6,7 +6,7 @@ class AddCollaboratorModel < ActiveRecord::Migration[8.0]
       t.decimal :profit_share, precision: 5, scale: 2, null: false, default: 0
       t.decimal :publishing_share, precision: 5, scale: 2, null: false, default: 0
       t.text :notes, null: true
-      t.references :track, null: false, foreign_key: true
+      t.references :entity, polymorphic: true, null: false
 
       t.timestamps
     end

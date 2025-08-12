@@ -20,6 +20,6 @@ module Collaboration
       presence: true,
       numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
 
-    belongs_to :track
+    belongs_to :entity, polymorphic: true
   end
 end

@@ -48,10 +48,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_020645) do
     t.decimal "profit_share", precision: 5, scale: 2, default: "0.0", null: false
     t.decimal "publishing_share", precision: 5, scale: 2, default: "0.0", null: false
     t.text "notes"
-    t.bigint "track_id", null: false
+    t.string "entity_type", null: false
+    t.bigint "entity_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["track_id"], name: "index_collaborators_on_track_id"
+    t.index ["entity_type", "entity_id"], name: "index_collaborators_on_entity"
   end
 
   create_table "comment_interactions", force: :cascade do |t|
@@ -140,7 +141,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_020645) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "collaborators", "tracks"
   add_foreign_key "comment_interactions", "comments"
   add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
