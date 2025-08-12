@@ -101,7 +101,7 @@
 
     <section class="w-full">
       <%= form.fields_for :collaborators do |cf| %>
-        <%= render Collaboration::CollaboratorComponent.new(form: cf) %>
+        <%= render "collaboration/collaborator/form", form: cf %>
       <% end %>
     </section>
 

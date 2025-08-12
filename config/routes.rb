@@ -31,6 +31,10 @@ Rails.application.routes.draw do
     resource :play, only: [ :create ], module: :tracks, as: "increment_plays"
   end
 
+  namespace :collaborations do
+    resources :collaborators, only: [ :new ]
+  end
+
   resources :comments, only: [ :create, :update, :destroy ] do
     member do
       post "like", to: "comments/interactions#like"

@@ -41,7 +41,7 @@ class Track < ApplicationRecord
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
   has_many :comments, as: :entity, dependent: :destroy
-  has_many :collaborators, class_name: "Collaboration::Collaborator", dependent: :destroy
+  has_many :collaborators, class_name: "Collaboration::Collaborator", as: :entity, dependent: :destroy
   accepts_nested_attributes_for :collaborators, allow_destroy: true
 
   class << self
