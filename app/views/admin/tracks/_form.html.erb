@@ -47,7 +47,7 @@
       <div class="flex flex-col justify-start gap-4 flex-1 ml-8">
         <div class="field content-input-container">
           <%= form.label :title %>
-          <%= form.text_field :title, autofocus: true, class: "content-input" %>
+          <%= form.text_field :title, autofocus: false, class: "content-input" %>
         </div>
         <div class="field content-input-container flex-1" data-controller="char-count">
           <div class="flex justify-between items-center w-full">
@@ -56,7 +56,7 @@
               <span data-char-count-target="count">0</span><%= "/#{max_description_length}" %>
             </div>
           </div>
-          <%= form.text_area :description, autofocus: true, class: "content-input resize-none flex-1", maxlength: max_description_length,
+          <%= form.text_area :description, autofocus: false, class: "content-input resize-none flex-1", maxlength: max_description_length,
             data: { char_count_target: "input", action: "input->char-count#count" } %>
         </div>
       </div>
@@ -73,7 +73,7 @@
       <div class="flex justify-between items-stretch gap-6">
         <div class="field content-input-container">
           <%= form.label :bpm %>
-          <%= form.number_field :bpm, autofocus: true, class: "content-input", min: 0, step: 1 %>
+          <%= form.number_field :bpm, autofocus: false, class: "content-input", min: 0, step: 1 %>
         </div>
         <div class="field content-input-container">
           <%= form.label :key %>
@@ -91,12 +91,18 @@
       <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags(@track) %>">
         <div class="field content-input-container">
           <%= form.label :tags %>
-          <%= form.text_field :tag_input, autofocus: true, class: "content-input",
+          <%= form.text_field :tag_input, autofocus: false, class: "content-input",
             data: { chip_selector_target: "input", action: "keydown->chip-selector#handleKeydown" } %>
         </div>
         <div data-chip-selector-target="display" class="flex justify-start items-center flex-wrap gap-1 mt-2"></div>
         <div data-chip-selector-target="tagValues" class="hidden"></div>
       </div>
+    </section>
+
+    <section class="w-full">
+      <%= form.fields_for :collaborators do |cf| %>
+        <%= render Collaboration::CollaboratorComponent.new(form: cf) %>
+      <% end %>
     </section>
 
     <section class="flex justify-end items-stretch w-full">

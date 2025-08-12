@@ -15,10 +15,10 @@ module Collaboration
     validates :notes, presence: true, allow_blank: true
     validates :profit_share,
       presence: true,
-      numericality: { greater_than: 0, less_than_or_equal_to: 1 }
+      numericality: { greater_than: 0, less_than_or_equal_to: 100 }
     validates :publishing_share,
       presence: true,
-      numericality: { greater_than: 0, less_than_or_equal_to: 1 }
+      numericality: { greater_than: 0, less_than_or_equal_to: 100 }
 
     belongs_to :track
   end

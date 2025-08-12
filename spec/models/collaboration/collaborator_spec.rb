@@ -11,8 +11,8 @@ RSpec.describe Collaboration::Collaborator, type: :model do
     it { is_expected.to validate_presence_of(:role) }
     it { is_expected.to validate_presence_of(:profit_share) }
     it { is_expected.to validate_presence_of(:publishing_share) }
-    it { is_expected.to validate_numericality_of(:profit_share).is_greater_than(0).is_less_than_or_equal_to(1) }
-    it { is_expected.to validate_numericality_of(:publishing_share).is_greater_than(0).is_less_than_or_equal_to(1) }
+    it { is_expected.to validate_numericality_of(:profit_share).is_greater_than(0).is_less_than_or_equal_to(100) }
+    it { is_expected.to validate_numericality_of(:publishing_share).is_greater_than(0).is_less_than_or_equal_to(100) }
     it { is_expected.to validate_presence_of(:notes).allow_blank }
 
     it "should be invalid if role is not defined" do

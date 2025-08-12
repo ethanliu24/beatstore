@@ -71,7 +71,8 @@ module Admin
         :track_stems,
         :project,
         :cover_photo,
-        tags_attributes: [ :id, :name, :_destroy ]
+        tags_attributes: [ :id, :name, :_destroy ],
+        collaborators_attributes: [ :id, :name, :role, :profit_share, :publishing_share, :notes, :_destroy ]
       )
     end
   end

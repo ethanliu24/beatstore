@@ -1,6 +1,7 @@
 class ApplicationComponent < ViewComponent::Base
   include ApplicationHelper
   include TrackAdminHelper
+  include CollaborationHelper
   include RailsIcons::Helpers
   include Turbo::FramesHelper
 
