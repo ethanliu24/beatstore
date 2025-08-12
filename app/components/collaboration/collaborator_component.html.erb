@@ -10,11 +10,11 @@
     </div>
     <div class="field content-input-container">
       <%= form.label "Profit Share %" %>
-      <%= form.number_field :profit_share, step: 0.01, min: 1, max: 100,class: "content-input" %>
+      <%= form.number_field :profit_share, step: 0.01, min: 0, max: 100, required: true, class: "content-input" %>
     </div>
     <div class="field content-input-container">
       <%= form.label "Publishing Share %" %>
-      <%= form.number_field :profit_share, step: 0.01, min: 1, max: 100,class: "content-input" %>
+      <%= form.number_field :profit_share, step: 0.01, min: 0, max: 100, required: true, class: "content-input" %>
     </div>
   </div>
   <div>

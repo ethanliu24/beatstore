@@ -24,7 +24,12 @@ module Admin
       @track = Track.new(sanitize_track_params)
 
       respond_to do |format|
-        if @track.save
+        if !valid_share_sum?(@track.collaborators)
+          flash.now[:alert] = t("admin.track.error.invalid_share_sum")
+
+          format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+          format.html { render :edit, status: :unprocessable_content }
+        elsif @track.save
           format.html { redirect_to admin_tracks_path, notice: t("admin.track.success.create") }
         else
           format.html { render :new, status: :unprocessable_content }
@@ -33,8 +38,17 @@ module Admin
     end
 
     def update
+      p @track.collaborators
+      @track.assign_attributes(sanitize_track_params)
+      p @track.collaborators
+
       respond_to do |format|
-        if @track.update(sanitize_track_params)
+        if !valid_share_sum?(@track.collaborators)
+          flash.now[:alert] = t("admin.track.error.invalid_share_sum")
+
+          format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+          format.html { render :edit, status: :unprocessable_content }
+        elsif @track.save
           format.html { redirect_to admin_tracks_path, notice: t("admin.track.success.update") }
         else
           format.html { render :edit, status: :unprocessable_content }
@@ -52,6 +66,13 @@ module Admin
     end
 
     private
+
+    def valid_share_sum?(collaborators)
+      return true # TODO remove
+      valid_profit_share = collaborators.sum { |c| c.profit_share.to_f } <= 100
+      valid_publishing_share = collaborators.sum { |c| c.publishing_share.to_f } <= 100
+      valid_profit_share && valid_publishing_share
+    end
 
     def set_track
       @track = Track.find(params[:id])
