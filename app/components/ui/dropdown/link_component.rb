@@ -3,17 +3,18 @@
 module Ui
   module Dropdown
     class LinkComponent < ApplicationComponent
-      def initialize(url:, text:, icon:, icon_size:, classes: "")
+      def initialize(url:, text:, icon:, icon_size:, classes: "", data: {})
         @url = url
         @text = text
         @icon_name = icon
         @icon_size = icon_size
         @classes = classes
+        @data = data
       end
 
       private
 
-      attr_reader :url, :text, :icon_name, :classes
+      attr_reader :url, :text, :icon_name, :classes, :data
 
       def icon_size
         "w-#{@icon_size} h-#{@icon_size} aspect-square"

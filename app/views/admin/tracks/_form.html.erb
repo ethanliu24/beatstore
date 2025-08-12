@@ -100,8 +100,35 @@
     </section>
 
     <section class="w-full">
-      <%= form.fields_for :collaborators do |cf| %>
-        <%= render "collaboration/collaborator/form", form: cf %>
+      <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
+        <% dropdown.with_trigger_button(
+          id: "add-collaboration", classes: "cursor-pointer", data: { dropdown_placement: "right" }
+        ) do %>
+          <div class="file-upload-chip flex justify-center items-center gap-1 text-xs">
+            <%= icon "plus", class: "w-4 h-4 aspect-square" %>
+            <p><%= t("admin.track.add_new_collaboration") %></p>
+          </div>
+        <% end %>
+
+        <% dropdown.with_section do %>
+          <ul>
+            <li class="dropdown-item">
+              <%= render Ui::Dropdown::LinkComponent.new(
+                url: new_collaborations_collaborator_path,
+                text: t("admin.track.add_collaborator"),
+                icon: "affiliate",
+                icon_size: 3,
+                data: { turbo_stream: true }
+              ) %>
+            </li>
+          </ul>
+        <% end %>
+      <% end %>
+
+      <%= turbo_frame_tag dom_id(@track, :collaborators) do %>
+        <%= form.fields_for :collaborators do |cf| %>
+          <%= render "collaboration/collaborator/form", form: cf %>
+        <% end %>
       <% end %>
     </section>
 

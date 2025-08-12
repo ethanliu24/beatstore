@@ -3,7 +3,7 @@
 module Collaboration
   class CollaboratorController < ApplicationController
     def new
-      
+
     end
   end
 end
