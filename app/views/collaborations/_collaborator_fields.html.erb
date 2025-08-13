@@ -23,7 +23,7 @@
     </div>
   </div>
   <div>
-    <details class="content-input-container">
+    <details class="content-input-container" <%= "open" unless f.object.notes.blank? %>>
       <summary class="cursor-pointer content-input-label">Notes</summary>
       <%= f.text_area :notes, class: "content-input resize-none" %>
     </details>
