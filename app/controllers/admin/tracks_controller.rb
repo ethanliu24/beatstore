@@ -24,12 +24,7 @@ module Admin
       @track = Track.new(sanitize_track_params)
 
       respond_to do |format|
-        if !valid_share_sum?(@track.collaborators)
-          flash.now[:alert] = t("admin.track.error.invalid_share_sum")
-
-          format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
-          format.html { render :edit, status: :unprocessable_content }
-        elsif @track.save
+        if @track.save
           format.html { redirect_to admin_tracks_path, notice: t("admin.track.success.create") }
         else
           format.html { render :new, status: :unprocessable_content }
