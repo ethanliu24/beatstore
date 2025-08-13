@@ -1,5 +1,5 @@
-<%= content_tag :div, class: "nested-fields flex flex-col gap-2" do %>
-  <div class="flex justify-between items-center w-full gap-8">
+<%= content_tag :div, class: "nested-fields flex flex-col gap-2 w-full" do %>
+  <div class="flex justify-between items-center w-full gap-4">
     <div class="field content-input-container">
       <%= f.label :name %>
       <%= f.text_field :name, class: "content-input" %>
@@ -16,11 +16,16 @@
       <%= f.label "Publishing Share %" %>
       <%= f.number_field :publishing_share, step: 0.01, min: 0, max: 100, required: true, class: "content-input" %>
     </div>
+    <div class="text-error p-2 ml-2 bg-error/20 h-full rounded">
+      <%= link_to_remove_association f do %>
+        <%= icon "trash", class: "w-5 h-5 aspect square" %>
+      <% end %>
+    </div>
   </div>
   <div>
-    <div class="field content-input-container">
-      <%= f.label :notes %>
+    <details class="content-input-container">
+      <summary class="cursor-pointer content-input-label">Notes</summary>
       <%= f.text_area :notes, class: "content-input resize-none" %>
-    </div>
+    </details>
   </div>
 <% end %>

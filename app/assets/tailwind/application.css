@@ -102,6 +102,10 @@
     @apply flex flex-col gap-2 w-full text-nowrap;
   }
 
+  .content-input-label {
+    @apply text-[0.8rem] font-bold;
+  }
+
   .content-input {
     @apply
       w-full border-1 rounded px-2 text-xs py-2

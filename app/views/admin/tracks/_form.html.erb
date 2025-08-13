@@ -102,7 +102,7 @@
     <section class="w-full">
       <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
         <% dropdown.with_trigger_button(
-          id: "add-collaboration", classes: "cursor-pointer", data: { dropdown_placement: "right" }
+          id: "add-collaboration", classes: "mb-4", data: { dropdown_placement: "right" }
         ) do %>
           <div class="file-upload-chip flex justify-center items-center gap-1 text-xs">
             <%= icon "plus", class: "w-4 h-4 aspect-square" %>
@@ -113,17 +113,20 @@
         <% dropdown.with_section do %>
           <ul>
             <li class="dropdown-item">
-              <%= link_to_add_association t("admin.track.add_collaborator"), form, :collaborators, class: "btn btn-primary",
-                partial: "collaborations/collaborator_fields",
-                data: { association_insertion_node: "##{dom_id(@track, :collaborators)}", association_insertion_method: "append" } %>
+                <%= link_to_add_association form, :collaborators, class: "dropdown-link", partial: "collaborations/collaborator_fields",
+                  data: { association_insertion_node: "##{dom_id(@track, :collaborators)}", association_insertion_method: "append" } do %>
+                  <%= icon "affiliate", class: "w-4 h-4" %>
+                  <p><%= t("admin.track.add_collaborator") %></p>
+                <% end %>
             </li>
           </ul>
         <% end %>
       <% end %>
 
-      <%# Alternative to nested form with stimulus nested forms: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
+      <%# Alternative to nested form with stimulus_nested_forms: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
       <%# Example tutorial: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
-      <%= content_tag :div, id: dom_id(@track, :collaborators) do %>
+      <%= content_tag :div, id: dom_id(@track, :collaborators),
+        class: "flex flex-col justify-start items-center gap-4 w-full" do %>
         <%= form.fields_for :collaborators do |cf| %>
           <%= render "collaborations/collaborator_fields", f: cf %>
         <% end %>
