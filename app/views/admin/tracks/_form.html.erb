@@ -113,21 +113,19 @@
         <% dropdown.with_section do %>
           <ul>
             <li class="dropdown-item">
-              <%= render Ui::Dropdown::LinkComponent.new(
-                url: new_collaborations_collaborator_path,
-                text: t("admin.track.add_collaborator"),
-                icon: "affiliate",
-                icon_size: 3,
-                data: { turbo_stream: true }
-              ) %>
+              <%= link_to_add_association t("admin.track.add_collaborator"), form, :collaborators, class: "btn btn-primary",
+                partial: "collaborations/collaborator_fields",
+                data: { association_insertion_node: "##{dom_id(@track, :collaborators)}", association_insertion_method: "append" } %>
             </li>
           </ul>
         <% end %>
       <% end %>
 
-      <%= turbo_frame_tag dom_id(@track, :collaborators) do %>
+      <%# Alternative to nested form with stimulus nested forms: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
+      <%# Example tutorial: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
+      <%= content_tag :div, id: dom_id(@track, :collaborators) do %>
         <%= form.fields_for :collaborators do |cf| %>
-          <%= render "collaboration/collaborator/form", form: cf %>
+          <%= render "collaborations/collaborator_fields", f: cf %>
         <% end %>
       <% end %>
     </section>

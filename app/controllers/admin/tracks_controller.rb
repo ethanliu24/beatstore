@@ -38,10 +38,8 @@ module Admin
     end
 
     def update
-      p @track.collaborators
       @track.assign_attributes(sanitize_track_params)
-      p @track.collaborators
-
+      p sanitize_track_params
       respond_to do |format|
         if !valid_share_sum?(@track.collaborators)
           flash.now[:alert] = t("admin.track.error.invalid_share_sum")

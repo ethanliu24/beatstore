@@ -1,0 +1,26 @@
+<%= content_tag :div, class: "nested-fields flex flex-col gap-2" do %>
+  <div class="flex justify-between items-center w-full gap-8">
+    <div class="field content-input-container">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: "content-input" %>
+    </div>
+    <div class="field content-input-container">
+      <%= f.label :role %>
+      <%= f.select :role, options_for_select(collaborator_role_options, f.object.role), {}, class: "content-input" %>
+    </div>
+    <div class="field content-input-container">
+      <%= f.label "Profit Share %" %>
+      <%= f.number_field :profit_share, step: 0.01, min: 0, max: 100, required: true, class: "content-input" %>
+    </div>
+    <div class="field content-input-container">
+      <%= f.label "Publishing Share %" %>
+      <%= f.number_field :publishing_share, step: 0.01, min: 0, max: 100, required: true, class: "content-input" %>
+    </div>
+  </div>
+  <div>
+    <div class="field content-input-container">
+      <%= f.label :notes %>
+      <%= f.text_area :notes, class: "content-input resize-none" %>
+    </div>
+  </div>
+<% end %>

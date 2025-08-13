@@ -42,7 +42,7 @@ class Track < ApplicationRecord
   accepts_nested_attributes_for :tags, allow_destroy: true
   has_many :comments, as: :entity, dependent: :destroy
   has_many :collaborators, class_name: "Collaboration::Collaborator", as: :entity, dependent: :destroy
-  accepts_nested_attributes_for :collaborators, allow_destroy: true
+  accepts_nested_attributes_for :collaborators, allow_destroy: true, reject_if: :all_blank
 
   class << self
     def ransackable_attributes(auth_object = nil)

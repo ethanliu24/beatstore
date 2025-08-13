@@ -82,5 +82,6 @@ gem "omniauth-google-oauth2"
 
 gem "ransack"
 gem "pagy", "~> 9.3"
+gem "cocoon"
 
 gem "active_storage_validations", "~> 3.0"
