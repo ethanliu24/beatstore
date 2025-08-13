@@ -27,6 +27,8 @@ class Track < ApplicationRecord
   validates :track_stems, content_type: [ "application/zip" ], if: -> { track_stems.attached? }
   validates :cover_photo, content_type: [ "image/png" ], if: -> { cover_photo.attached? }
 
+  validate :shares_cannot_exceed_100_percent
+
   # === Relationships ===
   has_one_attached :tagged_mp3
   has_one_attached :untagged_mp3
@@ -82,5 +84,15 @@ class Track < ApplicationRecord
 
   def num_hearts
     hearts.count
+  end
+
+  private
+
+  def shares_cannot_exceed_100_percent
+    total_profit = collaborators.sum { |c| c.profit_share.to_d }
+    total_publishing = collaborators.sum { |c| c.profit_share.to_d }
+    if total_profit> 100 || total_publishing > 100
+      errors.add(:base, I18n.t("admin.track.error.invalid_share_sum"))
+    end
   end
 end
