@@ -109,6 +109,8 @@ en:
     explore_tracks_here: "Explore tracks here"
     similar_tracks: "Similar tracks"
     more_info_modal_title: "More information"
+    no_collaborators: "There are no collaborators on this track"
+    no_samples: "There are no samples on this track"
 
   admin:
     track:
