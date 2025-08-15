@@ -2,32 +2,53 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="track-upload"
 export default class extends Controller {
+  static targets = ["uploaded", "audio", "file", "fileName", "fileSize", "fileInfoSeperator"];
   static values = {
     acceptedFileTypes: Array,
   }
 
   connect() {
-    this.track_uploaded_classes = [
-      "bg-accent",
-      "dark:bg-accent",
-      "text-white",
-      "dark:text-white",
-      "border-none"
-    ];
   }
 
   upload(event) {
-    const label = event.target.closest("label");
     const uploadedFile = event.target.files[0];
     const fileType = uploadedFile ? uploadedFile.type : null;
 
-    if (this.acceptedFileTypesValue.includes(fileType)) {
-      label.classList.remove("dark:bg-secondary-bg");
-      this.track_uploaded_classes.forEach((className) => {
-        label.classList.add(className);
-      });
-    } else {
+    if (!this.acceptedFileTypesValue.includes(fileType)) {
       alert("Invalid file type.");
+      return;
     }
+
+    this.uploadedTarget.classList.remove("text-secondary-txt");
+    this.uploadedTarget.classList.add("text-accent");
+    this.fileNameTarget.innerHTML = uploadedFile.name;
+    this.fileSizeTarget.innerHTML = `${(uploadedFile.size / (1024 * 1024)).toFixed(2)} MB`;
+    this.fileInfoSeperatorTarget.classList.remove("hidden");
+    if (this.hasAudioTarget) {
+      const url = URL.createObjectURL(uploadedFile);
+      this.audioTarget.src = url;
+    }
+  }
+
+  remove() {
+    if (!this.#isUploaded()) {
+      return;
+    }
+
+    if (window.confirm("Remove file?")) {
+      this.fileTarget.value = "";
+      this.uploadedTarget.classList.remove("text-accent");
+      this.uploadedTarget.classList.add("text-secondary-txt");
+      this.fileNameTarget.innerHTML = "";
+      this.fileSizeTarget.innerHTML = "";
+      this.fileInfoSeperatorTarget.classList.add("hidden");
+      if (this.hasAudioTarget) {
+        this.audioTarget.src = "";
+      }
+    }
+  }
+
+  #isUploaded() {
+    return this.uploadedTarget.classList.contains("text-accent");
   }
 }

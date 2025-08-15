@@ -1,13 +1,35 @@
-<%= content_tag :div, class: "flex justify-center items-center w-full flex-1",
-  data: { controller: "track-upload", track_upload_accepted_file_types_value: accepted_file_types } do %>
-  <label
-    for=<%= generate_id(file_for) %>
-    class="
-      flex flex-col justify-center items-center rounded w-full h-full cursor-pointer py-4
-      <%= track_upload_style(attachment) %>
-    ">
-    <p><%= t("admin.track.upload_file", file_for: file_for) %></p>
-    <%= form.file_field field, id: generate_id(file_for), class: "hidden",
-      data: { upload_target: "upload", action: "change->track-upload#upload" } %>
-  </label>
+<%= content_tag :div, class: "flex justify-between items-center gap-2",
+  data: {
+    controller: "track-upload",
+    track_upload_accepted_file_types_value: accepted_file_types
+  } do %>
+  <div class="flex justify-center items-center gap-3">
+    <%= icon "point", variant: "filled", class: "#{attachment.attached? ? "text-accent" : "text-secondary-txt"}",
+      data: { track_upload_target: "uploaded" } %>
+
+    <div class="full-accent-color-scheme rounded-full p-2 cursor-pointer">
+      <label for="<%= generate_id(file_for) %>">
+        <%= icon "upload", class: "w-4 h-4 cursor-pointer" %>
+      </label>
+      <%= form.file_field field, id: generate_id(file_for), class: "hidden",
+        data: { action: "change->track-upload#upload", track_upload_target: "file" } %>
+    </div>
+
+    <div class="full-error-color-scheme rounded-full p-2 cursor-pointer" data-action="click->track-upload#remove">
+      <%= icon "trash", class: "w-4 h-4" %>
+    </div>
+
+    <div>
+      <p class="text-xs text-nowrap"><%= file_for %></p>
+      <div class="flex gap-1 text-[0.6rem] text-secondary-txt">
+        <p class="truncate" data-track-upload-target="fileName"><%= attachment.attached? ? attachment.name : "" %></p>
+        <%= seperator_char_ui class: "#{attachment.attached? ? "" : "hidden"}", data: { track_upload_target: "fileInfoSeperator" } %>
+        <p class="text-nowrap" data-track-upload-target="fileSize"><%= attachment.attached? ? "#{(attachment.byte_size / (1024 * 1024)).round(2)} MB" : "" %></p>
+      </div>
+    </div>
+  </div>
+
+  <% if playable %>
+    <audio src="<%= attachment.attached? ? url_for(attachment) : "" %>" controls data-track-upload-target="audio"></audio>
+  <% end %>
 <% end %>
