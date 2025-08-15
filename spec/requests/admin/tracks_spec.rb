@@ -400,6 +400,117 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
   end
 
+  describe "samples" do
+    let!(:track) { create(:track) }
+    let(:params) {
+      {
+        name: "Song",
+        artist: "Test",
+        link: "www.example.com"
+      }
+    }
+
+    it "adds a new sample on #create" do
+      post admin_tracks_url, params: {
+        track: {
+          title: "Test",
+          genre: Track::GENRES[0],
+          bpm: 111,
+          samples_attributes: {
+            "0" => params
+          }
+        }
+      }
+
+      samples = Track.last.samples
+
+      expect(response).to have_http_status(302)
+      expect(samples.size).to eq(1)
+      expect(samples.first.name).to eq("Song")
+      expect(samples.first.artist).to eq("Test")
+      expect(samples.first.link).to eq("www.example.com")
+    end
+
+    it "adds a new sample on #update" do
+      patch admin_track_url(track), params: {
+        track: {
+          samples_attributes: {
+            "0" => params,
+            "1" => { name: "Song2", artist: "Test2", link: "www.example2.com" }
+          }
+        }
+      }
+
+      expect(response).to have_http_status(302)
+
+      samples = track.reload.samples
+      names = samples.pluck(:name)
+      artists = samples.pluck(:artist)
+      links = samples.pluck(:link)
+
+      expect(names).to include("Song")
+      expect(names).to include("Song2")
+      expect(artists).to include("Test")
+      expect(artists).to include("Test2")
+      expect(links).to include("www.example.com")
+      expect(links).to include("www.example2.com")
+    end
+
+    it "accepts blank sample artist and link" do
+      patch admin_track_url(track), params: {
+        track: {
+          samples_attributes: {
+            "0" => { name: "S" }
+          }
+        }
+      }
+
+      track.reload
+
+      expect(response).to have_http_status(302)
+      expect(Track.last.samples.size).to eq(1)
+      expect(Track.last.samples.first.name).to eq("S")
+      expect(Track.last.samples.first.artist).to eq("")
+      expect(Track.last.samples.first.link).to eq("")
+    end
+
+    it "rejects a blank name" do
+      expect(track.samples.size).to eq(0)
+
+      patch admin_track_url(track), params: {
+        track: {
+          samples_attributes: {
+            "0" => params.merge(name: "")
+          }
+        }
+      }
+
+      track.reload
+
+      expect(response).to have_http_status(422)
+      expect(track.samples.size).to eq(0)
+    end
+
+    it "deletes an existing collaborator" do
+      sample = create(:sample, track:)
+
+      expect(track.reload.samples.size).to eq(1)
+
+      patch admin_track_path(track), params: {
+        track: {
+          samples_attributes: {
+            "0" => {
+              id: sample.id,
+              _destroy: "true"
+            }
+          }
+        }
+      }
+
+      expect(track.reload.samples.size).to eq(0)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_tracks_url
