@@ -21,7 +21,6 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   }
 
   it "sanitizes parameters" do
-    # TODO add project file when available
     controller = Admin::TracksController.new
     controller.params = ActionController::Parameters.new(
       track: {
@@ -32,8 +31,8 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg"),
         untagged_mp3: fixture_file_upload("tracks/untagged_mp3.mp3", "audio/mpeg"),
         untagged_wav: fixture_file_upload("tracks/untagged_wav.wav", "audio/x-wav"),
-        track_stems: fixture_file_upload("tracks/track_stems.zip", "audio/mpeg"),
-        project: nil,
+        track_stems: fixture_file_upload("tracks/track_stems.zip", "application/zip"),
+        project: fixture_file_upload("tracks/project.zip", "application/zip"),
         cover_photo: fixture_file_upload("tracks/cover_photo.png", "image/png"),
         tags_attributes: { "0" => { id: 1, name: "test", _destroy: "false" } },
         collaborators_attributes: {
