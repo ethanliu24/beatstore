@@ -57,6 +57,10 @@
             <%= icon "share", class: "text-accent" %>
           </button>
 
+          <%= link_to track_more_info_modal_path(@track), class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
+            <%= icon "library", class: "text-accent" %>
+          <% end %>
+
           <% if current_user && current_user.admin? %>
             <%= link_to edit_admin_track_path(@track), class: "track-show-icon-only-btn" do %>
               <%= icon "pencil", class: "text-accent" %>

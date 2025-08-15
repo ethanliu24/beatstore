@@ -2,13 +2,12 @@
 
 module Collaboration
   class CollaboratorComponent < ApplicationComponent
-    def initialize(form:, collaborator: nil)
-      @form = form
-      @collaborator = collaborator || Collaboration::Collaborator.new
+    def initialize(collaborator:)
+      @collaborator = collaborator
     end
 
     private
 
-    attr_reader :form, :collaborator
+    attr_reader :collaborator
   end
 end
