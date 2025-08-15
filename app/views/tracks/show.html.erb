@@ -3,8 +3,8 @@
 <%# TODO make it responsive %>
 <div class="flex flex-col justify-center items-center gap-12 w-full">
   <section class="flex justify-start items-stretch gap-8 w-full">
-    <div class="max-w-50 min-h-50">
-      <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 50) %>
+    <div class="min-w-50 min-h-50">
+      <%= render Tracks::PlayableCovzerPhoto.new(track: @track, size: 50) %>
     </div>
 
     <div class="flex-1 flex flex-col justify-between items-start">

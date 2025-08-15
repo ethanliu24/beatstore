@@ -134,14 +134,22 @@
       <%# Example tutorial: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
 
       <%= content_tag :div, id: dom_id(@track, :collaborators),
-        class: "flex flex-col justify-start items-center gap-4 w-full" do %>
+        class: "flex flex-col justify-start items-start gap-4 w-full" do %>
+        <div class="flex justify-start items-center gap-1 text-accent text-xs font-bold mt-2 -mb-1">
+          <%= icon "affiliate", class: "w-4 h-4" %>
+          <%= content_tag :h2, t("label.collaborators") %>
+        </div>
         <%= form.fields_for :collaborators do |cf| %>
           <%= render "collaborations/collaborator_fields", f: cf %>
         <% end %>
       <% end %>
 
       <%= content_tag :div, id: dom_id(@track, :samples),
-        class: "flex flex-col justify-start items-center gap-4 w-full" do %>
+        class: "flex flex-col justify-start items-start gap-4 w-full" do %>
+        <div class="flex justify-start items-center gap-1 text-accent text-xs font-bold mt-2 -mb-1">
+          <%= icon "vinyl", class: "w-4 h-4" %>
+          <%= content_tag :h2, t("label.samples") %>
+        </div>
         <%= form.fields_for :samples do |sf| %>
           <%= render "collaborations/sample_fields", f: sf %>
         <% end %>
