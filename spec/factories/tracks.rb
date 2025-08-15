@@ -43,6 +43,11 @@ FactoryBot.define do
         filename: "track_stems.zip",
         content_type: "application/zip"
       )
+      track.project.attach(
+        io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "project.zip")),
+        filename: "project.zip",
+        content_type: "application/zip"
+      )
       track.cover_photo.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "cover_photo.png")),
         filename: "cover_photo.png",

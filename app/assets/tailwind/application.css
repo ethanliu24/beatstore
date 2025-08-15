@@ -168,7 +168,15 @@
   }
 
   .file-upload-chip {
-    @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/30 text-accent hover:bg-accent/50;
+    @apply rounded-full px-3 py-1 text-xs cursor-pointer bg-accent/30 text-accent hover:bg-accent/35 dark:hover:bg-accent/50;
+  }
+
+  .full-accent-color-scheme {
+    @apply bg-accent/30 text-accent hover:bg-accent/35 dark:hover:bg-accent/50;
+  }
+
+  .full-error-color-scheme {
+    @apply text-error bg-error/20 hover:bg-error/30;
   }
 
   .char-count {

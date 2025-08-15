@@ -33,6 +33,7 @@ en:
     untagged_mp3: "Untagged MP3"
     untagged_wav: "Untagged WAV"
     track_stems: "Track Stems"
+    project: "Project"
     open: "Open"
     close: "Close"
     create: "Create"

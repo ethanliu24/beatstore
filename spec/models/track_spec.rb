@@ -112,6 +112,7 @@ RSpec.describe Track, type: :model do
         expect(track_with_files.untagged_mp3.content_type).to eq("audio/mpeg")
         expect(track_with_files.untagged_wav.content_type).to eq("audio/x-wav")
         expect(track_with_files.track_stems.content_type).to eq("application/zip")
+        expect(track_with_files.project.content_type).to eq("application/zip")
         expect(track_with_files.cover_photo.content_type).to eq("image/png")
         expect(track_with_files).to be_valid
       end
@@ -142,6 +143,12 @@ RSpec.describe Track, type: :model do
         )
 
         track_with_files.cover_photo.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
+          filename: "tagged_mp3.mp3",
+          content_type: "audio/mpeg"
+        )
+
+        track_with_files.project.attach(
           io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
           filename: "tagged_mp3.mp3",
           content_type: "audio/mpeg"
@@ -203,7 +210,7 @@ RSpec.describe Track, type: :model do
     it { should have_one_attached(:untagged_mp3) }
     it { should have_one_attached(:untagged_wav) }
     it { should have_one_attached(:track_stems) }
-    it { should have_one_attached(:project_file) }
+    it { should have_one_attached(:project) }
     it { should have_one_attached(:cover_photo) }
   end
 end

@@ -25,6 +25,7 @@ class Track < ApplicationRecord
   validates :untagged_mp3, content_type: [ "audio/mpeg" ], if: -> { untagged_mp3.attached? }
   validates :untagged_wav, content_type: [ "audio/x-wav", "audio/vnd.wave" ], if: -> { untagged_wav.attached? }
   validates :track_stems, content_type: [ "application/zip" ], if: -> { track_stems.attached? }
+  validates :project, content_type: [ "application/zip" ], if: -> { project.attached? }
   validates :cover_photo, content_type: [ "image/png" ], if: -> { cover_photo.attached? }
 
   validate :shares_cannot_exceed_100_percent
@@ -34,7 +35,7 @@ class Track < ApplicationRecord
   has_one_attached :untagged_mp3
   has_one_attached :untagged_wav
   has_one_attached :track_stems
-  has_one_attached :project_file
+  has_one_attached :project
   has_one_attached :cover_photo
 
   has_many :hearts, class_name: "Track::Heart"
