@@ -181,6 +181,16 @@ RSpec.describe Track, type: :model do
 
       expect(track.comments.size).to eq(0)
     end
+
+    it "should delete all collaborators associated with it" do
+      create(:collaborator, entity: track)
+
+      expect(track.reload.collaborators.size).to eq(1)
+
+      track.destroy!
+
+      expect(track.reload.collaborators.size).to eq(0)
+    end
   end
 
   describe "associations" do

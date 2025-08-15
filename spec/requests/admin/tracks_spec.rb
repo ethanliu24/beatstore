@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Admin::TracksController, type: :request, admin: true do
@@ -34,10 +36,14 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         project: nil,
         cover_photo: fixture_file_upload("tracks/cover_photo.png", "image/png"),
         tags_attributes: { "0" => { id: 1, name: "test", _destroy: "false" } },
+        collaborators_attributes: {
+          "0" => { id: 1, name: "X", role: "producer", profit_share: "0.0", publishing_share: "0.0", _destroy: true }
+        },
         foo: "bar"
       }
     )
     permitted = controller.send(:sanitize_track_params)
+
     expect(permitted).not_to have_key("foo")
     expect(permitted.keys).to contain_exactly(
       "title",
@@ -50,9 +56,13 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       "track_stems",
       "project",
       "cover_photo",
-      "tags_attributes"
+      "tags_attributes",
+      "collaborators_attributes"
     )
     expect(permitted[:tags_attributes]["0"].keys).to contain_exactly("id", "name", "_destroy")
+    expect(permitted[:collaborators_attributes]["0"].keys).to contain_exactly(
+      "id", "name", "role", "profite_share", "publishing_share", "_destroy"
+    )
   end
 
   describe "GET /index" do
@@ -258,6 +268,134 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       }
 
       expect(Track::Tag.find_by(id: other_tag.id)).not_to be_nil
+    end
+  end
+
+  describe "collaborators" do
+    let!(:track) { create(:track) }
+    let(:params) {
+      {
+        name: "Test",
+        role: Collaboration::Collaborator.roles[:producer],
+        profit_share: "0.0",
+        publishing_share: "0.0",
+        notes: "ABCDE"
+      }
+    }
+
+    it "adds a new collaborator on #create" do
+      post admin_tracks_url, params: {
+        track: {
+          title: "Test",
+          genre: Track::GENRES[0],
+          bpm: 111,
+          collaborators_attributes: {
+            "0" => params
+          }
+        }
+      }
+
+      collaborators = Track.last.collaborators
+
+      expect(response).to have_http_status(302)
+      expect(collaborators.size).to eq(1)
+      expect(collaborators.first.name).to eq("Test")
+      expect(collaborators.first.profit_share).to eq(0.0)
+      expect(collaborators.first.publishing_share).to eq(0.0)
+      expect(collaborators.first.notes).to eq("ABCDE")
+    end
+
+    it "adds a new collaborator on #update" do
+      patch admin_track_url(track), params: {
+        track: {
+          collaborators_attributes: {
+            "0" => params,
+            "1" => params.merge(name: "Test2", profit_share: "11.1")
+          }
+        }
+      }
+
+      expect(response).to have_http_status(302)
+
+      collaborators = track.reload.collaborators
+      names = collaborators.pluck(:name)
+      profit_shares = collaborators.pluck(:profit_share)
+      publishing_shares = collaborators.pluck(:publishing_share)
+
+      expect(names).to include("Test")
+      expect(names).to include("Test2")
+      expect(profit_shares).to include(11.1)
+      expect(profit_shares).to include(0.0)
+      expect(publishing_shares).to include(0.0)
+      expect(publishing_shares).to include(0.0)
+    end
+
+    it "accepts blank collaborator notes" do
+      patch admin_track_url(track), params: {
+        track: {
+          collaborators_attributes: {
+            "0" => params.merge(notes: "")
+          }
+        }
+      }
+
+      track.reload
+
+      expect(response).to have_http_status(302)
+      expect(Track.last.collaborator.notes).to be_empty
+    end
+
+    it "rejects an invalid collaborator role" do
+      expect(track.collaborators.size).to eq(0)
+
+      patch admin_track_url(track), params: {
+        track: {
+          collaborators_attributes: {
+            "0" => params.merge(role: "invalid")
+          }
+        }
+      }
+
+      track.reload
+
+      expect(response).to have_http_status(422)
+      expect(track.collaborators.size).to eq(0)
+    end
+
+    it "rejects a blank name" do
+      expect(track.collaborators.size).to eq(0)
+
+      patch admin_track_url(track), params: {
+        track: {
+          collaborators_attributes: {
+            "0" => params.merge(name: "")
+          }
+        }
+      }
+
+      track.reload
+
+      expect(response).to have_http_status(422)
+      expect(track.collaborators.size).to eq(0)
+    end
+
+    it "deletes an existing collaborator" do
+      collaborator = create(:collaborator, entity: track)
+
+      expect(track.reload.collaborators.size).to eq(1)
+
+      patch admin_track_path(track), params: {
+        track: {
+          collaborators_attributes: {
+            "0" => {
+              id: collaborator.id,
+              _destroy: "true"
+            }
+          }
+        }
+      }
+
+      expect(track.reload.collaborators.size).to eq(0)
     end
   end
 
