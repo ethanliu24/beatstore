@@ -45,6 +45,8 @@ class Track < ApplicationRecord
   has_many :comments, as: :entity, dependent: :destroy
   has_many :collaborators, class_name: "Collaboration::Collaborator", as: :entity, dependent: :destroy
   accepts_nested_attributes_for :collaborators, allow_destroy: true, reject_if: :all_blank
+  has_many :samples, class_name: "Collaboration::Sample", dependent: :destroy
+  accepts_nested_attributes_for :samples, allow_destroy: true, reject_if: :all_blank
 
   class << self
     def ransackable_attributes(auth_object = nil)
@@ -91,7 +93,7 @@ class Track < ApplicationRecord
   def shares_cannot_exceed_100_percent
     total_profit = collaborators.sum { |c| c.profit_share.to_d }
     total_publishing = collaborators.sum { |c| c.profit_share.to_d }
-    if total_profit> 100 || total_publishing > 100
+    if total_profit > 100 || total_publishing > 100
       errors.add(:base, I18n.t("admin.track.error.invalid_share_sum"))
     end
   end
