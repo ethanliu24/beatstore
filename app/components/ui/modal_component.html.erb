@@ -1,5 +1,5 @@
 <div id="default-modal" tabindex="-1" data-controller="modal-manager" data-action="click->modal-manager#close"
-  class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-1000 justify-center items-center w-screen h-screen md:inset-0 bg-black/80">
+  class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-1000 justify-center items-center w-screen h-screen md:inset-0 bg-black/80 fade-in">
   <%= content_tag :div, data:,
     class: "modal-content relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full bg-secondary-bg rounded-lg overflow-y-auto hide-scrollbar #{size_class}" do %>
     <%= header %>
