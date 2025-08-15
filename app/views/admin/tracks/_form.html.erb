@@ -99,10 +99,10 @@
       </div>
     </section>
 
-    <section class="w-full">
+    <section class="w-full flex flex-col justify-center items-start gap-4">
       <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
         <% dropdown.with_trigger_button(
-          id: "add-collaboration", classes: "mb-4", data: { dropdown_placement: "right" }
+          id: "add-collaboration", data: { dropdown_placement: "right" }
         ) do %>
           <div class="file-upload-chip flex justify-center items-center gap-1 text-xs">
             <%= icon "plus", class: "w-4 h-4 aspect-square" %>
@@ -119,16 +119,31 @@
                   <p><%= t("admin.track.add_collaborator") %></p>
                 <% end %>
             </li>
+            <li class="dropdown-item">
+                <%= link_to_add_association form, :samples, class: "dropdown-link", partial: "collaborations/sample_fields",
+                  data: { association_insertion_node: "##{dom_id(@track, :samples)}", association_insertion_method: "append" } do %>
+                  <%= icon "vinyl", class: "w-4 h-4" %>
+                  <p><%= t("admin.track.add_sample") %></p>
+                <% end %>
+            </li>
           </ul>
         <% end %>
       <% end %>
 
       <%# Alternative to nested form with stimulus_nested_forms: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
       <%# Example tutorial: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
+
       <%= content_tag :div, id: dom_id(@track, :collaborators),
         class: "flex flex-col justify-start items-center gap-4 w-full" do %>
         <%= form.fields_for :collaborators do |cf| %>
           <%= render "collaborations/collaborator_fields", f: cf %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag :div, id: dom_id(@track, :samples),
+        class: "flex flex-col justify-start items-center gap-4 w-full" do %>
+        <%= form.fields_for :samples do |sf| %>
+          <%= render "collaborations/sample_fields", f: sf %>
         <% end %>
       <% end %>
     </section>

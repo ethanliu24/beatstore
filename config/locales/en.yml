@@ -124,6 +124,7 @@ en:
         invalid_share_sum: "The sum of profit and publishing shares must be less than or equal to 100."
       add_new_collaboration: "Add new collaboration"
       add_collaborator: "Add collaborator"
+      add_sample: "Add sample"
 
   profile:
     manage_your_profile_here: "Manage your profile here"
