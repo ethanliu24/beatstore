@@ -50,7 +50,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
-  gem "rspec-rails", "~> 8.0.1"
+  gem "rspec-rails", "~> 8.0.2"
   gem "factory_bot_rails"
   gem "shoulda-matchers"
   gem "rails-controller-testing"
@@ -81,7 +81,7 @@ gem "omniauth-rails_csrf_protection"
 gem "omniauth-google-oauth2"
 
 gem "ransack"
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 9.4"
 gem "cocoon"
 
 gem "active_storage_validations", "~> 3.0"
