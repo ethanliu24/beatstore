@@ -1,9 +1,11 @@
-<div class="<%= "relative flex justify-center items-center bg-secondary-bg rounded cursor-pointer #{image_size}" %>"
+<div class="<%= "relative cursor-pointer w-full h-full" %>"
   data-controller="playable-cover-photo" data-playable-cover-photo-target="container">
   <% if track.cover_photo.attached? %>
     <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
   <% else %>
-    <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
+    <div class="<%= "flex justify-center items-center bg-secondary-bg rounded #{image_size}" %>">
+      <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
+    </div>
   <% end %>
   <div class="hidden absolute top-0 left-0 w-full h-full aspect-square bg-black/50"
     data-playable-cover-photo-target="playTrigger" data-track-id="<%= track.id %>" data-action="click->audio-player#play">

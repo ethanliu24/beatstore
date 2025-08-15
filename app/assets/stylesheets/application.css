@@ -58,6 +58,10 @@
   animation: fadeOut 100ms ease-in forwards;
 }
 
+.fade-in {
+  animation: fadeOut 100ms ease-in reverse forwards;
+}
+
 @keyframes fadeOut {
   to {
     opacity: 0;

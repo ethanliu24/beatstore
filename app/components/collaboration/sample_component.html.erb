@@ -1,0 +1,9 @@
+<div class="font-thin text-md flex justify-start items-center mb-0.5 gap-2">
+  <%= icon "point", class: "w-4 h-4" %>
+  <p><%= sample.artist.blank? ? "#{sample.name}" : "#{sample.name} - #{sample.artist}" %></p>
+  <% unless sample.link.blank? %>
+    <%= link_to sample.link, target: "_blank", rel: "noopener" do %>
+      <%= icon "external-link", class: "link-btn w-4 h-4 text-accent" %>
+    <% end %>
+  <% end %>
+</div>

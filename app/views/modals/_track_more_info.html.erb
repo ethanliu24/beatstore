@@ -1,0 +1,34 @@
+<%= render Ui::ModalComponent.new(size: :md) do |modal| %>
+  <%= modal.with_header(title: t("track.more_info_modal_title"), size: :md) %>
+
+  <%= modal.with_body do %>
+    <div class="px-8 py-2 w-full flex flex-col gap-4">
+      <div class="w-full">
+        <h3 class="text-lg mb-1 font-light"><%= t("label.collaborators") %></h3>
+        <div class="flex flex-col gap-2 w-full">
+          <% if track.collaborators.any? %>
+            <% track.collaborators.each do |collaborator| %>
+              <%= render Collaboration::CollaboratorComponent.new(collaborator:) %>
+            <% end %>
+          <% else %>
+            <p class="font-light text-[0.8rem] italic text-secondary-txt"><%= t("track.no_collaborators") %></p>
+          <% end %>
+        </div>
+      </div>
+      <div class="w-full">
+        <h3 class="text-lg mb-1 font-light"><%= t("label.samples") %></h3>
+        <div class="flex flex-col gap-2 w-full">
+          <% if track.samples.any? %>
+            <% track.samples.each do |sample| %>
+              <%= render Collaboration::SampleComponent.new(sample:) %>
+            <% end %>
+          <% else %>
+            <p class="font-light text-[0.8rem] italic text-secondary-txt"><%= t("track.no_samples") %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= modal.with_footer(cancel_label: t(t("label.close"))) %>
+<% end %>
