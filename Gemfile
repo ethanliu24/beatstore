@@ -81,6 +81,6 @@ gem "omniauth-rails_csrf_protection"
 gem "omniauth-google-oauth2"
 
 gem "ransack"
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 9.4"
 
 gem "active_storage_validations", "~> 3.0"
