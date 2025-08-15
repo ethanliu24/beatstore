@@ -3,7 +3,7 @@
   <p><%= sample.artist.blank? ? "#{sample.name}" : "#{sample.name} - #{sample.artist}" %></p>
   <% unless sample.link.blank? %>
     <%= link_to sample.link, target: "_blank", rel: "noopener" do %>
-      <%= icon "external-link", class: "w-4 h-4 text-accent" %>
+      <%= icon "external-link", class: "link-btn w-4 h-4 text-accent" %>
     <% end %>
   <% end %>
 </div>
