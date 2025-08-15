@@ -176,7 +176,7 @@
   }
 
   .full-error-color-scheme {
-    @apply text-error bg-error/20;
+    @apply text-error bg-error/20 hover:bg-error/30;
   }
 
   .char-count {

@@ -1,4 +1,4 @@
-<%= content_tag :div, class: "flex justify-between items-center gap-2",
+<%= content_tag :div, class: "flex justify-between items-center gap-3",
   data: {
     controller: "track-upload",
     track_upload_accepted_file_types_value: accepted_file_types
@@ -30,6 +30,6 @@
   </div>
 
   <% if playable %>
-    <audio src="<%= attachment.attached? ? url_for(attachment) : "" %>" controls data-track-upload-target="audio"></audio>
+    <audio src="<%= attachment.attached? ? url_for(attachment) : "" %>" controls data-track-upload-target="audio" class="max-w-50 min-w-50 h-9"></audio>
   <% end %>
 <% end %>
