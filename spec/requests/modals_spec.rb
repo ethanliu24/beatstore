@@ -29,6 +29,12 @@ RSpec.describe ModalsController, type: :request do
       get delete_comment_modal_url(comment)
       expect(response).to redirect_to(root_path)
     end
+
+    it "does not allow visits to #track_more_info" do
+      track = create(:track)
+      get track_more_info_modal_url(track)
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "where request are from turbo frame" do
@@ -64,6 +70,14 @@ RSpec.describe ModalsController, type: :request do
       get delete_comment_modal_url(comment, format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_delete_comment")
+    end
+
+    it "fetches modal from #track_more_info" do
+      track = create(:track)
+
+      get track_more_info_modal_url(track, format: :turbo_stream), headers: @headers
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template(partial: "modals/_track_more_info")
     end
   end
 end
