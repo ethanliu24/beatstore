@@ -47,7 +47,7 @@
       <div class="flex flex-col justify-start gap-4 flex-1 ml-8">
         <div class="field content-input-container">
           <%= form.label :title %>
-          <%= form.text_field :title, autofocus: true, class: "content-input" %>
+          <%= form.text_field :title, autofocus: false, class: "content-input" %>
         </div>
         <div class="field content-input-container flex-1" data-controller="char-count">
           <div class="flex justify-between items-center w-full">
@@ -56,7 +56,7 @@
               <span data-char-count-target="count">0</span><%= "/#{max_description_length}" %>
             </div>
           </div>
-          <%= form.text_area :description, autofocus: true, class: "content-input resize-none flex-1", maxlength: max_description_length,
+          <%= form.text_area :description, autofocus: false, class: "content-input resize-none flex-1", maxlength: max_description_length,
             data: { char_count_target: "input", action: "input->char-count#count" } %>
         </div>
       </div>
@@ -73,7 +73,7 @@
       <div class="flex justify-between items-stretch gap-6">
         <div class="field content-input-container">
           <%= form.label :bpm %>
-          <%= form.number_field :bpm, autofocus: true, class: "content-input", min: 0, step: 1 %>
+          <%= form.number_field :bpm, autofocus: false, class: "content-input", min: 0, step: 1 %>
         </div>
         <div class="field content-input-container">
           <%= form.label :key %>
@@ -91,12 +91,46 @@
       <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags(@track) %>">
         <div class="field content-input-container">
           <%= form.label :tags %>
-          <%= form.text_field :tag_input, autofocus: true, class: "content-input",
+          <%= form.text_field :tag_input, autofocus: false, class: "content-input",
             data: { chip_selector_target: "input", action: "keydown->chip-selector#handleKeydown" } %>
         </div>
         <div data-chip-selector-target="display" class="flex justify-start items-center flex-wrap gap-1 mt-2"></div>
         <div data-chip-selector-target="tagValues" class="hidden"></div>
       </div>
+    </section>
+
+    <section class="w-full">
+      <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
+        <% dropdown.with_trigger_button(
+          id: "add-collaboration", classes: "mb-4", data: { dropdown_placement: "right" }
+        ) do %>
+          <div class="file-upload-chip flex justify-center items-center gap-1 text-xs">
+            <%= icon "plus", class: "w-4 h-4 aspect-square" %>
+            <p><%= t("admin.track.add_new_collaboration") %></p>
+          </div>
+        <% end %>
+
+        <% dropdown.with_section do %>
+          <ul>
+            <li class="dropdown-item">
+                <%= link_to_add_association form, :collaborators, class: "dropdown-link", partial: "collaborations/collaborator_fields",
+                  data: { association_insertion_node: "##{dom_id(@track, :collaborators)}", association_insertion_method: "append" } do %>
+                  <%= icon "affiliate", class: "w-4 h-4" %>
+                  <p><%= t("admin.track.add_collaborator") %></p>
+                <% end %>
+            </li>
+          </ul>
+        <% end %>
+      <% end %>
+
+      <%# Alternative to nested form with stimulus_nested_forms: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
+      <%# Example tutorial: https://www.youtube.com/watch?v=7JNRZLTRDCc %>
+      <%= content_tag :div, id: dom_id(@track, :collaborators),
+        class: "flex flex-col justify-start items-center gap-4 w-full" do %>
+        <%= form.fields_for :collaborators do |cf| %>
+          <%= render "collaborations/collaborator_fields", f: cf %>
+        <% end %>
+      <% end %>
     </section>
 
     <section class="flex justify-end items-stretch w-full">

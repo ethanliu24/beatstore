@@ -34,6 +34,11 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/delete_comment", locals: { comment: })
   end
 
+  def track_more_info
+    track = Track.find(params[:id])
+    render_modal(partial: "modals/track_more_info", locals: { track: })
+  end
+
   private
 
   def render_modal(partial:, locals: {})

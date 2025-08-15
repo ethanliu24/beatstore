@@ -60,5 +60,6 @@ Rails.application.routes.draw do
     get :user_pfp_upload, action: "user_pfp_upload", as: "user_pfp_upload_modal"
     get :delete_account, action: "delete_account", as: "delete_account_modal"
     get "delete_comment/:id", action: "delete_comment", as: "delete_comment_modal"
+    get "track_more_info/:id", action: "track_more_info", as: "track_more_info_modal"
   end
 end

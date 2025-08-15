@@ -23,22 +23,28 @@ module Admin
     def create
       @track = Track.new(sanitize_track_params)
 
-      respond_to do |format|
+      begin
         if @track.save
-          format.html { redirect_to admin_tracks_path, notice: t("admin.track.success.create") }
+          redirect_to admin_tracks_path, notice: t("admin.track.success.create")
         else
-          format.html { render :new, status: :unprocessable_content }
+          render :new, status: :unprocessable_entity
         end
+      rescue ArgumentError => _e
+        @track.errors.add(:role, "is invalid")
+        render :new, status: :unprocessable_entity
       end
     end
 
     def update
-      respond_to do |format|
+      begin
         if @track.update(sanitize_track_params)
-          format.html { redirect_to admin_tracks_path, notice: t("admin.track.success.update") }
+          redirect_to admin_tracks_path, notice: t("admin.track.success.create")
         else
-          format.html { render :edit, status: :unprocessable_content }
+          render :new, status: :unprocessable_entity
         end
+      rescue ArgumentError => _e
+        @track.errors.add(:role, "is invalid")
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -46,9 +52,7 @@ module Admin
       # TODO redirect to admin page when its up
       @track.destroy!
 
-      respond_to do |format|
-        format.html { redirect_to admin_tracks_path, status: :see_other, notice: t("admin.track.success.destroy") }
-      end
+      redirect_to admin_tracks_path, status: :see_other, notice: t("admin.track.success.destroy")
     end
 
     private
@@ -71,7 +75,8 @@ module Admin
         :track_stems,
         :project,
         :cover_photo,
-        tags_attributes: [ :id, :name, :_destroy ]
+        tags_attributes: [ :id, :name, :_destroy ],
+        collaborators_attributes: [ :id, :name, :role, :profit_share, :publishing_share, :notes, :_destroy ]
       )
     end
   end

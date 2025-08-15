@@ -1,0 +1,11 @@
+<div class="font-thin">
+  <p class="text-md flex justify-start items-center mb-0.5">
+    <%= icon "point", class: "w-4 h-4 mr-2" %>
+    <span class="text-accent font-medium"><%= "#{collaborator.name}" %></span>
+    <span class="px-1"><%= "-" %></span>
+    <span><%= "#{collaborator.role.split("_").join(" ").capitalize}" %></span>
+  </p>
+  <p class="text-[0.7rem]">
+    <%= collaborator.notes %>
+  </p>
+</div>

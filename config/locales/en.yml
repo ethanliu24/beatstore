@@ -55,6 +55,7 @@ en:
     clear: "Clear"
     to: "To"
     comments: "Comments"
+    collaborator: "Collaborator"
 
   general:
     upload_file: "Upload File"
@@ -106,6 +107,7 @@ en:
     visibility: "Visibility"
     explore_tracks_here: "Explore tracks here"
     similar_tracks: "Similar tracks"
+    more_info_modal_title: "More information"
 
   admin:
     track:
@@ -118,6 +120,10 @@ en:
         create: "Track was successfully created."
         update: "Track was successfully updated."
         destroy: "Track was successfully destroyed."
+      error:
+        invalid_share_sum: "The sum of profit and publishing shares must be less than or equal to 100."
+      add_new_collaboration: "Add new collaboration"
+      add_collaborator: "Add collaborator"
 
   profile:
     manage_your_profile_here: "Manage your profile here"
