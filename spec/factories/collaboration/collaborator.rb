@@ -5,6 +5,6 @@ FactoryBot.define do
     profit_share { 0.5 }
     publishing_share { 0.5 }
     notes { "IG: @diddy" }
-    association :track
+    association :entity
   end
 end
