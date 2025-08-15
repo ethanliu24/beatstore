@@ -61,7 +61,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     )
     expect(permitted[:tags_attributes]["0"].keys).to contain_exactly("id", "name", "_destroy")
     expect(permitted[:collaborators_attributes]["0"].keys).to contain_exactly(
-      "id", "name", "role", "profite_share", "publishing_share", "_destroy"
+      "id", "name", "role", "profit_share", "publishing_share", "_destroy"
     )
   end
 
@@ -342,7 +342,8 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       track.reload
 
       expect(response).to have_http_status(302)
-      expect(Track.last.collaborator.notes).to be_empty
+      expect(Track.last.collaborators.size).to eq(1)
+      expect(Track.last.collaborators.first.notes).to be_empty
     end
 
     it "rejects an invalid collaborator role" do

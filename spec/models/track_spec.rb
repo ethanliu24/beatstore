@@ -189,7 +189,7 @@ RSpec.describe Track, type: :model do
 
       track.destroy!
 
-      expect(track.reload.collaborators.size).to eq(0)
+      expect(track.collaborators.size).to eq(0)
     end
   end
 
