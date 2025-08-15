@@ -71,7 +71,7 @@
         accepted_file_types: ["audio/x-wav", "audio/wav", "audio/vnd.wave"] %>
       <%= render "track_upload", form: form, attachment: @track.track_stems, field: :track_stems, file_for: t("label.track_stems"), playable: false,
         accepted_file_types: ["application/zip"] %>
-      <%= render "track_upload", form: form, attachment: @track.project, field: :project, file_for: t("label.track_stems"), playable: false,
+      <%= render "track_upload", form: form, attachment: @track.project, field: :project, file_for: t("label.project"), playable: false,
         accepted_file_types: ["application/zip"] %>
     </section>
 
