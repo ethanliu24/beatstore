@@ -55,7 +55,8 @@ en:
     clear: "Clear"
     to: "To"
     comments: "Comments"
-    collaborator: "Collaborator"
+    collaborators: "Collaborators"
+    samples: "Samples"
 
   general:
     upload_file: "Upload File"
