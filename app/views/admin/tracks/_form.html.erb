@@ -108,7 +108,7 @@
     <section class="w-full flex flex-col justify-center items-start gap-4">
       <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
         <% dropdown.with_trigger_button(
-          id: "add-collaboration", data: { dropdown_placement: "right" }
+          id: "add-collaboration", classes: "cursor-pointer", data: { dropdown_placement: "right" }
         ) do %>
           <div class="full-accent-color-scheme rounded-full py-1 px-2 flex justify-center items-center gap-1 text-xs">
             <%= icon "plus", class: "w-4 h-4 aspect-square" %>
