@@ -86,6 +86,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_16_043532) do
     t.boolean "default_for_new", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["title"], name: "index_licenses_on_title", unique: true
   end
 
   create_table "samples", force: :cascade do |t|
