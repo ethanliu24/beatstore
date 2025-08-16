@@ -1,35 +1,50 @@
-<%= content_tag :div, class: "flex justify-between items-center gap-3",
+<%= content_tag :div, class: "flex justify-start items-center gap-3",
   data: {
     controller: "track-upload",
     track_upload_accepted_file_types_value: accepted_file_types
   } do %>
-  <div class="flex justify-center items-center gap-3">
-    <%= icon "point", variant: "filled", class: "#{attachment.attached? ? "text-accent" : "text-secondary-txt"}",
-      data: { track_upload_target: "uploaded" } %>
-
-    <div class="full-accent-color-scheme rounded-full p-2 cursor-pointer">
-      <label for="<%= generate_id(file_for) %>">
-        <%= icon "upload", class: "w-4 h-4 cursor-pointer" %>
-      </label>
-      <%= form.file_field field, id: generate_id(file_for), class: "hidden",
-        data: { action: "change->track-upload#upload", track_upload_target: "file" } %>
-    </div>
-
-    <div class="full-error-color-scheme rounded-full p-2 cursor-pointer" data-action="click->track-upload#remove">
-      <%= icon "trash", class: "w-4 h-4" %>
-    </div>
-
-    <div>
-      <p class="text-xs text-nowrap"><%= file_for %></p>
-      <div class="flex gap-1 text-[0.6rem] text-secondary-txt">
-        <p class="truncate" data-track-upload-target="fileName"><%= attachment.attached? ? attachment.name : "" %></p>
-        <%= seperator_char_ui class: "#{attachment.attached? ? "" : "hidden"}", data: { track_upload_target: "fileInfoSeperator" } %>
-        <p class="text-nowrap" data-track-upload-target="fileSize"><%= attachment.attached? ? "#{(attachment.byte_size / (1024 * 1024)).round(2)} MB" : "" %></p>
-      </div>
-    </div>
-  </div>
+  <%= icon "point", variant: "filled", class: "#{attachment.attached? ? "text-accent" : "text-secondary-txt"}",
+    data: { track_upload_target: "uploaded" } %>
 
   <% if playable %>
-    <audio src="<%= attachment.attached? ? url_for(attachment) : "" %>" controls data-track-upload-target="audio" class="max-w-50 min-w-50 h-9"></audio>
+    <%= render Ui::DropdownComponent.new(id: "track-#{field}-player") do |dropdown| %>
+      <%= dropdown.with_trigger_button(
+        id: "track-#{field}-player",
+        classes: "full-accent-color-scheme rounded-full p-2 cursor-pointer",
+        data: { dropdown_trigger: "hover", dropdown_placement: "right" },
+      ) do %>
+        <%= icon "player-play", variant: "filled", class: "w-4 h-4" %>
+      <% end %>
+
+      <%= dropdown.with_section do %>
+        <audio src="<%= attachment.attached? ? url_for(attachment) : "" %>" controls data-track-upload-target="audio"
+          class="max-w-50 min-w-50 h-9"></audio>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="bg-secondary-bg text-secondary-txt rounded-full p-2">
+      <%= icon "player-play", variant: "filled", class: "w-4 h-4" %>
+    </div>
   <% end %>
+
+  <div class="full-accent-color-scheme rounded-full p-2 cursor-pointer">
+    <label for="<%= generate_id(file_for) %>">
+      <%= icon "upload", class: "w-4 h-4 cursor-pointer" %>
+    </label>
+    <%= form.file_field field, id: generate_id(file_for), class: "hidden",
+      data: { action: "change->track-upload#upload", track_upload_target: "file" } %>
+  </div>
+
+  <div class="full-error-color-scheme rounded-full p-2 cursor-pointer" data-action="click->track-upload#remove">
+    <%= icon "trash", class: "w-4 h-4" %>
+  </div>
+
+  <div>
+    <p class="text-xs text-nowrap"><%= file_for %></p>
+    <div class="flex gap-1 text-[0.6rem] text-secondary-txt">
+      <p class="truncate" data-track-upload-target="fileName"><%= attachment.attached? ? attachment.name : "" %></p>
+      <%= seperator_char_ui class: "#{attachment.attached? ? "" : "hidden"}", data: { track_upload_target: "fileInfoSeperator" } %>
+      <p class="text-nowrap" data-track-upload-target="fileSize"><%= attachment.attached? ? "#{(attachment.byte_size / (1024 * 1024)).round(2)} MB" : "" %></p>
+    </div>
+  </div>
 <% end %>
