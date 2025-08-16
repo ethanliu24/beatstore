@@ -62,7 +62,7 @@
       </div>
     </section>
 
-    <section class="flex flex-col justify-between items-stretch w-full gap-2">
+    <section class="flex flex-col justify-between items-stretch w-full gap-4">
       <%= render "track_upload", form: form, attachment: @track.tagged_mp3, field: :tagged_mp3, file_for: t("label.tagged_mp3"), playable: true,
         accepted_file_types: ["audio/mpeg"] %>
       <%= render "track_upload", form: form, attachment: @track.untagged_mp3, field: :untagged_mp3, file_for: t("label.untagged_mp3"), playable: true,
@@ -108,7 +108,7 @@
     <section class="w-full flex flex-col justify-center items-start gap-4">
       <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
         <% dropdown.with_trigger_button(
-          id: "add-collaboration", data: { dropdown_placement: "right" }
+          id: "add-collaboration", classes: "cursor-pointer", data: { dropdown_placement: "right" }
         ) do %>
           <div class="full-accent-color-scheme rounded-full py-1 px-2 flex justify-center items-center gap-1 text-xs">
             <%= icon "plus", class: "w-4 h-4 aspect-square" %>
