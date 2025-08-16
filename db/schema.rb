@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_15_034925) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_16_043532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,6 +74,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_034925) do
     t.datetime "updated_at", null: false
     t.index ["entity_type", "entity_id"], name: "index_comments_on_entity"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "licenses", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.integer "price_cents", null: false
+    t.string "currency", limit: 3, default: "USD", null: false
+    t.string "contract_type", null: false
+    t.jsonb "contract_details", default: {}, null: false
+    t.boolean "default_for_new", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "samples", force: :cascade do |t|
