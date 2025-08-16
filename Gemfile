@@ -74,6 +74,7 @@ gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.3"
 gem "rails_icons", "~> 1.4"
 gem "view_component", "~> 4.0"
+gem "cocoon"
 
 gem "devise", "~> 4.9"
 gem "omniauth"
@@ -82,6 +83,6 @@ gem "omniauth-google-oauth2"
 
 gem "ransack"
 gem "pagy", "~> 9.4"
-gem "cocoon"
+gem "money-rails", "~> 1.12"
 
 gem "active_storage_validations", "~> 3.0"
