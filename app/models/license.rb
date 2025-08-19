@@ -1,4 +1,5 @@
-# app/models/license.rb
+# frozen_string_literal: true
+
 class License < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
 
@@ -14,10 +15,6 @@ class License < ApplicationRecord
   validates :price_cents, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true
-
-  def price
-    price_cents / 100.0
-  end
 
   def contract
     contract_details.with_indifferent_access
