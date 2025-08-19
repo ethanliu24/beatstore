@@ -2,7 +2,7 @@
 
 module Contracts
   module Track
-    class Free < Contracs::Track::Base
+    class Free < Contracts::Track::Base
     end
   end
 end

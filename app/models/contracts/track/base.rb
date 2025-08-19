@@ -2,7 +2,7 @@
 
 module Contracts
   module Track
-    class Base < Contracs::Base
+    class Base < Contracts::Base
       attribute :country
       attribute :province
       attribute :terms_of_years
