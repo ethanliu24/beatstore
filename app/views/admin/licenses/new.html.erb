@@ -1,0 +1,7 @@
+<% title("Create License") %>
+
+<% if @contract_form.blank? %>
+  <p><%= t("contracts.not_available") %></p>
+<% else %>
+  <%= render @contract_form, license: @license %>
+<% end %>

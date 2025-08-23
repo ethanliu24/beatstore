@@ -40,8 +40,10 @@ Rails.application.routes.draw do
     end
   end
 
+
   namespace :admin do
     resources :tracks, except: [ :show ]
+    resources :licenses
   end
 
   namespace :api do
