@@ -58,6 +58,7 @@ en:
     comments: "Comments"
     collaborators: "Collaborators"
     samples: "Samples"
+    licenses: "Licenses"
 
   general:
     upload_file: "Upload File"
@@ -129,6 +130,9 @@ en:
       add_new_collaboration: "Add new collaboration"
       add_collaborator: "Add collaborator"
       add_sample: "Add sample"
+    license:
+      index:
+        subtitle: "Manage licenses here"
 
   profile:
     manage_your_profile_here: "Manage your profile here"
@@ -144,8 +148,6 @@ en:
     delete_comment: "Delete Comment"
     comment_deletion_confirmation: "Are you sure you want to delete this comment?"
     action_cannot_be_undone: "This action can't be undone."
-
-  licenses:
 
   contracts:
     not_available: "This contract type is not available."

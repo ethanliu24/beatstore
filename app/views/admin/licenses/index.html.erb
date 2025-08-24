@@ -1,0 +1,28 @@
+<% title("All Licenses") %>
+
+<div class="w-full">
+  <%= render PageTitleComponent.new(
+    title: t("label.licenses"),
+    subtitle: t("admin.license.index.subtitle")
+  ) %>
+
+  <%= render Ui::DropdownComponent.new(id: "licenses-create") do |dropdown| %>
+    <% dropdown.with_trigger_button(
+      id: "licenses-create",
+      classes: "flex justify-center items-center gap-2 button py-1 px-2",
+      data: { dropdown_placement: "right" }
+    ) do %>
+      <%= icon "plus", class: "w-4 h-4 aspect-square" %>
+      <p><%= t("label.create") %></p>
+    <% end %>
+
+    <% dropdown.with_section do %>
+      <ul>
+        <li class="dropdown-item">
+          <%= link_to t("contracts.tracks.free"),
+            new_admin_license_path(contract_type: License.contract_types[:free]) %>
+        </li>
+      </ul>
+    <% end %>
+  <% end %>
+</div>

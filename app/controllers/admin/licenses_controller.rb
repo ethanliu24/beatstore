@@ -2,6 +2,10 @@
 
 module Admin
   class LicensesController < Admin::BaseController
+    def index
+      @licenses = License.all
+    end
+
     def new
       @contract_form = get_contract_form
       @license = License.new
