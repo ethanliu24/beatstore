@@ -3,6 +3,8 @@
 class License < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
 
+  MAX_DESCRIPTION_LENGTH = 400
+
   monetize :price_cents, with_model_currency: :currency
 
   enum :contract_type, {
@@ -12,6 +14,7 @@ class License < ApplicationRecord
   }
 
   validates :title, presence: true, uniqueness: true
+  validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
   validates :price_cents, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true

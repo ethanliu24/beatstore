@@ -151,3 +151,7 @@ en:
 
   contracts:
     not_available: "This contract type is not available."
+    form:
+      title:
+        basic_info: "BASIC INFO"
+      active_by_default: "Active by default"

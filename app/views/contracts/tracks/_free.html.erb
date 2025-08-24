@@ -1,1 +1,40 @@
-HI
+<%= form_with(
+    model: @license,
+    url: @license.persisted? ? admin_license_path(@license) : admin_licenses_path,
+    method: @license.persisted? ? :patch : :post,
+    class: "license-form flex flex-col justify-center items-center gap-3 p-8 divide-y divide-secondary-txt/15 w-full"
+  ) do |form| %>
+  <section class="w-full">
+    <div class="flex justify-start items-center gap-2 mb-4 text-accent">
+      <%= icon "contract", class: "w-4 h-4 aspect-square" %>
+      <h2 class="text-sm font-bold"><%= t("contracts.form.title.basic_info") %></h2>
+    </div>
+    <div class="field content-input-container">
+      <%= form.label :title %>
+      <%= form.text_field :title, autofocus: false, class: "content-input" %>
+    </div>
+    <div class="field content-input-container" data-controller="char-count">
+      <div class="flex justify-between items-center w-full">
+        <%= form.label :description %>
+        <div class="char-count">
+          <span data-char-count-target="count">0</span><%= "/#{License::MAX_DESCRIPTION_LENGTH}" %>
+        </div>
+      </div>
+      <%= form.text_area :description, autofocus: false, class: "content-input resize-none h-30",
+        maxlength: License::MAX_DESCRIPTION_LENGTH,
+        data: { char_count_target: "input", action: "input->char-count#count" } %>
+    </div>
+    <div class="field content-input-container mt-4">
+      <label class="inline-flex items-center mb-5 cursor-pointer">
+        <input type="checkbox" value="" class="sr-only peer">
+        <div class="relative w-9 h-5 bg-secondary-bg peer-focus:outline-none rounded-full
+          peer-focus:ring-2 peer-focus:ring-accent
+          peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white
+          after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full
+          after:h-4 after:w-4 after:transition-all border-1 border-secondary-txt/40 peer-checked:bg-accent-text">
+        </div>
+        <%= form.label t("contracts.form.active_by_default"), class: "ml-4" %>
+      </label>
+    </div>
+  </section>
+<% end %>
