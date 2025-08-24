@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "ostruct"
+
 module ApplicationHelper
   include Pagy::Frontend
   include ActionView::Helpers::DateHelper

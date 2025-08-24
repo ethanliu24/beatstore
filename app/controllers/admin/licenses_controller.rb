@@ -2,19 +2,46 @@
 
 module Admin
   class LicensesController < Admin::BaseController
+    before_action :resolve_contract, only: [ :create, :update ]
+
     def index
       @licenses = License.all
     end
 
     def new
-      @contract_form = get_contract_form
+      @contract_form = get_contract_form(params[:contract_type])
       @license = License.new
+    end
+
+    def create
+      @license = License.new(sanatize_license_params)
+
+      if @license.save
+        redirect_to admin_licenses_path, notice: t("admin.license.success.create")
+      else
+        @contract_form = get_contract_form(params[:license][:contract_type])
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+    def update
     end
 
     private
 
-    def get_contract_form
-      case params[:contract_type]
+    def resolve_contract
+      case params[:license][:contract_type]
+      when License.contract_types[:free]
+        @contract = Contracts::Track::Free
+      when License.contract_types[:non_exclusive]
+        @contract = Contracts::Track::NonExclusive
+      else
+        @contract = nil
+      end
+    end
+
+    def get_contract_form(contract_type)
+      case contract_type
       when License.contract_types[:free]
         "contracts/tracks/free"
       when License.contract_types[:non_exclusive]
@@ -23,6 +50,18 @@ module Admin
         # TODO redirect to 404
         ""
       end
+    end
+
+    def sanatize_license_params
+      params.require(:license).permit(
+        :title,
+        :description,
+        :contract_type,
+        :price_cents,
+        :currency,
+        :default_for_new,
+        contract_details: @contract.attribute_types.keys,
+      )
     end
   end
 end

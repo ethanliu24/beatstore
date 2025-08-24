@@ -1,17 +1,34 @@
 <%= form_with(
-    model: @license,
-    url: @license.persisted? ? admin_license_path(@license) : admin_licenses_path,
-    method: @license.persisted? ? :patch : :post,
-    class: "license-form flex flex-col justify-center items-center gap-3 p-8 divide-y divide-secondary-txt/15 w-full"
+    model: license,
+    url: license.persisted? ? admin_license_path(license) : admin_licenses_path,
+    method: license.persisted? ? :patch : :post,
+    class: "license-form flex flex-col justify-center items-center gap-4 p-8 divide-y divide-secondary-txt/15 w-full"
   ) do |form| %>
-  <section class="w-full">
-    <div class="flex justify-start items-center gap-2 mb-4 text-accent">
+  <% if license.errors.any? %>
+    <div id="error_explanation" class="flash flash-error mb-2">
+      <h2><%= pluralize(license.errors.count, "error") %> prohibited this track from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% license.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :contract_type, value: License.contract_types[:free] %>
+  <%= form.hidden_field :price_cents, value: 0 %>
+  <%= form.hidden_field :currency, value: "USD" %>
+
+  <section class="w-full flex flex-col justify-start items-center gap-4">
+    <div class="flex justify-start items-center gap-2 text-accent w-full">
       <%= icon "contract", class: "w-4 h-4 aspect-square" %>
       <h2 class="text-sm font-bold"><%= t("contracts.form.title.basic_info") %></h2>
     </div>
+
     <div class="field content-input-container">
       <%= form.label :title %>
-      <%= form.text_field :title, autofocus: false, class: "content-input" %>
+      <%= form.text_field :title, autofocus: false, autocomplete: "off", class: "content-input" %>
     </div>
     <div class="field content-input-container" data-controller="char-count">
       <div class="flex justify-between items-center w-full">
@@ -21,20 +38,37 @@
         </div>
       </div>
       <%= form.text_area :description, autofocus: false, class: "content-input resize-none h-30",
-        maxlength: License::MAX_DESCRIPTION_LENGTH,
+        maxlength: License::MAX_DESCRIPTION_LENGTH, autocomplete: "off",
         data: { char_count_target: "input", action: "input->char-count#count" } %>
     </div>
     <div class="field content-input-container mt-4">
       <label class="inline-flex items-center mb-5 cursor-pointer">
-        <input type="checkbox" value="" class="sr-only peer">
-        <div class="relative w-9 h-5 bg-secondary-bg peer-focus:outline-none rounded-full
+        <%= form.check_box :default_for_new, class: "sr-only peer" %>
+        <input type="checkbox" value="" class="sr-only peer" <%= "checked" if license.default_for_new %>>
+        <div class="relative w-9 h-5 bg-secondary-txt/40 dark:bg-secondary-bg peer-focus:outline-none rounded-full
           peer-focus:ring-2 peer-focus:ring-accent
-          peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white
+          peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
           after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full
-          after:h-4 after:w-4 after:transition-all border-1 border-secondary-txt/40 peer-checked:bg-accent-text">
+          after:h-4 after:w-4 after:transition-all dark:border-1 dark:border-secondary-txt/40 peer-checked:bg-accent">
         </div>
         <%= form.label t("contracts.form.active_by_default"), class: "ml-4" %>
       </label>
     </div>
+  </section>
+  <%= form.fields_for :contract_details, OpenStruct.new(license.contract_details) do |c| %>
+    <section class="w-full flex flex-col justify-start items-center gap-4">
+      <div class="flex justify-start items-center gap-2 text-accent w-full">
+        <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
+        <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
+      </div>
+
+      <div class="field content-input-container">
+        <%= c.label :country %>
+        <%= c.text_field :country, autocomplete: "off", class: "content-input" %>
+      </div>
+    </section>
+  <% end %>
+  <section class="flex justify-end items-stretch w-full">
+    <%= form.submit t("label.#{license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
   </section>
 <% end %>

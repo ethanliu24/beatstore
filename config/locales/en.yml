@@ -154,4 +154,5 @@ en:
     form:
       title:
         basic_info: "BASIC INFO"
+        territory: "TERRITORY"
       active_by_default: "Active by default"
