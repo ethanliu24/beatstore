@@ -83,6 +83,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_16_043532) do
     t.string "currency", limit: 3, default: "USD", null: false
     t.string "contract_type", null: false
     t.jsonb "contract_details", default: {}, null: false
+    t.string "country"
+    t.string "province"
     t.boolean "default_for_new", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
