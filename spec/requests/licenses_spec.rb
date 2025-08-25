@@ -149,4 +149,21 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       end
     end
   end
+
+  describe "admin paths", authorization_test: true do
+    it "only allows admin at GET /index" do
+      get admin_licenses_url
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "only allows admin at GET /new" do
+      get new_admin_license_url
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "only allows admin at POST /create" do
+      post admin_licenses_url, params: { licenses: params }
+      expect(response).to redirect_to(root_path)
+    end
+  end
 end
