@@ -45,17 +45,24 @@
         data: { char_count_target: "input", action: "input->char-count#count" } %>
     </div>
     <div class="field content-input-container mt-4">
-      <label class="inline-flex items-center cursor-pointer">
-        <%= form.check_box :default_for_new, class: "sr-only peer" %>
-        <input type="checkbox" value="" class="sr-only peer" <%= "checked" if @license.default_for_new %>>
-        <div class="relative w-9 h-5 bg-secondary-txt/40 dark:bg-secondary-bg peer-focus:outline-none rounded-full
-          peer-focus:ring-2 peer-focus:ring-accent
-          peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-          after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full
-          after:h-4 after:w-4 after:transition-all dark:border-1 dark:border-secondary-txt/40 peer-checked:bg-accent">
-        </div>
-        <%= form.label t("contracts.form.active_by_default"), class: "ml-4" %>
-      </label>
+      <% [
+        { field: :delivers_mp3, label: t("contracts.form.deliver_mp3"), checked: @license.contract[:delivers_mp3] },
+        { field: :delivers_wav, label: t("contracts.form.deliver_wav"), checked: @license.contract[:delivers_wav] },
+        { field: :delivers_stems, label: t("contracts.form.deliver_stems"), checked: @license.contract[:delivers_stems] },
+        { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new }
+      ].each do |toggle| %>
+        <label class="inline-flex items-center cursor-pointer">
+          <%= form.check_box toggle[:field], class: "sr-only peer" %>
+          <input type="checkbox" value="" class="sr-only peer" <%= "checked" if toggle[:checked] %>>
+          <div class="relative w-9 h-5 bg-secondary-txt/40 dark:bg-secondary-bg peer-focus:outline-none rounded-full
+            peer-focus:ring-2 peer-focus:ring-accent
+            peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+            after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full
+            after:h-4 after:w-4 after:transition-all dark:border-1 dark:border-secondary-txt/40 peer-checked:bg-accent">
+          </div>
+          <%= form.label toggle[:label], class: "ml-4" %>
+        </label>
+      <% end %>
     </div>
   </section>
   <section class="form-section">
@@ -64,7 +71,7 @@
       <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
     </div>
 
-    <div class="flex justify-center items-center gap-8 w-full" data-controller="selector-turbo"
+    <div class="form-grid-content" data-controller="selector-turbo"
       data-selector-turbo-url-value="<%= location_provinces_path %>" data-selector-turbo-param-value="country">
       <div class="field content-input-container">
         <%= form.label t("contracts.form.label.area_law_applied", area: "Country") %>
@@ -84,19 +91,96 @@
   <%= form.fields_for :contract_details, OpenStruct.new(@license.contract_details) do |c| %>
     <section class="form-section">
       <div class="flex justify-start items-center gap-2 text-accent w-full">
-        <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
+        <%= icon "gavel", class: "w-4 h-4 aspect-square" %>
         <h2 class="text-sm font-bold"><%= t("contracts.form.title.distribution") %></h2>
       </div>
 
-      <div class="grid grid-cols-2 gap-8 w-full">
-        <div class="field content-input-container">
-          <%= c.label :terms_of_years %>
-          <%= c.number_field :terms_of_years, class: "content-input", required: true, min: 1, step: 1 %>
+      <div class="form-grid-content">
+        <div class="field content-input-container grid-content">
+          <%= c.label t("contracts.form.label.terms_of_years") %>
+          <%= c.number_field :terms_of_years, class: "content-input", min: 1, step: 1 %>
         </div>
+
+        <% if contract_type == License.contract_types[:non_exclusive] %>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.distribution_copies") %>
+            <%= c.number_field :distribution_copies, class: "content-input", min: 1, step: 1 %>
+          </div>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.streams_allowed") %>
+            <%= c.number_field :streams_allowed, class: "content-input", min: 1, step: 1 %>
+          </div>
+        <% end %>
       </div>
     </section>
+
+    <% if contract_type == License.contract_types[:non_exclusive] %>
+      <section class="form-section">
+        <div class="flex justify-start items-center gap-2 text-accent w-full">
+          <%= icon "video", class: "w-4 h-4 aspect-square" %>
+          <h2 class="text-sm font-bold"><%= t("contracts.form.title.music_videos") %></h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch">
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.monetized_videos") %>
+            <%= c.number_field :monetized_videos, class: "content-input", min: 1, step: 1 %>
+          </div>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.non_monetized_videos") %>
+            <%= c.number_field :non_monetized_videos, class: "content-input", min: 1, step: 1 %>
+          </div>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.monetized_video_streams") %>
+            <%= c.number_field :monetized_vmonetized_video_streamsideos, class: "content-input", min: 1, step: 1 %>
+          </div>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.non_monetized_video_streams") %>
+            <%= c.number_field :non_monetized_video_streams, class: "content-input", min: 1, step: 1 %>
+          </div>
+        </div>
+      </section>
+      <section class="form-section">
+        <div class="flex justify-start items-center gap-2 text-accent w-full">
+          <%= icon "radio", class: "w-4 h-4 aspect-square" %>
+          <h2 class="text-sm font-bold"><%= t("contracts.form.title.radio_broadcasting") %></h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch">
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.has_broadcasting_rights") %>
+            <%= c.select :has_broadcasting_rights,
+              options_for_select([["Yes", true], ["No", false]], c.object.has_broadcasting_rights),
+              {}, class: "content-input" %>
+          </div>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.radio_stations_allowed") %>
+            <%= c.number_field :radio_stations_allowed, class: "content-input", min: 1, step: 1 %>
+          </div>
+        </div>
+      </section>
+      <section class="form-section">
+        <div class="flex justify-start items-center gap-2 text-accent w-full">
+          <%= icon "radio", class: "w-4 h-4 aspect-square" %>
+          <h2 class="text-sm font-bold"><%= t("contracts.form.title.live_performances") %></h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch">
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.allow_profitable_performances") %>
+            <%= c.select :allow_profitable_performances,
+              options_for_select([["Yes", true], ["No", false]], c.object.allow_profitable_performances),
+              {}, class: "content-input" %>
+          </div>
+          <div class="field content-input-container">
+            <%= c.label t("contracts.form.label.non_profitable_performances_allowed") %>
+            <%= c.number_field :non_profitable_performances_allowed, class: "content-input", min: 1, step: 1 %>
+          </div>
+        </div>
+      </section>
+    <% end %>
   <% end %>
-  <section class="flex justify-end items-stretch w-full">
+  <section class="flex justify-end items-stretch w-full py-6">
     <%= form.submit t("label.#{@license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
   </section>
 <% end %>
