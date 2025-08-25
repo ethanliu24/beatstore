@@ -18,10 +18,14 @@
 
     <% dropdown.with_section do %>
       <ul>
-        <li class="dropdown-item">
-          <%= link_to t("contracts.tracks.free"),
-            new_admin_license_path(contract_type: License.contract_types[:free]) %>
-        </li>
+        <% [
+          { contract_type: License.contract_types[:free], label: t("contracts.tracks.free") },
+          { contract_type: License.contract_types[:free], label: t("contracts.tracks.non_exclusive") }
+        ].each do |data| %>
+          <li class="dropdown-item">
+            <%= link_to data[:label], new_admin_license_path(contract_type: data[:contract_type]) %>
+          </li>
+        <% end %>
       </ul>
     <% end %>
   <% end %>

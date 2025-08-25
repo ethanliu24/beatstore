@@ -131,6 +131,8 @@ en:
       add_collaborator: "Add collaborator"
       add_sample: "Add sample"
     license:
+      back_to_licenses: "Back to licenses"
+      contract_name: "%{contract} License"
       index:
         subtitle: "Manage licenses here"
       create:
@@ -153,6 +155,10 @@ en:
 
   contracts:
     not_available: "This contract type is not available."
+    tracks:
+      free: "Free"
+      non_exclusive: "Non Exclusive"
+      exclusive: "Exclusive"
     form:
       title:
         basic_info: "BASIC INFO"

@@ -95,7 +95,7 @@
   }
 
   .page-title {
-    @apply font-bold text-4xl mb-5;
+    @apply font-bold text-4xl;
   }
 
   .content-input-container {
