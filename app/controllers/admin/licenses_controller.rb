@@ -18,6 +18,11 @@ module Admin
     end
 
     def create
+      if @contract_class.nil?
+        render :new, status: :unprocessable_content
+        return
+      end
+
       @license = License.new(sanitize_license_params)
       @contract = @contract_class.new(**@license.contract)
       process_license
@@ -29,6 +34,11 @@ module Admin
     private
 
     def resolve_contract_class
+      if params[:license].nil?
+        @contract_class = nil
+        return
+      end
+
       case params[:license][:contract_type]
       when License.contract_types[:free]
         @contract_class = Contracts::Track::Free
@@ -46,6 +56,8 @@ module Admin
         :contract_type,
         :price_cents,
         :currency,
+        :country,
+        :province,
         :default_for_new,
         contract_details: @contract_class.attribute_types.keys,
       )
@@ -60,7 +72,7 @@ module Admin
         end
 
         @contract_type = params[:license][:contract_type]
-        render :new, status: :unprocessable_content
+        render action_name == "create" ? :new : :edit, status: :unprocessable_content
       end
     end
   end

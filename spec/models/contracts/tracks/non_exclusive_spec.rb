@@ -28,23 +28,34 @@ RSpec.describe Contracts::Track::NonExclusive, type: :model do
       expect(contract).to be_valid
     end
 
-    it "does not allow negative numbers" do
-      numeric_fields = [
-        :distribution_copies,
-        :streams_allowed,
-        :non_monetized_videos,
-        :monetized_videos,
-        :non_monetized_video_streams,
-        :monetized_video_streams,
-        :non_profitable_performances,
-        :radio_stations_allowed
-      ]
+    context "unlimitable fields" do
+      let(:numeric_fields) {
+        [
+          :distribution_copies,
+          :streams_allowed,
+          :non_monetized_videos,
+          :monetized_videos,
+          :non_monetized_video_streams,
+          :monetized_video_streams,
+          :non_profitable_performances,
+          :radio_stations_allowed
+        ]
+      }
 
-      numeric_fields.each do |field|
-        contract.public_send("#{field}=", -1)
-        expect(contract).not_to be_valid, "#{field} should not accept negative numbers"
-        contract.public_send("#{field}=", 0)
-        expect(contract).to be_valid
+      it "does not allow negative numbers" do
+        numeric_fields.each do |field|
+          contract.public_send("#{field}=", -1)
+          expect(contract).not_to be_valid, "#{field} should not accept negative numbers"
+          contract.public_send("#{field}=", 0)
+          expect(contract).to be_valid
+        end
+      end
+
+      it "accepts nil" do
+        numeric_fields.each do |field|
+          contract.public_send("#{field}=", nil)
+          expect(contract).to be_valid
+        end
       end
     end
   end
