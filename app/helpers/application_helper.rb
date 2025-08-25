@@ -31,4 +31,8 @@ module ApplicationHelper
   def seperator_char_ui(class: "", data: {})
     content_tag(:span, "·", class:, data:)
   end
+
+  def currencies
+    ISO3166::Country.all.map { |c| c.currency_code }.compact.uniq.sort
+  end
 end

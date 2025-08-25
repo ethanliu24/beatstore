@@ -60,7 +60,7 @@ module Admin
         end
 
         @contract_type = params[:license][:contract_type]
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
   end

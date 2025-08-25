@@ -15,17 +15,26 @@ module Contracts
       attribute :allow_profitable_performances, :boolean
       attribute :non_profitable_performances_allowed, :integer
 
-      validates :distribution_copies, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :streams_allowed, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :non_monetized_videos, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :monetized_videos, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :non_monetized_video_streams, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :monetized_video_streams, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :non_profitable_performances, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :radio_stations_allowed, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-      validates :non_profitable_performances, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+      validates :distribution_copies, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { distribution_copies.present? }
+      validates :streams_allowed, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { streams_allowed.present? }
+      validates :non_monetized_videos, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { non_monetized_videos.present? }
+      validates :monetized_videos, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { monetized_videos.present? }
+      validates :non_monetized_video_streams, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { non_monetized_video_streams.present? }
+      validates :monetized_video_streams, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { monetized_video_streams.present? }
+      validates :non_profitable_performances, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { non_profitable_performances.present? }
+      validates :radio_stations_allowed, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { radio_stations_allowed.present? }
+      validates :non_profitable_performances, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+        if: -> { non_profitable_performances.present? }
       validates :has_broadcasting_rights, presence: true
-      validates :allow_profitable_performances_allowed, presence: true
+      validates :allow_profitable_performances, presence: true
 
       private
 
