@@ -1,0 +1,4 @@
+<%= turbo_stream.replace "license-province-select" do %>
+  <%= select_tag "license[province]", options_for_select(@provinces),
+    class: "content-input", id: "license-province-select" %>
+<% end %>

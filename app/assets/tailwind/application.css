@@ -248,7 +248,7 @@
 
   /* License */
   .license-form label {
-    @apply font-bold text-xs;
+    @apply font-bold text-xs text-wrap;
   }
 }
 

@@ -55,18 +55,29 @@
       </label>
     </div>
   </section>
-  <%= form.fields_for :contract_details, OpenStruct.new(license.contract_details) do |c| %>
-    <section class="w-full flex flex-col justify-start items-center gap-4">
-      <div class="flex justify-start items-center gap-2 text-accent w-full">
-        <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
-        <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
-      </div>
+  <section class="w-full flex flex-col justify-start items-center gap-4">
+    <div class="flex justify-start items-center gap-2 text-accent w-full">
+      <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
+      <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
+    </div>
 
+    <div class="flex justify-center items-center gap-8 w-full" data-controller="locations">
       <div class="field content-input-container">
-        <%= c.label :country %>
-        <%= c.text_field :country, autocomplete: "off", class: "content-input" %>
+        <%= form.label t("contracts.form.label.area_law_applied", area: "Country") %>
+        <%= form.select :country,
+          [ nil ] + ISO3166::Country.all.map { |c| [c.translations[I18n.locale.to_s] || c.name, c.alpha2] },
+          {}, class: "content-input",
+          data: { action: "change->locations#provincesForCountry" } %>
       </div>
-    </section>
+      <div class="field content-input-container">
+        <%= form.label t("contracts.form.label.area_law_applied", area: "(State or Province and Country)") %>
+        <%= form.select :province,
+          (ISO3166::Country[form.object.country]&.subdivisions || {}).map { |k,v| [v["name"], k] },
+          {}, class: "content-input", id: "license-province-select" %>
+      </div>
+    </div>
+  </section>
+  <%= form.fields_for :contract_details, OpenStruct.new(license.contract_details) do |c| %>
   <% end %>
   <section class="flex justify-end items-stretch w-full">
     <%= form.submit t("label.#{license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>

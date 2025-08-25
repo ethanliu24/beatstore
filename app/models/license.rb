@@ -18,8 +18,8 @@ class License < ApplicationRecord
   validates :price_cents, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true
-  validates :country, precense: true
-  validates :province, precense: true
+  validates :country, presence: true
+  validates :province, presence: true
 
   def contract
     contract_details.with_indifferent_access
@@ -33,14 +33,18 @@ class License < ApplicationRecord
   end
 
   def country_and_province_exists
-    country_obj = Carmen::Country.coded(country)
+    country_obj = ISO3166::Country[country]
     if country_obj.nil?
       errors.add(:country, "is not a valid country")
       return
     end
 
-    if province.present? && !country_obj.subregions.coded(province)
-      errors.add(:province, "is not valid for #{country_obj.name}")
+    if country_obj.subdivisions.any?
+      unless country_obj.subdivisions.key?(province)
+        errors.add(:province, "is not valid for #{country_obj.name}")
+      end
+    elsif province.present?
+      errors.add(:province, "#{country_obj.name} has no provinces")
     end
   end
 end

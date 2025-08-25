@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "stimulus/delete_modal"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -40,7 +39,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   namespace :admin do
     resources :tracks, except: [ :show ]
     resources :licenses
@@ -54,6 +52,10 @@ Rails.application.routes.draw do
     scope "track/:id" do
       get "free", to: "free_download", as: "download_track_free"
     end
+  end
+
+  scope :location, controller: :locations do
+    get "provinces", action: "provinces", as: "location_provinces"
   end
 
   scope :modal, controller: :modals do

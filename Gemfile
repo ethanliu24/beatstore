@@ -75,6 +75,7 @@ gem "tailwindcss-rails", "~> 4.3"
 gem "rails_icons", "~> 1.4"
 gem "view_component", "~> 4.0"
 gem "cocoon"
+gem "countries", "~> 6.0"
 
 gem "devise", "~> 4.9"
 gem "omniauth"
