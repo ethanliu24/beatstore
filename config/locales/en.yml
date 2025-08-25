@@ -133,6 +133,8 @@ en:
     license:
       index:
         subtitle: "Manage licenses here"
+      create:
+        sucess: "License was successfully created."
 
   profile:
     manage_your_profile_here: "Manage your profile here"

@@ -2,7 +2,7 @@
 
 module Admin
   class LicensesController < Admin::BaseController
-    before_action :resolve_contract, only: [ :create, :update ]
+    before_action :resolve_contract_class, only: [ :create, :update ]
 
     def index
       @licenses = License.all
@@ -14,14 +14,9 @@ module Admin
     end
 
     def create
-      @license = License.new(sanatize_license_params)
-
-      if @license.save
-        redirect_to admin_licenses_path, notice: t("admin.license.success.create")
-      else
-        @contract_form = get_contract_form(params[:license][:contract_type])
-        render :new, status: :unprocessable_entity
-      end
+      @license = License.new(sanitize_license_params)
+      @contract = @contract_class.new(**@license.contract)
+      process_license
     end
 
     def update
@@ -29,14 +24,14 @@ module Admin
 
     private
 
-    def resolve_contract
+    def resolve_contract_class
       case params[:license][:contract_type]
       when License.contract_types[:free]
-        @contract = Contracts::Track::Free
+        @contract_class = Contracts::Track::Free
       when License.contract_types[:non_exclusive]
-        @contract = Contracts::Track::NonExclusive
+        @contract_class = Contracts::Track::NonExclusive
       else
-        @contract = nil
+        @contract_class = nil
       end
     end
 
@@ -52,7 +47,7 @@ module Admin
       end
     end
 
-    def sanatize_license_params
+    def sanitize_license_params
       params.require(:license).permit(
         :title,
         :description,
@@ -60,8 +55,21 @@ module Admin
         :price_cents,
         :currency,
         :default_for_new,
-        contract_details: @contract.attribute_types.keys,
+        contract_details: @contract_class.attribute_types.keys,
       )
+    end
+
+    def process_license
+      if @contract.valid? && @license.save
+        redirect_to admin_licenses_path, notice: t("admin.license.create.sucess")
+      else
+        @contract.errors.each do |error|
+          @license.errors.add(error.attribute, error.message)
+        end
+
+        @contract_form = get_contract_form(params[:license][:contract_type])
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 end
