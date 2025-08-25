@@ -1,7 +1,9 @@
 <% title("Create License") %>
 
-<% if @contract_form.blank? %>
-  <p><%= t("contracts.not_available") %></p>
+<% if @contract_type.blank? %>
+  <div class="w-full h-full flex justify-center items-center">
+    <p class="text-secondary-txt italic font-light"><%= t("contracts.not_available") %></p>
+  </div>
 <% else %>
-  <%= render @contract_form, license: @license %>
+  <%= render "contracts/tracks/form", license: @license, contract_type: @contract_type %>
 <% end %>

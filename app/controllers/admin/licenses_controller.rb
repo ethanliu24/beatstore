@@ -9,8 +9,12 @@ module Admin
     end
 
     def new
-      @contract_form = get_contract_form(params[:contract_type])
       @license = License.new
+      @contract_type = params[:contract_type]
+
+      unless License.contract_types.key?(@contract_type.to_s)
+        @contract_type = nil
+      end
     end
 
     def create
@@ -35,18 +39,6 @@ module Admin
       end
     end
 
-    def get_contract_form(contract_type)
-      case contract_type
-      when License.contract_types[:free]
-        "contracts/tracks/free"
-      when License.contract_types[:non_exclusive]
-        "contracts/tracks/non_exclusive"
-      else
-        # TODO redirect to 404
-        ""
-      end
-    end
-
     def sanitize_license_params
       params.require(:license).permit(
         :title,
@@ -67,7 +59,7 @@ module Admin
           @license.errors.add(error.attribute, error.message)
         end
 
-        @contract_form = get_contract_form(params[:license][:contract_type])
+        @contract_type = params[:license][:contract_type]
         render :new, status: :unprocessable_entity
       end
     end

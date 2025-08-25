@@ -1,24 +1,27 @@
 <%= form_with(
-    model: license,
-    url: license.persisted? ? admin_license_path(license) : admin_licenses_path,
-    method: license.persisted? ? :patch : :post,
+    model: @license,
+    url: @license.persisted? ? admin_license_path(@license) : admin_licenses_path,
+    method: @license.persisted? ? :patch : :post,
     class: "license-form flex flex-col justify-center items-center p-8 divide-y divide-secondary-txt/15 w-full"
   ) do |form| %>
-  <% if license.errors.any? %>
+  <% if @license.errors.any? %>
     <div id="error_explanation" class="flash flash-error mb-2">
       <h2><%= pluralize(license.errors.count, "error") %> prohibited this track from being saved:</h2>
 
       <ul class="list-disc ml-6">
-        <% license.errors.each do |error| %>
+        <% @license.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <%= form.hidden_field :contract_type, value: License.contract_types[:free] %>
-  <%= form.hidden_field :price_cents, value: 0 %>
-  <%= form.hidden_field :currency, value: "USD" %>
+  <%= form.hidden_field :contract_type, value: contract_type %>
+
+  <% if contract_type == License.contract_types[:free] %>
+    <%= form.hidden_field :price_cents, value: 0 %>
+    <%= form.hidden_field :currency, value: "USD" %>
+  <% end %>
 
   <section class="form-section">
     <div class="flex justify-start items-center gap-2 text-accent w-full">
@@ -44,7 +47,7 @@
     <div class="field content-input-container mt-4">
       <label class="inline-flex items-center cursor-pointer">
         <%= form.check_box :default_for_new, class: "sr-only peer" %>
-        <input type="checkbox" value="" class="sr-only peer" <%= "checked" if license.default_for_new %>>
+        <input type="checkbox" value="" class="sr-only peer" <%= "checked" if @license.default_for_new %>>
         <div class="relative w-9 h-5 bg-secondary-txt/40 dark:bg-secondary-bg peer-focus:outline-none rounded-full
           peer-focus:ring-2 peer-focus:ring-accent
           peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -78,7 +81,7 @@
       </div>
     </div>
   </section>
-  <%= form.fields_for :contract_details, OpenStruct.new(license.contract_details) do |c| %>
+  <%= form.fields_for :contract_details, OpenStruct.new(@license.contract_details) do |c| %>
     <section class="form-section">
       <div class="flex justify-start items-center gap-2 text-accent w-full">
         <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
@@ -94,6 +97,6 @@
     </section>
   <% end %>
   <section class="flex justify-end items-stretch w-full">
-    <%= form.submit t("label.#{license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
+    <%= form.submit t("label.#{@license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
   </section>
 <% end %>
