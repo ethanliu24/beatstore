@@ -61,13 +61,14 @@
       <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
     </div>
 
-    <div class="flex justify-center items-center gap-8 w-full" data-controller="locations">
+    <div class="flex justify-center items-center gap-8 w-full" data-controller="selector-turbo"
+      data-selector-turbo-url-value="<%= location_provinces_path %>" data-selector-turbo-param-value="country">
       <div class="field content-input-container">
         <%= form.label t("contracts.form.label.area_law_applied", area: "Country") %>
         <%= form.select :country,
-          [ nil ] + ISO3166::Country.all.map { |c| [c.translations[I18n.locale.to_s] || c.name, c.alpha2] },
+          ISO3166::Country.all.map { |c| [c.translations[I18n.locale.to_s] || c.name, c.alpha2] },
           {}, class: "content-input",
-          data: { action: "change->locations#provincesForCountry" } %>
+          data: { action: "change->selector-turbo#change" } %>
       </div>
       <div class="field content-input-container">
         <%= form.label t("contracts.form.label.area_law_applied", area: "(State or Province and Country)") %>
