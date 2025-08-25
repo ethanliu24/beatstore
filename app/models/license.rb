@@ -15,7 +15,6 @@ class License < ApplicationRecord
 
   validates :title, presence: true, uniqueness: true
   validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
-  validates :price_cents, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true
   validates :country, presence: true
