@@ -44,6 +44,17 @@
         maxlength: License::MAX_DESCRIPTION_LENGTH, autocomplete: "off",
         data: { char_count_target: "input", action: "input->char-count#count" } %>
     </div>
+    <div class="form-grid-container">
+      <div class="field content-input-container grid-content">
+        <%= form.label :price %>
+        <%= form.number_field :price, class: "content-input", required: true, min: 0, step: 0.01 %>
+      </div>
+      <div class="field content-input-container grid-content">
+        <%= form.label :currency %>
+        <%= form.select :currency, options_for_select(currencies.map { |c| [c, c] }, @license.currency),
+          { required: true }, class: "content-input" %>
+      </div>
+    </div>
     <div class="field content-input-container mt-4">
       <% [
         { field: :delivers_mp3, label: t("contracts.form.deliver_mp3"), checked: @license.contract[:delivers_mp3] },
@@ -71,7 +82,7 @@
       <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
     </div>
 
-    <div class="form-grid-content" data-controller="selector-turbo"
+    <div class="form-grid-container" data-controller="selector-turbo"
       data-selector-turbo-url-value="<%= location_provinces_path %>" data-selector-turbo-param-value="country">
       <div class="field content-input-container">
         <%= form.label t("contracts.form.label.area_law_applied", area: "Country") %>
@@ -95,7 +106,7 @@
         <h2 class="text-sm font-bold"><%= t("contracts.form.title.distribution") %></h2>
       </div>
 
-      <div class="form-grid-content">
+      <div class="form-grid-container">
         <div class="field content-input-container grid-content">
           <%= c.label t("contracts.form.label.terms_of_years") %>
           <%= c.number_field :terms_of_years, class: "content-input", min: 1, step: 1 %>
@@ -121,7 +132,7 @@
           <h2 class="text-sm font-bold"><%= t("contracts.form.title.music_videos") %></h2>
         </div>
 
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch">
+        <div class="form-grid-container">
           <div class="field content-input-container">
             <%= c.label t("contracts.form.label.monetized_videos") %>
             <%= c.number_field :monetized_videos, class: "content-input", min: 1, step: 1 %>
@@ -146,7 +157,7 @@
           <h2 class="text-sm font-bold"><%= t("contracts.form.title.radio_broadcasting") %></h2>
         </div>
 
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch">
+        <div class="form-grid-container">
           <div class="field content-input-container">
             <%= c.label t("contracts.form.label.has_broadcasting_rights") %>
             <%= c.select :has_broadcasting_rights,
@@ -165,7 +176,7 @@
           <h2 class="text-sm font-bold"><%= t("contracts.form.title.live_performances") %></h2>
         </div>
 
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch">
+        <div class="form-grid-container">
           <div class="field content-input-container">
             <%= c.label t("contracts.form.label.allow_profitable_performances") %>
             <%= c.select :allow_profitable_performances,
