@@ -155,6 +155,7 @@ en:
       title:
         basic_info: "BASIC INFO"
         territory: "TERRITORY"
+        distribution: "DISTRIBUTION"
       label:
         area_law_applied: Arbitration %{area} where Governing Law is applied
       active_by_default: "Active by default"

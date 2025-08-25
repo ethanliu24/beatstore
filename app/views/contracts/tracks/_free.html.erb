@@ -2,7 +2,7 @@
     model: license,
     url: license.persisted? ? admin_license_path(license) : admin_licenses_path,
     method: license.persisted? ? :patch : :post,
-    class: "license-form flex flex-col justify-center items-center gap-4 p-8 divide-y divide-secondary-txt/15 w-full"
+    class: "license-form flex flex-col justify-center items-center p-8 divide-y divide-secondary-txt/15 w-full"
   ) do |form| %>
   <% if license.errors.any? %>
     <div id="error_explanation" class="flash flash-error mb-2">
@@ -20,7 +20,7 @@
   <%= form.hidden_field :price_cents, value: 0 %>
   <%= form.hidden_field :currency, value: "USD" %>
 
-  <section class="w-full flex flex-col justify-start items-center gap-4">
+  <section class="form-section">
     <div class="flex justify-start items-center gap-2 text-accent w-full">
       <%= icon "contract", class: "w-4 h-4 aspect-square" %>
       <h2 class="text-sm font-bold"><%= t("contracts.form.title.basic_info") %></h2>
@@ -42,7 +42,7 @@
         data: { char_count_target: "input", action: "input->char-count#count" } %>
     </div>
     <div class="field content-input-container mt-4">
-      <label class="inline-flex items-center mb-5 cursor-pointer">
+      <label class="inline-flex items-center cursor-pointer">
         <%= form.check_box :default_for_new, class: "sr-only peer" %>
         <input type="checkbox" value="" class="sr-only peer" <%= "checked" if license.default_for_new %>>
         <div class="relative w-9 h-5 bg-secondary-txt/40 dark:bg-secondary-bg peer-focus:outline-none rounded-full
@@ -55,7 +55,7 @@
       </label>
     </div>
   </section>
-  <section class="w-full flex flex-col justify-start items-center gap-4">
+  <section class="form-section">
     <div class="flex justify-start items-center gap-2 text-accent w-full">
       <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
       <h2 class="text-sm font-bold"><%= t("contracts.form.title.territory") %></h2>
@@ -67,7 +67,7 @@
         <%= form.label t("contracts.form.label.area_law_applied", area: "Country") %>
         <%= form.select :country,
           ISO3166::Country.all.map { |c| [c.translations[I18n.locale.to_s] || c.name, c.alpha2] },
-          {}, class: "content-input",
+          { prompt: "" }, class: "content-input",
           data: { action: "change->selector-turbo#change" } %>
       </div>
       <div class="field content-input-container">
@@ -79,6 +79,19 @@
     </div>
   </section>
   <%= form.fields_for :contract_details, OpenStruct.new(license.contract_details) do |c| %>
+    <section class="form-section">
+      <div class="flex justify-start items-center gap-2 text-accent w-full">
+        <%= icon "map-pin", class: "w-4 h-4 aspect-square" %>
+        <h2 class="text-sm font-bold"><%= t("contracts.form.title.distribution") %></h2>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8 w-full">
+        <div class="field content-input-container">
+          <%= form.label :terms_of_years %>
+          <%= form.number_field :terms_of_years, class: "content-input", required: true, min: 1, step: 1 %>
+        </div>
+      </div>
+    </section>
   <% end %>
   <section class="flex justify-end items-stretch w-full">
     <%= form.submit t("label.#{license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>

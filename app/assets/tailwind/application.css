@@ -250,6 +250,10 @@
   .license-form label {
     @apply font-bold text-xs text-wrap;
   }
+
+  .license-form > .form-section {
+    @apply py-6 w-full flex flex-col justify-start items-center gap-4;
+  }
 }
 
 /* Admin tracks page layout */
