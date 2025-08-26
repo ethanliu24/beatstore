@@ -20,7 +20,7 @@
       <ul>
         <% [
           { contract_type: License.contract_types[:free], label: t("contracts.tracks.free") },
-          { contract_type: License.contract_types[:free], label: t("contracts.tracks.non_exclusive") }
+          { contract_type: License.contract_types[:non_exclusive], label: t("contracts.tracks.non_exclusive") }
         ].each do |data| %>
           <li class="dropdown-item">
             <%= link_to data[:label], new_admin_license_path(contract_type: data[:contract_type]) %>
@@ -29,4 +29,10 @@
       </ul>
     <% end %>
   <% end %>
+
+  <div class="w-full flex flex-col justify-start items-start gap-2 pt-8">
+    <% @licenses.each do |license| %>
+      <%= render Licenses::LicenseComponent.new(license:) %>
+    <% end %>
+  </div>
 </div>

@@ -5,7 +5,7 @@ module Admin
     before_action :resolve_contract_class, only: [ :create, :update ]
 
     def index
-      @licenses = License.all
+      @licenses = License.order(updated_at: :desc)
     end
 
     def new
@@ -50,7 +50,7 @@ module Admin
     end
 
     def sanitize_license_params
-      params.require(:license).permit(
+      permitted = params.require(:license).permit(
         :title,
         :description,
         :contract_type,
@@ -61,6 +61,12 @@ module Admin
         :default_for_new,
         contract_details: @contract_class.attribute_types.keys,
       )
+
+      if permitted[:price_cents].present?
+        permitted[:price_cents] = (permitted[:price_cents].to_f * 100).round
+      end
+
+      permitted
     end
 
     def process_license

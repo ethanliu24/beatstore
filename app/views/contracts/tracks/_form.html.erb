@@ -1,9 +1,7 @@
 <div class="w-full px-8">
   <div class="mb-4">
     <h1 class="page-title mb-1 text-accent"><%= t("label.#{@license.persisted? ? "update" : "create"}") %></h1>
-    <p class="font-light text-sm text-secondary-txt">
-      <%= t("admin.license.contract_name", contract: t("contracts.tracks.#{contract_type}")) %>
-    </p>
+    <p class="font-light text-sm text-secondary-txt"><%= contract_name(contract_type) %></p>
   </div>
 
   <a

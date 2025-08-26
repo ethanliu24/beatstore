@@ -59,6 +59,7 @@ en:
     collaborators: "Collaborators"
     samples: "Samples"
     licenses: "Licenses"
+    view: "View"
 
   general:
     upload_file: "Upload File"
@@ -133,6 +134,7 @@ en:
     license:
       back_to_licenses: "Back to licenses"
       contract_name: "%{contract} License"
+      default_for_new_content: "Default for new content"
       index:
         subtitle: "Manage licenses here"
       create:
