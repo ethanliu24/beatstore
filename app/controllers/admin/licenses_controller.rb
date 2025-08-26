@@ -2,7 +2,7 @@
 
 module Admin
   class LicensesController < Admin::BaseController
-    before_action :resolve_contract_class, only: [ :create, :update ]
+    before_action :set_license, only: [ :edit, :update, :destroy ]
 
     def index
       @licenses = License.order(updated_at: :desc)
@@ -21,28 +21,41 @@ module Admin
     end
 
     def create
-      if @contract_class.nil?
-        render :new, status: :unprocessable_content
+      if params[:license].nil?
+        render action, status: :unprocessable_content
         return
       end
 
+      @contract_class = resolve_contract_type(params[:license][:contract_type])
       @license = License.new(sanitize_license_params)
       @contract = @contract_class.new(**@license.contract)
+
       process_license
     end
 
+    def edit
+      @contract_type = @license.contract_type
+    end
+
     def update
+      @contract_class = resolve_contract_type(@license.contract_type)
+      @contract = @contract_class.new(**@license.contract)
+
+      process_license
+    end
+
+    def destroy
     end
 
     private
 
-    def resolve_contract_class
-      if params[:license].nil?
+    def resolve_contract_type(contract_type)
+      if contract_type.nil?
         @contract_class = nil
         return
       end
 
-      case params[:license][:contract_type]
+      case contract_type
       when License.contract_types[:free]
         @contract_class = Contracts::Track::Free
       when License.contract_types[:non_exclusive]
@@ -50,6 +63,10 @@ module Admin
       else
         @contract_class = nil
       end
+    end
+
+    def set_license
+      @license = License.find(params[:id])
     end
 
     def sanitize_license_params
@@ -66,14 +83,15 @@ module Admin
       )
 
       if permitted[:price_cents].present?
-        permitted[:price_cents] = (permitted[:price_cents].to_f * 100).round
+        permitted[:price_cents] = (permitted[:price_cents].to_f * 100).to_i
       end
 
       permitted
     end
 
     def process_license
-      if @contract.valid? && @license.save
+      if @contract.valid? &&
+        (action_name == :new ? @license.save : @license.update(sanitize_license_params))
         redirect_to admin_licenses_path, notice: t("admin.license.create.sucess")
       else
         @contract.errors.each do |error|
