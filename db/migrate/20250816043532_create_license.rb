@@ -10,6 +10,7 @@ class CreateLicense < ActiveRecord::Migration[8.0]
       t.string :country
       t.string :province
       t.boolean :default_for_new, null: false, default: false
+      t.references :licensable, polymorphic: true, index: true
 
       t.timestamps
     end
