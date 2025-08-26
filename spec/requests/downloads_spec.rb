@@ -1,4 +1,5 @@
-# spec/requests/downloads_spec.rb
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DownloadsController, type: :request do
