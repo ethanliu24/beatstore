@@ -19,6 +19,8 @@ class License < ApplicationRecord
   validates :contract_type, presence: true
   validates :country, presence: true
 
+  has_and_belongs_to_many :tracks
+
   def contract
     contract_details.with_indifferent_access
   end

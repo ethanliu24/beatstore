@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_16_043532) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_201829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,6 +91,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_16_043532) do
     t.index ["title"], name: "index_licenses_on_title", unique: true
   end
 
+  create_table "licenses_tracks", id: false, force: :cascade do |t|
+    t.bigint "license_id", null: false
+    t.bigint "track_id", null: false
+    t.index ["license_id", "track_id"], name: "index_licenses_tracks_on_license_id_and_track_id", unique: true
+    t.index ["license_id"], name: "index_licenses_tracks_on_license_id"
+    t.index ["track_id"], name: "index_licenses_tracks_on_track_id"
+  end
+
   create_table "samples", force: :cascade do |t|
     t.string "name", null: false
     t.string "artist", default: ""
@@ -169,6 +177,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_16_043532) do
   add_foreign_key "comment_interactions", "comments"
   add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
+  add_foreign_key "licenses_tracks", "licenses"
+  add_foreign_key "licenses_tracks", "tracks"
   add_foreign_key "samples", "tracks"
   add_foreign_key "track_hearts", "tracks", on_delete: :nullify
   add_foreign_key "track_hearts", "users", on_delete: :nullify
