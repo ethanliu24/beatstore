@@ -252,6 +252,21 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "DELETE #destroy" do
+    let!(:license) { create(:license) }
+
+    it "destroys the request track" do
+      expect {
+        delete admin_license_url(license)
+      }.to change(License, :count).by(-1)
+
+      expect(License.count).to eq(0)
+      expect(response).to have_http_status(303)
+      expect(response).to redirect_to(admin_licenses_url)
+      # TODO test if deletion also deletes from track
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_licenses_url
