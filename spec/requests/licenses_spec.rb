@@ -88,15 +88,22 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         license = License.last
         expect(response).to have_http_status(302)
         expect(license.title).to eq("Test License")
+        expect(license.country).to eq("CA")
+        expect(license.province).to eq("ON")
+        expect(license.price_cents).to eq(1999)
+        expect(license.currency).to eq("USD")
+        expect(license.default_for_new).to be(true)
         expect(response).to redirect_to(admin_licenses_path)
       end
 
       it "creates a non exclusive license and redirects" do
         expect {
-          post admin_licenses_url, params: { license: params.merge(
-            contract_type: License.contract_types[:non_exclusive],
-            contract_details: non_exclusive_contract
-          )}
+          post admin_licenses_url, params: {
+            license: params.merge(
+              contract_type: License.contract_types[:non_exclusive],
+              contract_details: non_exclusive_contract
+            )
+          }
         }.to change(License, :count).by(1)
 
         license = License.last
@@ -107,10 +114,12 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
 
       it "creates an unlimited non exclusive license and redirects" do
         expect {
-          post admin_licenses_url, params: { license: params.merge(
-            contract_type: License.contract_types[:non_exclusive],
-            contract_details: non_exclusive_unlimited_contract
-          )}
+          post admin_licenses_url, params: {
+            license: params.merge(
+              contract_type: License.contract_types[:non_exclusive],
+              contract_details: non_exclusive_unlimited_contract
+            )
+          }
         }.to change(License, :count).by(1)
 
         license = License.last
@@ -144,6 +153,99 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         }.to change(License, :count).by(0)
 
         expect(License.count).to eq(0)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(assigns(:license).errors[:title]).to include("is required")
+      end
+    end
+  end
+
+  describe "GET #edit" do
+    it "sets and contract_type correctly" do
+      license = create(:license)
+      get edit_admin_license_url(license)
+
+      expect(assigns(:license).id).to be(license.id)
+      expect(assigns(:license).contract_details).to eq(license.contract_details)
+      expect(assigns(:contract_type)).to eq(license.contract_type)
+    end
+  end
+
+  describe "PUT #update" do
+    let!(:license) { create(:license) }
+
+    context "with valid params" do
+      it "updates a free license and redirects" do
+        put admin_license_url(license), params: {
+          license: params.merge(
+            contract_type: License.contract_types[:free],
+            contract_details: free_contract,
+            title: "Modified"
+          )
+        }
+
+        license = License.last
+        expect(response).to have_http_status(302)
+        expect(license.title).to eq("Modified")
+        expect(response).to redirect_to(admin_licenses_path)
+      end
+
+      it "updates a non exclusive license and redirects" do
+        put admin_license_url(license), params: {
+          license: params.merge(
+            contract_type: License.contract_types[:non_exclusive],
+            contract_details: non_exclusive_contract,
+            title: "Non Exclusive",
+            price_cents: 10
+          )
+        }
+
+        license = License.last
+        expect(response).to have_http_status(302)
+        expect(license.title).to eq("Non Exclusive")
+        expect(license.price_cents).to eq(1000)
+        expect(response).to redirect_to(admin_licenses_path)
+      end
+
+      it "updates an unlimited non exclusive license and redirects" do
+        put admin_license_url(license), params: {
+          license: params.merge(
+            contract_type: License.contract_types[:non_exclusive],
+            contract_details: non_exclusive_unlimited_contract,
+            province: "BC"
+          )
+        }
+
+        license = License.last
+        expect(response).to have_http_status(302)
+        expect(license.province).to eq("BC")
+        expect(response).to redirect_to(admin_licenses_path)
+      end
+    end
+
+    context "with invalid contract" do
+      it "does not save license and renders new" do
+        expect(License.count).to eq(1)
+
+        put admin_license_url(license), params: { license: {} }
+
+        expect(License.count).to eq(1)
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "with invalid license params" do
+      it "does not save and renders new" do
+        expect(License.count).to eq(1)
+
+        put admin_license_url(license), params: {
+          license: {
+            title: "",
+            contract_type: License.contract_types[:free],
+            contract_details: free_contract
+          }
+        }
+
+        expect(License.count).to eq(1)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(assigns(:license).errors[:title]).to include("is required")
       end

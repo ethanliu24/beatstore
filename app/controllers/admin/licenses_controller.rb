@@ -22,7 +22,7 @@ module Admin
 
     def create
       if params[:license].nil?
-        render action, status: :unprocessable_content
+        render :new, status: :unprocessable_content
         return
       end
 
@@ -83,7 +83,7 @@ module Admin
       )
 
       if permitted[:price_cents].present?
-        permitted[:price_cents] = (permitted[:price_cents].to_f * 100).to_i
+        permitted[:price_cents] = (permitted[:price_cents].to_d * 100).to_i
       end
 
       permitted
