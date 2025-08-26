@@ -212,5 +212,19 @@ RSpec.describe Track, type: :model do
     it { should have_one_attached(:track_stems) }
     it { should have_one_attached(:project) }
     it { should have_one_attached(:cover_photo) }
+
+    it "can have many licenses" do
+      track = create(:track)
+      license1 = create(:license)
+      license2 = create(:license, title: "L2")
+
+      track.licenses << [ license1, license2 ]
+
+      expect(track.licenses.count).to eq(2)
+      expect(license1.tracks).to include(track)
+      expect(license2.tracks).to include(track)
+      expect(license1.tracks.count).to eq(2)
+      expect(license2.tracks.count).to eq(2)
+    end
   end
 end

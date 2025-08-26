@@ -54,4 +54,20 @@ RSpec.describe License, type: :model do
       expect(license.contract["streams"]).to eq(1000)
     end
   end
+
+  describe "associations" do
+    it "should have many tracks" do
+      track1 = create(:track)
+      track2 = create(:track)
+      license = create(:license)
+
+      license.tracks << [ track1, track2 ]
+
+      expect(license.tracks.count).to eq(2)
+      expect(track1.licenses).to include(license)
+      expect(track2.licenses).to include(license)
+      expect(track1.licenses.count).to eq(2)
+      expect(track2.licenses.count).to eq(2)
+    end
+  end
 end
