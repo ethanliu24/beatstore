@@ -94,9 +94,9 @@ module Admin
 
     def process_license
       if @contract.valid? &&
-        (action_name == :new ? @license.save : @license.update(sanitize_license_params))
+        (action_name == "create" ? @license.save : @license.update(sanitize_license_params))
         redirect_to admin_licenses_path,
-          notice: t("admin.license.#{action_name == :new ? :create : :update}.success")
+          notice: t("admin.license.#{action_name == "create" ? "create" : "update"}.success")
       else
         @contract.errors.each do |error|
           @license.errors.add(error.attribute, error.message)

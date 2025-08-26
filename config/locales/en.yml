@@ -139,6 +139,8 @@ en:
         subtitle: "Manage licenses here"
       create:
         success: "License was successfully created."
+      update:
+        success: "License was successfully updated."
       destroy:
         success: "License was successfully deleted."
 
