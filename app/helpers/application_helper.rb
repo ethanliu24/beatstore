@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "ostruct"
+
 module ApplicationHelper
   include Pagy::Frontend
   include ActionView::Helpers::DateHelper
@@ -26,5 +30,9 @@ module ApplicationHelper
 
   def seperator_char_ui(class: "", data: {})
     content_tag(:span, "·", class:, data:)
+  end
+
+  def currencies
+    ISO3166::Country.all.map { |c| c.currency_code }.compact.uniq.sort
   end
 end

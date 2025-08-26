@@ -1,0 +1,38 @@
+<% title("All Licenses") %>
+
+<div class="w-full">
+  <%= render PageTitleComponent.new(
+    title: t("label.licenses"),
+    subtitle: t("admin.license.index.subtitle")
+  ) %>
+
+  <%= render Ui::DropdownComponent.new(id: "licenses-create") do |dropdown| %>
+    <% dropdown.with_trigger_button(
+      id: "licenses-create",
+      classes: "flex justify-center items-center gap-2 button py-1 px-2",
+      data: { dropdown_placement: "right" }
+    ) do %>
+      <%= icon "plus", class: "w-4 h-4 aspect-square" %>
+      <p><%= t("label.create") %></p>
+    <% end %>
+
+    <% dropdown.with_section do %>
+      <ul>
+        <% [
+          { contract_type: License.contract_types[:free], label: t("contracts.tracks.free") },
+          { contract_type: License.contract_types[:non_exclusive], label: t("contracts.tracks.non_exclusive") }
+        ].each do |data| %>
+          <li class="dropdown-item">
+            <%= link_to data[:label], new_admin_license_path(contract_type: data[:contract_type]) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <div class="w-full flex flex-col justify-start items-start gap-2 pt-8">
+    <% @licenses.each do |license| %>
+      <%= render Licenses::LicenseComponent.new(license:) %>
+    <% end %>
+  </div>
+</div>

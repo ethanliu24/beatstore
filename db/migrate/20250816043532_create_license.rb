@@ -7,6 +7,8 @@ class CreateLicense < ActiveRecord::Migration[8.0]
       t.string :currency, limit: 3, null: false, default: "USD"
       t.string :contract_type, null: false
       t.jsonb :contract_details, null: false, default: {}
+      t.string :country
+      t.string :province
       t.boolean :default_for_new, null: false, default: false
 
       t.timestamps

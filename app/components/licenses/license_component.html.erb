@@ -1,0 +1,65 @@
+<div class="flex justify-between items-center w-full rounded border-1 border-hover p-2">
+  <div>
+    <%= link_to admin_license_path(license), class: "mb-1 font-light flex justify-start items-center gap-2" do %>
+      <p><%= license.title %></p>
+      <%= icon "external-link", class: "w-3 h-3" %>
+    <% end %>
+    <div class="text-xs font-light">
+      <div class="flex justify-start items-center gap-2">
+        <%= icon "article", class: "w-3 h-3 aspect-square text-accent" %>
+        <%= content_tag :p, contract_name(license.contract_type) %>
+      </div>
+      <div class="flex justify-start items-center gap-2">
+        <%= icon "currency-dollar", class: "w-3 h-3 aspect-square text-accent" %>
+        <%= content_tag :p, "#{license.price.format} #{license.currency}" %>
+      </div>
+      <div class="flex justify-start items-center gap-2">
+        <%= icon "gavel", class: "w-3 h-3 aspect-square text-accent" %>
+        <%= content_tag :p, "#{license.province}, #{license.country}" %>
+      </div>
+      <% if license.default_for_new %>
+        <div class="flex justify-start items-center gap-2">
+          <%= icon "check", class: "w-3 h-3 aspect-square text-success" %>
+          <%= content_tag :p, t("admin.license.default_for_new_content") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div>
+    <%= render Ui::DropdownComponent.new(id: dom_id(license)) do |dropdown| %>
+      <% dropdown.with_trigger_button(id: dom_id(license)) do %>
+        <%= icon "dots-vertical", class: "cursor-pointer" %>
+      <% end %>
+      <% dropdown.with_section do %>
+        <ul>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: admin_license_path(license),
+              text: t("label.view"),
+              icon: "eye",
+              icon_size: 4
+            ) %>
+          </li>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: edit_admin_license_path(license),
+              text: t("label.edit"),
+              icon: "pencil",
+              icon_size: 4
+            ) %>
+          </li>
+          <li class="dropdown-item">
+            <%= render Ui::Dropdown::LinkComponent.new(
+              url: admin_license_path(license),
+              text: t("label.delete"),
+              icon: "trash",
+              icon_size: 4,
+              classes: "text-error",
+              data: { turbo_method: "delete" }
+            ) %>
+          </li>
+        </ul>
+      <% end %>
+    <% end %>
+  </div>
+</div>

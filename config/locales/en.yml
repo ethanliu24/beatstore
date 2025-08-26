@@ -58,6 +58,8 @@ en:
     comments: "Comments"
     collaborators: "Collaborators"
     samples: "Samples"
+    licenses: "Licenses"
+    view: "View"
 
   general:
     upload_file: "Upload File"
@@ -129,6 +131,16 @@ en:
       add_new_collaboration: "Add new collaboration"
       add_collaborator: "Add collaborator"
       add_sample: "Add sample"
+    license:
+      back_to_licenses: "Back to licenses"
+      contract_name: "%{contract} License"
+      default_for_new_content: "Default for new content"
+      index:
+        subtitle: "Manage licenses here"
+      create:
+        success: "License was successfully created."
+      destroy:
+        success: "License was successfully deleted."
 
   profile:
     manage_your_profile_here: "Manage your profile here"
@@ -144,3 +156,35 @@ en:
     delete_comment: "Delete Comment"
     comment_deletion_confirmation: "Are you sure you want to delete this comment?"
     action_cannot_be_undone: "This action can't be undone."
+
+  contracts:
+    not_available: "This contract type is not available."
+    tracks:
+      free: "Free"
+      non_exclusive: "Non Exclusive"
+      exclusive: "Exclusive"
+    form:
+      title:
+        basic_info: "BASIC INFO"
+        territory: "TERRITORY"
+        distribution: "DISTRIBUTION"
+        music_videos: "MUSIC VIDEOS"
+        radio_broadcasting: "RADIO BROADCASTING"
+        live_performances: "LIVE PERFORMANCES"
+      label:
+        area_law_applied: "Arbitration %{area} where Governing Law is applied"
+        terms_of_years: "Term of Years for the Licenses"
+        distribution_copies: "Number of Distribution Copies allowed (blank for unlimited)"
+        streams_allowed: "Number of Audio Streams allowed (blank for unlimited)"
+        monetized_videos: "Number of Monetized Music Videos allowed (blank for unlimited)"
+        non_monetized_videos: "Number of Non Monetized Music Videos allowed (blank for unlimited)"
+        monetized_video_streams: "Number of Monetized Video Streams Allowed (blank for unlimited)"
+        non_monetized_video_streams: "Number of Non Monetized Video Streams Allowed (blank for unlimited)"
+        has_broadcasting_rights: "Broadcasting Rights"
+        radio_stations_allowed: "Number of Radio Stations Allowed (blank for unlimited)"
+        allow_profitable_performances: "Allow performances for profit (may or may not)"
+        non_profitable_performances_allowed: "Number of Not for Profit Performances Allowed (blank for unlimited)"
+      active_by_default: "Active by default"
+      deliver_mp3: "Deliver MP3"
+      deliver_wav: "Deliver WAV"
+      deliver_stems: "Deliver Track Stems"

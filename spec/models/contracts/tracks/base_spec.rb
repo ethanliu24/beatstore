@@ -7,8 +7,6 @@ RSpec.describe Contracts::Track::Base, type: :model do
 
   let(:valid_attributes) do
     {
-      country: "Canada",
-      province: "Ontario",
       terms_of_years: 3,
       delivers_mp3: true,
       delivers_wav: false,
@@ -21,27 +19,12 @@ RSpec.describe Contracts::Track::Base, type: :model do
       expect(contract).to be_valid
     end
 
-    it "requires a country" do
-      contract.country = nil
-      expect(contract).not_to be_valid
-      expect(contract.errors[:country]).to include("can't be blank")
-    end
-
-    it "requires a province" do
-      contract.province = nil
-      expect(contract).not_to be_valid
-      expect(contract.errors[:province]).to include("can't be blank")
-    end
-
     it "requires terms_of_years to be an integer greater than 0" do
       contract.terms_of_years = 0
       expect(contract).not_to be_valid
       expect(contract.errors[:terms_of_years]).to include("must be greater than 0")
 
       contract.terms_of_years = -5
-      expect(contract).not_to be_valid
-
-      contract.terms_of_years = 2.5
       expect(contract).not_to be_valid
 
       contract.terms_of_years = 2

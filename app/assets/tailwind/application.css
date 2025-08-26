@@ -95,11 +95,11 @@
   }
 
   .page-title {
-    @apply font-bold text-4xl mb-5;
+    @apply font-bold text-4xl;
   }
 
   .content-input-container {
-    @apply flex flex-col gap-2 w-full text-nowrap;
+    @apply flex flex-col justify-end gap-2 w-full text-nowrap;
   }
 
   .content-input-label {
@@ -245,6 +245,19 @@
   .interaction-icon {
     @apply w-3 h-3 aspect-square cursor-pointer;
   }
+
+  /* License */
+  .license-form label {
+    @apply font-bold text-xs text-wrap;
+  }
+
+  .license-form > .form-section {
+    @apply py-6 w-full flex flex-col justify-start items-center gap-4;
+  }
+
+  .license-form .form-grid-container {
+    @apply grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch;
+  }
 }
 
 /* Admin tracks page layout */
@@ -278,6 +291,5 @@
     .admin-track-list-container {
       grid-template-columns: repeat(1, 1fr);
     }
-
   }
 }

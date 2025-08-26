@@ -27,11 +27,11 @@ module Admin
         if @track.save
           redirect_to admin_tracks_path, notice: t("admin.track.success.create")
         else
-          render :new, status: :unprocessable_entity
+          render :new, status: :unprocessable_content
         end
       rescue ArgumentError => _e
         @track.errors.add(:role, "is invalid")
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -40,11 +40,11 @@ module Admin
         if @track.update(sanitize_track_params)
           redirect_to admin_tracks_path, notice: t("admin.track.success.create")
         else
-          render :new, status: :unprocessable_entity
+          render :new, status: :unprocessable_content
         end
       rescue ArgumentError => _e
         @track.errors.add(:role, "is invalid")
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

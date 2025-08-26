@@ -3,15 +3,11 @@
 module Contracts
   module Track
     class Base < Contracts::Base
-      attribute :country
-      attribute :province
-      attribute :terms_of_years
-      attribute :delivers_mp3
-      attribute :delivers_wav
-      attribute :delivers_stems
+      attribute :terms_of_years, :integer
+      attribute :delivers_mp3, :boolean
+      attribute :delivers_wav, :boolean
+      attribute :delivers_stems, :boolean
 
-      validates :country, presence: true
-      validates :province, presence: true
       validates :terms_of_years, numericality: { only_integer: true, greater_than: 0 }
     end
   end

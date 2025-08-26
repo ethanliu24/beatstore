@@ -7,8 +7,6 @@ RSpec.describe Contracts::Track::NonExclusive, type: :model do
 
   let(:valid_attributes) do
     {
-      country: "USA",
-      province: "California",
       terms_of_years: 2,
       delivers_mp3: true,
       delivers_wav: false,
@@ -19,9 +17,9 @@ RSpec.describe Contracts::Track::NonExclusive, type: :model do
       non_monetized_video_streams: 10000,
       monetized_video_streams: 50000,
       non_profitable_performances: 50,
-      has_broadcasting_rights: 1,
+      has_broadcasting_rights: true,
       radio_stations_allowed: 10,
-      allow_profitable_performances: 5
+      allow_profitable_performances: true
     }
   end
 
@@ -30,24 +28,34 @@ RSpec.describe Contracts::Track::NonExclusive, type: :model do
       expect(contract).to be_valid
     end
 
-    it "does not allow negative numbers" do
-      numeric_fields = [
-        :distribution_copies,
-        :non_monetized_videos,
-        :monetized_videos,
-        :non_monetized_video_streams,
-        :monetized_video_streams,
-        :non_profitable_performances,
-        :has_broadcasting_rights,
-        :radio_stations_allowed,
-        :allow_profitable_performances
-      ]
+    context "unlimitable fields" do
+      let(:numeric_fields) {
+        [
+          :distribution_copies,
+          :streams_allowed,
+          :non_monetized_videos,
+          :monetized_videos,
+          :non_monetized_video_streams,
+          :monetized_video_streams,
+          :non_profitable_performances,
+          :radio_stations_allowed
+        ]
+      }
 
-      numeric_fields.each do |field|
-        contract.public_send("#{field}=", -1)
-        expect(contract).not_to be_valid, "#{field} should not accept negative numbers"
-        contract.public_send("#{field}=", 0)
-        expect(contract).to be_valid
+      it "does not allow negative numbers" do
+        numeric_fields.each do |field|
+          contract.public_send("#{field}=", -1)
+          expect(contract).not_to be_valid, "#{field} should not accept negative numbers"
+          contract.public_send("#{field}=", 0)
+          expect(contract).to be_valid
+        end
+      end
+
+      it "accepts nil" do
+        numeric_fields.each do |field|
+          contract.public_send("#{field}=", nil)
+          expect(contract).to be_valid
+        end
       end
     end
   end
@@ -57,6 +65,8 @@ RSpec.describe Contracts::Track::NonExclusive, type: :model do
       expect(contract.delivers_mp3).to eq(true)
       expect(contract.delivers_wav).to eq(false)
       expect(contract.delivers_stems).to eq(true)
+      expect(contract.has_broadcasting_rights).to eq(true)
+      expect(contract.allow_profitable_performances).to eq(true)
     end
   end
 end
