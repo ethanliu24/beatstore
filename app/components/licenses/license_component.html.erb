@@ -49,12 +49,13 @@
             ) %>
           </li>
           <li class="dropdown-item">
-            <%# TODO Delete %>
             <%= render Ui::Dropdown::LinkComponent.new(
               url: admin_license_path(license),
-              text: t("label.view"),
-              icon: "eye",
-              icon_size: 4
+              text: t("label.delete"),
+              icon: "trash",
+              icon_size: 4,
+              classes: "text-error",
+              data: { turbo_method: "delete" }
             ) %>
           </li>
         </ul>

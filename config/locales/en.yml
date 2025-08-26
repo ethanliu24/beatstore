@@ -138,7 +138,9 @@ en:
       index:
         subtitle: "Manage licenses here"
       create:
-        sucess: "License was successfully created."
+        success: "License was successfully created."
+      destroy:
+        success: "License was successfully deleted."
 
   profile:
     manage_your_profile_here: "Manage your profile here"

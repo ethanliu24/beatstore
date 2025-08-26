@@ -18,7 +18,6 @@ class License < ApplicationRecord
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true
   validates :country, presence: true
-  validates :province, presence: true
 
   def contract
     contract_details.with_indifferent_access
