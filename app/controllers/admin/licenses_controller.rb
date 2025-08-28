@@ -30,7 +30,17 @@ module Admin
       @license = License.new(sanitize_license_params)
       @contract = @contract_class.new(**@license.contract)
 
-      process_license
+      if @contract.valid?
+        @license.contract_details = @contract.attributes
+
+        if @license.save
+          redirect_to admin_licenses_path, notice: t("admin.license.create.success")
+          return
+        end
+      end
+
+      handle_create_or_update_errors
+      render :new, status: :unprocessable_content
     end
 
     def edit
@@ -38,10 +48,21 @@ module Admin
     end
 
     def update
+      update_params = sanitize_license_params
       @contract_class = resolve_contract_type(@license.contract_type)
-      @contract = @contract_class.new(**@license.contract)
+      @contract = @contract_class.new(**update_params[:contract_details])
 
-      process_license
+      if @contract.valid?
+        update_params.merge(contract_details: @contract.attributes)
+
+        if @license.update(update_params)
+          redirect_to admin_licenses_path, notice: t("admin.license.update.success")
+          return
+        end
+      end
+
+      handle_create_or_update_errors
+      render :edit, status: :unprocessable_content
     end
 
     def destroy
@@ -92,19 +113,12 @@ module Admin
       permitted
     end
 
-    def process_license
-      if @contract.valid? &&
-        (action_name == "create" ? @license.save : @license.update(sanitize_license_params))
-        redirect_to admin_licenses_path,
-          notice: t("admin.license.#{action_name == "create" ? "create" : "update"}.success")
-      else
-        @contract.errors.each do |error|
-          @license.errors.add(error.attribute, error.message)
-        end
-
-        @contract_type = params[:license][:contract_type]
-        render action_name == "create" ? :new : :edit, status: :unprocessable_content
+    def handle_create_or_update_errors
+      @contract.errors.each do |error|
+        @license.errors.add(error.attribute, error.message)
       end
+
+      @contract_type = params[:license][:contract_type]
     end
   end
 end
