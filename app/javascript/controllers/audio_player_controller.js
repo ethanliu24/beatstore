@@ -7,7 +7,8 @@ export default class extends Controller {
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
-    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar"
+    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar",
+    "priceBtn",
   ];
 
   static values = {
@@ -267,6 +268,7 @@ export default class extends Controller {
       this.titleTarget.innerText = track.title;
       this.keyTarget.innerText = track.key;
       this.bpmTarget.innerText = `${track.bpm} BPM`;
+      this.priceBtnTarget.innerText = track.cheapest_price;
       this.toggleLikeButton(track.liked_by_user);
       this.pauseAudio();
       this.resetAudio();

@@ -23,9 +23,9 @@
         </div>
         <div class="flex justify-start items-stretch gap-2">
           <%# TODO might look better to show the cheapest license price, whatevs %>
-          <button class="button px-2 py-1">
+          <button class="button px-2 py-1.5">
             <%= icon "shopping-bag", class: "mr-1" %>
-            <%= t("label.purchase") %>
+            <p class="text-sm font-light"><%= @track.cheapest_price %></p>
           </button>
 
           <%# TODO add tool tips for the following %>

@@ -38,9 +38,9 @@
     <% end %>
 
     <%# TODO get the lowest price of the track %>
-    <button class="button text-xs px-2 py-1.5 flex justify-center items-center gap-1.5">
+    <button class="button text-xs px-2 py-1.5 flex justify-center items-center gap-1.5 min-w-21">
       <%= icon "shopping-bag", class: "w-4 h-4" %>
-      <span class="max-sm:hidden">$19.99</span>
+      <span class="max-sm:hidden"><%= track.cheapest_price %></span>
     </button>
 
     <%# Track more dropdown %>

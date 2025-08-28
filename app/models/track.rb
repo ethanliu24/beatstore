@@ -90,6 +90,14 @@ class Track < ApplicationRecord
     hearts.count
   end
 
+  def profitable_licenses
+    licenses.where.not(contract_type: License.contract_types[:free]).order(:price_cents)
+  end
+
+  def cheapest_price
+    profitable_licenses.first&.price&.format.presence || "$0.00"
+  end
+
   private
 
   def shares_cannot_exceed_100_percent
