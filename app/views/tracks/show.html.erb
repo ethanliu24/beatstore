@@ -73,73 +73,79 @@
   <section class="w-full">
     <h2 class="font-bold text-lg mb-2"><%= t("track.licensing") %></h2>
 
-    <div class="">
-      <ul class="grid grid-cols-3 gap-x-2 gap-y-2 mb-4 w-full text-sm font-medium"
-        id="default-styled-tab" data-tabs-toggle="#license-tab-contents" role="tablist"
-        data-tabs-active-classes="border-accent"
-        data-tabs-inactive-classes="border-secondary-txt/30">
-        <% @licenses.each_with_index do |license, i| %>
-          <li role="presentation">
-            <button id=<%= dom_id(license, :tab) %>
-              class="<%= "
-                flex flex-col justify-start items-start gap-1 w-full p-3 border-1 rounded-xl cursor-pointer
-                #{i == 0 ? "border-accent" : "border-secondary-txt/30"}
-               " %>"
-              data-tabs-target="#<%= dom_id(license) %>"
-              type="button" role="tab" aria-controls="<%= dom_id(license) %>" aria-selected="false">
-              <p class="text-sm"><%= license.title %></p>
-              <p class="text-[0.7rem] font-light"><%= "#{license.price.format} #{license.currency}" %></p>
-              <p class="text-[0.6rem] text-secondary-txt"><%= track_files_delivered(license) %></p>
-            </button>
-          </li>
+    <% if @licenses.any? %>
+      <div>
+        <ul class="grid grid-cols-3 gap-x-2 gap-y-2 mb-4 w-full text-sm font-medium"
+          id="default-styled-tab" data-tabs-toggle="#license-tab-contents" role="tablist"
+          data-tabs-active-classes="border-accent"
+          data-tabs-inactive-classes="border-secondary-txt/30">
+          <% @licenses.each_with_index do |license, i| %>
+            <li role="presentation">
+              <button id=<%= dom_id(license, :tab) %>
+                class="<%= "
+                  flex flex-col justify-start items-start gap-1 w-full p-3 border-1 rounded-xl cursor-pointer
+                  #{i == 0 ? "border-accent" : "border-secondary-txt/30"}
+                " %>"
+                data-tabs-target="#<%= dom_id(license) %>"
+                type="button" role="tab" aria-controls="<%= dom_id(license) %>" aria-selected="false">
+                <p class="text-sm"><%= license.title %></p>
+                <p class="text-[0.7rem] font-light"><%= "#{license.price.format} #{license.currency}" %></p>
+                <p class="text-[0.6rem] text-secondary-txt"><%= track_files_delivered(license) %></p>
+              </button>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <div id="license-tab-contents">
+        <% @licenses.each do |license| %>
+          <div class="hidden" id="<%= dom_id(license) %>" role="tabpanel" aria-labelledby=<%= dom_id(license, :tab) %>>
+            <p class="text-sm font-light mb-4"><%= "#{license.title} (#{license.price.format})" %></p>
+            <% contract = license.contract %>
+            <ul class="grid grid-cols-3 w-full gap-x-4 gap-y-2">
+              <% [
+                {
+                  phrase: t("track.show.licensing.allow_music_recording"),
+                  icon: "microphone"
+                },
+                {
+                  phrase: t("track.show.licensing.distribution_copies",
+                    copies: contract[:distribution_copies].presence || t("track.show.licensing.unlimited")),
+                  icon: "gavel"
+                },
+                {
+                  phrase: t("track.show.licensing.online_audio_streams",
+                    streams: contract[:streams_allowed].presence || t("track.show.licensing.unlimited")),
+                  icon: "access-point"
+                },
+                {
+                  phrase: t("track.show.licensing.music_videos",
+                    videos: contract[:monetized_videos].presence || t("track.show.licensing.unlimited")),
+                  icon: "video"
+                },
+                {
+                  phrase: t("track.show.licensing.#{contract[:allow_profitable_performances] ? "" : "not_" }for_profit_live_performances"),
+                  icon: "microphone-2"
+                },
+                {
+                  phrase: t("track.show.licensing.has_radio_broadcasting_rights",
+                    stations: contract[:radio_stations_allowed].presence || t("track.show.licensing.unlimited")),
+                  icon: "radio"
+                }
+              ].each do |data| %>
+                <li class="flex justify-start items-center gap-2 text-secondary-txt text-xs">
+                  <%= icon data[:icon], class: "w-4 h-4 aspect-square" %>
+                  <p class="text-[0.6rem]"><%= data[:phrase] %></p>
+                </li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
-    </div>
-    <div id="license-tab-contents">
-      <% @licenses.each do |license| %>
-        <div class="hidden" id="<%= dom_id(license) %>" role="tabpanel" aria-labelledby=<%= dom_id(license, :tab) %>>
-          <p class="text-sm font-light mb-4"><%= "#{license.title} (#{license.price.format})" %></p>
-          <% contract = license.contract %>
-          <ul class="grid grid-cols-3 w-full gap-x-4 gap-y-2">
-            <% [
-              {
-                phrase: t("track.show.licensing.allow_music_recording"),
-                icon: "microphone"
-              },
-              {
-                phrase: t("track.show.licensing.distribution_copies",
-                  copies: contract[:distribution_copies].presence || t("track.show.licensing.unlimited")),
-                icon: "gavel"
-              },
-              {
-                phrase: t("track.show.licensing.online_audio_streams",
-                  streams: contract[:streams_allowed].presence || t("track.show.licensing.unlimited")),
-                icon: "access-point"
-              },
-              {
-                phrase: t("track.show.licensing.music_videos",
-                  videos: contract[:monetized_videos].presence || t("track.show.licensing.unlimited")),
-                icon: "video"
-              },
-              {
-                phrase: t("track.show.licensing.#{contract[:allow_profitable_performances] ? "" : "not_" }for_profit_live_performances"),
-                icon: "microphone-2"
-              },
-              {
-                phrase: t("track.show.licensing.has_radio_broadcasting_rights",
-                  stations: contract[:radio_stations_allowed].presence || t("track.show.licensing.unlimited")),
-                icon: "radio"
-              }
-            ].each do |data| %>
-              <li class="flex justify-start items-center gap-2 text-secondary-txt text-xs">
-                <%= icon data[:icon], class: "w-4 h-4 aspect-square" %>
-                <p class="text-[0.6rem]"><%= data[:phrase] %></p>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <p class="w-full flex justify-center items-center text-secondary-txt italic font-light py-2 text-xs">
+        <%= t("track.show.licensing.no_licenses") %>
+      </p>
+    <% end %>
   </section>
   <section class="w-full">
     <h2 class="font-bold text-lg mb-2"><%= t("track.similar_tracks") %></h2>

@@ -125,6 +125,7 @@ en:
         not_for_profit_live_performances: "NO FOR PROFIT LIVE PERFORMANCES ALLOWED"
         has_radio_broadcasting_rights: "%{stations} RADIO STATIONS BROADCASTING RIGHTS"
         unlimited: "UNLIMITED"
+        no_licenses: "There are no licenses available"
 
   admin:
     track:
