@@ -4,7 +4,7 @@
       <div class="flex items-center p-2 rounded-sm hover:bg-hover">
         <%= check_box_tag "q[#{query}][]", values[i], params.dig(:q, query)&.include?(values[i]),
           id: checkbox_id(option),
-          class: "w-3 h-3 cursor-pointer rounded accent-accent",
+          class: "checkbox w-3 h-3",
           data: checkbox_data %>
         <label for="<%= checkbox_id(option) %>" class="w-full h-full ms-2 cursor-pointer font-medium">
           <%= option %>

@@ -162,13 +162,13 @@
       <% end %>
     </section>
 
-        <section class="w-full">
+    <section class="w-full">
       <%= content_tag :label, t("label.licenses") %>
       <div class="flex flex-col justify-center items-center w-full gap-2 mt-2">
         <%= form.collection_check_boxes :license_ids, @licenses, :id, :title do |l| %>
           <% license = l.object %>
           <%= l.label class: "flex justify-center items-center w-full gap-4 cursor-pointer p-3 border-2 border-secondary-bg rounded" do %>
-            <%= l.check_box checked: license_applied_to_track?(track: @track, license:), class: "w-3 h-3 cursor-pointer rounded accent-accent" %>
+            <%= l.check_box checked: license_applied_to_track?(track: @track, license:), class: "w-3 h-3 checkbox" %>
             <div class="flex-1 flex justify-between items-center font-normal">
               <div>
                 <%= content_tag :p, license.title, class: "text-[0.8rem] cursor-text" %>
