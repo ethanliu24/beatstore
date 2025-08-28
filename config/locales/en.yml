@@ -122,10 +122,12 @@ en:
       see_track: "See track"
       manage_tracks_here: "Manage tracks here"
       no_tracks_found: "No tracks found."
-      success:
-        create: "Track was successfully created."
-        update: "Track was successfully updated."
-        destroy: "Track was successfully destroyed."
+      create:
+        success: "Track was successfully created."
+      update:
+        success: "Track was successfully updated."
+      destroy:
+        success: "Track was successfully destroyed."
       error:
         invalid_share_sum: "The sum of profit and publishing shares must be less than or equal to 100."
       add_new_collaboration: "Add new collaboration"

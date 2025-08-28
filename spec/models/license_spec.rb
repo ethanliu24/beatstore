@@ -66,8 +66,8 @@ RSpec.describe License, type: :model do
       expect(license.tracks.count).to eq(2)
       expect(track1.licenses).to include(license)
       expect(track2.licenses).to include(license)
-      expect(track1.licenses.count).to eq(2)
-      expect(track2.licenses.count).to eq(2)
+      expect(track1.licenses.count).to eq(1)
+      expect(track2.licenses.count).to eq(1)
     end
   end
 end

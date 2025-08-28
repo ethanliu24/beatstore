@@ -18,8 +18,9 @@ class License < ApplicationRecord
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true
   validates :country, presence: true
+  validate :country_and_province_exists
 
-  has_and_belongs_to_many :tracks
+  has_and_belongs_to_many :tracks, join_table: "licenses_tracks"
 
   def contract
     contract_details.with_indifferent_access

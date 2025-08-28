@@ -162,6 +162,25 @@
       <% end %>
     </section>
 
+        <section class="w-full">
+      <%= content_tag :label, t("label.licenses") %>
+      <div class="flex flex-col justify-center items-center w-full gap-2 mt-2">
+        <%= form.collection_check_boxes :license_ids, @licenses, :id, :title do |l| %>
+          <% license = l.object %>
+          <%= l.label class: "flex justify-center items-center w-full gap-4 cursor-pointer p-3 border-2 border-secondary-bg rounded" do %>
+            <%= l.check_box checked: license_applied_to_track?(track: @track, license:), class: "w-3 h-3 cursor-pointer rounded accent-accent" %>
+            <div class="flex-1 flex justify-between items-center font-normal">
+              <div>
+                <%= content_tag :p, license.title, class: "text-[0.8rem] cursor-text" %>
+                <%= content_tag :p, track_files_delivered(license), class: "text-[0.6rem] text-secondary-txt font-light cursor-text" %>
+              </div>
+              <%= content_tag :p, "#{license.price.format} #{license.currency}", class: "cursor-text" %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+
     <section class="flex justify-end items-stretch w-full">
       <%= form.submit t("label.#{@track.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
     </section>

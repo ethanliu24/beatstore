@@ -15,9 +15,11 @@ module Admin
 
     def new
       @track = Track.new
+      @licenses = get_licenses
     end
 
     def edit
+      @licenses = get_licenses
     end
 
     def create
@@ -25,7 +27,7 @@ module Admin
 
       begin
         if @track.save
-          redirect_to admin_tracks_path, notice: t("admin.track.success.create")
+          redirect_to admin_tracks_path, notice: t("admin.track.create.success")
         else
           render :new, status: :unprocessable_content
         end
@@ -38,7 +40,7 @@ module Admin
     def update
       begin
         if @track.update(sanitize_track_params)
-          redirect_to admin_tracks_path, notice: t("admin.track.success.create")
+          redirect_to admin_tracks_path, notice: t("admin.track.update.success")
         else
           render :new, status: :unprocessable_content
         end
@@ -49,10 +51,9 @@ module Admin
     end
 
     def destroy
-      # TODO redirect to admin page when its up
       @track.destroy!
 
-      redirect_to admin_tracks_path, status: :see_other, notice: t("admin.track.success.destroy")
+      redirect_to admin_tracks_path, status: :see_other, notice: t("admin.track.destroy.success")
     end
 
     private
@@ -77,8 +78,19 @@ module Admin
         :cover_photo,
         tags_attributes: [ :id, :name, :_destroy ],
         collaborators_attributes: [ :id, :name, :role, :profit_share, :publishing_share, :notes, :_destroy ],
-        samples_attributes: [ :id, :name, :artist, :link, :_destroy ]
+        samples_attributes: [ :id, :name, :artist, :link, :_destroy ],
+        license_ids: []
       )
+    end
+
+    def get_licenses
+      # Since the number of licenses will be very little so this is fine,
+      # but to optimize the querying should be done using raw SQL
+      (
+        @track.licenses +
+        License.where(default_for_new: true) +
+        License.all.where(default_for_new: false).order(created_at: :desc)
+      ).uniq
     end
   end
 end

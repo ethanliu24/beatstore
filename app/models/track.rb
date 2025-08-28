@@ -48,7 +48,7 @@ class Track < ApplicationRecord
   accepts_nested_attributes_for :collaborators, allow_destroy: true, reject_if: :all_blank
   has_many :samples, class_name: "Collaboration::Sample", dependent: :destroy
   accepts_nested_attributes_for :samples, allow_destroy: true, reject_if: :all_blank
-  has_and_belongs_to_many :licenses
+  has_and_belongs_to_many :licenses, join_table: "licenses_tracks"
 
   class << self
     def ransackable_attributes(auth_object = nil)
