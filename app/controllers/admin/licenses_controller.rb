@@ -48,8 +48,8 @@ module Admin
     end
 
     def update
-      update_params = sanitize_license_params
       @contract_class = resolve_contract_type(@license.contract_type)
+      update_params = sanitize_license_params
       @contract = @contract_class.new(**update_params[:contract_details])
 
       if @contract.valid?
