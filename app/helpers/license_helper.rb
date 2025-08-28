@@ -4,7 +4,7 @@ module LicenseHelper
   end
 
   def track_files_delivered(license)
-    return "MP3" if license.contract_type == License.contract_types[:free]
+    return "Free MP3" if license.contract_type == License.contract_types[:free]
 
     files = []
     files << "MP3" if license.contract[:delivers_mp3]

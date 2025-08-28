@@ -114,6 +114,17 @@ en:
     more_info_modal_title: "More information"
     no_collaborators: "There are no collaborators on this track"
     no_samples: "There are no samples on this track"
+    licensing: "Licensing"
+    show:
+      licensing:
+        allow_music_recording: "USED FOR MUSIC RECORDING"
+        distribution_copies: "DISTRIBUTE UP TO %{copies} COPIES"
+        online_audio_streams: "%{streams} ONLINE AUDIO STREAMS"
+        music_videos: "%{videos} MUSIC VIDEOS"
+        for_profit_live_performances: "FOR PROFIT LIVE PERFORMANCES"
+        not_for_profit_live_performances: "NO FOR PROFIT LIVE PERFORMANCES ALLOWED"
+        has_radio_broadcasting_rights: "%{stations} RADIO STATIONS BROADCASTING RIGHTS"
+        unlimited: "UNLIMITED"
 
   admin:
     track:
