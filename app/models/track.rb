@@ -95,7 +95,7 @@ class Track < ApplicationRecord
   end
 
   def cheapest_price
-    profitable_licenses.first&.price&.format.presence || "$0.00"
+    profitable_licenses.first&.price&.format.presence || "$111.00"
   end
 
   private
