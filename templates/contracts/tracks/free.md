@@ -10,7 +10,7 @@ You may use the Track only for personal, non-commercial purposes. The Track may 
 
 ## 2. Term
 
-This Agreement is valid for **{{ TERMS_OF_YEARS }}** years and will expire on the {{ TERMS_OF_YEARS }} year anniversary of {{ CONTRACT_DATE }}.
+This Agreement is valid for **{{ TERMS_OF_YEARS }}** years and will expire on the **{{ TERMS_OF_YEARS }}** year anniversary of **{{ CONTRACT_DATE }}**.
 
 If the Effective Date is February 29 and the expiration year is not a leap year, the license expires on February 28 of that year.
 

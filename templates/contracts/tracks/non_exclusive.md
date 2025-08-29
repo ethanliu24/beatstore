@@ -1,6 +1,6 @@
 # Non-Exclusive **{{ LICENSE_NAME }}** License Agreement
 
-This Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement") is made and effective as of {CONTRACT_DATE} (the "Effective Date") by and between **{{ PRODUCT_OWNER_FULLNAME }}** p/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}** residing at **{{ CUSTOMER_ADDRESS }}** ("You" or "Licensee"). This Agreement sets forth the terms under which Licensee may use the Producer’s instrumental music file entitled **{{ PRODUCT_TITLE }}** (the "Beat") in exchange for payment of $ **{{ PRODUCT_PRICE }}** (the "License Fee").
+This Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement") is made and effective as of **{{ CONTRACT_DATE }}** (the "Effective Date") by and between **{{ PRODUCT_OWNER_FULLNAME }}** p/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}** residing at **{{ CUSTOMER_ADDRESS }}** ("You" or "Licensee"). This Agreement sets forth the terms under which Licensee may use the Producer’s instrumental music file entitled **{{ PRODUCT_TITLE }}** (the "Beat") in exchange for payment of $ **{{ PRODUCT_PRICE }}** (the "License Fee").
 
 ## 1. License Fee
 
@@ -10,13 +10,13 @@ Rights granted under this Agreement are conditional upon full payment.
 
 ## 2. Delivery
 
-Licensor shall deliver the Beat as a high-quality {{ FILE_TYPE }}, as such terms are understood in the music industry.
+Licensor shall deliver the Beat as a high-quality **{{ FILE_TYPE }}**, as such terms are understood in the music industry.
 
 Delivery will be made via email to the address provided by Licensee upon receipt of payment.
 
 ## 3. Term
 
-This Agreement is valid for {{ TERMS_OF_YEARS }} years and will expire on the {{ TERMS_OF_YEARS }} year anniversary of {{ CONTRACT_DATE }}.
+This Agreement is valid for **{{ TERMS_OF_YEARS }}** years and will expire on the **{{ TERMS_OF_YEARS }}** year anniversary of **{{ CONTRACT_DATE }}**.
 
 If the Effective Date is February 29 and the expiration year is not a leap year, the license expires on February 28 of that year.
 
