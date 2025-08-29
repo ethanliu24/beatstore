@@ -268,6 +268,58 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "POST #apply_to_all" do
+    let(:license) { create(:license) }
+
+    it "should apply license to all tracks" do
+      t1 = create(:track)
+      t2 = create(:track)
+
+      expect(t1.licenses.count).to eq(0)
+      expect(t2.licenses.count).to eq(0)
+      expect(license.tracks.count).to eq(0)
+
+      post apply_to_all_admin_license_url(license, format: :turbo_stream)
+
+      t1.reload
+      t2.reload
+      license.reload
+
+      expect(response).to have_http_status(:ok)
+      expect(t1.licenses.count).to eq(1)
+      expect(t1.licenses).to include(license)
+      expect(t2.licenses.count).to eq(1)
+      expect(t2.licenses).to include(license)
+      expect(license.tracks.count).to eq(2)
+    end
+  end
+
+  describe "DELETE #remove_from_all" do
+    let(:license) { create(:license) }
+
+    it "should apply license to all tracks" do
+      t1 = create(:track)
+      t2 = create(:track)
+      t1.licenses << license
+      t2.licenses << license
+
+      expect(t1.licenses.count).to eq(1)
+      expect(t2.licenses.count).to eq(1)
+      expect(license.tracks.count).to eq(2)
+
+      delete remove_from_all_admin_license_url(license, format: :turbo_stream)
+
+      t1.reload
+      t2.reload
+      license.reload
+
+      expect(response).to have_http_status(:ok)
+      expect(t1.licenses.count).to eq(0)
+      expect(t2.licenses.count).to eq(0)
+      expect(license.tracks.count).to eq(0)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_licenses_url

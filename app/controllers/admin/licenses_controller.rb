@@ -69,7 +69,7 @@ module Admin
     end
 
     def apply_to_all
-      entity = resolve_contract_type_corresponded_entity(@license.contract_type)
+      entity = resolve_contract_type_corresponding_entity(@license.contract_type)
       return if entity.nil?
 
       entity.all.each do |e|
@@ -83,7 +83,7 @@ module Admin
     end
 
     def remove_from_all
-      entity = resolve_contract_type_corresponded_entity(@license.contract_type)
+      entity = resolve_contract_type_corresponding_entity(@license.contract_type)
       return if entity.nil?
 
       entity.all.each do |e|
@@ -114,10 +114,11 @@ module Admin
       end
     end
 
-    def resolve_contract_type_corresponded_entity(contract_type)
-      case contract_type
-      when License.contract_types[:free]
-      when License.contract_types[:non_exclusive]
+    def resolve_contract_type_corresponding_entity(contract_type)
+      if [
+        License.contract_types[:free],
+        License.contract_types[:non_exclusive]
+      ].include?(contract_type)
         Track
       else
         nil
