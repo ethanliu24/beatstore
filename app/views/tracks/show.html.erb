@@ -128,7 +128,7 @@
                 },
                 {
                   phrase: t("track.show.licensing.has_radio_broadcasting_rights",
-                    stations: contract[:radio_stations_allowed].presence || t("track.show.licensing.unlimited")),
+                    stations: contract[:has_broadcasting_rights] ? (contract[:radio_stations_allowed].presence || t("track.show.licensing.unlimited")) : 0),
                   icon: "radio"
                 }
               ].each do |data| %>

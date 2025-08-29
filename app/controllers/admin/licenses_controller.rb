@@ -53,7 +53,7 @@ module Admin
       @contract = @contract_class.new(**update_params[:contract_details])
 
       if @contract.valid?
-        update_params.merge(contract_details: @contract.attributes)
+        update_params[:contract_details] = @contract.attributes
 
         if @license.update(update_params)
           redirect_to admin_licenses_path, notice: t("admin.license.update.success")
