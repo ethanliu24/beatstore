@@ -18,6 +18,10 @@ class License < ApplicationRecord
   validates :currency, presence: true, length: { is: 3 }
   validates :contract_type, presence: true
   validates :country, presence: true
+  validate :country_and_province_exists
+
+  has_many :licenses_tracks_associations, class_name: "Licenses::LicensesTracksAssociation", dependent: :destroy
+  has_many :tracks, through: :licenses_tracks_associations
 
   def contract
     contract_details.with_indifferent_access

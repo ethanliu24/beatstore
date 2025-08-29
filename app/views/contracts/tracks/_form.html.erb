@@ -74,24 +74,19 @@
       <div class="field content-input-container mt-4">
         <% render_deliver = contract_type != License.contract_types[:free] %>
 
-        <% [
-          { field: :delivers_mp3, label: t("contracts.form.deliver_mp3"), checked: @license.contract[:delivers_mp3], render: render_deliver },
-          { field: :delivers_wav, label: t("contracts.form.deliver_wav"), checked: @license.contract[:delivers_wav], render: render_deliver },
-          { field: :delivers_stems, label: t("contracts.form.deliver_stems"), checked: @license.contract[:delivers_stems], render: render_deliver },
-          { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new, render: true }
-        ].each do |toggle| %>
-          <% if toggle[:render] %>
-            <label class="inline-flex items-center cursor-pointer">
-              <%= form.check_box toggle[:field], class: "sr-only peer" %>
-              <input type="checkbox" value="" class="sr-only peer" <%= "checked" if toggle[:checked] %>>
-              <div class="relative w-9 h-5 bg-secondary-txt/40 dark:bg-secondary-bg peer-focus:outline-none rounded-full
-                peer-focus:ring-2 peer-focus:ring-accent
-                peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full
-                after:h-4 after:w-4 after:transition-all dark:border-1 dark:border-secondary-txt/40 peer-checked:bg-accent">
-              </div>
-              <%= form.label toggle[:label], class: "ml-4" %>
-            </label>
+        <%= form.fields_for :contract_details, OpenStruct.new(@license.contract_details) do |c| %>
+          <% [
+            { field: :delivers_mp3, label: t("contracts.form.deliver_mp3"), checked: @license.contract[:delivers_mp3], render: render_deliver, form: c },
+            { field: :delivers_wav, label: t("contracts.form.deliver_wav"), checked: @license.contract[:delivers_wav], render: render_deliver, form: c },
+            { field: :delivers_stems, label: t("contracts.form.deliver_stems"), checked: @license.contract[:delivers_stems], render: render_deliver, form: c },
+            { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new, render: true, form: }
+          ].each do |checkbox| %>
+            <% if checkbox[:render] %>
+              <label class="inline-flex items-center cursor-pointer py-1">
+                <%= checkbox[:form].check_box checkbox[:field], { checked: checkbox[:checked], id: "#{checkbox[:field]}-check", class: "checkbox w-3 h-3" } %>
+                <%= form.label checkbox[:label], for: "#{checkbox[:field]}-check", class: "ml-2 cursor-pointer" %>
+              </label>
+            <% end %>
           <% end %>
         <% end %>
       </div>

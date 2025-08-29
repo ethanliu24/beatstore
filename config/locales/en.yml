@@ -114,6 +114,18 @@ en:
     more_info_modal_title: "More information"
     no_collaborators: "There are no collaborators on this track"
     no_samples: "There are no samples on this track"
+    licensing: "Licensing"
+    show:
+      licensing:
+        allow_music_recording: "USED FOR MUSIC RECORDING"
+        distribution_copies: "DISTRIBUTE UP TO %{copies} COPIES"
+        online_audio_streams: "%{streams} ONLINE AUDIO STREAMS"
+        music_videos: "%{videos} MUSIC VIDEOS"
+        for_profit_live_performances: "FOR PROFIT LIVE PERFORMANCES"
+        not_for_profit_live_performances: "NO FOR PROFIT LIVE PERFORMANCES ALLOWED"
+        has_radio_broadcasting_rights: "%{stations} RADIO STATIONS BROADCASTING RIGHTS"
+        unlimited: "UNLIMITED"
+        no_licenses: "There are no licenses available"
 
   admin:
     track:
@@ -122,10 +134,12 @@ en:
       see_track: "See track"
       manage_tracks_here: "Manage tracks here"
       no_tracks_found: "No tracks found."
-      success:
-        create: "Track was successfully created."
-        update: "Track was successfully updated."
-        destroy: "Track was successfully destroyed."
+      create:
+        success: "Track was successfully created."
+      update:
+        success: "Track was successfully updated."
+      destroy:
+        success: "Track was successfully destroyed."
       error:
         invalid_share_sum: "The sum of profit and publishing shares must be less than or equal to 100."
       add_new_collaboration: "Add new collaboration"
@@ -135,10 +149,18 @@ en:
       back_to_licenses: "Back to licenses"
       contract_name: "%{contract} License"
       default_for_new_content: "Default for new content"
+      apply_to_all:
+        action: "Apply to all"
+        success: "Successfully applied license to all."
+      remove_from_all:
+        action: "Remove from all"
+        success: "Successfully removed license from all."
       index:
         subtitle: "Manage licenses here"
       create:
         success: "License was successfully created."
+      update:
+        success: "License was successfully updated."
       destroy:
         success: "License was successfully deleted."
 

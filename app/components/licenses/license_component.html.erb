@@ -1,9 +1,6 @@
 <div class="flex justify-between items-center w-full rounded border-1 border-hover p-2">
   <div>
-    <%= link_to admin_license_path(license), class: "mb-1 font-light flex justify-start items-center gap-2" do %>
-      <p><%= license.title %></p>
-      <%= icon "external-link", class: "w-3 h-3" %>
-    <% end %>
+    <p><%= license.title %></p>
     <div class="text-xs font-light">
       <div class="flex justify-start items-center gap-2">
         <%= icon "article", class: "w-3 h-3 aspect-square text-accent" %>
@@ -11,11 +8,11 @@
       </div>
       <div class="flex justify-start items-center gap-2">
         <%= icon "currency-dollar", class: "w-3 h-3 aspect-square text-accent" %>
-        <%= content_tag :p, "#{license.price.format} #{license.currency}" %>
+        <%= content_tag :p, price_with_currency(license) %>
       </div>
       <div class="flex justify-start items-center gap-2">
         <%= icon "gavel", class: "w-3 h-3 aspect-square text-accent" %>
-        <%= content_tag :p, "#{license.province}, #{license.country}" %>
+        <%= content_tag :p, format_country_location(license) %>
       </div>
       <% if license.default_for_new %>
         <div class="flex justify-start items-center gap-2">
@@ -25,7 +22,11 @@
       <% end %>
     </div>
   </div>
-  <div>
+  <div class="flex justify-between items-center gap-8">
+    <%= button_to t("admin.license.apply_to_all.action"), apply_to_all_admin_license_path(license), method: :post,
+      class: "button px-2 py-1 text-xs", data: { turbo_stream: true } %>
+    <%= button_to t("admin.license.remove_from_all.action"), remove_from_all_admin_license_path(license), method: :delete,
+      class: "button-critical bg-error px-2 py-1 text-xs", data: { turbo_stream: true } %>
     <%= render Ui::DropdownComponent.new(id: dom_id(license)) do |dropdown| %>
       <% dropdown.with_trigger_button(id: dom_id(license)) do %>
         <%= icon "dots-vertical", class: "cursor-pointer" %>
@@ -55,7 +56,7 @@
               icon: "trash",
               icon_size: 4,
               classes: "text-error",
-              data: { turbo_method: "delete" }
+              data: { turbo_method: "delete", turbo_confirm: "Are you sure?" }
             ) %>
           </li>
         </ul>

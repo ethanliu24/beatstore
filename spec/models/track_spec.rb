@@ -212,5 +212,37 @@ RSpec.describe Track, type: :model do
     it { should have_one_attached(:track_stems) }
     it { should have_one_attached(:project) }
     it { should have_one_attached(:cover_photo) }
+
+    it "can have many licenses" do
+      track = create(:track)
+      license1 = create(:license)
+      license2 = create(:license, title: "L2")
+
+      track.licenses << [ license1, license2 ]
+
+      expect(track.licenses.count).to eq(2)
+      expect(license1.tracks).to include(track)
+      expect(license2.tracks).to include(track)
+      expect(license1.tracks.count).to eq(1)
+      expect(license2.tracks.count).to eq(1)
+    end
+  end
+
+  describe "#cheapest_price" do
+    let(:track) { create(:track) }
+
+    it "should return cheapest price of profitable licenses" do
+      l1 = create(:non_exclusive_license, price_cents: 1000)
+      l2 = create(:non_exclusive_license, title: "T2", price_cents: 2000)
+      track.licenses << l1
+      track.licenses << l2
+
+      expect(track.licenses.count).to eq(2)
+      expect(track.cheapest_price).to eq("$10.00")
+    end
+
+    it "should return nil if there are no available licenses" do
+      expect(track.cheapest_price).to be_nil
+    end
   end
 end

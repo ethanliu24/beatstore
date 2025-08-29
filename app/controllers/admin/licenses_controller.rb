@@ -2,13 +2,10 @@
 
 module Admin
   class LicensesController < Admin::BaseController
-    before_action :set_license, only: [ :edit, :update, :destroy ]
+    before_action :set_license, only: [ :edit, :update, :destroy, :apply_to_all, :remove_from_all ]
 
     def index
       @licenses = License.order(updated_at: :desc)
-    end
-
-    def show
     end
 
     def new
@@ -30,7 +27,17 @@ module Admin
       @license = License.new(sanitize_license_params)
       @contract = @contract_class.new(**@license.contract)
 
-      process_license
+      if @contract.valid?
+        @license.contract_details = @contract.attributes
+
+        if @license.save
+          redirect_to admin_licenses_path, notice: t("admin.license.create.success")
+          return
+        end
+      end
+
+      handle_create_or_update_errors
+      render :new, status: :unprocessable_content
     end
 
     def edit
@@ -39,9 +46,20 @@ module Admin
 
     def update
       @contract_class = resolve_contract_type(@license.contract_type)
-      @contract = @contract_class.new(**@license.contract)
+      update_params = sanitize_license_params
+      @contract = @contract_class.new(**update_params[:contract_details])
 
-      process_license
+      if @contract.valid?
+        update_params[:contract_details] = @contract.attributes
+
+        if @license.update(update_params)
+          redirect_to admin_licenses_path, notice: t("admin.license.update.success")
+          return
+        end
+      end
+
+      handle_create_or_update_errors
+      render :edit, status: :unprocessable_content
     end
 
     def destroy
@@ -50,21 +68,57 @@ module Admin
       redirect_to admin_licenses_path, status: :see_other, notice: t("admin.license.destroy.success")
     end
 
+    def apply_to_all
+      entity = resolve_contract_type_corresponding_entity(@license.contract_type)
+      return if entity.nil?
+
+      entity.all.each do |e|
+        e.licenses << @license unless e.licenses.include?(@license)
+      end
+
+      respond_to do |format|
+        flash.now[:notice] = t("admin.license.apply_to_all.success")
+        format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+      end
+    end
+
+    def remove_from_all
+      entity = resolve_contract_type_corresponding_entity(@license.contract_type)
+      return if entity.nil?
+
+      entity.all.each do |e|
+        e.licenses.delete(@license)
+      end
+
+      respond_to do |format|
+        flash.now[:notice] = t("admin.license.remove_from_all.success")
+        format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+      end
+    end
+
     private
 
     def resolve_contract_type(contract_type)
-      if contract_type.nil?
-        @contract_class = nil
-        return
-      end
+      return nil if contract_type.nil?
 
       case contract_type
       when License.contract_types[:free]
-        @contract_class = Contracts::Track::Free
+        Contracts::Track::Free
       when License.contract_types[:non_exclusive]
-        @contract_class = Contracts::Track::NonExclusive
+        Contracts::Track::NonExclusive
       else
-        @contract_class = nil
+        nil
+      end
+    end
+
+    def resolve_contract_type_corresponding_entity(contract_type)
+      if [
+        License.contract_types[:free],
+        License.contract_types[:non_exclusive]
+      ].include?(contract_type)
+        Track
+      else
+        nil
       end
     end
 
@@ -92,19 +146,12 @@ module Admin
       permitted
     end
 
-    def process_license
-      if @contract.valid? &&
-        (action_name == :new ? @license.save : @license.update(sanitize_license_params))
-        redirect_to admin_licenses_path,
-          notice: t("admin.license.#{action_name == :new ? :create : :update}.success")
-      else
-        @contract.errors.each do |error|
-          @license.errors.add(error.attribute, error.message)
-        end
-
-        @contract_type = params[:license][:contract_type]
-        render action_name == "create" ? :new : :edit, status: :unprocessable_content
+    def handle_create_or_update_errors
+      @contract.errors.each do |error|
+        @license.errors.add(error.attribute, error.message)
       end
+
+      @contract_type = params[:license][:contract_type]
     end
   end
 end

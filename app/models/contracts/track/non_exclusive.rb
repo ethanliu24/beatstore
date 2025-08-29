@@ -33,8 +33,8 @@ module Contracts
         if: -> { radio_stations_allowed.present? }
       validates :non_profitable_performances, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
         if: -> { non_profitable_performances.present? }
-      validates :has_broadcasting_rights, presence: true
-      validates :allow_profitable_performances, presence: true
+      validates :has_broadcasting_rights, inclusion: { in: [ true, false ] }
+      validates :allow_profitable_performances, inclusion: { in: [ true, false ] }
 
       private
 
