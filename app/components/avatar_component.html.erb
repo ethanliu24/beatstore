@@ -4,7 +4,7 @@
   <%= image_tag url_for(user.profile_picture), class: "avatar #{avatar_size}" %>
 <% else %>
   <div class="flex justify-center items-center <%= avatar_size %> bg-secondary-bg rounded-full">
-    <div class="relative w-full h-full max-w-full max-h-full overflow-hidden rounded-full <%= avatar_size %>">
+    <div class="relative w-full h-full max-w-full max-h-full min-w-full min-h-full overflow-hidden rounded-full <%= avatar_size %>">
       <%= default_avatar_icon(size) %>
     </div>
   </div>
