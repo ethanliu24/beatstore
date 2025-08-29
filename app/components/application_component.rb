@@ -2,6 +2,7 @@ class ApplicationComponent < ViewComponent::Base
   include ApplicationHelper
   include TrackAdminHelper
   include LicenseHelper
+  include UserHelper
   include RailsIcons::Helpers
   include Turbo::FramesHelper
 

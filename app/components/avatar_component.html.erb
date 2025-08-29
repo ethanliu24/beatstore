@@ -1,10 +1,11 @@
-<% avatar_size = "w-#{size} h-#{size} min-w-#{size} min-h-#{size} man-w-#{size} man-h-#{size} aspect-square" %>
-<% icon_size = "w-#{size - 1} h-#{size - 1} aspect-square" %>
+<% avatar_size = "w-#{size} h-#{size} min-w-#{size} min-h-#{size} max-w-#{size} max-h-#{size} aspect-square" %>
 
 <% if user && user.profile_picture.attached? %>
   <%= image_tag url_for(user.profile_picture), class: "avatar #{avatar_size}" %>
 <% else %>
   <div class="flex justify-center items-center <%= avatar_size %> bg-secondary-bg rounded-full">
-    <%= icon "user", class: "avatar #{icon_size} text-secondary-txt"%>
+    <div class="relative w-full h-full max-w-full max-h-full min-w-full min-h-full overflow-hidden rounded-full <%= avatar_size %>">
+      <%= default_avatar_icon(size) %>
+    </div>
   </div>
 <% end %>

@@ -14,12 +14,12 @@ RSpec.describe AvatarComponent, type: :component do
     user = create(:user)
     rendered = render_inline(described_class.new(user:, size: 4))
 
-    expect(rendered).to have_css("svg.avatar.w-3.h-3", count: 1)
+    expect(rendered).to have_css("svg.avatar.w-4.h-4", count: 1)
   end
 
   it "renders a default avatar if user is annonymous" do
     rendered = render_inline(described_class.new(user: nil, size: 8))
 
-    expect(rendered).to have_css("svg.avatar.w-7.h-7", count: 1)
+    expect(rendered).to have_css("svg.avatar.w-8.h-8", count: 1)
   end
 end
