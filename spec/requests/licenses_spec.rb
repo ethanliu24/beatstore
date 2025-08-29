@@ -154,7 +154,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         }.to change(License, :count).by(0)
 
         expect(License.count).to eq(0)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(assigns(:license).errors[:title]).to include("is required")
       end
     end
@@ -247,7 +247,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         }
 
         expect(License.count).to eq(1)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(assigns(:license).errors[:title]).to include("is required")
       end
     end
