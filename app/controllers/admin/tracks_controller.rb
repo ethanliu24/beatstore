@@ -19,7 +19,8 @@ module Admin
     end
 
     def edit
-      @licenses = @track.licenses
+      # Fine for now as there won't be a lot of licenses, if want to be optimize use raw sql
+      @licenses = (@track.licenses + License.all).uniq
     end
 
     def create

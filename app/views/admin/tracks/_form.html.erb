@@ -175,7 +175,13 @@
                   <%= content_tag :p, license.title, class: "text-[0.8rem] cursor-text" %>
                   <%= content_tag :p, track_files_delivered(license), class: "text-[0.6rem] text-secondary-txt font-light cursor-text" %>
                 </div>
-                <%= content_tag :p, "#{license.price.format} #{license.currency}", class: "cursor-text" %>
+                <div class="flex justify-between items-center gap-2">
+                  <% if license.default_for_new %>
+                    <%= content_tag :p, "Default", class: "text-success" %>
+                    <%= seperator_char_ui %>
+                  <% end %>
+                  <%= content_tag :p, "#{license.price.format} #{license.currency}", class: "cursor-text" %>
+                </div>
               </div>
             <% end %>
           <% end %>

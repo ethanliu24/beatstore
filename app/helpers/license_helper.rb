@@ -15,6 +15,12 @@ module LicenseHelper
   end
 
   def license_applied_to_track?(track:, license:)
-    license.default_for_new || track.licenses.include?(license)
+    if controller_name == "tracks"
+      if action_name == "new"
+        license.default_for_new || track.licenses.include?(license)
+      else
+        track.licenses.include?(license)
+      end
+    end
   end
 end

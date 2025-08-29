@@ -83,8 +83,8 @@
           ].each do |checkbox| %>
             <% if checkbox[:render] %>
               <label class="inline-flex items-center cursor-pointer py-1">
-                <%= checkbox[:form].check_box checkbox[:field], { checked: checkbox[:checked], class: "checkbox w-3 h-3" } %>
-                <%= form.label checkbox[:label], class: "ml-2" %>
+                <%= checkbox[:form].check_box checkbox[:field], { checked: checkbox[:checked], id: "#{checkbox[:field]}-check", class: "checkbox w-3 h-3" } %>
+                <%= form.label checkbox[:label], for: "#{checkbox[:field]}-check", class: "ml-2 cursor-pointer" %>
               </label>
             <% end %>
           <% end %>

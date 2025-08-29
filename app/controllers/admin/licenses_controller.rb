@@ -99,18 +99,15 @@ module Admin
     private
 
     def resolve_contract_type(contract_type)
-      if contract_type.nil?
-        @contract_class = nil
-        return
-      end
+      return nil if contract_type.nil?
 
       case contract_type
       when License.contract_types[:free]
-        @contract_class = Contracts::Track::Free
+        Contracts::Track::Free
       when License.contract_types[:non_exclusive]
-        @contract_class = Contracts::Track::NonExclusive
+        Contracts::Track::NonExclusive
       else
-        @contract_class = nil
+        nil
       end
     end
 
