@@ -4,6 +4,7 @@ class License < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
 
   MAX_DESCRIPTION_LENGTH = 400
+  CONTRACT_TEMPLATES = Rails.configuration.templates[:contracts]
 
   monetize :price_cents, with_model_currency: :currency
 
@@ -22,6 +23,12 @@ class License < ApplicationRecord
 
   has_many :licenses_tracks_associations, class_name: "Licenses::LicensesTracksAssociation", dependent: :destroy
   has_many :tracks, through: :licenses_tracks_associations
+
+  class << self
+    def contract_templates
+      Rails.configuration.templates[:contracts]
+    end
+  end
 
   def contract
     contract_details.with_indifferent_access

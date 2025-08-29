@@ -3,10 +3,13 @@
 class Templates
   class << self
     def read_contract_templates
+      track_free = License.contract_types[:free]
+      track_non_exclusive = License.contract_types[:free]
+
       {
-        track_free: read_templates("templates/contracts/tracks/free.md"),
-        track_non_exclusive: read_templates("templates/contracts/tracks/non_exclusive.md")
-      }
+        "#{track_free}" => read_templates("templates/contracts/tracks/free.md"),
+        "#{track_non_exclusive}" => read_templates("templates/contracts/tracks/non_exclusive.md")
+      }.with_indifferent_access
     end
 
     private
@@ -17,5 +20,7 @@ class Templates
   end
 end
 
-Rails.configuration.templates = {}
-Rails.configuration.templates[:contracts] = Templates.read_contract_templates
+Rails.application.config.to_prepare do
+  Rails.configuration.templates = {}
+  Rails.configuration.templates[:contracts] = Templates.read_contract_templates
+end

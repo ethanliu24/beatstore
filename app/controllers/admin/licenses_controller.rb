@@ -142,7 +142,7 @@ module Admin
       if permitted[:price_cents].present?
         permitted[:price_cents] = (permitted[:price_cents].to_d * 100).to_i
       end
-
+      p permitted
       permitted
     end
 
