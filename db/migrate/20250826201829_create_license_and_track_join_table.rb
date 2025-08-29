@@ -1,6 +1,6 @@
 class CreateLicenseAndTrackJoinTable < ActiveRecord::Migration[8.0]
   def change
-    create_table :licenses_tracks, id: false do |t|
+    create_table :licenses_tracks do |t|
       t.references :license, null: false, foreign_key: true
       t.references :track, null: false, foreign_key: true
     end

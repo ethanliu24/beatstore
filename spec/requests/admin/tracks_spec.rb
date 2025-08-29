@@ -542,14 +542,14 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     it "delets licenses associations when deleted" do
       track.licenses << license1
 
-      expect(LicensesTracksAssociation.count).to eq(1)
+      expect(Licenses::LicensesTracksAssociation.count).to eq(1)
 
       delete admin_track_url(track)
 
       expect(response).to have_http_status(303)
       expect(track.licenses.count).to eq(0)
       expect(license1.tracks.count).to eq(0)
-      expect(LicensesTracksAssociation.count).to eq(0)
+      expect(Licenses::LicensesTracksAssociation.count).to eq(0)
     end
   end
 

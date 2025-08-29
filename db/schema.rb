@@ -91,7 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_201829) do
     t.index ["title"], name: "index_licenses_on_title", unique: true
   end
 
-  create_table "licenses_tracks", id: false, force: :cascade do |t|
+  create_table "licenses_tracks", force: :cascade do |t|
     t.bigint "license_id", null: false
     t.bigint "track_id", null: false
     t.index ["license_id", "track_id"], name: "index_licenses_tracks_on_license_id_and_track_id", unique: true
