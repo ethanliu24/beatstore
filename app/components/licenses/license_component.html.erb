@@ -12,7 +12,7 @@
       </div>
       <div class="flex justify-start items-center gap-2">
         <%= icon "gavel", class: "w-3 h-3 aspect-square text-accent" %>
-        <%= content_tag :p, "#{license.province}, #{license.country}" %>
+        <%= content_tag :p, license.province.present? ? "#{license.province}, #{license.country}" : license.country %>
       </div>
       <% if license.default_for_new %>
         <div class="flex justify-start items-center gap-2">
