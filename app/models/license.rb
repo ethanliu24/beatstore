@@ -20,7 +20,8 @@ class License < ApplicationRecord
   validates :country, presence: true
   validate :country_and_province_exists
 
-  has_and_belongs_to_many :tracks, join_table: "licenses_tracks"
+  has_many :licenses_tracks_associations, dependent: :destroy
+  has_many :tracks, through: :licenses_tracks_associations
 
   def contract
     contract_details.with_indifferent_access

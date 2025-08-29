@@ -15,11 +15,11 @@ module Admin
 
     def new
       @track = Track.new
-      @licenses = get_licenses
+      @licenses = License.order(Arel.sql("default_for_new DESC, created_at DESC"))
     end
 
     def edit
-      @licenses = get_licenses
+      @licenses = @track.licenses
     end
 
     def create
@@ -81,16 +81,6 @@ module Admin
         samples_attributes: [ :id, :name, :artist, :link, :_destroy ],
         license_ids: []
       )
-    end
-
-    def get_licenses
-      # Since the number of licenses will be very little so this is fine,
-      # but to optimize the querying should be done using raw SQL
-      (
-        @track.licenses +
-        License.where(default_for_new: true) +
-        License.all.where(default_for_new: false).order(created_at: :desc)
-      ).uniq
     end
   end
 end

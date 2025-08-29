@@ -2,9 +2,7 @@
 
 class Track < ApplicationRecord
   # before_validation :adjust_visibility
-  before_validation do
-    self.is_public = false if is_public.nil?
-  end
+  before_validation { self.is_public = false if is_public.nil? }
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
@@ -48,7 +46,8 @@ class Track < ApplicationRecord
   accepts_nested_attributes_for :collaborators, allow_destroy: true, reject_if: :all_blank
   has_many :samples, class_name: "Collaboration::Sample", dependent: :destroy
   accepts_nested_attributes_for :samples, allow_destroy: true, reject_if: :all_blank
-  has_and_belongs_to_many :licenses, join_table: "licenses_tracks"
+  has_many :licenses_tracks_associations, dependent: :destroy
+  has_many :licenses, through: :licenses_tracks_associations
 
   class << self
     def ransackable_attributes(auth_object = nil)
