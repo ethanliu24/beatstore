@@ -35,4 +35,8 @@ module ApplicationHelper
   def currencies
     ISO3166::Country.all.map { |c| c.currency_code }.compact.uniq.sort
   end
+
+  def format_country_location(license)
+    license.province.present? ? "#{license.province}, #{license.country}" : license.country
+  end
 end

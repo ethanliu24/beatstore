@@ -3,6 +3,10 @@ module LicenseHelper
     t("admin.license.contract_name", contract: t("contracts.tracks.#{contract_type}"))
   end
 
+  def price_with_currency(license)
+    "#{license.price.format} #{license.currency}"
+  end
+
   def track_files_delivered(license)
     return "Free MP3" if license.contract_type == License.contract_types[:free]
 

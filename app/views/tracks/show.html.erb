@@ -89,7 +89,7 @@
                 data-tabs-target="#<%= dom_id(license) %>"
                 type="button" role="tab" aria-controls="<%= dom_id(license) %>" aria-selected="false">
                 <p class="text-sm"><%= license.title %></p>
-                <p class="text-[0.7rem] font-light"><%= "#{license.price.format} #{license.currency}" %></p>
+                <p class="text-[0.7rem] font-light"><%= price_with_currency(license) %></p>
                 <p class="text-[0.6rem] text-secondary-txt"><%= track_files_delivered(license) %></p>
               </button>
             </li>

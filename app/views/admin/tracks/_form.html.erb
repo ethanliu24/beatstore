@@ -180,7 +180,7 @@
                     <%= content_tag :p, "Default", class: "text-success" %>
                     <%= seperator_char_ui %>
                   <% end %>
-                  <%= content_tag :p, "#{license.price.format} #{license.currency}", class: "cursor-text" %>
+                  <%= content_tag :p, price_with_currency(license), class: "cursor-text" %>
                 </div>
               </div>
             <% end %>

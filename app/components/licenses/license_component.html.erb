@@ -8,11 +8,11 @@
       </div>
       <div class="flex justify-start items-center gap-2">
         <%= icon "currency-dollar", class: "w-3 h-3 aspect-square text-accent" %>
-        <%= content_tag :p, "#{license.price.format} #{license.currency}" %>
+        <%= content_tag :p, price_with_currency(license) %>
       </div>
       <div class="flex justify-start items-center gap-2">
         <%= icon "gavel", class: "w-3 h-3 aspect-square text-accent" %>
-        <%= content_tag :p, license.province.present? ? "#{license.province}, #{license.country}" : license.country %>
+        <%= content_tag :p, format_country_location(license) %>
       </div>
       <% if license.default_for_new %>
         <div class="flex justify-start items-center gap-2">
