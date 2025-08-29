@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :tracks, except: [ :show ]
-    resources :licenses do
+    resources :licenses, except: [ :show ] do
       member do
         post :apply_to_all
         delete :remove_from_all

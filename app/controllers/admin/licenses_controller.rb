@@ -8,9 +8,6 @@ module Admin
       @licenses = License.order(updated_at: :desc)
     end
 
-    def show
-    end
-
     def new
       @license = License.new
       @contract_type = params[:contract_type]
