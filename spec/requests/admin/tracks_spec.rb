@@ -21,6 +21,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   }
 
   it "sanitizes parameters" do
+    license = create(:license)
     controller = Admin::TracksController.new
     controller.params = ActionController::Parameters.new(
       track: {
@@ -38,6 +39,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         collaborators_attributes: {
           "0" => { id: 1, name: "X", role: "producer", profit_share: "0.0", publishing_share: "0.0", _destroy: true }
         },
+        license_ids: [ license.id ],
         foo: "bar"
       }
     )
@@ -56,7 +58,8 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       "project",
       "cover_photo",
       "tags_attributes",
-      "collaborators_attributes"
+      "collaborators_attributes",
+      "license_ids"
     )
     expect(permitted[:tags_attributes]["0"].keys).to contain_exactly("id", "name", "_destroy")
     expect(permitted[:collaborators_attributes]["0"].keys).to contain_exactly(
@@ -507,6 +510,46 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       }
 
       expect(track.reload.samples.size).to eq(0)
+    end
+  end
+
+  describe "licenses" do
+    let(:track) { create(:track) }
+    let(:license1) { create(:license) }
+    let(:license2) { create(:non_exclusive_license) }
+
+    it "creates track with given licenses" do
+      expect {
+        post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license1.id ]) }
+      }.to change(Track, :count).by(1)
+
+      created_track = Track.last
+
+      expect(response).to have_http_status(302)
+      expect(created_track.licenses.count).to eq(1)
+      expect(created_track.licenses).to include(license1)
+    end
+
+    it "updates track with given licenses" do
+      track.licenses << license1
+
+      put admin_track_url(track), params: { track: { license_ids: [ license1.id, license2.id ] } }
+
+      expect(response).to have_http_status(302)
+      expect(track.licenses.count).to eq(2)
+    end
+
+    it "delets licenses associations when deleted" do
+      track.licenses << license1
+
+      expect(LicensesTracksAssociation.count).to eq(1)
+
+      delete admin_track_url(track)
+
+      expect(response).to have_http_status(303)
+      expect(track.licenses.count).to eq(0)
+      expect(license1.tracks.count).to eq(0)
+      expect(LicensesTracksAssociation.count).to eq(0)
     end
   end
 
