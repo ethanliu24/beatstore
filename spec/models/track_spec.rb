@@ -227,4 +227,22 @@ RSpec.describe Track, type: :model do
       expect(license2.tracks.count).to eq(1)
     end
   end
+
+  describe "#cheapest_price" do
+    let(:track) { create(:track) }
+
+    it "should return cheapest price of profitable licenses" do
+      l1 = create(:non_exclusive_license, price_cents: 1000)
+      l2 = create(:non_exclusive_license, title: "T2", price_cents: 2000)
+      track.licenses << l1
+      track.licenses << l2
+
+      expect(track.licenses.count).to eq(2)
+      expect(track.cheapest_price).to eq("$10.00")
+    end
+
+    it "should return nil if there are no available licenses" do
+      expect(track.cheapest_price).to be_nil
+    end
+  end
 end
