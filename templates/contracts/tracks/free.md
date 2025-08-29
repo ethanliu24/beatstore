@@ -1,4 +1,4 @@
-# Free Non-Exclusive {{ LICENSE_NAME }} License Agreement
+# Free Non-Exclusive **{{ LICENSE_NAME }}** License Agreement
 
 This Free Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement"), effective as of **{{ CONTRACT_DATE }}** (the "Effective Date"), is entered into by and between **{{ PRODUCT_OWNER_FULLNAME }}** a/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}**, residing at **{{ CUSTOMER_ADDRESS }}** ("You" or "Licensee"). This Agreement governs your use of the instrumental music file(s) (the "Track"). For clarity, “Track” includes all files comprising the Track, individually and collectively.
 
@@ -10,7 +10,9 @@ You may use the Track only for personal, non-commercial purposes. The Track may 
 
 ## 2. Term
 
-This Agreement is valid for {{ TERMS_OF_YEARS }} years and will expire on the {{ TERMS_OF_YEARS }} year anniversary of {{ CONTRACT_DATE }}. If the license is purchased on Feburary 29th and the expiration year is not a leap year, the license expires one day before Febuary 29th of the expiration year, that is, Febuary 28th. Otherwise it remains on Febuary 29th.
+This Agreement is valid for **{{ TERMS_OF_YEARS }}** years and will expire on the {{ TERMS_OF_YEARS }} year anniversary of {{ CONTRACT_DATE }}.
+
+If the Effective Date is February 29 and the expiration year is not a leap year, the license expires on February 28 of that year.
 
 ## 3. Permitted Uses
 
@@ -48,17 +50,25 @@ Producer retains all rights, title, and interest in the Track, including copyrig
 
 You do not own any New Masters; you own only your original contributions to New Compositions.
 
-Publishing shares of New Compositions may be shared as specified in {{ PUBLISHING_SHARES }}.
+Publishing shares of New Compositions may be shared as specified in **{{ PUBLISHING_SHARES }}**.
 
 Subject to all of the terms and restrictions set forth in this Agreement, each party shall be entitled to solely administer their respective share of the New Composition(s).
 
 ## 6. Mechanical License
 
-If any portion of a New Composition includes work controlled by Producer, mechanical licenses may be issued to Licensee to allow permitted uses. Royalties, if applicable, are subject to standard statutory rates.
+If any portion of the New Song—whether a musical composition, selection, or arrangement—is written, composed, or owned (in whole or in part, alone or with collaborators) by the Producer, or by any entity in which the Producer has a direct or indirect interest, such portion shall be considered a “Controlled Composition.”
+
+The Producer agrees to grant, or cause to be granted, to the Licensee a mechanical license for each Controlled Composition embodied in the New Song. Under this license:
+
+1. For sales in the United States and Canada, the Licensee shall pay mechanical royalties at 100% of the statutory minimum rate, without any cap, including for albums and EPs.
+
+2. For sales outside the United States and Canada, the Licensee shall pay mechanical royalties at the prevailing industry rate in the applicable country at the date this Agreement is executed.
+
+This mechanical license ensures that Licensee may reproduce, distribute, and sell the New Song in physical or digital form in accordance with the terms of this Agreement, while compensating the Producer for any portions of the composition they control.
 
 ## 7. Credit
 
-Licensee must give proper credit to the Producer in all applicable New Compositions and Masters in a manner such as: "Produced by {{ PRODUCER_ALIAS }}". Licensee should use best efforts to ensure credit accuracy.
+Licensee must give proper credit to the Producers on this track in all applicable New Compositions and Masters in a manner such as: **"Produced by {{ TRACK_CONTRIBUTOR_ALIASES }}"**. Licensee should use best efforts to ensure credit accuracy.
 
 ## 8. Accounting and Auditing
 
@@ -78,12 +88,26 @@ Licensee has five (5) business days to cure any breach after notice. Failure to 
 
 ## 12. Warranties and Indemnification
 
-The Track is provided "as is" without warranties.
+- Both parties agree to indemnify each other against third-party claims arising from breaches of warranties or unauthorized use of copyrighted material.
 
-Licensee is responsible for obtaining any necessary third-party clearances.
+- The Track is provided "as is" without warranties.
 
-Licensee agrees to indemnify Producer against claims arising from breach or misuse of the Track.
+- Licensee is responsible for obtaining any necessary third-party clearances.
+
+- Licensee agrees to indemnify Producer against claims arising from breach or misuse of the Track.
 
 ## 13. Miscellaneous
 
-This Agreement constitutes the entire understanding between parties. It may only be modified in writing signed by both parties. Governing law is {{ STATE_PROVINCE_COUNTRY }}, and any disputes are subject to jurisdiction in that location. Electronic acceptance or receipt of the Track constitutes acknowledgment and agreement to these terms.
+- This Agreement is the entire agreement between the parties and can only be changed in writing (email is sufficient). It supersedes all prior agreements.
+
+- If any part of this Agreement is invalid or unenforceable, the rest remains in effect.
+
+- Licensor is not in breach unless Licensee gives written notice and the breach is not cured within 30 days (or longer if reasonably needed, provided Licensor acts diligently).
+
+- This Agreement is governed by the laws of **{{ STATE_PROVINCE_COUNTRY }}**, and any disputes must be resolved in the state or federal courts there.
+
+- Notices must be in writing and sent by certified mail or expedited delivery; they are deemed received 5 business days after mailing or 2 business days after expedited dispatch.
+
+- You acknowledge that you had the opportunity to consult an independent attorney. Your payment of the License Fee and/or acknowledgment serves as your acceptance of this Agreement.
+
+- This Agreement may be executed in counterparts and emailed/faxed copies are treated as originals.
