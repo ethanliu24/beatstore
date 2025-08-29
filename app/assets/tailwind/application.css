@@ -126,7 +126,7 @@
   }
 
   .button-critical {
-    @apply flex justify-around items-center bg-error hover:bg-error/50 rounded cursor-pointer text-white;
+    @apply flex justify-around items-center bg-error hover:bg-error/80 rounded cursor-pointer text-white;
   }
 
   .avatar {

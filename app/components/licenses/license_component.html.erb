@@ -25,7 +25,11 @@
       <% end %>
     </div>
   </div>
-  <div>
+  <div class="flex justify-between items-center gap-8">
+    <%= button_to t("admin.license.apply_to_all.action"), apply_to_all_admin_license_path(license), method: :post,
+      class: "button px-2 py-1 text-xs" %>
+    <%= button_to t("admin.license.remove_from_all.action"), remove_from_all_admin_license_path(license), method: :delete,
+      class: "button-critical bg-error px-2 py-1 text-xs" %>
     <%= render Ui::DropdownComponent.new(id: dom_id(license)) do |dropdown| %>
       <% dropdown.with_trigger_button(id: dom_id(license)) do %>
         <%= icon "dots-vertical", class: "cursor-pointer" %>
@@ -55,7 +59,7 @@
               icon: "trash",
               icon_size: 4,
               classes: "text-error",
-              data: { turbo_method: "delete" }
+              data: { turbo_method: "delete", turbo_confirm: "Are you sure?" }
             ) %>
           </li>
         </ul>

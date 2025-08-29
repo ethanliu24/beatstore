@@ -149,6 +149,12 @@ en:
       back_to_licenses: "Back to licenses"
       contract_name: "%{contract} License"
       default_for_new_content: "Default for new content"
+      apply_to_all:
+        action: "Apply to all"
+        success: "Successfully applied license to all."
+      remove_from_all:
+        action: "Remove from all"
+        success: "Successfully removed license from all."
       index:
         subtitle: "Manage licenses here"
       create:

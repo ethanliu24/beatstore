@@ -2,7 +2,7 @@
 
 module Admin
   class LicensesController < Admin::BaseController
-    before_action :set_license, only: [ :edit, :update, :destroy ]
+    before_action :set_license, only: [ :edit, :update, :destroy, :apply_to_all, :remove_from_all ]
 
     def index
       @licenses = License.order(updated_at: :desc)
@@ -71,6 +71,34 @@ module Admin
       redirect_to admin_licenses_path, status: :see_other, notice: t("admin.license.destroy.success")
     end
 
+    def apply_to_all
+      entity = resolve_contract_type_corresponded_entity(@license.contract_type)
+      return if entity.nil?
+
+      entity.all.each do |e|
+        e.licenses << @license unless e.licenses.include?(@license)
+      end
+
+      respond_to do |format|
+        flash.now[:notice] = t("admin.license.apply_to_all.success")
+        format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+      end
+    end
+
+    def remove_from_all
+      entity = resolve_contract_type_corresponded_entity(@license.contract_type)
+      return if entity.nil?
+
+      entity.all.each do |e|
+        e.licenses.delete(@license)
+      end
+
+      respond_to do |format|
+        flash.now[:notice] = t("admin.license.remove_from_all.success")
+        format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+      end
+    end
+
     private
 
     def resolve_contract_type(contract_type)
@@ -86,6 +114,16 @@ module Admin
         @contract_class = Contracts::Track::NonExclusive
       else
         @contract_class = nil
+      end
+    end
+
+    def resolve_contract_type_corresponded_entity(contract_type)
+      case contract_type
+      when License.contract_types[:free]
+      when License.contract_types[:non_exclusive]
+        Track
+      else
+        nil
       end
     end
 
