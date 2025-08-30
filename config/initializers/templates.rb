@@ -7,14 +7,14 @@ class Templates
       track_non_exclusive = License.contract_types[:free]
 
       {
-        "#{track_free}" => read_templates("templates/contracts/tracks/free.md"),
-        "#{track_non_exclusive}" => read_templates("templates/contracts/tracks/non_exclusive.md")
+        "#{track_free}" => read_template("templates/contracts/tracks/free.md"),
+        "#{track_non_exclusive}" => read_template("templates/contracts/tracks/non_exclusive.md")
       }.with_indifferent_access
     end
 
     private
 
-    def read_templates(file_name)
+    def read_template(file_name)
       File.exist?(file_name) ? File.read(file_name) : ""
     end
   end
