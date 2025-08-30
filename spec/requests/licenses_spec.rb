@@ -6,9 +6,10 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
   let(:free_contract) {
     {
       terms_of_years: 1,
-      delivers_mp3: true,
+      delivers_mp3: false,
       delivers_wav: false,
-      delivers_stems: true
+      delivers_stems: false,
+      document_template: "Free Template"
     }
   }
   let(:non_exclusive_contract) {
@@ -27,7 +28,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       has_broadcasting_rights: true,
       radio_stations_allowed: 1,
       allow_profitable_performances: true,
-      non_profitable_performances_allowed: true
+      non_profitable_performances_allowed: 1,
+      document_template: "Non Exclusive Template"
     }
   }
   let(:non_exclusive_unlimited_contract) {
@@ -46,7 +48,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       has_broadcasting_rights: true,
       radio_stations_allowed: nil,
       allow_profitable_performances: true,
-      non_profitable_performances_allowed: true
+      non_profitable_performances_allowed: nil,
+      document_template: "Unlimited Non Exclusive Template"
     }
   }
   let!(:params) {
@@ -87,6 +90,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         }.to change(License, :count).by(1)
 
         license = License.last
+        contract = license.contract
+
         expect(response).to have_http_status(302)
         expect(license.title).to eq("Test License")
         expect(license.country).to eq("CA")
@@ -94,6 +99,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         expect(license.price_cents).to eq(1999)
         expect(license.currency).to eq("USD")
         expect(license.default_for_new).to be(true)
+        expect(contract[:terms_of_years]).to eq(1)
+        expect(contract[:document_template]).to eq("Free Template")
         expect(response).to redirect_to(admin_licenses_path)
       end
 
@@ -108,8 +115,27 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         }.to change(License, :count).by(1)
 
         license = License.last
+        contract = license.contract
         expect(response).to have_http_status(302)
         expect(license.title).to eq("Test License")
+
+        expect(contract[:document_template]).to eq("Non Exclusive Template")
+        expect(contract[:terms_of_years]).to eq(1)
+        expect(contract[:delivers_mp3]).to be(true)
+        expect(contract[:delivers_wav]).to be(false)
+        expect(contract[:delivers_stems]).to be(true)
+        expect(contract[:distribution_copies]).to eq(10000)
+        expect(contract[:streams_allowed]).to eq(10000)
+        expect(contract[:non_monetized_videos]).to eq(2)
+        expect(contract[:monetized_videos]).to eq(1)
+        expect(contract[:non_monetized_video_streams]).to eq(10000)
+        expect(contract[:monetized_video_streams]).to eq(1000)
+        expect(contract[:non_profitable_performances]).to eq(1)
+        expect(contract[:has_broadcasting_rights]).to be(true)
+        expect(contract[:allow_profitable_performances]).to be(true)
+        expect(contract[:non_profitable_performances_allowed]).to be(1)
+        expect(contract[:radio_stations_allowed]).to be(1)
+
         expect(response).to redirect_to(admin_licenses_path)
       end
 
@@ -124,8 +150,28 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         }.to change(License, :count).by(1)
 
         license = License.last
+        contract = license.contract
+
         expect(response).to have_http_status(302)
         expect(license.title).to eq("Test License")
+
+        expect(contract[:document_template]).to eq("Unlimited Non Exclusive Template")
+        expect(contract[:terms_of_years]).to eq(1)
+        expect(contract[:delivers_mp3]).to be(true)
+        expect(contract[:delivers_wav]).to be(false)
+        expect(contract[:delivers_stems]).to be(true)
+        expect(contract[:distribution_copies]).to be_nil
+        expect(contract[:streams_allowed]).to be_nil
+        expect(contract[:non_monetized_videos]).to be_nil
+        expect(contract[:monetized_videos]).to be_nil
+        expect(contract[:non_monetized_video_streams]).to be_nil
+        expect(contract[:monetized_video_streams]).to be_nil
+        expect(contract[:non_profitable_performances]).to be_nil
+        expect(contract[:has_broadcasting_rights]).to be(true)
+        expect(contract[:allow_profitable_performances]).to be(true)
+        expect(contract[:non_profitable_performances_allowed]).to be_nil
+        expect(contract[:radio_stations_allowed]).to be_nil
+
         expect(response).to redirect_to(admin_licenses_path)
       end
     end
@@ -179,7 +225,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         put admin_license_url(license), params: {
           license: params.merge(
             contract_type: License.contract_types[:free],
-            contract_details: free_contract,
+            contract_details: free_contract.merge(terms_of_years: 24, document_template: "Edited"),
             title: "Modified"
           )
         }
@@ -187,6 +233,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         license = License.last
         expect(response).to have_http_status(302)
         expect(license.title).to eq("Modified")
+        expect(license.contract[:terms_of_years]).to eq(24)
+        expect(license.contract[:document_template]).to eq("Edited")
         expect(response).to redirect_to(admin_licenses_path)
       end
 
@@ -194,7 +242,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         put admin_license_url(license), params: {
           license: params.merge(
             contract_type: License.contract_types[:non_exclusive],
-            contract_details: non_exclusive_contract,
+            contract_details: non_exclusive_contract.merge(delivers_mp3: false, document_template: "Edited"),
             title: "Non Exclusive",
             price_cents: 10
           )
@@ -204,6 +252,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         expect(response).to have_http_status(302)
         expect(license.title).to eq("Non Exclusive")
         expect(license.price_cents).to eq(1000)
+        expect(license.contract[:delivers_mp3]).to be(false)
+        expect(license.contract[:document_template]).to eq("Edited")
         expect(response).to redirect_to(admin_licenses_path)
       end
 
@@ -211,7 +261,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         put admin_license_url(license), params: {
           license: params.merge(
             contract_type: License.contract_types[:non_exclusive],
-            contract_details: non_exclusive_unlimited_contract,
+            contract_details: non_exclusive_unlimited_contract.merge(streams_allowed: nil, document_template: "Edited"),
             province: "BC"
           )
         }
@@ -219,6 +269,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         license = License.last
         expect(response).to have_http_status(302)
         expect(license.province).to eq("BC")
+        expect(license.contract[:streams_allowed]).to be_nil
+        expect(license.contract[:document_template]).to eq("Edited")
         expect(response).to redirect_to(admin_licenses_path)
       end
     end
