@@ -25,7 +25,7 @@ class License < ApplicationRecord
   has_many :tracks, through: :licenses_tracks_associations
 
   class << self
-    def contract_templates
+    def track_contract_templates
       Rails.configuration.templates[:contracts]
     end
   end
