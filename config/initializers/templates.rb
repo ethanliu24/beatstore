@@ -4,7 +4,7 @@ class Templates
   class << self
     def read_contract_templates
       track_free = License.contract_types[:free]
-      track_non_exclusive = License.contract_types[:free]
+      track_non_exclusive = License.contract_types[:non_exclusive]
 
       {
         "#{track_free}" => read_template("templates/contracts/tracks/free.md"),
