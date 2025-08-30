@@ -214,7 +214,7 @@
 
         <div class="field content-input-container">
           <%= c.text_area :document_template,
-            value: license.contract[:document_template].nil? ? License.track_contract_templates[contract_type] : license.contract[:document_template],
+            value: license.persisted? ? license.contract[:document_template] : License.track_contract_templates[contract_type],
             autocomplete: "off", class: "content-input h-80 min-h-10 font-light" %>
         </div>
       </section>
