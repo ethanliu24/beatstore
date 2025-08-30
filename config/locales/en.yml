@@ -193,6 +193,7 @@ en:
         music_videos: "MUSIC VIDEOS"
         radio_broadcasting: "RADIO BROADCASTING"
         live_performances: "LIVE PERFORMANCES"
+        contract_document_template: "CONTRACT DOCUMENT"
       label:
         area_law_applied: "Arbitration %{area} where Governing Law is applied"
         terms_of_years: "Term of Years for the Licenses"

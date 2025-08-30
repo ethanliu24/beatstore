@@ -35,14 +35,6 @@
         <ul>
           <li class="dropdown-item">
             <%= render Ui::Dropdown::LinkComponent.new(
-              url: admin_license_path(license),
-              text: t("label.view"),
-              icon: "eye",
-              icon_size: 4
-            ) %>
-          </li>
-          <li class="dropdown-item">
-            <%= render Ui::Dropdown::LinkComponent.new(
               url: edit_admin_license_path(license),
               text: t("label.edit"),
               icon: "pencil",

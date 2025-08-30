@@ -4,5 +4,7 @@ module Contracts
   class Base
     include ActiveModel::Model
     include ActiveModel::Attributes
+
+    attribute :document_template, :string
   end
 end
