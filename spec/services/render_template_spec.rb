@@ -20,6 +20,14 @@ RSpec.describe RenderTemplateService, type: :service do
       expect(result).to eq("Count: 5")
     end
 
+    it "should render all appearences of a placeholder" do
+      template = "Name: {{ NAME }} - Name: {{ NAME }}"
+      contents = { "NAME": "Diddy" }
+      result = call_service(template:, contents:)
+
+      expect(result).to eq("Name: Diddy - Name: Diddy")
+    end
+
     it "should not change anything if no placeholders match" do
       template = "Name: {{ NAME }}"
       contents = { "INVALID": "Diddy" }
