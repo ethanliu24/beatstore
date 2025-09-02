@@ -52,6 +52,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :tracks, only: [ :show ]
+    namespace :templates do
+      get :contracts, to: "get_contract_templates"
+    end
   end
 
   scope :download, controller: :downloads do
@@ -69,6 +72,7 @@ Rails.application.routes.draw do
     get :track_image_upload, action: "track_image_upload", as: "track_image_upload_modal"
     get :user_pfp_upload, action: "user_pfp_upload", as: "user_pfp_upload_modal"
     get :delete_account, action: "delete_account", as: "delete_account_modal"
+    get :preview_contract, action: "preview_contract", as: "preview_contract_modal"
     get "delete_comment/:id", action: "delete_comment", as: "delete_comment_modal"
     get "track_more_info/:id", action: "track_more_info", as: "track_more_info_modal"
   end

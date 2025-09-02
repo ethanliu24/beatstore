@@ -35,6 +35,12 @@ RSpec.describe ModalsController, type: :request do
       get track_more_info_modal_url(track)
       expect(response).to redirect_to(root_path)
     end
+
+    it "does not allow visits to #preview_contract" do
+      license = create(:license)
+      get preview_contract_modal_url(license_id: license.id)
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "where request are from turbo frame" do
@@ -78,6 +84,15 @@ RSpec.describe ModalsController, type: :request do
       get track_more_info_modal_url(track, format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_track_more_info")
+    end
+
+    it "fetches modal from #track_more_info" do
+      track = create(:track)
+      license = create(:license, contract_details: { document_template: License.track_contract_templates[:free] })
+
+      get preview_contract_modal_url(license_id: license.id, track_id: track.id, format: :turbo_stream), headers: @headers
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template(partial: "modals/_preview_contract")
     end
   end
 end

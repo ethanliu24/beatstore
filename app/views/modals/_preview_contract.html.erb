@@ -1,0 +1,11 @@
+<%= render Ui::ModalComponent.new(size: :xl) do |modal| %>
+  <%= modal.with_header(title: t("modal.title.preview_contract"), size: :md) %>
+
+  <%= modal.with_body do %>
+    <div class="px-8 py-4 font-light">
+      <%= markdown(content) %>
+    </div>
+  <% end %>
+
+  <%= modal.with_footer(cancel_label: t(t("label.close"))) %>
+<% end %>

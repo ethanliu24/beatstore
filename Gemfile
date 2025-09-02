@@ -76,6 +76,7 @@ gem "rails_icons", "~> 1.4"
 gem "view_component", "~> 4.0"
 gem "cocoon"
 gem "countries", "~> 8.0"
+gem "redcarpet"
 
 gem "devise", "~> 4.9"
 gem "omniauth"
