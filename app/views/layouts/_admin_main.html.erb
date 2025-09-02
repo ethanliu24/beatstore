@@ -1,3 +1,8 @@
-<div class="w-full h-full p-8 bg-transparent overflow-y-scroll">
-  <%= yield %>
+<div class="flex w-full h-full bg-transparent">
+  <% if render_admin_sidebar? %>
+    <%= render partial: "nav/admin_sidebar" %>
+  <% end %>
+  <div class="p-8 w-full h-full overflow-y-scroll">
+    <%= yield %>
+  </div>
 </div>

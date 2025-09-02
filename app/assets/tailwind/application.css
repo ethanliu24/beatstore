@@ -151,6 +151,10 @@
     @apply max-sm:hidden;
   }
 
+  .admin-sidebar-item {
+    @apply flex justify-start items-center gap-2 hover:bg-hover rounded text-sm px-2 py-1;
+  }
+
   .dropdown-link {
     @apply flex justify-start items-center gap-2 w-full flex-nowrap cursor-pointer;
   }
