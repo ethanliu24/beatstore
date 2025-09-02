@@ -50,7 +50,7 @@ Producer retains all rights, title, and interest in the Track, including copyrig
 
 You do not own any New Masters; you own only your original contributions to New Compositions.
 
-Publishing shares of New Compositions may be shared as specified in **{{ PUBLISHING_SHARES }}**.
+Publishing shares of New Compositions may be shared as specified in **{{ PUBLISHING_SHARES }}** to be split among the collaborators on this track.
 
 Subject to all of the terms and restrictions set forth in this Agreement, each party shall be entitled to solely administer their respective share of the New Composition(s).
 
