@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "pages#home"
+  get "admin", to: "admin/tracks#index", as: "admin"
 
   devise_for :users, path: "", controllers: {
     registrations: "users/registrations",

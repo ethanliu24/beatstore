@@ -12,15 +12,11 @@
     </li>
     <%# TODO add path to these patges when available %>
     <li class="nav-responsive">
-      <a href="<%= tracks_path %>"><%= t("label.playlists") %></a>
-    </li>
-    <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
     </li>
     <% if current_user && current_user.admin? %>
       <li>
-        <%# TODO replace with path variable %>
-        <a href="<%= admin_tracks_path %>"><%= icon "lock", class: "w-4 h-4" %></a>
+        <a href="<%= admin_path %>"><%= icon "lock", class: "w-4 h-4" %></a>
       </li>
     <% end %>
     <li data-controller="dark-mode">
@@ -156,14 +152,6 @@
                 url: tracks_path,
                 text: t("label.tracks"),
                 icon: "vinyl",
-                icon_size: 4
-              ) %>
-            </li>
-            <li class="dropdown-item">
-              <%= render Ui::Dropdown::LinkComponent.new(
-                url: tracks_path,
-                text: t("label.playlists"),
-                icon: "playlist",
                 icon_size: 4
               ) %>
             </li>
