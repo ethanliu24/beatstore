@@ -43,7 +43,7 @@
           </li>
           <li class="dropdown-item">
             <%= render Ui::Dropdown::LinkComponent.new(
-              url: preview_contract_modal_path(license_id: license.id, contract_type: license.contract_type),
+              url: preview_contract_modal_path(license_id: license.id),
               text: t("label.preview"),
               icon: "file",
               icon_size: 4,
