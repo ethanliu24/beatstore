@@ -11,7 +11,7 @@ export default class extends Controller {
   }
 
   reset() {
-    if (window.confirm("Reset contract?")) {
+    if (window.confirm("Reset contract? This action will not update the database, just frontend.")) {
       fetch(this.urlValue, {
         method: "GET",
         headers: {

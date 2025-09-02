@@ -215,9 +215,9 @@
         <div class="field content-input-container"
           data-controller="contracts-reset"
           data-contracts-reset-url-value="<%= api_templates_path(contract_type:) %>">
-          <div>
-            <button type="button" data-action="click->contracts-reset#reset">
-              ASD
+          <div class="text-xs font-light">
+            <button type="button" data-action="click->contracts-reset#reset" class="hover:text-secondary-txt cursor-pointer">
+              <%= t("contracts.form.title.reset_contract_document") %>
             </button>
           </div>
           <%= c.text_area :document_template,

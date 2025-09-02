@@ -194,6 +194,7 @@ en:
         radio_broadcasting: "RADIO BROADCASTING"
         live_performances: "LIVE PERFORMANCES"
         contract_document_template: "CONTRACT DOCUMENT"
+        reset_contract_document: "Reset contract document"
       label:
         area_law_applied: "Arbitration %{area} where Governing Law is applied"
         terms_of_years: "Term of Years for the Licenses"
