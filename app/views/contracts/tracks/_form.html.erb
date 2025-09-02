@@ -212,12 +212,16 @@
           <h2 class="text-sm font-bold"><%= t("contracts.form.title.contract_document_template") %></h2>
         </div>
 
-        <div class="field content-input-container"
+        <div class="field content-input-container divide-secondary-bg"
           data-controller="contracts-reset"
           data-contracts-reset-url-value="<%= api_templates_contracts_path(contract_type:) %>">
           <div class="text-xs font-light">
+            <%= link_to preview_contract_modal_path(license_id: license.id, entity_type: Track.name, track_id: nil, contract_type: "free"),
+              data: { turbo_stream: true }, class: "text-accent hover:text-accent-dim" do %>
+              <%= t("contracts.form.preview_contract") %>
+            <% end %>
             <button type="button" data-action="click->contracts-reset#reset" class="hover:text-secondary-txt cursor-pointer">
-              <%= t("contracts.form.title.reset_contract_document") %>
+              <%= t("contracts.form.reset_contract_document") %>
             </button>
           </div>
           <%= c.text_area :document_template,

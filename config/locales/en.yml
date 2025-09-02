@@ -186,6 +186,8 @@ en:
       non_exclusive: "Non Exclusive"
       exclusive: "Exclusive"
     form:
+      reset_contract_document: "Reset contract document"
+      preview_contract: "Preview contract"
       title:
         basic_info: "BASIC INFO"
         territory: "TERRITORY"
@@ -194,7 +196,6 @@ en:
         radio_broadcasting: "RADIO BROADCASTING"
         live_performances: "LIVE PERFORMANCES"
         contract_document_template: "CONTRACT DOCUMENT"
-        reset_contract_document: "Reset contract document"
       label:
         area_law_applied: "Arbitration %{area} where Governing Law is applied"
         terms_of_years: "Term of Years for the Licenses"
@@ -212,3 +213,7 @@ en:
       deliver_mp3: "Deliver MP3"
       deliver_wav: "Deliver WAV"
       deliver_stems: "Deliver Track Stems"
+
+  modal:
+    title:
+      preview_contract: "Preview Contract"

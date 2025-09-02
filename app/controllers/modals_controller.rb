@@ -39,6 +39,22 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/track_more_info", locals: { track: })
   end
 
+  def preview_contract
+    license = License.find_by(params[:license_id])
+    entity_type = params[:entity_type]
+
+    content = if license.nil?
+      Rails.configuration.templates[:contracts][params[:contract_type]]
+    elsif entity_type = Track.name
+      track = Track.find_by(params[:track_id])
+      Contracts::RenderTracksContractService.new(license:, track:).call
+    else
+      ""
+    end
+
+    render_modal(partial: "modals/preview_contract", locals: { content: })
+  end
+
   private
 
   def render_modal(partial:, locals: {})
