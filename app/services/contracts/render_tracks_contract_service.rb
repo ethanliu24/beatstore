@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Contracts
-  class ConstructTracksContractContents
+  class RenderTracksContractService
     def initialize(license:, track:)
       @license = license
       @contract = license.contract
@@ -84,7 +84,7 @@ module Contracts
     end
 
     def format_samples
-      return "NO THIRD PARTY SAMPLES USED ON THIS TRACK" if @track.nil?
+      return "NO THIRD PARTY SAMPLES USED ON THIS TRACK" if @track.nil? || @track.samples.empty?
 
       samples = []
       @track.samples.each do |s|
