@@ -212,13 +212,22 @@
           <h2 class="text-sm font-bold"><%= t("contracts.form.title.contract_document_template") %></h2>
         </div>
 
-        <div class="field content-input-container">
+        <div class="field content-input-container"
+          data-controller="contracts-reset"
+          data-contracts-reset-url-value="<%= api_templates_path(contract_type:) %>">
+          <div>
+            <button type="button" data-action="click->contracts-reset#reset">
+              ASD
+            </button>
+          </div>
           <%= c.text_area :document_template,
             value: license.persisted? ? license.contract[:document_template] : License.track_contract_templates[contract_type],
-            autocomplete: "off", class: "content-input h-80 min-h-10 font-light" %>
+            autocomplete: "off", class: "content-input h-80 min-h-10 font-light",
+            data: { contracts_reset_target: "documentContainer" } %>
         </div>
       </section>
     <% end %>
+
     <section class="flex justify-end items-stretch w-full py-6">
       <%= form.submit t("label.#{@license.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
     </section>
