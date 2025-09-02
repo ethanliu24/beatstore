@@ -52,7 +52,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :tracks, only: [ :show ]
-    resource :templates, only: [ :show ]
+    namespace :templates do
+      get :contracts, to: "get_contract_templates"
+    end
   end
 
   scope :download, controller: :downloads do
