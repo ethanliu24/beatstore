@@ -274,28 +274,22 @@
     display: grid;
     row-gap: 40px;
     column-gap: 2rem;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   @media (max-width: 1279px) {
-    .admin-track-list-container {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  @media (max-width: 1023px) {
     .admin-track-list-container {
       grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  @media screen and (max-width: 767px) {
+  @media (max-width: 1023px) {
     .admin-track-list-container {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media screen and (max-width: 539px) {
+  @media screen and (max-width: 767px) {
     .admin-track-list-container {
       grid-template-columns: repeat(1, 1fr);
     }

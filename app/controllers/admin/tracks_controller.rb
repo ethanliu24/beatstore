@@ -6,7 +6,7 @@ module Admin
       base_scope = Track.order(created_at: :desc)
       @q = base_scope.ransack(params[:q], auth_object: current_user)
       queried_tracks = @q.result(distinct: true).includes(:tags)
-      @pagy, @tracks = pagy(queried_tracks, limit: 10)
+      @pagy, @tracks = pagy(queried_tracks, limit: 8)
 
       if turbo_or_xhr_request?
         render partial: "admin/tracks/list", locals: { tracks: @tracks }
