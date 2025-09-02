@@ -60,6 +60,7 @@ en:
     samples: "Samples"
     licenses: "Licenses"
     view: "View"
+    preview: "Preview"
 
   general:
     upload_file: "Upload File"
