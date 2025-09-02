@@ -34,7 +34,7 @@ Licensee may:
 
 - **{{ HAS_BROADCASTING_RIGHT }}** Be broadcast on any television network and/or uploaded to the internet for digital streaming and/or free download by the public including but not limited to on YouTube and/or Vevo, as well as played on **{{ NUMBER_OF_RADIO_STATIONS }}** terrestrial or satellite radio stations. Producer grants no other synchronization rights to Licensee.
 
-- Perform the New Song publicly, **{{ INCLUDING_OR_NOT_INCLUDING }}** monetized performances (i.e. concert, festival, nightclub etc.), on terrestrial or satellite radio, and/or on the internet via third-party streaming services (Spotify, YouTube, iTunes Radio etc.), within a limit of **{{ NON_PROFITABLE_PERFORMANCES_ALLOWED }}** non-profitable performances.
+- Perform the New Song publicly, **{{ INCLUDING_OR_NOT_INCLUDING_PERFOMANCES }}** monetized performances (i.e. concert, festival, nightclub etc.), on terrestrial or satellite radio, and/or on the internet via third-party streaming services (Spotify, YouTube, iTunes Radio etc.), within a limit of **{{ NON_PROFITABLE_PERFORMANCES_ALLOWED }}** non-profitable performances.
 
 - **NOT** Sell or distribute the Beat in its original form.
 
