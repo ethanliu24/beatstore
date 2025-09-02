@@ -4,7 +4,6 @@ require "rails_helper"
 
 RSpec.describe Contracts::RenderTracksContractService, type: :service do
   let(:track) { create(:track) }
-  subject(:service) {  }
 
   before do
     [
