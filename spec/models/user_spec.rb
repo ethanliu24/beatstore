@@ -149,6 +149,21 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "cart association" do
+    let(:user) { create(:user) }
+
+    it "should create a cart for user after create" do
+      expect(user.cart).not_to be_nil
+    end
+
+    it "should delete the user's cart after delete" do
+      cart = user.cart
+      user.destroy!
+
+      expect(Cart.find_by(id: cart.id)).to be_nil
+    end
+  end
+
   describe "omniauth" do
     before do
       allow(Faraday).to receive(:get).and_return(
