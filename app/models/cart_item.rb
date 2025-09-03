@@ -1,20 +1,23 @@
 # frozen_string_literal: true
 
 class CartItem < ApplicationRecord
-  validates :license, presence: true
   validates :product_type, inclusion: {
     in: :valid_product_types,
     message: "%{value} is not a valid entity type"
-  }
+  }, if: -> { product.present? }
 
   belongs_to :product, polymorphic: true, optional: true
-  belongs_to :license, optional: false
+  belongs_to :license, optional: true
   belongs_to :cart, optional: false
 
   class << self
     def valid_product_types
       [ Track ].map { |p| p.name }
     end
+  end
+
+  def available?
+    license.present? && product.present?
   end
 
   private

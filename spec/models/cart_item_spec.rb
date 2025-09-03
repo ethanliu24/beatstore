@@ -10,13 +10,11 @@ RSpec.describe CartItem, type: :model do
 
   describe "associations" do
     it { should belong_to(:cart).required }
-    it { should belong_to(:license).required }
-    it { should belong_to(:product) }
+    it { should belong_to(:license).optional }
+    it { should belong_to(:product).optional }
   end
 
   describe "validations" do
-    it { should validate_presence_of(:license) }
-
     it "allows valid product_type" do
       cart_item = build(:cart_item, product: build(:track))
       expect(cart_item).to be_valid
@@ -24,7 +22,22 @@ RSpec.describe CartItem, type: :model do
 
     it "rejects invalid product_type" do
       subject.product_type = "Invalid"
+
       expect { subject.valid? }.to raise_error(NameError)
+    end
+  end
+
+  describe "#available?" do
+    it "should be true if license and product are both defined" do
+      cart_item = create(:cart_item)
+
+      expect(cart_item.available?).to be(true)
+    end
+
+    it "should be false if license or product is missing" do
+      cart_item = create(:cart_item, product: nil, license: nil)
+
+      expect(cart_item.available?).to be(false)
     end
   end
 

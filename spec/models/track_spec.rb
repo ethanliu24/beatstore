@@ -247,6 +247,7 @@ RSpec.describe Track, type: :model do
       expect(cart_item.product).to be_nil
       expect(cart_item.product_id).to be_nil
       expect(cart_item.product_type).to be_nil
+      expect(cart_item.available?).to be(false)
     end
   end
 

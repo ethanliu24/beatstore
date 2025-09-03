@@ -89,6 +89,7 @@ RSpec.describe License, type: :model do
 
       expect(cart_item.license).to be_nil
       expect(cart_item.license_id).to be_nil
+      expect(cart_item.available?).to be(false)
     end
   end
 end
