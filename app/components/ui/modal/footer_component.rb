@@ -4,6 +4,7 @@ module Ui
   module Modal
     class FooterComponent < ApplicationComponent
       renders_one :primary_action
+      renders_many :secondary_actions
 
       def initialize(cancel_label: "", size: :md)
         @cancel_label = cancel_label

@@ -60,7 +60,7 @@ class ModalsController < ApplicationController
 
   def track_purchase
     track = Track.find(params[:id])
-    render_modal(partial: "modals/track_purchase", locals: { track:, partial_id: "license-tabs-track-purchase-modal" })
+    render_modal(partial: "modals/track_purchase", locals: { track: })
   end
 
   private

@@ -224,3 +224,5 @@ en:
       preview_contract: "Preview Contract"
     track_purchase:
       title: "Purchase or add track to cart"
+      action_description: "Select the license you want to purchase or add to cart. You can review the details before you purchase."
+      add_to_cart: "Add to cart"

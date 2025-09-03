@@ -6,7 +6,10 @@
       data-tabs-active-classes="border-accent"
       data-tabs-inactive-classes="border-secondary-txt/30">
       <% licenses.each_with_index do |license, i| %>
-        <li role="presentation">
+        <%= content_tag :li, {
+          role: "presentation",
+          data: { action: "click->track-purchase-view#selectLicense", license_id: license.id }
+        } do %>
           <button id=<%= dom_id(license, "#{:tab}_#{partial_id}") %>
             class="<%= "
               flex flex-col justify-start items-start gap-1 w-full p-3 border-1 rounded-xl cursor-pointer h-full
@@ -18,7 +21,7 @@
             <p class="text-[0.7rem] font-light"><%= price_with_currency(license) %></p>
             <p class="text-[0.6rem] text-secondary-txt"><%= track_files_delivered(license) %></p>
           </button>
-        </li>
+        <% end %>
       <% end %>
     </ul>
   </div>
