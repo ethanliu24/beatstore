@@ -53,8 +53,8 @@ class ApplicationController < ActionController::Base
     turbo_frame_request? || request.xhr? || request.format.turbo_stream?
   end
 
-  def logging_in
-    # TODO transfer guest cart to user carts AND append to #create in session and registration
+  def transfer_guest_to_user
+    # TODO transfer guest cart to user carts
   end
 
   def create_guest_user
