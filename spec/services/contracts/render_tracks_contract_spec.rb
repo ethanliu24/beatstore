@@ -39,7 +39,7 @@ RSpec.describe Contracts::RenderTracksContractService, type: :service do
       expect(contents[:NON_MONETIZED_VIDEOS]).to eq(2)
       expect(contents[:MONETIZED_VIDEO_STREAMS]).to eq(1000)
       expect(contents[:NON_MONETIZED_VIDEO_STREAMS]).to eq(10000)
-      expect(contents[:HAS_BROADCASTING_RIGHT]).to eq(true)
+      expect(contents[:HAS_BROADCASTING_RIGHT]).to eq("MAY")
       expect(contents[:NUMBER_OF_RADIO_STATIONS]).to eq(1)
       expect(contents[:INCLUDING_OR_NOT_INCLUDING_PERFOMANCES]).to eq("INCLUDING")
       expect(contents[:NON_PROFITABLE_PERFORMANCES]).to eq(1)
