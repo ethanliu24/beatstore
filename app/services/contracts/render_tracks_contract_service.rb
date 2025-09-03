@@ -60,7 +60,7 @@ module Contracts
         "HAS_BROADCASTING_RIGHT": @contract[:has_broadcasting_rights],
         "NUMBER_OF_RADIO_STATIONS": @contract[:radio_stations_allowed].presence || "unlimited",
         "INCLUDING_OR_NOT_INCLUDING_PERFOMANCES": (@contract[:allow_profitable_performances] ? "" : "NOT ") + "INCLUDING",
-        "NON_PROFITABLE_PERFORMANCES_ALLOWED": @contract[:non_profitable_performances].presence || "unlimited",
+        "NON_PROFITABLE_PERFORMANCES": @contract[:non_profitable_performances].presence || "unlimited",
         "TRACK_CONTRIBUTOR_ALIASES": format_collaborators,
         "SAMPLES": format_samples,
         "STATE_PROVINCE_COUNTRY": format_country
