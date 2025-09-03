@@ -2,18 +2,18 @@
   <div>
     <ul class="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 items-stretch
       gap-x-2 gap-y-2 mb-4 w-full text-sm font-medium"
-      id="default-styled-tab" data-tabs-toggle="#license-tab-contents" role="tablist"
+      id="default-styled-tab" data-tabs-toggle="#<%= partial_id %>" role="tablist"
       data-tabs-active-classes="border-accent"
       data-tabs-inactive-classes="border-secondary-txt/30">
       <% licenses.each_with_index do |license, i| %>
         <li role="presentation">
-          <button id=<%= dom_id(license, :tab) %>
+          <button id=<%= dom_id(license, "#{:tab}_#{partial_id}") %>
             class="<%= "
               flex flex-col justify-start items-start gap-1 w-full p-3 border-1 rounded-xl cursor-pointer h-full
               #{i == 0 ? "border-accent" : "border-secondary-txt/30"}
             " %>"
-            data-tabs-target="#<%= dom_id(license) %>"
-            type="button" role="tab" aria-controls="<%= dom_id(license) %>" aria-selected="false">
+            data-tabs-target="#<%= dom_id(license, partial_id.to_sym) %>"
+            type="button" role="tab" aria-controls="<%= dom_id(license, partial_id.to_sym) %>" aria-selected="false">
             <p class="text-sm text-left"><%= license.title %></p>
             <p class="text-[0.7rem] font-light"><%= price_with_currency(license) %></p>
             <p class="text-[0.6rem] text-secondary-txt"><%= track_files_delivered(license) %></p>
@@ -22,9 +22,9 @@
       <% end %>
     </ul>
   </div>
-  <div id="license-tab-contents">
+  <div id="<%= partial_id %>">
     <% licenses.each do |license| %>
-      <div class="hidden" id="<%= dom_id(license) %>" role="tabpanel" aria-labelledby=<%= dom_id(license, :tab) %>>
+      <div class="hidden" id="<%= dom_id(license, partial_id.to_sym) %>" role="tabpanel" aria-labelledby=<%= dom_id(license, "#{:tab}_#{partial_id}") %>>
         <p class="text-sm font-light mb-4"><%= "#{license.title} (#{license.price.format})" %></p>
         <% contract = license.contract %>
         <ul class="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 w-full gap-x-4 gap-y-2">

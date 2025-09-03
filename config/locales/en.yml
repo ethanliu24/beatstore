@@ -222,3 +222,5 @@ en:
   modal:
     title:
       preview_contract: "Preview Contract"
+    track_purchase:
+      title: "Purchase or add track to cart"
