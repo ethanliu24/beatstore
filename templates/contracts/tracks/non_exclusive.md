@@ -30,7 +30,7 @@ Licensee may:
 
 - Release the New Song available for sale in physical and/or digital form and sell **{{ DISTRIBUTE_COPIES }}** downloads/physical music products and are allowed **{{ AUDIO_STREAMS }}** streams.
 
-- Use the New Song in synchronization with **{{ MONETIZED_MUSIC_VIDEOS }}** audiovisual work no longer than five (5) minutes in length (a "Video") with up to **{{ NON_MONETIZED_VIDEO_STREAMS }}** streams. In the event that the New Song itself is longer than five (5) minutes in length, the Video may not play for longer than the length of the New Song.
+- Use the New Song in synchronization with **{{ MONETIZED_VIDEOS }}** audiovisual work no longer than five (5) minutes in length (a "Video") with up to **{{ MONETIZED_VIDEO_STREAMS }}** streams. In the event that the New Song itself is longer than five (5) minutes in length, the Video may not play for longer than the length of the New Song.
 
 - **{{ HAS_BROADCASTING_RIGHT }}** Be broadcast on any television network and/or uploaded to the internet for digital streaming and/or free download by the public including but not limited to on YouTube and/or Vevo, as well as played on **{{ NUMBER_OF_RADIO_STATIONS }}** terrestrial or satellite radio stations. Producer grants no other synchronization rights to Licensee.
 
