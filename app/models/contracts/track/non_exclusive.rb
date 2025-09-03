@@ -9,11 +9,10 @@ module Contracts
       attribute :monetized_videos, :integer
       attribute :non_monetized_video_streams, :integer
       attribute :monetized_video_streams, :integer
-      attribute :non_profitable_performances, :integer
       attribute :has_broadcasting_rights, :boolean
       attribute :radio_stations_allowed, :integer
       attribute :allow_profitable_performances, :boolean
-      attribute :non_profitable_performances_allowed, :integer
+      attribute :non_profitable_performances, :integer
 
       validates :distribution_copies, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
         if: -> { distribution_copies.present? }
@@ -31,8 +30,6 @@ module Contracts
         if: -> { non_profitable_performances.present? }
       validates :radio_stations_allowed, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
         if: -> { radio_stations_allowed.present? }
-      validates :non_profitable_performances, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
-        if: -> { non_profitable_performances.present? }
       validates :has_broadcasting_rights, inclusion: { in: [ true, false ] }
       validates :allow_profitable_performances, inclusion: { in: [ true, false ] }
 

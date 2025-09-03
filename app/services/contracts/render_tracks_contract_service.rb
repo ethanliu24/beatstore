@@ -51,14 +51,16 @@ module Contracts
         "PRODUCT_PRICE": "#{@license.price.format} #{@license.currency}",
         "FILE_TYPE": file_type_delivered,
         "TERMS_OF_YEARS": @contract[:terms_of_years],
-        "DISTRIBUTE_COPIES": @contract[:distribution_copies],
-        "AUDIO_STREAMS": @contract[:streams_allowed],
-        "MONETIZED_MUSIC_VIDEOS": @contract[:monetized_videos],
-        "NON_MONETIZED_MUSIC_VIDEOS": @contract[:non_monetized_videos],
-        "HAS_BROADCASTING_RIGHT": @contract[:has_broadcasting_rights],
-        "NUMBER_OF_RADIO_STATIONS": @contract[:radio_stations_allowed],
+        "DISTRIBUTE_COPIES": @contract[:distribution_copies].presence || "unlimited",
+        "AUDIO_STREAMS": @contract[:streams_allowed].presence || "unlimited",
+        "MONETIZED_VIDEOS": @contract[:monetized_videos].presence || "unlimited",
+        "NON_MONETIZED_VIDEOS": @contract[:non_monetized_videos].presence || "unlimited",
+        "MONETIZED_VIDEO_STREAMS": @contract[:monetized_video_streams].presence || "unlimited",
+        "NON_MONETIZED_VIDEO_STREAMS": @contract[:non_monetized_video_streams].presence || "unlimited",
+        "HAS_BROADCASTING_RIGHT": @contract[:has_broadcasting_rights] ? "MAY" : "MAY NOT",
+        "NUMBER_OF_RADIO_STATIONS": @contract[:radio_stations_allowed].presence || "unlimited",
         "INCLUDING_OR_NOT_INCLUDING_PERFOMANCES": (@contract[:allow_profitable_performances] ? "" : "NOT ") + "INCLUDING",
-        "NON_PROFITABLE_PERFORMANCES_ALLOWED": @contract[:non_profitable_performances_allowed],
+        "NON_PROFITABLE_PERFORMANCES": @contract[:non_profitable_performances].presence || "unlimited",
         "TRACK_CONTRIBUTOR_ALIASES": format_collaborators,
         "SAMPLES": format_samples,
         "STATE_PROVINCE_COUNTRY": format_country
@@ -74,7 +76,7 @@ module Contracts
 
     def format_collaborators
       collaborators = [ "prodethan" ]
-      return collaborators if @track.nil?
+      return collaborators[0] if @track.nil?
 
       @track.collaborators.each do |c|
         collaborators.push(c.name)

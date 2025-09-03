@@ -209,7 +209,7 @@ en:
         has_broadcasting_rights: "Broadcasting Rights"
         radio_stations_allowed: "Number of Radio Stations Allowed (blank for unlimited)"
         allow_profitable_performances: "Allow performances for profit (may or may not)"
-        non_profitable_performances_allowed: "Number of Not for Profit Performances Allowed (blank for unlimited)"
+        non_profitable_performances: "Number of Not for Profit Performances Allowed (blank for unlimited)"
       active_by_default: "Active by default"
       deliver_mp3: "Deliver MP3"
       deliver_wav: "Deliver WAV"
