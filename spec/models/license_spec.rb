@@ -69,5 +69,26 @@ RSpec.describe License, type: :model do
       expect(track1.licenses.count).to eq(1)
       expect(track2.licenses.count).to eq(1)
     end
+
+    it "should have many cart items" do
+      cart = create(:cart)
+      license = create(:license)
+      cart_item = create(:cart_item, cart:, license:)
+
+      expect(license.cart_items.count).to eq(1)
+      expect(license.cart_items.first).to eq(cart_item)
+    end
+
+    it "should nullify cart items after delete" do
+      cart = create(:cart)
+      license = create(:license)
+      cart_item = create(:cart_item, cart:, license:)
+
+      license.destroy!
+      cart_item.reload
+
+      expect(cart_item.license).to be_nil
+      expect(cart_item.license_id).to be_nil
+    end
   end
 end

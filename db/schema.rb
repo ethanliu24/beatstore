@@ -47,7 +47,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_154231) do
     t.bigint "cart_id", null: false
     t.string "product_type"
     t.bigint "product_id"
-    t.bigint "license_id", null: false
+    t.bigint "license_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
