@@ -215,6 +215,10 @@ en:
       deliver_wav: "Deliver WAV"
       deliver_stems: "Deliver Track Stems"
 
+  cart:
+    add_item:
+      success: "Added item to cart!"
+
   modal:
     title:
       preview_contract: "Preview Contract"

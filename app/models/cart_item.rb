@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CartItem < ApplicationRecord
+  validates :quantity, numericality: { only_integer: true, greater_than: 0 }, presence: true
   validates :product_type, inclusion: {
     in: :valid_product_types,
     message: "%{value} is not a valid entity type"

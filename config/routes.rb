@@ -40,6 +40,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :cart, only: [ :show ] do
+    member do
+      post :add_item
+    end
+  end
+
   namespace :admin do
     resources :tracks, except: [ :show ]
     resources :licenses, except: [ :show ] do
