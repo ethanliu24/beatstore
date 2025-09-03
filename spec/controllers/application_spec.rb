@@ -42,7 +42,5 @@ RSpec.describe ApplicationController, type: :controller do
 
     expect(session[:guest_user_id]).to be_nil
     expect(response.body).to eq(user.id.to_s)
-
-    # test info transfer after signing in
   end
 end
