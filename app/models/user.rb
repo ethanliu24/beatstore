@@ -9,7 +9,7 @@ class User < ApplicationRecord
     :omniauthable,
     omniauth_providers: [ :google_oauth2 ]
 
-  enum :role, [ :customer, :admin ]
+  enum :role, [ :customer, :admin, :guest ]
 
   after_initialize :set_default_columns, if: :new_record?
 
