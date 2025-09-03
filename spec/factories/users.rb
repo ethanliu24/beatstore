@@ -19,6 +19,16 @@ FactoryBot.define do
     role { :admin }
   end
 
+  factory :guest, class: "User" do
+    display_name { "guest" }
+    username { "guest" }
+    email { "guest@example.com" }
+    password { "Password1!" }
+    password_confirmation { "Password1!" }
+    confirmed_at { Time.now }
+    role { :guest }
+  end
+
   factory :user_with_pfp, class: "User" do
     display_name { "PFP" }
     username { "with_pfp" }

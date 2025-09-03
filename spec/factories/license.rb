@@ -39,7 +39,7 @@ FactoryBot.define do
         non_profitable_performances: 1,
         has_broadcasting_rights: true,
         radio_stations_allowed: 1,
-        allow_profitable_performances: true,
+        allow_profitable_performances: true
       }
     }
     default_for_new { true }

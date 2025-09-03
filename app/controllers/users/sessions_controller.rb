@@ -15,6 +15,7 @@ class Users::SessionsController < Devise::SessionsController
 
     unless resource.errors.any?
       super
+      transfer_guest_to_user
     else
       respond_with(resource, location: new_user_session_path)
     end

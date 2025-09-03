@@ -9,6 +9,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       username = params[:user][:username]
       current_user.update(username: username) if username && username != current_user.username
     end
+
+    transfer_guest_to_user
   end
 
   protected
