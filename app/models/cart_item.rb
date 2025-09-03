@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CartItem < ApplicationRecord
-  validate :license, presence: true
+  validates :license, presence: true
   validates :product_type, inclusion: {
     in: :valid_product_types,
     message: "%{value} is not a valid entity type"
