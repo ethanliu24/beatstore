@@ -60,6 +60,7 @@ en:
     samples: "Samples"
     licenses: "Licenses"
     view: "View"
+    preview: "Preview"
 
   general:
     upload_file: "Upload File"
@@ -186,6 +187,8 @@ en:
       non_exclusive: "Non Exclusive"
       exclusive: "Exclusive"
     form:
+      reset_contract_document: "Reset contract document"
+      preview_contract: "Preview contract"
       title:
         basic_info: "BASIC INFO"
         territory: "TERRITORY"
@@ -211,3 +214,7 @@ en:
       deliver_mp3: "Deliver MP3"
       deliver_wav: "Deliver WAV"
       deliver_stems: "Deliver Track Stems"
+
+  modal:
+    title:
+      preview_contract: "Preview Contract"

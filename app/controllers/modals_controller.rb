@@ -39,6 +39,25 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/track_more_info", locals: { track: })
   end
 
+  # If license doesn't exist in DB, render default template, which requires contract_type in params.
+  # Else will decide which service to call to render the contract, which is specified by entity_type in params.
+  # It should be the class name of the entity that's associated with the license.
+  def preview_contract
+    license = License.find_by(id: params[:license_id])
+    entity_type = params[:entity_type]
+
+    content = if license.nil?
+      Rails.configuration.templates[:contracts][params[:contract_type]]
+    elsif entity_type = Track.name
+      track = Track.find_by(id: params[:track_id])
+      Contracts::RenderTracksContractService.new(license:, track:).call
+    else
+      ""
+    end
+
+    render_modal(partial: "modals/preview_contract", locals: { content: })
+  end
+
   private
 
   def render_modal(partial:, locals: {})
