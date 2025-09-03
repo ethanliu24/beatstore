@@ -19,20 +19,25 @@ export default class extends Controller {
   }
 
   addToCart() {
-    if (!this.selectedLicenseIdValue) return;
+    if (!this.selectedLicenseId) return;
+
+    const cartItemBody = {
+      product_id: this.trackIdValue,
+      product_type: this.productTypeValue,
+      license_id: this.selectedLicenseId,
+      quantity: this.quantity
+    }
 
     fetch(this.createCartItemUrlValue, {
       method: "POST",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Content-Type": "application/json",
         "Accept": "text/vnd.turbo-stream.html"
       },
-      body: {
-        product_id: this.trackIdValue,
-        product_type: this.productTypeValue,
-        license_id: this.selectedLicenseId,
-        quantity: this.quantity
-      }
+      body: JSON.stringify({
+        cart_item: cartItemBody
+      })
     })
       .then(r => r.text())
       .then(html => Turbo.renderStreamMessage(html))

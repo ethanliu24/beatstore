@@ -215,9 +215,11 @@ en:
       deliver_wav: "Deliver WAV"
       deliver_stems: "Deliver Track Stems"
 
-  cart:
-    add_item:
+  cart_item:
+    create:
       success: "Added item to cart!"
+      fail: "Failed to add item to cart."
+      has_item: "The item is already in cart."
 
   modal:
     title:

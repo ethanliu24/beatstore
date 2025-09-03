@@ -6,6 +6,6 @@ class Cart < ApplicationRecord
   has_many :items, class_name: CartItem.name, dependent: :destroy
 
   def has_item(license_id:, product_id:, product_type:)
-    CartItem.find_by(license_id:, product_id:, product_type:).nil?
+    !CartItem.find_by(license_id:, product_id:, product_type:).nil?
   end
 end

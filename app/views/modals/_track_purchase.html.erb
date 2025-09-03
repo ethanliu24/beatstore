@@ -24,7 +24,7 @@
     <%# TODO primary action for purchase %>
     <%= footer.with_secondary_action do %>
       <button class="rounded cursor-pointer px-2 py-1 bg-hover hover:bg-hover/60"
-        data-action="click->track-purchase-view#addToCart">
+        data-action="click->track-purchase-view#addToCart click->modal-manager#close">
         <%= t("modal.track_purchase.add_to_cart") %>
       </button>
     <% end %>
