@@ -12,6 +12,7 @@ class User < ApplicationRecord
   enum :role, [ :customer, :admin, :guest ]
 
   after_initialize :set_default_columns, if: :new_record?
+  after_create :create_cart
 
   # === Constants ===
   DISPLAY_NAME_LENGTH = 30
