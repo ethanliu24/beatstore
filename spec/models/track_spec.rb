@@ -226,6 +226,28 @@ RSpec.describe Track, type: :model do
       expect(license1.tracks.count).to eq(1)
       expect(license2.tracks.count).to eq(1)
     end
+
+    it "can have many cart items" do
+      cart = create(:cart)
+      track = create(:track)
+      cart_item = create(:cart_item, cart:, product: track)
+
+      expect(track.cart_items.count).to eq(1)
+      expect(track.cart_items.first).to eq(cart_item)
+    end
+
+    it "destroying a track nullifies cart's product attribute" do
+      cart = create(:cart)
+      track = create(:track)
+      cart_item = create(:cart_item, cart:, product: track)
+
+      track.destroy!
+      cart_item.reload
+
+      expect(cart_item.product).to be_nil
+      expect(cart_item.product_id).to be_nil
+      expect(cart_item.product_type).to be_nil
+    end
   end
 
   describe "#cheapest_price" do

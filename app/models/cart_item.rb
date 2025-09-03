@@ -7,7 +7,7 @@ class CartItem < ApplicationRecord
     message: "%{value} is not a valid entity type"
   }
 
-  belongs_to :product, polymorphic: true, optional: false
+  belongs_to :product, polymorphic: true, optional: true
   belongs_to :license, optional: false
   belongs_to :cart, optional: false
 

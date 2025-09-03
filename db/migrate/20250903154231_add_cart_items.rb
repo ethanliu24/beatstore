@@ -3,7 +3,7 @@ class AddCartItems < ActiveRecord::Migration[8.0]
     create_table :cart_items do |t|
       t.integer :quantity
       t.references :cart, null: false, foreign_key: true
-      t.references :product, polymorphic: true, null: false
+      t.references :product, polymorphic: true, null: true
       t.references :license, null: false, foreign_key: true
 
       t.timestamps
