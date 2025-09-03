@@ -40,6 +40,7 @@ class User < ApplicationRecord
   # === Associations ===
   has_one_attached :profile_picture, dependent: :destroy
 
+  has_one :cart, dependent: :destroy
   has_many :hearts, class_name: "Track::Heart"
   has_many :hearted_tracks, through: :hearts, source: :track
   has_many :track_plays, class_name: "Track::Play"

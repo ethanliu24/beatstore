@@ -21,6 +21,7 @@ class License < ApplicationRecord
   validates :country, presence: true
   validate :country_and_province_exists
 
+  has_many :cart_items, dependent: :nullify
   has_many :licenses_tracks_associations, class_name: "Licenses::LicensesTracksAssociation", dependent: :destroy
   has_many :tracks, through: :licenses_tracks_associations
 

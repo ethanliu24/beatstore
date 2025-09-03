@@ -48,6 +48,7 @@ class Track < ApplicationRecord
   accepts_nested_attributes_for :samples, allow_destroy: true, reject_if: :all_blank
   has_many :licenses_tracks_associations, class_name: "Licenses::LicensesTracksAssociation", dependent: :destroy
   has_many :licenses, through: :licenses_tracks_associations
+  has_many :cart_items, as: :product, dependent: :nullify
 
   class << self
     def ransackable_attributes(auth_object = nil)
