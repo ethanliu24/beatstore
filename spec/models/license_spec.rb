@@ -36,7 +36,7 @@ RSpec.describe License, type: :model do
     it "should reject invalid contract types" do
       expect {
         subject.contract_type = "invalid"
-    }.to raise_error(ArgumentError)
+      }.to raise_error(ArgumentError)
     end
   end
 
