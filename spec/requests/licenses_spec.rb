@@ -28,7 +28,6 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       has_broadcasting_rights: true,
       radio_stations_allowed: 1,
       allow_profitable_performances: true,
-      non_profitable_performances_allowed: 1,
       document_template: "Non Exclusive Template"
     }
   }
@@ -48,7 +47,6 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       has_broadcasting_rights: true,
       radio_stations_allowed: nil,
       allow_profitable_performances: true,
-      non_profitable_performances_allowed: nil,
       document_template: "Unlimited Non Exclusive Template"
     }
   }
@@ -133,7 +131,6 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         expect(contract[:non_profitable_performances]).to eq(1)
         expect(contract[:has_broadcasting_rights]).to be(true)
         expect(contract[:allow_profitable_performances]).to be(true)
-        expect(contract[:non_profitable_performances_allowed]).to be(1)
         expect(contract[:radio_stations_allowed]).to be(1)
 
         expect(response).to redirect_to(admin_licenses_path)
@@ -169,7 +166,6 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         expect(contract[:non_profitable_performances]).to be_nil
         expect(contract[:has_broadcasting_rights]).to be(true)
         expect(contract[:allow_profitable_performances]).to be(true)
-        expect(contract[:non_profitable_performances_allowed]).to be_nil
         expect(contract[:radio_stations_allowed]).to be_nil
 
         expect(response).to redirect_to(admin_licenses_path)

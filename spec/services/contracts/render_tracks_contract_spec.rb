@@ -35,14 +35,30 @@ RSpec.describe Contracts::RenderTracksContractService, type: :service do
       expect(contents[:TERMS_OF_YEARS]).to eq(1)
       expect(contents[:DISTRIBUTE_COPIES]).to eq(10000)
       expect(contents[:AUDIO_STREAMS]).to eq(10000)
-      expect(contents[:MONETIZED_MUSIC_VIDEOS]).to eq(1)
-      expect(contents[:NON_MONETIZED_MUSIC_VIDEOS]).to eq(2)
-      expect(contents[:HAS_BROADCASTING_RIGHT]).to eq(true)
+      expect(contents[:MONETIZED_VIDEOS]).to eq(1)
+      expect(contents[:NON_MONETIZED_VIDEOS]).to eq(2)
+      expect(contents[:MONETIZED_VIDEO_STREAMS]).to eq(1000)
+      expect(contents[:NON_MONETIZED_VIDEO_STREAMS]).to eq(10000)
+      expect(contents[:HAS_BROADCASTING_RIGHT]).to eq("MAY")
       expect(contents[:NUMBER_OF_RADIO_STATIONS]).to eq(1)
       expect(contents[:INCLUDING_OR_NOT_INCLUDING_PERFOMANCES]).to eq("INCLUDING")
-      expect(contents[:NON_PROFITABLE_PERFORMANCES_ALLOWED]).to eq(true)
+      expect(contents[:NON_PROFITABLE_PERFORMANCES]).to eq(1)
       expect(contents[:SAMPLES]).to eq("NO THIRD PARTY SAMPLES USED ON THIS TRACK")
       expect(contents[:FILE_TYPE]).to eq("WAV")
+    end
+
+    it "constructs unlimited non exclusive licenses" do
+      license = create(:non_exclusive_license, contract_details: {})
+      contents = service(license:, track:).send(:construct_non_exclusive_contract)
+
+      expect(contents[:DISTRIBUTE_COPIES]).to eq("unlimited")
+      expect(contents[:AUDIO_STREAMS]).to eq("unlimited")
+      expect(contents[:MONETIZED_VIDEOS]).to eq("unlimited")
+      expect(contents[:NON_MONETIZED_VIDEOS]).to eq("unlimited")
+      expect(contents[:MONETIZED_VIDEO_STREAMS]).to eq("unlimited")
+      expect(contents[:NON_MONETIZED_VIDEO_STREAMS]).to eq("unlimited")
+      expect(contents[:NUMBER_OF_RADIO_STATIONS]).to eq("unlimited")
+      expect(contents[:NON_PROFITABLE_PERFORMANCES]).to eq("unlimited")
     end
 
     it "renders the correct file type delivered" do
