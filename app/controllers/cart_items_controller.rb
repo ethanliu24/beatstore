@@ -9,7 +9,7 @@ class CartItemsController < ApplicationController
     license_id = cart_item_params[:license_id]
     @cart_item = CartItem.new(cart_item_params)
 
-    if current_or_guest_user.cart.has_item(license_id:, product_id:, product_type:)
+    if current_or_guest_user.cart.has_item?(license_id:, product_id:, product_type:)
       flash.now[:notice] = t("cart_item.create.has_item")
     elsif @cart_item.save
       flash.now[:notice] = t("cart_item.create.success")
