@@ -40,8 +40,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :cart, only: [ :show ]
-
   resources :cart_items, only: [ :create, :destroy ]
 
   namespace :admin do
