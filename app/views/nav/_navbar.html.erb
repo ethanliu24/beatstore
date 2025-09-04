@@ -26,7 +26,26 @@
       </span>
     </li>
     <li class="nav-responsive">
-      <%= render partial: "nav/cart" %>
+      <%= render Ui::DropdownComponent.new(
+        id: "nav-cart-dropdown",
+        classes: "absolute top-full rounded-lg shadow-sm hidden w-auto select-none text-primary-txt bg-background divide-y"
+      ) do |dropdown| %>
+        <%= dropdown.with_trigger_button(
+          id: "nav-cart-dropdown",
+          classes: "nav-dropdown",
+          data: { dropdown_placement: "bottom-end" }
+        ) do %>
+          <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
+          <%= cart_total_price(current_or_guest_user.cart) %>
+          <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
+        <% end %>
+
+        <%= dropdown.with_section do %>
+          <div id="navbar_cart" class="w-full h-full">
+            <%= render partial: "nav/cart" %>
+          </div>
+        <% end %>
+      <% end %>
     </li>
     <% if current_user %>
       <li>
