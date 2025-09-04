@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Users::ProfilesController, type: :request do
   include ActionDispatch::TestProcess::FixtureFile
 
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
 
   describe "GET #edit" do
     it "should allow authenticated users enter" do

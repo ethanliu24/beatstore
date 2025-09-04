@@ -151,6 +151,10 @@
     @apply max-sm:hidden;
   }
 
+  .nav-cart-icon {
+    @apply w-6 h-6 text-primary-txt;
+  }
+
   .admin-sidebar-item {
     @apply flex justify-start items-center gap-2 hover:bg-hover rounded text-sm px-2 py-1;
   }

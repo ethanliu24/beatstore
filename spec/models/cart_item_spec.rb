@@ -25,6 +25,14 @@ RSpec.describe CartItem, type: :model do
 
       expect { subject.valid? }.to raise_error(NameError)
     end
+
+    it "should not allow two same items in a single cart" do
+      license = create(:license)
+      create(:cart_item, cart:, product: track, license:)
+      dup = build(:cart_item, cart:, product: track, license:)
+
+      expect(dup).not_to be_valid
+    end
   end
 
   describe "#available?" do

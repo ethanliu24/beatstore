@@ -22,11 +22,10 @@
           <% end %>
         </div>
         <div class="flex justify-start items-stretch gap-2">
-          <%# TODO might look better to show the cheapest license price, whatevs %>
-          <button class="button px-2 py-1.5">
+          <%= link_to track_purchase_modal_path(@track), class: "button px-2 py-1.5", data: { turbo_stream: true } do %>
             <%= icon "shopping-bag", class: "mr-1" %>
             <p class="text-sm font-light"><%= @track.cheapest_price %></p>
-          </button>
+          <% end %>
 
           <%# TODO add tool tips for the following %>
           <% if current_user %>
@@ -68,8 +67,7 @@
   </section>
   <section class="w-full">
     <h2 class="font-bold text-lg mb-2"><%= t("track.licensing") %></h2>
-
-    <%= render partial: "tracks/license_usages", locals: { licenses: @licenses } %>
+    <%= render partial: "tracks/license_usages", locals: { licenses: @licenses, partial_id: "license-tab-contents-page" } %>
   </section>
   <section class="w-full">
     <h2 class="font-bold text-lg mb-2"><%= t("track.similar_tracks") %></h2>

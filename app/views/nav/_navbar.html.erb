@@ -26,26 +26,23 @@
       </span>
     </li>
     <li class="nav-responsive">
-      <!-- Cart Dropdown -->
-      <%# TODO add actual amount in cart %>
       <%= render Ui::DropdownComponent.new(
-        id: "navbar-cart-dropdown",
+        id: "nav-cart-dropdown",
         classes: "absolute top-full rounded-lg shadow-sm hidden w-auto select-none text-primary-txt bg-background divide-y"
       ) do |dropdown| %>
         <%= dropdown.with_trigger_button(
-          id: "navbar-cart-dropdown",
+          id: "nav-cart-dropdown",
           classes: "nav-dropdown",
           data: { dropdown_placement: "bottom-end" }
         ) do %>
-          <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
-          $0.00
+          <%= icon "shopping-bag", id: "nav_cart_icon", class: "nav-cart-icon" %>
+          <p id="nav_cart_total_price"><%= cart_total_price(current_or_guest_user.cart) %></p>
           <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
         <% end %>
 
         <%= dropdown.with_section do %>
-          <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
-            <%# Set a max width for each cart item or on cart-dropdown (remove w-auto) %>
-            <div><%= t("label.your_cart") %></div>
+          <div id="navbar_cart_content" class="w-full h-full">
+            <%= render partial: "nav/cart" %>
           </div>
         <% end %>
       <% end %>

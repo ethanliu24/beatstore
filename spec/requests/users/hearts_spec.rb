@@ -4,7 +4,7 @@ RSpec.describe Users::HeartsController, type: :request do
   describe "GET /index" do
     context "user is signed in" do
       before do
-        @user = build(:user)
+        @user = create(:user)
         sign_in @user, scope: :user
       end
 

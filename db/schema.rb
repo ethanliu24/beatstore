@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_154231) do
     t.bigint "license_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cart_id", "license_id", "product_id", "product_type"], name: "idx_on_cart_id_license_id_product_id_product_type_057ea79c24", unique: true
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
     t.index ["license_id"], name: "index_cart_items_on_license_id"
     t.index ["product_type", "product_id"], name: "index_cart_items_on_product"

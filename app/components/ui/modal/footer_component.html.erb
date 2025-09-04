@@ -2,5 +2,8 @@
   <button type="button" class="button-secondary px-2 py-1 bg-white" data-action="click->modal-manager#close">
     <%= cancel_label.empty? ? t("label.cancel") : cancel_label %>
   </button>
+  <% secondary_actions.each do |action| %>
+    <%= action %>
+  <% end %>
   <%= primary_action %>
 <% end %>

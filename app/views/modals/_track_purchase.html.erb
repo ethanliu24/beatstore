@@ -1,0 +1,32 @@
+<%= render Ui::ModalComponent.new(
+  size: :xl,
+  data: {
+    controller: "track-purchase-view",
+    track_purchase_view_create_cart_item_url_value: cart_items_path,
+    track_purchase_view_initial_license_id_value: track.profitable_licenses.first&.id,
+    track_purchase_view_track_id_value: track.id,
+    track_purchase_view_product_type_value: Track.name,
+  }
+) do |modal| %>
+  <%= modal.with_header(title: t("modal.track_purchase.title"), size: :md) %>
+
+  <%= modal.with_body do %>
+    <div class="px-4 py-4">
+      <%= content_tag :p, t("modal.track_purchase.action_description"), class: "mb-6 font-light text-sm" %>
+      <%= render partial: "tracks/license_usages", locals: {
+        licenses: track.profitable_licenses,
+        partial_id: "license-tabs-track-purchase-modal"
+      } %>
+    </div>
+  <% end %>
+
+  <%= modal.with_footer do |footer| %>
+    <%# TODO primary action for purchase %>
+    <%= footer.with_secondary_action do %>
+      <button class="rounded cursor-pointer px-2 py-1 bg-hover hover:bg-hover/60"
+        data-action="click->track-purchase-view#addToCart click->modal-manager#close">
+        <%= t("modal.track_purchase.add_to_cart") %>
+      </button>
+    <% end %>
+  <% end %>
+<% end %>
