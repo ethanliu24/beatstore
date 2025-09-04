@@ -18,7 +18,7 @@ class CartItemsController < ApplicationController
     end
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+      format.turbo_stream
     end
   end
 

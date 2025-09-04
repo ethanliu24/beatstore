@@ -1,0 +1,7 @@
+<%= turbo_stream.update "navbar_cart" do %>
+  <%= render partial: "nav/cart" %>
+<% end %>
+
+<%= turbo_stream.update "toasts" do %>
+  <%= render "shared/toasts" %>
+<% end %>
