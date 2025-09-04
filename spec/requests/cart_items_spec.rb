@@ -66,20 +66,42 @@ RSpec.describe CartItemsController, type: :request do
 
   describe "DELETE #destroy" do
     before do
-      user = create(:user)
-      sign_in user, scope: :user
-      create(:cart_item, cart: user.cart, license:, product: track)
+      @user = create(:user)
+      sign_in @user, scope: :user
+
+      @item = create(:cart_item, cart: @user.cart, license:, product: track)
     end
 
     it "delets the specified cart item" do
+      expect {
+        delete cart_item_url(@item, format: :turbo_stream)
+      }.to change(CartItem, :count).by(-1)
+
+      expect(response).to have_http_status(200)
+      expect(CartItem.find_by(id: @item.id)).to be_nil
+    end
+
+    it "delets the specified cart item for a guest user" do
+      sign_out @user
+
+      post cart_items_url(format: :turbo_stream), params: { cart_item:
+        {
+          product_id: track.id,
+          product_type: "Track",
+          license_id: license.id,
+          quantity: 1
+        }
+      }
+
       item = CartItem.last
 
+      expect(response).to have_http_status(200)
       expect {
         delete cart_item_url(item, format: :turbo_stream)
       }.to change(CartItem, :count).by(-1)
 
       expect(response).to have_http_status(200)
-      expect(CartItem.find_by(item.id)).to be_nil
+      expect(CartItem.find_by(id: item.id)).to be_nil
     end
   end
 end
