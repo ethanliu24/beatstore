@@ -14,7 +14,7 @@
     <% end %>
 
     <%= dropdown.with_section do %>
-      <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white w-70 min-w-70 max-w-70 select">
+      <div class="p-4 text-gray-900 dark:text-white w-70 min-w-70 max-w-70 select">
         <div class="text-[1rem] mb-4"><%= t("cart.nav.title", count: current_or_guest_user.cart.total_items) %></div>
 
         <% if current_or_guest_user.cart.empty? %>
