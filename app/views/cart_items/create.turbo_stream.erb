@@ -1,5 +1,9 @@
-<%= turbo_stream.update "navbar_cart" do %>
+<%= turbo_stream.update "navbar_cart_content" do %>
   <%= render partial: "nav/cart" %>
+<% end %>
+
+<%= turbo_stream.update "nav_cart_total_price" do %>
+  <%= cart_total_price(current_or_guest_user.cart) %>
 <% end %>
 
 <%= turbo_stream.update "toasts" do %>
