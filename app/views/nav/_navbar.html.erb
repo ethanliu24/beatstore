@@ -29,23 +29,63 @@
       <!-- Cart Dropdown -->
       <%# TODO add actual amount in cart %>
       <%= render Ui::DropdownComponent.new(
-        id: "navbar-cart-dropdown",
+        id: "navbar_cart_dropdown",
         classes: "absolute top-full rounded-lg shadow-sm hidden w-auto select-none text-primary-txt bg-background divide-y"
       ) do |dropdown| %>
         <%= dropdown.with_trigger_button(
-          id: "navbar-cart-dropdown",
+          id: "navbar_cart_dropdown",
           classes: "nav-dropdown",
           data: { dropdown_placement: "bottom-end" }
         ) do %>
           <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
-          $0.00
+          <%= current_or_guest_user.cart.total_price %>
           <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
         <% end %>
 
         <%= dropdown.with_section do %>
-          <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
-            <%# Set a max width for each cart item or on cart-dropdown (remove w-auto) %>
-            <div><%= t("label.your_cart") %></div>
+          <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white w-70 min-w-70 max-w-70 select">
+            <div class="text-[1rem] mb-4"><%= t("cart.nav.title", count: current_or_guest_user.cart.total_items) %></div>
+
+            <% if current_or_guest_user.cart.empty? %>
+              <div class="flex flex-col justify-center items-center w-full h-full py-10 text-center">
+                <%= icon "shopping-cart", class: "w-20 h-20 aspect-square text-secondary-txt mb-2" %>
+                <p class="text-lg"><%= t("cart.nav.empty_title") %></p>
+                <p class="font-light text-secondary-txt text-wrap"><%= t("cart.nav.empty_subtitle") %></p>
+              </div>
+            <% else %>
+              <div class="flex flex-col justify-start items-center gap-2 w-full h-full">
+                <% current_or_guest_user.cart.items.each do |item| %>
+                  <div class="flex justify-between items-center gap-2 w-full">
+                    <% unless item.available? %>
+                      <p class="text-secondary-txt font-light italic py-2 text-center w-full"><%= t("cart.nav.item_not_available") %></p>
+                    <% else %>
+                      <div class="w-10 h-10 aspect-square">
+                        <% if cart_item_has_photo?(item) %>
+                          <%= image_tag cart_item_photo_url(item), class: "rounded" %>
+                        <% else %>
+                          <div class="border-1 border-hover rounded w-full h-full flex justify-center items-center bg-hover">
+                            <%= icon "photo-scan", class: "w-6 h-6 aspect-square" %>
+                          </div>
+                        <% end %>
+                      </div>
+                      <div class="flex-1 flex flex-col justify-between items-start truncate">
+                        <p><%= cart_item_product_title(item) %></p>
+                        <p class="text-[0.6rem] font-light text-secondary-txt"><%= item.product_type %></p>
+                      </div>
+                      <div>
+                        <%= item.license.price.format %>
+                      </div>
+                      <div class="flex justify-center items-center">
+                        <%# TODO implement delete %>
+                        <button class="text-center cursor-pointer">
+                          <%= icon "x", class: "w-4 w-4" %>
+                        </button>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
           </div>
         <% end %>
       <% end %>

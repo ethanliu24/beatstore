@@ -14,7 +14,7 @@
     <div class="px-4 py-4">
       <%= content_tag :p, t("modal.track_purchase.action_description"), class: "mb-6 font-light text-sm" %>
       <%= render partial: "tracks/license_usages", locals: {
-        licenses: track.licenses,
+        licenses: track.profitable_licenses,
         partial_id: "license-tabs-track-purchase-modal"
       } %>
     </div>
