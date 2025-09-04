@@ -8,5 +8,7 @@ class AddCartItems < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
+
+    add_index :cart_items, [ :cart_id, :license_id, :product_id, :product_type ], unique: true
   end
 end

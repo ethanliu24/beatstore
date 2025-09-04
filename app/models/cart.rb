@@ -12,7 +12,7 @@ class Cart < ApplicationRecord
   end
 
   def has_item?(license_id:, product_id:, product_type:)
-    !CartItem.find_by(license_id:, product_id:, product_type:).nil?
+    cart_items.exists?(license_id:, product_id:, product_type:)
   end
 
   def total_items
