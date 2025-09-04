@@ -37,11 +37,17 @@
       <span class="max-sm:hidden"><%= t("label.free").downcase %></span>
     <% end %>
 
-    <%# TODO get the lowest price of the track %>
-    <button class="button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18">
+    <%= content_tag :div,
+      class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18",
+      data: {
+        track_purchase_modal_url: track_purchase_modal_path(@track),
+        action: "click->audio-player#fetchTrackPurchaseModal"
+      } do %>
       <%= icon "shopping-bag", class: "w-4 h-4" %>
-      <span class="max-sm:hidden"><%= track.cheapest_price %></span>
-    </button>
+      <% unless track.profitable_licenses.count == 0 %>
+        <span class="max-sm:hidden"><%= track.cheapest_price %></span>
+      <% end %>
+    <% end %>
 
     <%# Track more dropdown %>
     <%= render Ui::DropdownComponent.new(
