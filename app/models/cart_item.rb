@@ -6,6 +6,8 @@ class CartItem < ApplicationRecord
     in: :valid_product_types,
     message: "%{value} is not a valid entity type"
   }, if: -> { product.present? }
+  validates :license_id, uniqueness: { scope: [ :cart_id, :product_id, :product_type, :license_id ],
+    message: "has already been added to this cart" }
 
   belongs_to :product, polymorphic: true, optional: true
   belongs_to :license, optional: true
