@@ -37,7 +37,7 @@ RSpec.describe Tracks::TrackComponent, type: :component do
     expect(rendered).to have_css("#track_more_track_#{track.id}-dropdown-toggle")
     expect(rendered).to have_css("#track_more_track_#{track.id}")
     expect(rendered.css("div.dropdown").count).to eq(1)
-    expect(rendered.css("li.dropdown-item").count).to eq(7)
+    expect(rendered.css("li.dropdown-item").count).to eq(6)
   end
 
   # TODO test shopping cart

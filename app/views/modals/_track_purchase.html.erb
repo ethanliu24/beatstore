@@ -11,7 +11,7 @@
   <%= modal.with_header(title: t("modal.track_purchase.title"), size: :md) %>
 
   <%= modal.with_body do %>
-    <div class="px-4 py-4">
+    <div class="px-8 py-4">
       <%= content_tag :p, t("modal.track_purchase.action_description"), class: "mb-6 font-light text-sm" %>
       <%= render partial: "tracks/license_usages", locals: {
         licenses: track.profitable_licenses,
