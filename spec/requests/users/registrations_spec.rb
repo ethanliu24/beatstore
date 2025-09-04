@@ -25,6 +25,8 @@ RSpec.describe Users::RegistrationsController, type: :request do
     end
 
     it "does not create a new user when parameters are invalid" do
+      allow_any_instance_of(ApplicationController).to receive(:current_or_guest_user).and_return(create(:user))
+
       invalid_params = {
         user: {
           email: "invalid_email",

@@ -4,13 +4,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
 
+  def create
+    super
+    transfer_guest_to_user
+  end
+
   def update
     super do
       username = params[:user][:username]
       current_user.update(username: username) if username && username != current_user.username
     end
-
-    transfer_guest_to_user
   end
 
   protected
