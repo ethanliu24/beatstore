@@ -24,6 +24,11 @@ class Cart < ApplicationRecord
   end
 
   def total_price
-    "$0.00"
+    price_cents = cart_items.reduce 0 do |acc, item|
+      acc + item.license.price_cents
+    end
+
+    # Cart should have a currency, but everything's USD in this case
+    Money.new(price_cents, "USD").format
   end
 end
