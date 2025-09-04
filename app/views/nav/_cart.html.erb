@@ -9,7 +9,7 @@
       data: { dropdown_placement: "bottom-end" }
     ) do %>
       <%= icon "shopping-bag", class: "w-6 h-6 text-primary-txt" %>
-      <%= current_or_guest_user.cart.total_price %>
+      <%= cart_total_price(current_or_guest_user.cart) %>
       <%= icon "chevron-down", class: "w-3 h-3 text-secondary-txt" %>
     <% end %>
 
