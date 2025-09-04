@@ -6,7 +6,7 @@ RSpec.describe CartItemsController, type: :request do
   let(:track) { create(:track) }
   let(:license) { create(:license) }
 
-  describe "POST /cart_items" do
+  describe "POST #create" do
     let(:valid_params) do
       {
         product_id: track.id,
@@ -61,6 +61,25 @@ RSpec.describe CartItemsController, type: :request do
       }.to change(CartItem, :count).by(0)
 
       expect(response).to have_http_status(200)
+    end
+  end
+
+  describe "DELETE #destroy" do
+    before do
+      user = create(:user)
+      sign_in user, scope: :user
+      create(:cart_item, cart: user.cart, license:, product: track)
+    end
+
+    it "delets the specified cart item" do
+      item = CartItem.last
+
+      expect {
+        delete cart_item_url(item, format: :turbo_stream)
+      }.to change(CartItem, :count).by(-1)
+
+      expect(response).to have_http_status(200)
+      expect(CartItem.find_by(item.id)).to be_nil
     end
   end
 end
