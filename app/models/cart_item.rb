@@ -19,6 +19,8 @@ class CartItem < ApplicationRecord
 
   def available?
     license.present? && product.present?
+    # TODO also need to check product state, e.g. if track is private or not.
+    # do this after non exclusive license is implemented or smth
   end
 
   private

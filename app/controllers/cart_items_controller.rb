@@ -22,6 +22,15 @@ class CartItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @cart_item = current_or_guest_user.cart.cart_items.find(params[:id])
+    @cart_item.destroy!
+
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
+
   private
 
   def sanitize_cart_item_params
