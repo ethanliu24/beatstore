@@ -69,13 +69,10 @@
             <%= icon "player-play", class: icon_size %>
             <%= t("label.play") %>
           </li>
-          <li class="dropdown-item">
+          <li class="dropdown-item" data-action="click->audio-player#fetchTrackPurchaseModal"
+            data-track-purchase-modal-url="<%= track_purchase_modal_path(@track) %>">
             <%= icon "shopping-bag", class: icon_size %>
             <%= t("track.add_to_cart") %>
-          </li>
-          <li class="dropdown-item">
-            <%= icon "share", class: icon_size %>
-            <%= t("label.share") %>
           </li>
         </ul>
       <% end %>
