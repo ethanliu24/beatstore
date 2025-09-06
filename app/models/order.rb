@@ -4,7 +4,7 @@ class Order < ApplicationRecord
   belongs_to :user
   has_many :order_items, dependent: :restrict_with_error
 
-  enum status: {
+  enum :status, {
     pending: "pending",
     completed: "completed",
     failed: "failed"
