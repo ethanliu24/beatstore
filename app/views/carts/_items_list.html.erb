@@ -1,13 +1,13 @@
 
 <% unless current_or_guest_user.cart.empty? %>
-  <div class="flex justify-between items-start gap-12 w-full mt-10">
-    <div class="flex-1 flex flex-col justify-start items-start gap-6 w-full">
+  <div class="grid grid-cols-[1fr_auto] items-start max-lg:grid-cols-1 gap-12 w-full mt-10">
+    <div class="max-lg:order-2 flex-1 flex flex-col justify-start items-start gap-6 w-full">
       <% current_or_guest_user.cart.items.each do |item| %>
         <% next unless item.available? %>
 
-        <div class="flex justify-between items-stretch gap-6 w-full h-full">
+        <div class="flex justify-between items-stretch gap-6 max-sm:gap-3 w-full h-full">
           <div class="flex justify-center items-center">
-            <% photo_size = "w-16 h-16 aspect-square" %>
+            <% photo_size = "w-16 h-16 min-w-16 min-h-16 max-sm:w-8 max-sm:h-8 max-sm:min-w-10 max-sm:min-h-10 aspect-square" %>
             <% if cart_item_has_photo?(item) %>
               <%= image_tag cart_item_photo_url(item), class: "#{photo_size} rounded" %>
             <% else %>
@@ -16,9 +16,9 @@
               </div>
             <% end %>
           </div>
-          <div class="flex-1 flex flex-col justify-start items-start text-xs text-secondary-txt font-light w-full h-full">
-            <%= content_tag :p, cart_item_product_title(item), class: "text-lg text-primary-txt font-medium mb-0.5" %>
-            <div class="flex justify-start items-center gap-1 truncate w-full">
+          <div class="flex-1 flex flex-col justify-start items-start text-xs max-sm:text-[0.6rem] text-secondary-txt font-light truncate w-full min-w-10">
+            <%= content_tag :p, cart_item_product_title(item), class: "text-lg max-sm:text-md text-primary-txt truncate w-full font-medium mb-0.5" %>
+            <div class="flex justify-start items-center gap-1 w-full">
               <%= content_tag :p, item.product_type %>
               <%= seperator_char_ui %>
               <%= content_tag :p, item.license.title %>
@@ -45,7 +45,7 @@
         </div>
       <% end %>
     </div>
-    <div class="bg-secondary-bg rounded-lg px-4 py-4 min-w-60 max-w-60">
+    <div class="max-lg:order-1 bg-secondary-bg rounded-lg px-4 py-4 min-w-60 max-w-60 max-lg:min-w-full max-lg:max-w-full">
       <%= content_tag :p, t("cart.show.summary.title"), class: "whitespace-nowrap font-light mb-4" %>
       <div class="flex justify-between items-center text-xs text-secondary-txt font-light">
         <%= content_tag :p, t("cart.show.summary.items_total_label") %>
