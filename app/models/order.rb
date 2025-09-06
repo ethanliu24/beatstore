@@ -19,7 +19,7 @@ class Order < ApplicationRecord
 
   # enforce immutability after payment
   def prevent_core_changes_if_paid
-    if paid? && (changed & %w[total_cents currency user_id]).any?
+    if paid? && (changed & %w[subtotal_cents currency user_id]).any?
       errors.add(:base, "Cannot modify order details once paid")
       throw(:abort)
     end
