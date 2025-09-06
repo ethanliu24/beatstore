@@ -25,7 +25,11 @@ class Cart < ApplicationRecord
 
   def total_price_cents
     cart_items.reduce 0 do |acc, item|
-      acc + item.license.price_cents
+      if item.available?
+        acc + item.license.price_cents
+      else
+        0
+      end
     end
   end
 end

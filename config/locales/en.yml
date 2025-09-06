@@ -232,6 +232,7 @@ en:
         browse: "Brose tracks"
       item:
         quantity: "Quantity: %{quantity}"
+        view_contract: "Contract"
         track:
           files: "Files: %{files}"
 
