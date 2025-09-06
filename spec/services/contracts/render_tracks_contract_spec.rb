@@ -44,7 +44,7 @@ RSpec.describe Contracts::RenderTracksContractService, type: :service do
       expect(contents[:INCLUDING_OR_NOT_INCLUDING_PERFOMANCES]).to eq("INCLUDING")
       expect(contents[:NON_PROFITABLE_PERFORMANCES]).to eq(1)
       expect(contents[:SAMPLES]).to eq("NO THIRD PARTY SAMPLES USED ON THIS TRACK")
-      expect(contents[:FILE_TYPE]).to eq("WAV")
+      expect(contents[:FILE_TYPE]).to eq("WAV, MP3")
     end
 
     it "constructs unlimited non exclusive licenses" do
@@ -78,7 +78,7 @@ RSpec.describe Contracts::RenderTracksContractService, type: :service do
       })
 
       contents = service(license: l2, track:).send(:construct_non_exclusive_contract)
-      expect(contents[:FILE_TYPE]).to eq("WAV")
+      expect(contents[:FILE_TYPE]).to eq("WAV, MP3")
     end
 
     it "renders the samples used on track" do
