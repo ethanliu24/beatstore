@@ -1,7 +1,17 @@
 module CartHelper
-  def cart_total_price(cart)
-    price_cents = cart.nil? ? 0 : cart.total_price_cents
+  def cart_items_total_price(cart)
+    price_cents = cart.nil? ? 0 : cart.total_items_price_cents
     # Cart should have a currency, but everything's USD in this case
+    Money.new(price_cents, "USD").format
+  end
+
+  def cart_subtotal_price(cart)
+    price_cents = 0
+
+    unless cart.nil?
+      price_cents += cart.total_items_price_cents
+    end
+
     Money.new(price_cents, "USD").format
   end
 
