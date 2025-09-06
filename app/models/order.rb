@@ -6,7 +6,7 @@ class Order < ApplicationRecord
 
   enum status: {
     pending: "pending",
-    paid: "paid",
+    completed: "completed",
     failed: "failed"
   }
 
@@ -14,14 +14,19 @@ class Order < ApplicationRecord
   validates :subtotal_cents, numericality: { greater_than_or_equal_to: 0 }
 
   before_update :prevent_core_changes_if_paid
+  before_destroy :prevent_destroy
 
   private
 
-  # enforce immutability after payment
+  # immutability after payment
   def prevent_core_changes_if_paid
     if paid? && (changed & %w[subtotal_cents currency user_id]).any?
       errors.add(:base, "Cannot modify order details once paid")
       throw(:abort)
     end
+  end
+
+  def prevent_destroy
+    raise ActiveRecord::ReadOnlyRecord, "Orders are immutable"
   end
 end
