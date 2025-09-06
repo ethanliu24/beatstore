@@ -8,7 +8,7 @@
       <p class="font-light text-secondary-txt text-wrap"><%= t("cart.nav.empty_subtitle") %></p>
     </div>
   <% else %>
-    <div class="flex flex-col justify-start items-center gap-2 w-full h-full">
+    <div class="flex flex-col justify-start items-center gap-2 w-full max-h-[50vh] overflow-scroll transparent-scrollbar-background">
       <% current_or_guest_user.cart.items.each do |item| %>
         <div class="flex justify-between items-center gap-2 w-full">
           <div class="w-10 h-10 aspect-square">
