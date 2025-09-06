@@ -61,6 +61,7 @@ en:
     licenses: "Licenses"
     view: "View"
     preview: "Preview"
+    quantity: "Quantity"
 
   general:
     upload_file: "Upload File"
@@ -229,6 +230,11 @@ en:
         title: "Your cart is empty"
         subtitle: "Cart items will appear once you add them. Add them by going to an item and click the price button to select the desired license."
         browse: "Brose tracks"
+      item:
+        quantity: "Quantity: %{quantity}"
+        track:
+          files: "Files: %{files}"
+
 
   cart_item:
     create:

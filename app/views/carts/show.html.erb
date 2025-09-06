@@ -6,9 +6,35 @@
 ) %>
 
 <% unless current_or_guest_user.cart.empty? %>
-  <div class="flex justify-between items-start gap-4 w-full">
-    <div class="flex-1 w-full">
-
+  <div class="flex justify-between items-start gap-4 w-full mt-10">
+    <div class="flex-1 flex flex-col justify-start items-start gap-6 w-full">
+      <% current_or_guest_user.cart.items.each do |item| %>
+        <% next unless item.available? %>
+        <div class="flex justify-between items-stretch gap-6 w-full h-full">
+          <div class="flex justify-center items-center">
+            <% photo_size = "w-16 h-16 aspect-square" %>
+            <% if cart_item_has_photo?(item) %>
+              <%= image_tag cart_item_photo_url(item), class: "#{photo_size} rounded" %>
+            <% else %>
+              <div class="<%= "flex justify-center items-center #{photo_size} rounded bg-secondary-bg" %>">
+                <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex-1 flex flex-col justify-start items-start text-xs text-secondary-txt font-light w-full h-full">
+            <%= content_tag :p, cart_item_product_title(item), class: "text-lg text-primary-txt font-medium mb-0.5" %>
+            <div class="flex justify-start items-center gap-1 truncate w-full">
+              <%= content_tag :p, item.product_type %>
+              <%= seperator_char_ui %>
+              <%= content_tag :p, item.license.title %>
+            </div>
+            <% if item.product_type == Track.name %>
+              <%= content_tag :p, "#{t("cart.index.item.track.files", files: cart_item_track_files_delivered(item))}" %>
+            <% end %>
+            <%= content_tag :p, "#{t("cart.index.item.quantity", quantity: item.quantity)}" %>
+          </div>
+        </div>
+      <% end %>
     </div>
     <div></div>
   </div>
