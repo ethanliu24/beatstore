@@ -61,6 +61,7 @@ en:
     licenses: "Licenses"
     view: "View"
     preview: "Preview"
+    quantity: "Quantity"
 
   general:
     upload_file: "Upload File"
@@ -216,11 +217,31 @@ en:
       deliver_stems: "Deliver Track Stems"
 
   cart:
+    tab_title: "Shopping Cart"
     nav:
       title: "Your cart (%{count})"
       empty_title: "There's nothing in your cart"
       empty_subtitle: "Cart items will appear once you add them. Add them by going to an item and click the price button to select the desired license."
       item_not_available: "This item is not available."
+      checkout_button: "Checkout"
+    show:
+      title: "Shopping Cart"
+      subtitle: "Your picks so far"
+      empty:
+        title: "Your cart is empty"
+        subtitle: "Cart items will appear once you add them. Add them by going to an item and click the price button to select the desired license."
+        browse: "Brose tracks"
+      item:
+        quantity: "Quantity: %{quantity}"
+        view_contract: "Contract"
+        track:
+          files: "Files: %{files}"
+      summary:
+        title: "Cart Summary"
+        items_total_label: "Items total"
+        checkout_button: "Proceed to checkout"
+        continue_as_guest_prompt_html: "Continue as guest, %{login_link} or %{signup_link}"
+        site_aggrement_prompt_html: "By clicking on the checkout button, you agree to our %{refund_policy_link}, %{tos_link} and %{privacy_link}"
 
   cart_item:
     create:

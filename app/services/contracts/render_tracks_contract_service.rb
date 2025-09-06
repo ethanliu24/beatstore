@@ -97,11 +97,12 @@ module Contracts
     end
 
     def file_type_delivered
-      if @contract[:delivers_wav] || @contract[:delivers_stems]
-        "WAV"
-      else
-        "MP3"
-      end
+      files = []
+
+      files << "WAV" if @contract[:delivers_wav] || @contract[:delivers_stems]
+      files << "MP3" if @contract[:delivers_mp3]
+
+      files.join(", ")
     end
   end
 end

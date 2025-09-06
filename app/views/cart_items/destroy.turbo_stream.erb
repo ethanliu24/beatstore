@@ -3,5 +3,11 @@
 <% end %>
 
 <%= turbo_stream.update "nav_cart_total_price" do %>
-  <%= cart_total_price(current_or_guest_user.cart) %>
+  <%= cart_items_total_price(current_or_guest_user.cart) %>
+<% end %>
+
+<%# Could be optimized by deleting a single item's view and splitting empty cart view to a partial %>
+<%# and decide what to render depending on if the cart's empty. Same for nav cart. %>
+<%= turbo_stream.update "cart" do %>
+  <%= render partial: "carts/items_list" %>
 <% end %>

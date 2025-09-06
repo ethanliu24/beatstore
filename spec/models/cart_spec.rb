@@ -46,7 +46,7 @@ RSpec.describe Cart, type: :model do
       create(:cart_item, cart:, product: track, license: license1)
       create(:cart_item, cart:, product: track, license: license2)
 
-      expect(cart.total_price_cents).to eq(2234)
+      expect(cart.total_items_price_cents).to eq(2234)
     end
 
     it "should not have floating point errors" do
@@ -57,7 +57,7 @@ RSpec.describe Cart, type: :model do
       create(:cart_item, cart:, product: track, license: license1)
       create(:cart_item, cart:, product: track, license: license2)
 
-      expect(cart.total_price_cents).to eq(0003)
+      expect(cart.total_items_price_cents).to eq(0003)
     end
   end
 end

@@ -1,0 +1,10 @@
+<% content_for :title, t("cart.tab_title") %>
+
+<%= render PageTitleComponent.new(
+  title: t("cart.index.title"),
+  subtitle: t("cart.index.subtitle")
+) %>
+
+<div id="cart" class="w-full">
+  <%= render partial: "carts/items_list" %>
+</div>

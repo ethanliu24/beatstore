@@ -7,7 +7,7 @@
 <% end %>
 
 <%= turbo_stream.update "nav_cart_total_price" do %>
-  <%= cart_total_price(current_or_guest_user.cart) %>
+  <%= cart_items_total_price(current_or_guest_user.cart) %>
 <% end %>
 
 <%= turbo_stream.update "toasts" do %>

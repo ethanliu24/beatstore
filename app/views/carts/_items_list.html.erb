@@ -1,0 +1,86 @@
+
+<% unless current_or_guest_user.cart.empty? %>
+  <div class="grid grid-cols-[1fr_auto] items-start max-lg:grid-cols-1 gap-12 w-full mt-10 max-lg:mt-4">
+    <div class="max-lg:order-2 flex-1 flex flex-col justify-start items-start gap-6 w-full">
+      <% current_or_guest_user.cart.items.each do |item| %>
+        <% next unless item.available? %>
+
+        <div class="flex justify-between items-stretch gap-6 max-sm:gap-3 w-full h-full">
+          <div class="flex justify-center items-center">
+            <% photo_size = "w-16 h-16 min-w-16 min-h-16 max-sm:w-8 max-sm:h-8 max-sm:min-w-10 max-sm:min-h-10 aspect-square" %>
+            <% if cart_item_has_photo?(item) %>
+              <%= image_tag cart_item_photo_url(item), class: "#{photo_size} rounded" %>
+            <% else %>
+              <div class="<%= "flex justify-center items-center #{photo_size} rounded bg-secondary-bg" %>">
+                <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex-1 flex flex-col justify-start items-start text-xs max-sm:text-[0.6rem] text-secondary-txt font-light truncate w-full min-w-10">
+            <%= content_tag :p, cart_item_product_title(item), class: "text-lg max-sm:text-md text-primary-txt truncate w-full font-medium mb-0.5" %>
+            <div class="flex justify-start items-center gap-1 w-full">
+              <%= content_tag :p, item.product_type %>
+              <%= seperator_char_ui %>
+              <%= content_tag :p, item.license.title %>
+            </div>
+            <% if item.product_type == Track.name %>
+              <%= content_tag :p, "#{t("cart.show.item.track.files", files: cart_item_track_files_delivered(item))}" %>
+            <% end %>
+            <%= content_tag :p, "#{t("cart.show.item.quantity", quantity: item.quantity)}" %>
+          </div>
+          <div class="flex justify-center items-center">
+            <%# TODO pass customer info if there is %>
+            <%= link_to t("cart.show.item.view_contract"), preview_contract_modal_path(license_id: item.license.id),
+              data: { turbo_stream: true }, class: "text-accent text-sm max-sm:text-xs hover:text-accent-text" %>
+          </div>
+          <div class="flex justify-center items-center text-sm font-light max-sm:text-xs">
+            <%= item.license.price.format %>
+          </div>
+          <div class="flex justify-center items-center">
+            <%= link_to cart_item_path(item), data: { turbo_method: "delete" },
+              class: "text-center cursor-pointer" do %>
+              <%= icon "x", class: "w-5 h-5 max-sm:w-4 max-sm:h-4" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="max-lg:order-1 bg-secondary-bg rounded-lg px-4 py-4 min-w-60 max-w-60 max-lg:min-w-full max-lg:max-w-full">
+      <%= content_tag :p, t("cart.show.summary.title"), class: "whitespace-nowrap font-light mb-4" %>
+      <div class="flex justify-between items-center text-xs text-secondary-txt font-light">
+        <%= content_tag :p, t("cart.show.summary.items_total_label") %>
+        <%= content_tag :p, cart_items_total_price(current_or_guest_user.cart) %>
+      </div>
+      <div class="flex justify-between items-center text-sm mt-2">
+        <%= content_tag :p, t("cart.show.summary.items_total_label") %>
+        <%= content_tag :p, cart_subtotal_price(current_or_guest_user.cart) %>
+      </div>
+      <% if current_user.nil? %>
+        <p class="text-[0.6rem] font-light mt-6 text-secondary-txt italic text-center w-full">
+          <%= t(
+            "cart.show.summary.continue_as_guest_prompt_html",
+            login_link: link_to(t("label.log_in"), new_user_session_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+            signup_link: link_to(t("label.sign_up"), new_user_registration_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe
+          ) %>
+        </p>
+      <% end %>
+      <button class="button w-full py-1 text-sm mt-6"><%= t("cart.show.summary.checkout_button") %></button>
+      <%# TODO add the links when available %>
+      <p class="w-full text-[0.6rem] text-secondary-txt font-light italic text-wrap text-center mt-4">
+        <%= t(
+          "cart.show.summary.site_aggrement_prompt_html",
+          refund_policy_link: link_to("refund policy", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          tos_link: link_to("tos", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          privacy_link: link_to("privacy", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+        ) %>
+      </p>
+    </div>
+  </div>
+<% else %>
+  <div class="flex flex-col justify-center items-center w-full h-full">
+    <%= icon "shopping-cart", class: "text-secondary-txt w-50 h-50 max-sm:w-30 max-sm:h-30 mb-4" %>
+    <%= content_tag :p, t("cart.show.empty.title"), class: "text-lg" %>
+    <%= content_tag :p, t("cart.show.empty.subtitle"), class: "text-[0.8rem] text-secondary-txt max-w-100 text-center" %>
+    <%= link_to t("cart.show.empty.browse"), tracks_path, class: "mt-8 font-light italic border-accent border-1 rounded-2xl px-6 py-1 text-accent hover:bg-secondary-bg/70" %>
+  </div>
+<% end %>
