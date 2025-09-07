@@ -33,16 +33,8 @@ class OrderItem < ApplicationRecord
       raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed"
     end
 
-    files_being_attached = attachment_changes[:files].present?
-    other_changes = changed - [ "updated_at" ]
-
-    if other_changes.any?
-      raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable except for attaching files before payment"
-    end
-
-    unless files_being_attached
-      raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable except for attaching files before payment"
-    end
+    errors.add(:base, "Cannot modify order item details other than attaching files")
+    throw(:abort)
   end
 
   def prevent_destroy
