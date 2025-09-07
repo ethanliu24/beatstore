@@ -11,17 +11,29 @@ class Order < ApplicationRecord
   }
 
   validates :currency, presence: true
-  validates :subtotal_cents, numericality: { greater_than_or_equal_to: 0 }
+  validates :subtotal_cents, numericality: { greater_than_or_equal_to: 0 }, presence: true
 
-  before_update :prevent_core_changes_if_paid
+  before_update :prevent_updates_except_status
   before_destroy :prevent_destroy
+
+  def transaction_completed?
+    completed?
+  end
+
+  def transaction_failed?
+    failed?
+  end
 
   private
 
-  # immutability after payment
-  def prevent_core_changes_if_paid
-    if paid? && (changed & %w[subtotal_cents currency user_id]).any?
-      errors.add(:base, "Cannot modify order details once paid")
+  def prevent_updates_except_status
+    unless status_was == Order.statuses[:pending]
+      errors.add(:base, "Cannot modify order details once transaction completed or failed")
+      throw(:abort)
+    end
+
+    if (changed - %w[status updated_at]).any?
+      errors.add(:base, "Cannot modify order details other than status")
       throw(:abort)
     end
   end
