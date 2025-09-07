@@ -63,13 +63,16 @@ RSpec.describe Order, type: :model do
       before { order.update!(status: Order.statuses[:completed]) }
 
       it "does not allow any updates" do
-        expect { order.update!(subtotal_cents: 2222) }.to raise_error(ActiveRecord::ReadOnlyRecord)
-        expect(order.errors[:base]).to include("Cannot modify order details once transaction completed or failed")
+        expect {
+          order.update!(subtotal_cents: 2222)
+        }.to raise_error(ActiveRecord::ReadOnlyRecord, "Cannot modify order details once transaction completed or failed")
         expect(order.reload.subtotal_cents).to eq(2000)
       end
 
       it "does not allow status updates" do
-        expect { order.update!(status: Order.statuses[:failed]) }.to raise_error(ActiveRecord::ReadOnlyRecord)
+        expect {
+          order.update!(status: Order.statuses[:failed])
+        }.to raise_error(ActiveRecord::ReadOnlyRecord, "Cannot modify order details once transaction completed or failed")
 
         expect(order.reload.status).to eq(Order.statuses[:completed])
       end
@@ -79,13 +82,16 @@ RSpec.describe Order, type: :model do
       before { order.update!(status: Order.statuses[:failed]) }
 
       it "does not allow any updates" do
-        expect { order.update!(currency: "CAD") }.to raise_error(ActiveRecord::ReadOnlyRecord)
-        expect(order.errors[:base]).to include("Cannot modify order details once transaction completed or failed")
+        expect {
+          order.update!(currency: "CAD")
+        }.to raise_error(ActiveRecord::ReadOnlyRecord, "Cannot modify order details once transaction completed or failed")
         expect(order.reload.currency).to eq("USD")
       end
 
       it "does not allow status updates" do
-        expect { order.update!(status: Order.statuses[:completed]) }.to raise_error(ActiveRecord::ReadOnlyRecord)
+        expect {
+          order.update!(status: Order.statuses[:completed])
+        }.to raise_error(ActiveRecord::ReadOnlyRecord, "Cannot modify order details once transaction completed or failed")
         expect(order.reload.status).to eq(Order.statuses[:failed])
       end
     end
