@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# This should be partly immutable except for status updates. Once transaction clears it should be readonly
 class Order < ApplicationRecord
   belongs_to :user
   has_many :order_items, dependent: :restrict_with_error
