@@ -51,6 +51,15 @@ RSpec.describe OrderItem, type: :model do
         expect(order_item.files.attached?).to be(true)
         expect(order_item.files.first.filename.to_s).to eq("tagged_mp3.mp3")
       end
+
+      it "should allow order items to be associated with an order" do
+        oi = create(:order_item, order:)
+        order.reload
+
+        expect(order.order_items.count).to eq(2)
+        expect(order.order_items.last).to eq(oi)
+        expect(oi.order.id).to eq(order.id)
+      end
     end
 
     context "order is completed" do
@@ -71,6 +80,12 @@ RSpec.describe OrderItem, type: :model do
           )
         }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed")
       end
+
+      it "should not allow new associations to order" do
+        order_item = build(:order_item, order:)
+        expect { order_item.save! }.to raise_error(ActiveRecord::RecordNotSaved)
+        expect(order_item.errors[:base]).to include("Couldn't create order item as associated order's transaction has completed or failed")
+      end
     end
 
     context "order has failed" do
@@ -90,6 +105,12 @@ RSpec.describe OrderItem, type: :model do
             content_type: "audio/mpeg"
           )
         }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed")
+      end
+
+      it "should not allow new associations to order" do
+        order_item = build(:order_item, order:)
+        expect { order_item.save! }.to raise_error(ActiveRecord::RecordNotSaved)
+        expect(order_item.errors[:base]).to include("Couldn't create order item as associated order's transaction has completed or failed")
       end
     end
 
