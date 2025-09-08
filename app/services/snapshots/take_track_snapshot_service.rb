@@ -6,13 +6,6 @@ class TakeTrackSnapshotService
   end
 
   def call
-    {
-      id: @track.id,
-      title: @track.title,
-      description: @track.description,
-      bpm: @track.bpm,
-      key: @track.key,
-      genre: @track.genre
-    }.with_indifferent_access
+    @track.attributes
   end
 end
