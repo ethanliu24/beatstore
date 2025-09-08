@@ -18,9 +18,9 @@ class CartItem < ApplicationRecord
   belongs_to :cart, optional: false
 
   def available?
-    # if license.nil? || product.nil?
-    #   return false
-    # end
+    if license.nil? || product.nil?
+      return false
+    end
 
     case product_type
     when Track.name
