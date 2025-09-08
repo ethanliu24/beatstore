@@ -7,7 +7,7 @@ class Api::TracksController < ApplicationController
   def show
     track = Track.find_by(id: params[:id])
 
-    if track && track.tagged_mp3.attached? && (current_user&.admin? || track.is_public?)
+    if track && track.tagged_mp3.attached? && (current_user&.admin? || track.available?)
       render json: {
         id: track.id,
         title: track.title,
