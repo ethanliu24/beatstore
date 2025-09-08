@@ -1,7 +1,6 @@
 class AddOrderItems < ActiveRecord::Migration[8.0]
   def change
     create_table :order_items do |t|
-      t.string :public_id, null: false
       t.integer :quantity, null: false, default: 1
       t.references :order, null: false, foreign_key: true
 
@@ -14,7 +13,5 @@ class AddOrderItems < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-
-    add_index :order_items, :public_id, unique: true
   end
 end
