@@ -2,7 +2,7 @@ class TracksController < ApplicationController
   SIMILAR_TRACKS_RECOMMENDATION_LIMIT = 10
 
   def index
-    base_scope = Track.where(is_public: true)
+    base_scope = Track.publicly_available
     @q = base_scope.ransack(params[:q], auth_object: current_user)
     queried_tracks = @q.result(distinct: true).includes(:tags).order(created_at: :desc)
     # Sorting is disabled due to incompatibilty with ransack and pagy_keyset.
@@ -11,7 +11,7 @@ class TracksController < ApplicationController
   end
 
   def show
-    base_scope = current_user&.admin? ? Track : Track.where(is_public: true)
+    base_scope = current_user&.admin? ? Track : Track.publicly_available
     @track = base_scope.find(params.expect(:id))
     @similar_tracks = find_similar_tracks(@track)
     @licenses = @track.profitable_licenses
@@ -30,7 +30,7 @@ class TracksController < ApplicationController
 
     if similar_tracks.size < SIMILAR_TRACKS_RECOMMENDATION_LIMIT
       extra_tracks = Track
-        .where(is_public: true)
+        .publicly_available
         .where.not(id: base_track.id)
         .where.not(id: similar_tracks.pluck(:id))
         .order(created_at: :desc)

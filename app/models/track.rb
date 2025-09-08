@@ -50,6 +50,9 @@ class Track < ApplicationRecord
   has_many :licenses, through: :licenses_tracks_associations
   has_many :cart_items, as: :product, dependent: :nullify
 
+  # === Scopes ===
+  scope :publicly_available, -> { where(is_public: true) }
+
   class << self
     def ransackable_attributes(auth_object = nil)
       base = [
@@ -96,6 +99,10 @@ class Track < ApplicationRecord
 
   def cheapest_price
     profitable_licenses.first&.price&.format.presence
+  end
+
+  def available?
+    is_public
   end
 
   private
