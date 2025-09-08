@@ -121,7 +121,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_06_174232) do
   end
 
   create_table "order_items", force: :cascade do |t|
-    t.string "public_id", null: false
     t.integer "quantity", default: 1, null: false
     t.bigint "order_id", null: false
     t.integer "unit_price_cents", null: false
@@ -132,10 +131,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_06_174232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["public_id"], name: "index_order_items_on_public_id", unique: true
   end
 
   create_table "orders", force: :cascade do |t|
+    t.string "public_id", null: false
     t.bigint "user_id", null: false
     t.integer "subtotal_cents", default: 0, null: false
     t.string "currency", default: "usd", null: false
