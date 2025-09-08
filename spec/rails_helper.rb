@@ -61,6 +61,7 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemSpecHelpers, type: :feature
   config.include ViewComponent::SystemSpecHelpers, type: :system
   config.include FactoryBot::Syntax::Methods
+  config.include ActiveSupport::Testing::TimeHelpers
 
   # url_for doesn't work in components for whatever the fuck reason, we'll just trust it works
   RSpec.configure do |config|

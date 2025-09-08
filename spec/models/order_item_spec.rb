@@ -14,12 +14,6 @@ RSpec.describe OrderItem, type: :model do
   it { should validate_numericality_of(:unit_price_cents).is_greater_than_or_equal_to(0) }
 
   describe "validations" do
-    it "requires a public_id" do
-      order_item.public_id = nil
-      expect(order_item).not_to be_valid
-      expect(order_item.errors[:public_id]).to include("is required")
-    end
-
     it "allows purchasable products" do
       [ Track.name ].each do |type|
         order_item.product_type = type

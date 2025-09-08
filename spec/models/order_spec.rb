@@ -16,6 +16,25 @@ RSpec.describe Order, type: :model do
     it { should have_many(:order_items).dependent(:restrict_with_error) }
   end
 
+  describe "validations" do
+    let(:order) { create(:order) }
+
+    it "requires a public_id" do
+      order.public_id = nil
+      expect(order).not_to be_valid
+      expect(order.errors[:public_id]).to include("is required")
+    end
+
+    it "public_id follows the correct format" do
+      travel_to Time.zone.local(2025, 11, 11, 12, 34, 56) do
+        id_regex = /\A#{Order::PUBLIC_ID_PREFIX}_251111123456_[A-Za-z0-9]{#{Order::PUBLIC_ID_SUFFIX_LENGTH}}\z/
+
+        expect(order).to be_valid
+        expect(order.public_id).to match(id_regex)
+      end
+    end
+  end
+
   describe "statuses" do
     subject(:order) { build(:order) }
 
