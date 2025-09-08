@@ -60,4 +60,35 @@ RSpec.describe Cart, type: :model do
       expect(cart.total_items_price_cents).to eq(0003)
     end
   end
+
+  describe "#available_items" do
+    it "should return the available items and " do
+      cart = create(:cart)
+      t1 = create(:track, is_public: false)
+      t2 = create(:track)
+      license = create(:license)
+
+      item1 = create(:cart_item, cart:, product: t2, license:)
+      _item2 = create(:cart_item, cart:, product: t1, license:)
+      _item3 = create(:cart_item, cart:, product: nil, license: nil)
+
+      expect(cart.available_items.size).to eq(1)
+      expect(cart.available_items[0]).to eq(item1)
+    end
+  end
+
+  describe "#unavailable_items_count" do
+    it "should return the correct available items count" do
+      cart = create(:cart)
+      t1 = create(:track, is_public: false)
+      t2 = create(:track)
+      license = create(:license)
+
+      create(:cart_item, cart:, product: t2, license:)
+      create(:cart_item, cart:, product: t1, license:)
+      create(:cart_item, cart:, product: nil, license: nil)
+
+      expect(cart.unavailable_items_count).to eq(2)
+    end
+  end
 end

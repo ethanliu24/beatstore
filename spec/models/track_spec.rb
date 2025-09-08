@@ -268,4 +268,18 @@ RSpec.describe Track, type: :model do
       expect(track.cheapest_price).to be_nil
     end
   end
+
+  describe "#available?" do
+    it "should indicate that the track is available" do
+      track = create(:track)
+
+      expect(track.available?).to be(true)
+    end
+
+    it "should be unavailable if it's private" do
+      track = create(:track, is_public: false)
+
+      expect(track.available?).to be(false)
+    end
+  end
 end

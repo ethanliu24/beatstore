@@ -49,9 +49,34 @@ RSpec.describe CartItem, type: :model do
     end
   end
 
-  describe ".valid_product_types" do
+  describe "#valid_product_types" do
     it "returns Track as a valid type" do
       expect(CartItem.valid_product_types).to include("Track")
+    end
+  end
+
+  describe "#available?" do
+    let(:cart) { create(:cart) }
+
+    it "should return true if nothing makes the item unavailable" do
+      item = create(:cart_item, cart:)
+
+      expect(item.available?).to be(true)
+    end
+
+    it "should return false if product or license is nil" do
+      item1 = create(:cart_item, cart:, product: nil)
+      item2 = create(:cart_item, cart:, license: nil)
+
+      expect(item1.available?).to be(false)
+      expect(item2.available?).to be(false)
+    end
+
+    it "should return false if track is unavailable" do
+      track = create(:track, is_public: false)
+      item = create(:cart_item, cart:, product: track)
+
+      expect(item.available?).to be(false)
     end
   end
 end
