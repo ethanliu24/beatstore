@@ -102,7 +102,7 @@ class Track < ApplicationRecord
   end
 
   def available?
-    is_public?
+    is_public
   end
 
   private

@@ -2,7 +2,7 @@
 <% unless current_or_guest_user.cart.empty? %>
   <div class="grid grid-cols-[1fr_auto] items-start max-lg:grid-cols-1 gap-12 w-full mt-10 max-lg:mt-4">
     <div class="max-lg:order-2 flex-1 flex flex-col justify-start items-start gap-6 w-full">
-      <% current_or_guest_user.cart.items.each do |item| %>
+      <% current_or_guest_user.cart.available_items.each do |item| %>
         <% next unless item.available? %>
 
         <div class="flex justify-between items-stretch gap-6 max-sm:gap-3 w-full h-full">

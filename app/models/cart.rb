@@ -11,6 +11,10 @@ class Cart < ApplicationRecord
       .order(created_at: :desc)
   end
 
+  def available_items
+    cart_items.filter { |item| item.available? }
+  end
+
   def has_item?(license_id:, product_id:, product_type:)
     cart_items.exists?(license_id:, product_id:, product_type:)
   end
@@ -24,12 +28,8 @@ class Cart < ApplicationRecord
   end
 
   def total_items_price_cents
-    cart_items.reduce 0 do |acc, item|
-      if item.available?
-        acc + item.license.price_cents
-      else
-        0
-      end
+    available_items.reduce 0 do |acc, item|
+      acc += item.license.price_cents
     end
   end
 end
