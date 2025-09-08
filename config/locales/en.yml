@@ -223,6 +223,7 @@ en:
       empty_title: "There's nothing in your cart"
       empty_subtitle: "Cart items will appear once you add them. Add them by going to an item and click the price button to select the desired license."
       item_not_available: "This item is not available."
+      num_items_unavailable: "There are (%{count}) items unavailable"
       checkout_button: "Checkout"
     show:
       title: "Shopping Cart"

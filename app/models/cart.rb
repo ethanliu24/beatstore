@@ -15,6 +15,10 @@ class Cart < ApplicationRecord
     cart_items.filter { |item| item.available? }
   end
 
+  def unavailable_items_count
+    cart_items.count - available_items.size
+  end
+
   def has_item?(license_id:, product_id:, product_type:)
     cart_items.exists?(license_id:, product_id:, product_type:)
   end
