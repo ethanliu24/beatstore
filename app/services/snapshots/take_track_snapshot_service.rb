@@ -1,4 +1,4 @@
-# forzen_string_literal: true
+# frozen_string_literal: true
 
 module Snapshots
   class TakeTrackSnapshotService
@@ -11,4 +11,3 @@ module Snapshots
     end
   end
 end
-
