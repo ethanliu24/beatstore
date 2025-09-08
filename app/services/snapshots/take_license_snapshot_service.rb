@@ -1,11 +1,13 @@
 # forzen_string_literal: true
 
-class TakeLicenseSnapshotService
-  def initialize(license:)
-    @license = license
-  end
+module Snapshots
+  class TakeLicenseSnapshotService
+    def initialize(license:)
+      @license = license
+    end
 
-  def call
-    @license.attributes
+    def call
+      @license.attributes
+    end
   end
 end
