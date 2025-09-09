@@ -3,7 +3,7 @@
 class CheckoutsController < ApplicationController
   # Creates a checkout session
   def create
-    construct_orders_and_items
+    create_order_and_order_items
 
     session = Stripe::Checkout::Session.create({
       line_items: line_items,
@@ -19,7 +19,7 @@ class CheckoutsController < ApplicationController
 
   private
 
-  def construct_orders_and_items
+  def create_order_and_order_items
     customer = current_or_guest_user
 
     @order = Order.create!(
