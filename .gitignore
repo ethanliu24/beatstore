@@ -41,3 +41,5 @@
 
 # Ignore icons from Tabler
 /app/assets/svg/icons/tabler
+
+/config/credentials/development.key

@@ -9,8 +9,8 @@ FactoryBot.define do
       product { association(:track) }
     end
 
-    after(:build) do |cart, evaluator|
-      cart.product = evaluator.product
+    after(:build) do |cart_item, evaluator|
+      cart_item.product = evaluator.product
     end
   end
 end
