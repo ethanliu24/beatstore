@@ -56,9 +56,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
     services:
       postgres:
         image: postgres
@@ -103,6 +100,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://beatstore:beatstore@localhost:5432
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bundle exec rspec
 
