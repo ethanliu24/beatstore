@@ -1,8 +1,8 @@
 
 <% unless current_or_guest_user.cart.empty? %>
-  <div class="grid grid-cols-[1fr_auto] items-start max-lg:grid-cols-1 gap-12 w-full mt-4 max-lg:mt-4">
+  <div class="grid grid-cols-[1fr_auto] items-start max-lg:grid-cols-1 gap-12 w-full mt-10 max-lg:mt-4">
     <div class="max-lg:order-2 flex-1 flex flex-col justify-start items-start gap-6 w-full">
-      <% current_or_guest_user.cart.available_items.each do |item| %>
+      <% current_or_guest_user.cart.items.each do |item| %>
         <% next unless item.available? %>
 
         <div class="flex justify-between items-stretch gap-6 max-sm:gap-3 w-full h-full">
@@ -45,7 +45,7 @@
         </div>
       <% end %>
     </div>
-    <div class="max-lg:order-1 bg-secondary-bg rounded-lg px-4 py-4 min-w-74 max-w-74 max-lg:min-w-full max-lg:max-w-full">
+    <div class="max-lg:order-1 bg-secondary-bg rounded-lg px-4 py-4 min-w-60 max-w-60 max-lg:min-w-full max-lg:max-w-full">
       <%= content_tag :p, t("cart.show.summary.title"), class: "whitespace-nowrap font-light mb-4" %>
       <div class="flex justify-between items-center text-xs text-secondary-txt font-light">
         <%= content_tag :p, t("cart.show.summary.items_total_label") %>
@@ -64,7 +64,8 @@
           ) %>
         </p>
       <% end %>
-      <button class="button w-full py-1 text-sm mt-6"><%= t("cart.show.summary.checkout_button") %></button>
+      <%= button_to t("cart.show.summary.checkout_button"), checkout_path, method: :post,
+        class: "button w-full py-1 text-sm mt-6", data: { turbo: false } %>
       <%# TODO add the links when available %>
       <p class="w-full text-[0.6rem] text-secondary-txt font-light italic text-wrap text-center mt-4">
         <%= t(

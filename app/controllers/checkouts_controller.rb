@@ -1,0 +1,68 @@
+# frozen_string_literal: true
+
+class CheckoutsController < ApplicationController
+  # Creates a checkout session
+  def create
+    construct_orders_and_items
+
+    session = Stripe::Checkout::Session.create({
+      line_items: line_items,
+      mode: "payment",
+      success_url: root_url,
+      cancel_url: root_url
+    })
+
+    # TODO add success and cancel page urls
+
+    redirect_to session.url, status: :see_other, allow_other_host: true
+  end
+
+  private
+
+  def construct_orders_and_items
+    customer = current_or_guest_user
+
+    @order = Order.create!(
+      user: customer,
+      status: Order.statuses[:pending],
+      subtotal_cents: customer.cart.total_items_price_cents,
+      currency: "USD"
+    )
+
+    @order_items = customer.cart.available_items.map do |item|
+      product_snapshot = case item.product_type
+      when Track.name
+        Snapshots::TakeTrackSnapshotService.new(track: item.product).call
+      else
+        {}
+      end
+
+      OrderItem.create!(
+        order: @order,
+        quantity: item.quantity,
+        unit_price_cents: item.license.price_cents,
+        currency: item.license.currency.presence || "USD",
+        product_type: item.product_type,
+        product_snapshot: product_snapshot,
+        license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: item.license).call
+      )
+    end
+  end
+
+  def line_items
+    [
+      {
+        price_data: {
+          currency: "USD",
+          unit_amount: 1000,
+          product_data: {
+            name: "Test - MP# license",
+            description: "Test",
+            images: [url_for(Track.first.cover_photo)],  # TODO public url
+          },
+        },
+        quantity: 1
+      }
+    ]
+  end
+end
