@@ -19,6 +19,30 @@ Things to cover:
 
 ## Installation
 
+### Stripe
+Stripe will handle payments with Stripe Checkout.
+Set up Stripe with the project by creating/logging in to [Stripe Dashboard](https://dashboard.stripe.com/),
+and copy the public and secret keys.
+
+In the rails project, enter rails credentials editing enviornment using this command:
+`VISUAL="cursor --wait" rails credentials:edit`
+
+_Instead of "cursor", you can use the command that opens the editor of your choice, e.g. "code"_
+
+Then, paste in the Stripe API keys in the following format:
+```
+# Paste Stripe keys in this format
+stripe:
+  test:
+    public_key: <sk_test_...>
+    secret_key: <sk_test_...>
+  live:
+    public_key: <sk_live_...>
+    secret_key: <sk_live_...>
+```
+
+Close the file to save.
+
 ### Gems
 Install all the gems with bundle:
 ```
