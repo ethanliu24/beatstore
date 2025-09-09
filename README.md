@@ -43,6 +43,10 @@ stripe:
 
 Close the file to save.
 
+Additionally, we need to install the [Stripe CLI](https://docs.stripe.com/stripe-cli) to test Stripe webhooks locally.
+Run the following command to install it on:
+- Mac: `brew install stripe/stripe-cli/stripe`
+
 ### Gems
 Install all the gems with bundle:
 ```
@@ -77,12 +81,28 @@ $ rails generate rails_icons:install --libraries=tabler
 
 
 ## Running
+
+### Backend Server
+
 Run this to start the server:
 ```
 $ ./bin/dev
 ```
 
 The reason we use this instead of `rails s` is so that Tailwind can watch for changes. If not working on views, either command works.
+
+### Stripe CLI
+This is for testing Stripe webhooks locally. In a seperate terminal and run the following commands:
+
+```
+$ stripe login  # will prompt you to go to an url to log in
+$ stripe listen --forward-to localhost:3000/webhook/stripe/payments
+
+# You can trigger Stripe webhooks using "trigger"
+stripe trigger <webhook-event>
+```
+
+More details [here](https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local).
 
 
 ## Testing
