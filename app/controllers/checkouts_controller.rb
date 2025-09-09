@@ -58,20 +58,13 @@ class CheckoutsController < ApplicationController
         ""
       end
 
-      product_description = case item.product_type
-      when Track.name
-        item.product_snapshot["description"]
-      else
-        ""
-      end
-
       {
         price_data: {
           currency: item.currency,
           unit_amount: item.unit_price_cents,
           product_data: {
             name: product_name,
-            description: product_description,
+            description: item.license_snapshot["title"],
             images: []  # TODO public url
           }
         },
