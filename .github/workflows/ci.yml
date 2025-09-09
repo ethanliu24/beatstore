@@ -76,11 +76,6 @@ jobs:
       #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - name: Print an environment variable
-      env:
-        MY_VAR:  ${{ secrets.RAILS_MASTER_KEY }} 
-      run: echo "The value of MY_VAR is: $MY_VAR"
-
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config google-chrome-stable
 
