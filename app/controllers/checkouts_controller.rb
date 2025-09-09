@@ -50,19 +50,33 @@ class CheckoutsController < ApplicationController
   end
 
   def line_items
-    [
+    @order_items.map do |item|
+      product_name = case item.product_type
+      when Track.name
+        item.product_snapshot["title"]
+      else
+        ""
+      end
+
+      product_description = case item.product_type
+      when Track.name
+        item.product_snapshot["description"]
+      else
+        ""
+      end
+
       {
         price_data: {
-          currency: "USD",
-          unit_amount: 1000,
+          currency: item.currency,
+          unit_amount: item.unit_price_cents,
           product_data: {
-            name: "Test - MP# license",
-            description: "Test",
-            images: [url_for(Track.first.cover_photo)],  # TODO public url
-          },
+            name: product_name,
+            description: product_description,
+            images: []  # TODO public url
+          }
         },
-        quantity: 1
+        quantity: item.quantity
       }
-    ]
+    end
   end
 end
