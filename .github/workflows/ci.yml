@@ -78,7 +78,7 @@ jobs:
     steps:
       - name: Print an environment variable
       env:
-        MY_VAR:  ${{ secrets.RAILS_MASTER_KEY }}
+        MY_VAR:  ${{ secrets.RAILS_MASTER_KEY }} 
       run: echo "The value of MY_VAR is: $MY_VAR"
 
       - name: Install packages
