@@ -96,7 +96,7 @@ This is for testing Stripe webhooks locally. In a seperate terminal and run the 
 
 ```
 $ stripe login  # will prompt you to go to an url to log in
-$ stripe listen --forward-to localhost:3000/webhook/stripe/payments
+$ stripe listen --forward-to localhost:3000/webhooks/stripe/payments
 
 # You can trigger Stripe webhooks using "trigger"
 stripe trigger <webhook-event>

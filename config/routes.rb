@@ -62,6 +62,12 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :webhooks do
+    namespace :stripe do
+      post :payments
+    end
+  end
+
   scope :download, controller: :downloads do
     scope "track/:id" do
       get "free", to: "free_download", as: "download_track_free"

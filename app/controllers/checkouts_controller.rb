@@ -9,7 +9,10 @@ class CheckoutsController < ApplicationController
       line_items: line_items,
       mode: "payment",
       success_url: root_url,
-      cancel_url: root_url
+      cancel_url: root_url,
+      metadata: {
+        order_id: @order.id
+      }
     })
 
     # TODO add success and cancel page urls
