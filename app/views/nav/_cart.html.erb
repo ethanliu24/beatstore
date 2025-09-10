@@ -39,9 +39,12 @@
           </div>
         </div>
       <% end %>
-      <div class="py-2 font-light text-secondary-txt italic">
-        <%= t("cart.nav.num_items_unavailable", count: current_or_guest_user.cart.unavailable_items_count) %>
-      </div>
+
+      <% if current_or_guest_user.cart.unavailable_items_count > 0 %>
+        <div class="py-2 font-light text-secondary-txt italic">
+          <%= t("cart.nav.num_items_unavailable", count: current_or_guest_user.cart.unavailable_items_count) %>
+        </div>
+      <% end %>
     </div>
     <%= link_to t("cart.nav.checkout_button"), cart_path, class: "button w-full py-1 mt-4" %>
   <% end %>

@@ -16,7 +16,7 @@ class Cart < ApplicationRecord
   end
 
   def clear
-    # TODO clear cart
+    cart_items.destroy_all
   end
 
   def unavailable_items_count
