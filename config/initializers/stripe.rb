@@ -6,4 +6,4 @@ STRIPE_CONFIG = Rails.application.credentials.dig(
 )
 
 Stripe.api_key = STRIPE_CONFIG[:secret_key]
-STRIPE_WEBHOOK_SECRET = STRIPE_CONFIG[:webhook_secret]
+STRIPE_PAYMENTS_WEBHOOK_SECRET = STRIPE_CONFIG[:payments_webhook_secret]
