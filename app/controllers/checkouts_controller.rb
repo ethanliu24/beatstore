@@ -47,7 +47,8 @@ class CheckoutsController < ApplicationController
         currency: item.license.currency.presence || "USD",
         product_type: item.product_type,
         product_snapshot: product_snapshot,
-        license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: item.license).call
+        license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: item.license).call,
+        is_immutable: true
       )
     end
   end

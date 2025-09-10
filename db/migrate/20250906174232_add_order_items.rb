@@ -1,6 +1,7 @@
 class AddOrderItems < ActiveRecord::Migration[8.0]
   def change
     create_table :order_items do |t|
+      t.boolean :is_immutable, null: false, default: false
       t.integer :quantity, null: false, default: 1
       t.references :order, null: false, foreign_key: true
 

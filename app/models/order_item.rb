@@ -7,6 +7,7 @@ class OrderItem < ApplicationRecord
   belongs_to :order
   has_many_attached :files
 
+  validates :is_immutable, presence: true
   validates :quantity, numericality: { greater_than: 0 }
   validates :unit_price_cents, numericality: { greater_than_or_equal_to: 0 }
   validates :product_snapshot, :license_snapshot, :currency, presence: true
@@ -15,6 +16,10 @@ class OrderItem < ApplicationRecord
   before_create :prevent_create_if_order_is_not_pending
   before_update :prevent_update_unless_attaching_files
   before_destroy :prevent_destroy
+
+  def immutable?
+    is_immutable
+  end
 
   private
 
@@ -26,12 +31,14 @@ class OrderItem < ApplicationRecord
   end
 
   def prevent_update_unless_attaching_files
-    unless order.pending?
-      raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed"
+    unless is_immutable_was == true
+      raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable"
     end
 
-    errors.add(:base, "Cannot modify order item details other than attaching files")
-    throw(:abort)
+    unless (changed - %w[ is_immutable ]).empty?
+      errors.add(:base, "Cannot modify order item details other than attaching files")
+      throw(:abort)
+    end
   end
 
   def prevent_destroy
