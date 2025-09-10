@@ -35,7 +35,7 @@ class OrderItem < ApplicationRecord
       raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable"
     end
 
-    unless (changed - %w[ is_immutable ]).empty?
+    unless (changed - %w[is_immutable updated_at]).empty?
       errors.add(:base, "Cannot modify order item details other than attaching files")
       throw(:abort)
     end

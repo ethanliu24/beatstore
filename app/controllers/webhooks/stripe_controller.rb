@@ -12,8 +12,7 @@ module Webhooks
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
         @order.update!(status: Order.statuses[:completed])
-      when "payment_intent.payment_failed"
-      when "payment_intent.canceled"
+      when "payment_intent.payment_failed", "payment_intent.canceled"
         # TODO maybe one more status for canceled
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
@@ -35,8 +34,6 @@ module Webhooks
         end
 
         @order.user.cart.clear
-      else
-        # TODO Log error
       end
 
       head :ok
