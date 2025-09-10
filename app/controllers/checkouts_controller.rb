@@ -4,7 +4,7 @@ class CheckoutsController < ApplicationController
   # Creates a checkout session
   def create
     create_order_and_order_items
-
+    
     session = Stripe::Checkout::Session.create({
       line_items: line_items,
       mode: "payment",

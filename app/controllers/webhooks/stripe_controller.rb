@@ -6,9 +6,9 @@ module Webhooks
     before_action :parse_event
 
     def payments
+      # TODO update transaction with status for each
       case @event.type
       when "payment_intent.succeeded"
-        # associate transaction object with order
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
         @order.update!(status: Order.statuses[:completed])
@@ -21,19 +21,23 @@ module Webhooks
         payment_intent = @event.data.object.payment_intent
         find_order(payment_intent:)
 
+        # TODO associate transaction object with order
+
+        # Maybe should duplicate on session create and purge if order failed
         @order.order_items.each do |item|
           case item.product_type
           when Track.name
             track = Track.find(item.product_snapshot["id"])
-            item.files.attach(track.untagged_mp3) if item.license_snapshot["contract_details"]["delivers_mp3"]
-            item.files.attach(track.untagged_wav) if item.license_snapshot["contract_details"]["delivers_wav"]
-            item.files.attach(track.track_stems) if item.license_snapshot["contract_details"]["delivers_stems"]
+            duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
+            duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
+            duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
           end
 
           item.update!(is_immutable: true)
         end
 
         @order.user.cart.clear
+        @order.update!(status: Order.statuses[:completed])
       end
 
       head :ok
@@ -47,14 +51,12 @@ module Webhooks
       endpoint_secret = STRIPE_PAYMENTS_WEBHOOK_SECRET
       @event = nil
 
-      # TODO can log errors here + set order to failed
+      # TODO can log errors here
       begin
         @event = Stripe::Webhook.construct_event(
           payload, sig_header, endpoint_secret
         )
-      rescue JSON::ParserError => _e
-        head :bad_request and return
-      rescue Stripe::SignatureVerificationError => _e
+      rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
         head :bad_request and return
       end
     end
@@ -63,6 +65,16 @@ module Webhooks
       session = Stripe::Checkout::Session.list(payment_intent:).first
       order_id = session.metadata["order_id"]
       @order = Order.find(order_id)
+    end
+
+    def duplicate_file(item:, file:, attach:)
+      if attach
+        item.files.attach(
+          io: StringIO.new(file.download),
+          filename: file.blob.filename,
+          content_type: file.blob.content_type
+          )
+      end
     end
   end
 end
