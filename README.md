@@ -21,24 +21,26 @@ Things to cover:
 
 ### Stripe
 Stripe will handle payments with Stripe Checkout.
-Set up Stripe with the project by creating/logging in to [Stripe Dashboard](https://dashboard.stripe.com/),
-and copy the public and secret keys.
 
-In the rails project, enter rails credentials editing enviornment using this command:
+1. In the rails project, enter rails credentials editing enviornment using this command:
 `VISUAL="cursor --wait" rails credentials:edit`
+    - _Instead of "cursor", you can use the command that opens the editor of your choice, e.g. "code"_
+    - _Locate the stripe field_
+2. Set up Stripe with the project by creating/logging in to [Stripe Dashboard](https://dashboard.stripe.com/)
+3. Copy the public and secret keys to `stripe.<env>.public_key` and `stripe.<env>.secret_key`.
+4. Get the payments webhook route signiture and paste to `stripe.<env>.payments_webhook_secret`
 
-_Instead of "cursor", you can use the command that opens the editor of your choice, e.g. "code"_
-
-Then, paste in the Stripe API keys in the following format:
+The resulting credential file for stripe should look like this:
 ```
-# Paste Stripe keys in this format
 stripe:
   test:
     public_key: <sk_test_...>
     secret_key: <sk_test_...>
+    payments_webhook_secret: <whsec_...>
   live:
     public_key: <sk_live_...>
     secret_key: <sk_live_...>
+    payments_webhook_secret: <whsec_...>
 ```
 
 Close the file to save.
@@ -94,13 +96,14 @@ The reason we use this instead of `rails s` is so that Tailwind can watch for ch
 ### Stripe CLI
 This is for testing Stripe webhooks locally. In a seperate terminal and run the following commands:
 
-```
-$ stripe login  # will prompt you to go to an url to log in
-$ stripe listen --forward-to localhost:3000/webhooks/stripe/payments
-
-# You can trigger Stripe webhooks using "trigger"
-stripe trigger <webhook-event>
-```
+1. `stripe login`
+    - This will prompt you to go to an url to log in
+2. `stripe listen --forward-to localhost:3000/webhooks/stripe/payments`
+    - This will output a webhook signiture event in format `whsec_...`
+    - Open rails credentials: `VISUAL="cursor --wait" rails credentials:edit`
+    - in `stripe.test.payments_webhook_secret`, if the signiture is different, replace it with the newly generated signiture
+3. `stripe trigger <webhook-event>`
+    - This will trigger a Stripe webhook event and will be picked up by localhost
 
 More details [here](https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local).
 
