@@ -64,15 +64,17 @@ module Webhooks
     def find_order(payment_intent:)
       session = Stripe::Checkout::Session.list(payment_intent:).first
       order_id = session.metadata["order_id"]
+      # TODO log if session deosnt have metadata or order is nil
       @order = Order.find(order_id)
     end
 
     def duplicate_file(item:, file:, attach:)
+      # TODO log error if file.blob is nil. it means that the files uploaded doesnt match with license
       if attach
         item.files.attach(
           io: StringIO.new(file.download),
-          filename: file.blob.filename,
-          content_type: file.blob.content_type
+          filename: file.blob&.filename,
+          content_type: file.blob&.content_type
           )
       end
     end

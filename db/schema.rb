@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_06_174232) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_11_183819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -193,6 +193,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_06_174232) do
     t.datetime "updated_at", null: false
     t.string "genre"
     t.text "description"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "idempotency_key"
+    t.bigint "stripe_id"
+    t.string "customer_email"
+    t.string "customer_name"
+    t.integer "amount_cents"
+    t.string "currency"
+    t.string "receipt_url"
+    t.bigint "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_transactions_on_order_id"
   end
 
   create_table "users", force: :cascade do |t|
