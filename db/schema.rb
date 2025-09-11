@@ -199,11 +199,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_183819) do
     t.string "status", null: false
     t.string "idempotency_key"
     t.bigint "stripe_id"
+    t.string "stripe_receipt_url"
     t.string "customer_email"
     t.string "customer_name"
-    t.integer "amount_cents"
-    t.string "currency"
-    t.string "receipt_url"
+    t.integer "amount_cents", null: false
+    t.string "currency", null: false
     t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
