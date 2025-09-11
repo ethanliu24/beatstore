@@ -13,7 +13,7 @@ class OrderItem < ApplicationRecord
   validates :product_type, inclusion: { in: ->() { valid_product_types }, message: "%{value} is not a valid entity type" }
 
   before_create :prevent_create_if_order_is_not_pending
-  before_update :prevent_update_unless_attaching_files
+  before_update :prevent_update_unless_attaching_files_or_toggle_immutability
   before_destroy :prevent_destroy
 
   def immutable?
@@ -29,7 +29,7 @@ class OrderItem < ApplicationRecord
     end
   end
 
-  def prevent_update_unless_attaching_files
+  def prevent_update_unless_attaching_files_or_toggle_immutability
     if is_immutable_was == true
       raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable"
     end

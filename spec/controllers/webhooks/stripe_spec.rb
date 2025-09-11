@@ -19,7 +19,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       product_type: Track.name,
       product_snapshot: Snapshots::TakeTrackSnapshotService.new(track:).call,
       license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license:).call,
-      is_immutable: true
+      is_immutable: false
     )
 
     allow(controller).to receive(:find_order) do
@@ -58,6 +58,8 @@ RSpec.describe Webhooks::StripeController, type: :controller do
     it "should attach files to order item, set it to immutable and set order status to completed" do
       event = build_event(type: "checkout.session.completed")
       stub_event(event)
+
+      expect(order.order_items.first.is_immutable).to be(false)
 
       post :payments
 
