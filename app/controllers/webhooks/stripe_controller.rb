@@ -24,8 +24,8 @@ module Webhooks
         # TODO associate transaction object with order
 
         # Maybe should duplicate on session create and purge if order failed
-        begin
-          @order.order_items.each do |item|
+        @order.order_items.each do |item|
+          begin
             case item.product_type
             when Track.name
               track = Track.find(item.product_snapshot["id"])
@@ -35,9 +35,9 @@ module Webhooks
             end
 
             item.update!(is_immutable: true)
+          rescue => _e
+            # TODO log any errors
           end
-        rescue => _e
-          # TODO log any errors
         end
 
         @order.user.cart.clear
