@@ -65,6 +65,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       expect(order.order_items.first.files.count).to eq(2)
       expect(order.order_items.first.files.first.blob.filename).to eq("untagged_mp3.mp3")
       expect(order.order_items.first.files.last.blob.filename).to eq("track_stems.zip")
+      expect(order.order_items.first.is_immutable).to be(true)
       expect(order.status).to eq(Order.statuses[:completed])
     end
   end

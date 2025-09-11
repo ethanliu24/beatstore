@@ -7,7 +7,6 @@ class OrderItem < ApplicationRecord
   belongs_to :order
   has_many_attached :files
 
-  validates :is_immutable, presence: true
   validates :quantity, numericality: { greater_than: 0 }
   validates :unit_price_cents, numericality: { greater_than_or_equal_to: 0 }
   validates :product_snapshot, :license_snapshot, :currency, presence: true
@@ -31,7 +30,7 @@ class OrderItem < ApplicationRecord
   end
 
   def prevent_update_unless_attaching_files
-    unless is_immutable_was == true
+    if is_immutable_was == true
       raise ActiveRecord::ReadOnlyRecord, "OrderItem is immutable"
     end
 
