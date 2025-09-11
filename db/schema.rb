@@ -121,6 +121,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_06_174232) do
   end
 
   create_table "order_items", force: :cascade do |t|
+    t.boolean "is_immutable", default: false, null: false
     t.integer "quantity", default: 1, null: false
     t.bigint "order_id", null: false
     t.integer "unit_price_cents", null: false

@@ -6,6 +6,7 @@ FactoryBot.define do
     product_type { Track.name }
     product_snapshot { { test: "test" } }
     license_snapshot { { test: "test" } }
+    is_immutable { false }
 
     association :order
   end

@@ -39,10 +39,6 @@ class Order < ApplicationRecord
   end
 
   def prevent_updates_except_status
-    unless status_was == Order.statuses[:pending]
-      raise ActiveRecord::ReadOnlyRecord, "Cannot modify order details once transaction completed or failed"
-    end
-
     if (changed - %w[status updated_at]).any?
       errors.add(:base, "Cannot modify order details other than status")
       throw(:abort)

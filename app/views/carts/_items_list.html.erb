@@ -65,13 +65,13 @@
         </p>
       <% end %>
       <%= button_to t("cart.show.summary.checkout_button"), checkout_path, method: :post,
-        class: "button w-full py-1 text-sm mt-6", data: { turbo: false } %>
+        class: "button w-full py-1 text-xs mt-6", data: { turbo: false } %>
       <%# TODO add the links when available %>
       <p class="w-full text-[0.6rem] text-secondary-txt font-light italic text-wrap text-center mt-4">
         <%= t(
           "cart.show.summary.site_aggrement_prompt_html",
           refund_policy_link: link_to("refund policy", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
-          tos_link: link_to("tos", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          tos_link: link_to("terms of service", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
           privacy_link: link_to("privacy", root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
         ) %>
       </p>

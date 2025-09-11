@@ -9,7 +9,10 @@ class CheckoutsController < ApplicationController
       line_items: line_items,
       mode: "payment",
       success_url: root_url,
-      cancel_url: root_url
+      cancel_url: root_url,
+      metadata: {
+        order_id: @order.id
+      }
     })
 
     # TODO add success and cancel page urls
@@ -44,7 +47,8 @@ class CheckoutsController < ApplicationController
         currency: item.license.currency.presence || "USD",
         product_type: item.product_type,
         product_snapshot: product_snapshot,
-        license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: item.license).call
+        license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: item.license).call,
+        is_immutable: true
       )
     end
   end

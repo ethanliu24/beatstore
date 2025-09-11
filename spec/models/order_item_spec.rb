@@ -29,7 +29,7 @@ RSpec.describe OrderItem, type: :model do
   end
 
   describe "mutability" do
-    context "order is pending" do
+    context "order item is not flagged as immutable" do
       it "should not allow any updates to the columns" do
         expect { order_item.update!(unit_price_cents: 5000) }.to raise_error(ActiveRecord::RecordNotSaved)
         expect(order_item.errors[:base]).to include("Cannot modify order item details other than attaching files")
@@ -56,13 +56,13 @@ RSpec.describe OrderItem, type: :model do
       end
     end
 
-    context "order is completed" do
-      before { order.update!(status: Order.statuses[:completed]) }
+    context "order item is flagged as immutable" do
+      before { order_item.update!(is_immutable: true) }
 
       it "should not allow column changes" do
         expect {
           order_item.update!(quantity: 2)
-        }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed")
+        }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable")
       end
 
       it "should not allow file attachment" do
@@ -72,39 +72,12 @@ RSpec.describe OrderItem, type: :model do
             filename: "tagged_mp3.mp3",
             content_type: "audio/mpeg"
           )
-        }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed")
+        }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable")
       end
 
-      it "should not allow new associations to order" do
+      it "should allow new associations to order" do
         order_item = build(:order_item, order:)
-        expect { order_item.save! }.to raise_error(ActiveRecord::RecordNotSaved)
-        expect(order_item.errors[:base]).to include("Couldn't create order item as associated order's transaction has completed or failed")
-      end
-    end
-
-    context "order has failed" do
-      before { order.update!(status: Order.statuses[:failed]) }
-
-      it "should not allow column changes" do
-        expect {
-          order_item.update!(quantity: 2)
-        }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed")
-      end
-
-      it "should not allow file attachment" do
-        expect {
-          order_item.files.attach(
-            io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
-            filename: "tagged_mp3.mp3",
-            content_type: "audio/mpeg"
-          )
-        }.to raise_error(ActiveRecord::ReadOnlyRecord, "OrderItem is immutable after order is completed or failed")
-      end
-
-      it "should not allow new associations to order" do
-        order_item = build(:order_item, order:)
-        expect { order_item.save! }.to raise_error(ActiveRecord::RecordNotSaved)
-        expect(order_item.errors[:base]).to include("Couldn't create order item as associated order's transaction has completed or failed")
+        expect(order_item.save).to be(true)
       end
     end
 
