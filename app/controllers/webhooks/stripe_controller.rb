@@ -25,15 +25,19 @@ module Webhooks
 
         # Maybe should duplicate on session create and purge if order failed
         @order.order_items.each do |item|
-          case item.product_type
-          when Track.name
-            track = Track.find(item.product_snapshot["id"])
-            duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
-            duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
-            duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
-          end
+          begin
+            case item.product_type
+            when Track.name
+              track = Track.find(item.product_snapshot["id"])
+              duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
+              duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
+              duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
+            end
 
-          item.update!(is_immutable: true)
+            item.update!(is_immutable: true)
+          rescue => _e
+            # TODO log any errors
+          end
         end
 
         @order.user.cart.clear
@@ -63,11 +67,17 @@ module Webhooks
 
     def find_order(payment_intent:)
       session = Stripe::Checkout::Session.list(payment_intent:).first
-      order_id = session.metadata["order_id"]
+      begin
+        order_id = session.metadata["order_id"]
+      rescue => _e
+        # TODO log if any errors
+      end
+
       @order = Order.find(order_id)
     end
 
     def duplicate_file(item:, file:, attach:)
+      # TODO file.blob is none iff file doesn't match what the license indicates to deliver
       if attach
         item.files.attach(
           io: StringIO.new(file.download),
