@@ -48,7 +48,7 @@ class CheckoutsController < ApplicationController
         product_type: item.product_type,
         product_snapshot: product_snapshot,
         license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: item.license).call,
-        is_immutable: true
+        is_immutable: false
       )
     end
   end
