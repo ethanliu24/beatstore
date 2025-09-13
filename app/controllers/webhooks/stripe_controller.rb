@@ -8,6 +8,10 @@ module Webhooks
     def payments
       # TODO update transaction with status for each
       case @event.type
+      when "charge.succeeded", "charge.updated"
+        payment_intent = @event.data.object.payment_intent
+        find_order(payment_intent:)
+        update_transaction(transaction: @order.payment_transaction, event: @event)
       when "payment_intent.succeeded"
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
@@ -20,8 +24,6 @@ module Webhooks
       when "checkout.session.completed"
         payment_intent = @event.data.object.payment_intent
         find_order(payment_intent:)
-
-        # TODO associate transaction object with order
 
         # Maybe should duplicate on session create and purge if order failed
         @order.order_items.each do |item|
@@ -85,6 +87,17 @@ module Webhooks
           content_type: file.blob&.content_type
           )
       end
+    end
+
+    def update_transaction(transaction:, event:)
+      transaction.update!(
+        status: Transaction.statuses[:pending],
+        idempotency_key: event.request.idempotency_key,
+        stripe_charge_id: event.data.object.id,
+        stripe_receipt_url: event.data.object.receipt_url,
+        customer_email: event.data.object.billing_details.email,
+        customer_name: event.data.object.billing_details.name
+      )
     end
   end
 end

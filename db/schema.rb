@@ -198,7 +198,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_183819) do
   create_table "transactions", force: :cascade do |t|
     t.string "status", null: false
     t.string "idempotency_key"
-    t.bigint "stripe_id"
+    t.bigint "stripe_charge_id"
     t.string "stripe_receipt_url"
     t.string "customer_email"
     t.string "customer_name"
