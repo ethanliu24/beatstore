@@ -81,8 +81,8 @@ module Webhooks
       if attach
         item.files.attach(
           io: StringIO.new(file.download),
-          filename: file.blob.filename,
-          content_type: file.blob.content_type
+          filename: file.blob&.filename,
+          content_type: file.blob&.content_type
           )
       end
     end
