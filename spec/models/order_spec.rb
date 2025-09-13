@@ -13,6 +13,7 @@ RSpec.describe Order, type: :model do
 
   describe "associations" do
     it { should belong_to(:user) }
+    it { should have_one(:transaction) }
     it { should have_many(:order_items).dependent(:restrict_with_error) }
   end
 

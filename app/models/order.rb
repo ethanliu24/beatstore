@@ -6,7 +6,7 @@ class Order < ApplicationRecord
   PUBLIC_ID_SUFFIX_LENGTH = 8
 
   belongs_to :user
-  has_one :transaction, dependent: :restrict_with_error
+  has_one :payment_transaction, class_name: "Transaction", dependent: :restrict_with_error
   has_many :order_items, dependent: :restrict_with_error
 
   enum :status, {
