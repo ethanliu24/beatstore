@@ -92,11 +92,12 @@ module Webhooks
     def update_transaction(transaction:, event:)
       transaction.update!(
         status: Transaction.statuses[:pending],
-        idempotency_key: event.request.idempotency_key,
         stripe_charge_id: event.data.object.id,
         stripe_receipt_url: event.data.object.receipt_url,
         customer_email: event.data.object.billing_details.email,
-        customer_name: event.data.object.billing_details.name
+        customer_name: event.data.object.billing_details.name,
+        amount_cents: event.data.object.amount,
+        currency: event.data.object.currency
       )
     end
   end
