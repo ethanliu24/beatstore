@@ -41,9 +41,9 @@ RSpec.describe CheckoutsController, type: :request do
       expect(order.subtotal_cents).to eq(2000)
 
       expect(order.payment_transaction).not_to be(nil)
-      expect(order.payment_transaction.status).to be(Transaction.statuses[:pending])
-      expect(order.payment_transaction.amount_cents).to be(0)
-      expect(order.payment_transaction.currency).to be("USD")
+      expect(order.payment_transaction.status).to eq(Transaction.statuses[:pending])
+      expect(order.payment_transaction.amount_cents).to eq(0)
+      expect(order.payment_transaction.currency).to eq("USD")
 
       expect(order_items.count).to eq(2)
 

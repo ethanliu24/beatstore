@@ -11,7 +11,7 @@ module Webhooks
       when "charge.succeeded", "charge.updated"
         payment_intent = @event.data.object.payment_intent
         find_order(payment_intent:)
-        update_transaction(transaction: @order.payment_transaction, event: @event)
+        update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
       when "payment_intent.succeeded"
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
@@ -21,6 +21,7 @@ module Webhooks
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
         @order.update!(status: Order.statuses[:failed])
+        @order.payment_transaction.update!(status: Transaction.statuses[:failed])
       when "checkout.session.completed"
         payment_intent = @event.data.object.payment_intent
         find_order(payment_intent:)
@@ -89,9 +90,9 @@ module Webhooks
       end
     end
 
-    def update_transaction(transaction:, event:)
+    def update_transaction(transaction:, event:, status:)
       transaction.update!(
-        status: Transaction.statuses[:pending],
+        status:,
         stripe_charge_id: event.data.object.id,
         stripe_receipt_url: event.data.object.receipt_url,
         customer_email: event.data.object.billing_details.email,
