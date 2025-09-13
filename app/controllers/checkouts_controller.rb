@@ -32,6 +32,14 @@ class CheckoutsController < ApplicationController
       currency: "USD"
     )
 
+    # The 0 is tempory, will be updated once stripe webhook comes in with total charged amount
+    Transaction.create!(
+      order: @order,
+      status: Transaction.statuses[:pending],
+      amount_cents: 0,
+      currency: "USD"
+    )
+
     @order_items = customer.cart.available_items.map do |item|
       product_snapshot = case item.product_type
       when Track.name
