@@ -25,14 +25,23 @@
               </div>
               <div class="flex flex-col justify-center items-start flex-1 w-10 truncate">
                 <div class="text-sm w-full text-left truncate"><%= product_name(item) %></div>
-                <%= product_info_ui(item) %>
+                <div class="text-[0.6rem] text-secondary-txt flex justify-start items-center gap-1">
+                  <%= item.product_type %>
+                  <%= seperator_char_ui %>
+                  <%= item.license_snapshot["title"] %>
+                </div>
               </div>
             </div>
           <% end %>
           <% accordian.with_body do %>
-            <% item.files.each do |file| %>
-              <%= file.name %>
-            <% end %>
+            <div class="flex flex-col gap-2 pb-4 pt-2">
+              <% item.files.each do |file| %>
+                <%= link_to download_product_item_path(id: item.order.id, item_id: item.id, file_id: file.id), target: "_blank", rel: "noopener", class: "flex justify-start items-center gap-2 cursor-pointer underline" do %>
+                  <div class="text-sm"><%= file.filename.to_s %></div>
+                  <%= icon "download", class: "w-4 h-4 text-accent" %>
+                <% end %>
+              <% end %>
+            </div>
           <% end %>
         <% end %>
       </div>

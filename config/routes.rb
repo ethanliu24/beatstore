@@ -73,6 +73,8 @@ Rails.application.routes.draw do
     scope "track/:id" do
       get "free", to: "free_download", as: "download_track_free"
     end
+
+    get "order/:id/item/:item_id/files/:file_id", to: "product_item", as: "download_product_item"
   end
 
   scope :location, controller: :locations do

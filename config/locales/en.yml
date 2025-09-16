@@ -268,7 +268,7 @@ en:
     index:
       page_title: "Purchases"
       title: "Purchases"
-      subtitle: "See your purchase history"
+      subtitle: "See your purchase history and download what you bought"
       no_purchases: "You haven't purchased anything yet"
 
   modal:
