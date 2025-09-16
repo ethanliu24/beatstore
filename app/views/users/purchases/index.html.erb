@@ -1,1 +1,20 @@
-hi
+<% content_for :title, t("purchases.index.page_title") %>
+
+<%= render PageTitleComponent.new(
+  title: t("purchases.index.title"),
+  subtitle: t("purchases.index.subtitle")
+) %>
+
+<% unless @purchases.size == 0 %>
+  <div class="flex flex-col justify-center items-center w-full">
+    <% @purchases.each do |item| %>
+      <div>
+        <%= item.id %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="w-full h-full flex justify-center items-center font-light italic text-secondary-txt">
+    <%= t("purchases.index.no_purchases") %>
+  </p>
+<% end %>
