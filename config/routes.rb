@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   namespace :users do
     resource :profile, only: [ :edit, :update ]
     resources :hearts, only: [ :index ]
+    resources :purchases, only: [ :index ]
   end
 
   resources :tracks, only: [ :index, :show ] do
@@ -44,7 +45,6 @@ Rails.application.routes.draw do
   resources :cart_items, only: [ :create, :destroy ]
   resource :checkout, only: [ :create ]
   resources :orders, only: [ :index ]
-  resources :purchases, only: [ :index ]
 
   namespace :admin do
     resources :tracks, except: [ :show ]
