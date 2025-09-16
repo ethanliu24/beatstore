@@ -1,0 +1,10 @@
+<div data-controller="accordian">
+  <button class="flex justify-between items-center px-4 py-1 cursor-pointer w-full hover:bg-hover rounded"
+    data-accordian-target="summary" data-action="click->accordian#toggleExpand">
+    <p><%= summary %></p>
+    <%= icon "chevron-right", class: "w-4 h-4 accordian-expand-icon", data: { accordian_target: "expandIcon" } %>
+  </button>
+  <div class="pl-8 my-2 max-h-0 overflow-hidden transform-[max-height] duration-200 ease-out" data-accordian-target="body">
+    <%= body %>
+  </div>
+</div>

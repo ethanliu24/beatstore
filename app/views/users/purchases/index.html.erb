@@ -8,8 +8,15 @@
 <% unless @purchases.size == 0 %>
   <div class="flex flex-col justify-center items-center w-full">
     <% @purchases.each do |item| %>
-      <div>
-        <%= item.id %>
+      <div class="w-full">
+        <%= render Ui::AccordianComponent.new do |accordian| %>
+          <% accordian.with_summary do %>
+            <%= item.id %>
+          <% end %>
+          <% accordian.with_body do %>
+            <%= item.product_type %>
+          <% end %>
+        <% end %>
       </div>
     <% end %>
   </div>
