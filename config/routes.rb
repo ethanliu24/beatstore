@@ -45,6 +45,8 @@ Rails.application.routes.draw do
 
   resource :checkout, only: [ :create ]
 
+  resources :orders, only: [ :index ]
+
   namespace :admin do
     resources :tracks, except: [ :show ]
     resources :licenses, except: [ :show ] do

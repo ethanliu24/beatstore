@@ -47,6 +47,7 @@ class User < ApplicationRecord
   has_many :track_plays, class_name: "Track::Play"
   has_many :comments, dependent: :destroy
   has_many :comment_interactions, class_name: "Comment::Interaction"
+  has_many :orders
 
   class << self
     def from_omniauth(auth)

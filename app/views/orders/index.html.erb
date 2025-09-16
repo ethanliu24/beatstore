@@ -1,0 +1,38 @@
+<% content_for :title, "Explore Tracks" %>
+
+<%= render PageTitleComponent.new(
+  title: t("orders.index.title"),
+  subtitle: t("orders.index.subtitle")
+) %>
+
+<% unless @orders.count == 0 %>
+  <table class="w-full mt-4">
+    <tr>
+      <% [
+        t("orders.index.table.order_id"),
+        t("orders.index.table.date"),
+        t("orders.index.table.price"),
+        t("orders.index.table.status"),
+        ""  # this is for link to reciept, which does not have a header name
+      ].each do |header| %>
+        <th class="text-[0.6rem] font-bold text-nowrap text-secondary-txt text-left pb-2"><%= header %></th>
+      <% end %>
+    </tr>
+    <% @orders.each_with_index do |order, i| %>
+      <tr class="<%= "#{i != @orders.count - 1 ? "border-b-1 border-hover" : ""} text-xs" %>">
+        <td class="py-2"><%= order.public_id %></td>
+        <td class="py-2"><%= format_date(order.updated_at) %></td>
+        <td class="py-2"><%= order.completed? ? order.payment_transaction.amount.format : order.subtotal.format %></td>
+        <td class="py-2 <%= status_color(order.status) %>"><%= order.status %></td>
+        <td class="py-2 text-accent">
+          <% if order.completed? %>
+            <%= link_to t("orders.index.receipt"), order.payment_transaction.stripe_receipt_url,
+              target: "_blank", rel: "noopener" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p class="w-full h-full flex justify-center items-center font-light italic text-secondary-txt"><%= t("orders.index.no_orders") %></p>
+<% end %>

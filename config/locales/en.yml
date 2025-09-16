@@ -62,6 +62,7 @@ en:
     view: "View"
     preview: "Preview"
     quantity: "Quantity"
+    orders: "Orders"
 
   general:
     upload_file: "Upload File"
@@ -249,6 +250,18 @@ en:
       success: "Added item to cart!"
       fail: "Failed to add item to cart."
       has_item: "The item is already in cart."
+
+  orders:
+    index:
+      title: "Orders"
+      subtitle: "See your order history"
+      no_orders: "You haven't ordered anything yet"
+      receipt: "See receipt"
+      table:
+        order_id: "ORDER ID"
+        date: "DATE"
+        price: "PRICE"
+        status: "STATUS"
 
   modal:
     title:

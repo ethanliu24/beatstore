@@ -15,6 +15,8 @@ class Order < ApplicationRecord
     failed: "failed"
   }
 
+  monetize :subtotal_cents
+
   validates :public_id, presence: true, uniqueness: true
   validates :currency, presence: true
   validates :subtotal_cents, numericality: { greater_than_or_equal_to: 0 }, presence: true

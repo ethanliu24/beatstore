@@ -84,6 +84,14 @@
               </li>
               <li class="dropdown-item">
                 <%= render Ui::Dropdown::LinkComponent.new(
+                  url: orders_path,
+                  text: t("label.orders"),
+                  icon: "basket-check",
+                  icon_size: 4
+                ) %>
+              </li>
+              <li class="dropdown-item">
+                <%= render Ui::Dropdown::LinkComponent.new(
                   url: cart_path,
                   text: t("label.cart"),
                   icon: "shopping-bag",
