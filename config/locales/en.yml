@@ -250,6 +250,18 @@ en:
       fail: "Failed to add item to cart."
       has_item: "The item is already in cart."
 
+  orders:
+    index:
+      title: "Orders"
+      subtitle: "See your order history"
+      no_orders: "You haven't ordered anything yet"
+      receipt: "See receipt"
+      table:
+        order_id: "ORDER ID"
+        date: "DATE"
+        price: "PRICE"
+        status: "STATUS"
+
   modal:
     title:
       preview_contract: "Preview Contract"

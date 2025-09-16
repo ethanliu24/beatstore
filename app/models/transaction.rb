@@ -9,5 +9,7 @@ class Transaction < ApplicationRecord
     failed: "failed"
   }
 
+  monetize :amount_cents
+
   validates :status, :amount_cents, :currency, presence: true
 end
