@@ -19,7 +19,7 @@ class DownloadsController < ApplicationController
     order_item = order.order_items.find(params[:item_id])
     file = order_item.files.find(params[:file_id])
 
-    if order_item.order.status != Order.statuses[:completed]
+    unless order.status == Order.statuses[:completed]
       redirect_back fallback_location: root_path
       return
     end
