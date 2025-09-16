@@ -62,6 +62,7 @@ en:
     view: "View"
     preview: "Preview"
     quantity: "Quantity"
+    orders: "Orders"
 
   general:
     upload_file: "Upload File"
