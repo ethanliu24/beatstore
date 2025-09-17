@@ -23,7 +23,7 @@
         <td class="py-2"><%= order.public_id %></td>
         <td class="py-2"><%= format_date(order.updated_at) %></td>
         <td class="py-2"><%= order.completed? ? order.payment_transaction.amount.format : order.subtotal.format %></td>
-        <td class="py-2 <%= status_color(order.status) %>"><%= order.status %></td>
+        <td class="py-2 <%= product_status_color(order.status) %>"><%= order.status %></td>
         <td class="py-2 text-accent">
           <% if order.completed? %>
             <%= link_to t("orders.index.receipt"), order.payment_transaction.stripe_receipt_url,
@@ -34,5 +34,7 @@
     <% end %>
   </table>
 <% else %>
-  <p class="w-full h-full flex justify-center items-center font-light italic text-secondary-txt"><%= t("orders.index.no_orders") %></p>
+  <p class="w-full h-full flex justify-center items-center font-light italic text-secondary-txt">
+    <%= t("orders.index.no_orders") %>
+  </p>
 <% end %>

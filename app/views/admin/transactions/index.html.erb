@@ -1,1 +1,35 @@
-HI
+<% content_for :title, t("admin.license.index.title") %>
+
+<%= render PageTitleComponent.new(
+  title: t("admin.transaction.index.page_title"),
+  subtitle: t("admin.transaction.index.page_subtitle")
+) %>
+
+<% unless @transactions.count == 0 %>
+  <table class="w-full mt-8">
+    <tr>
+      <% [
+        t("admin.transaction.index.table.amount"),
+        t("admin.transaction.index.table.status"),
+        t("admin.transaction.index.table.date"),
+        t("admin.transaction.index.table.customer_name"),
+        t("admin.transaction.index.table.customer_email")
+      ].each do |header| %>
+        <th class="text-[0.6rem] font-bold text-nowrap text-secondary-txt text-left pb-2 pr-1"><%= header %></th>
+      <% end %>
+    </tr>
+    <% @transactions.each_with_index do |transaction, i| %>
+      <tr class="<%= "#{i != @transactions.count - 1 ? "border-b-1 border-hover" : ""} text-xs max-sm:text-[0.6rem]" %>">
+        <td class="py-2"><%= transaction.amount.format %></td>
+        <td class="py-2 pr-1 <%= product_status_color(transaction.status) %>"><%= transaction.status %></td>
+        <td class="py-2 pr-1"><%= transaction.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td class="py-2 pr-1"><%= transaction.customer_name.presence || "---" %></td>
+        <td class="py-2 pr-1"><%= transaction.customer_email.presence || "---" %></td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p class="w-full h-full flex justify-center items-center font-light italic text-secondary-txt">
+    <%= t("admin.transaction.index.no_transactions") %>
+  </p>
+<% end %>

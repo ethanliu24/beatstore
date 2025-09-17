@@ -166,6 +166,18 @@ en:
         success: "License was successfully updated."
       destroy:
         success: "License was successfully deleted."
+    transaction:
+      index:
+        title: "Transactions"
+        page_title: "Transactions"
+        page_subtitle: "See all transactions here"
+        no_transactions: "There are no transactions yet"
+        table:
+          amount: "AMOUNT"
+          status: "STATUS"
+          date: "DATE"
+          customer_email: "CUSTOMER EMAIL"
+          customer_name: "CUSTOMER NAME"
 
   profile:
     manage_your_profile_here: "Manage your profile here"
