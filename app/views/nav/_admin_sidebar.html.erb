@@ -1,20 +1,18 @@
 <nav class="h-full w-52 min-w-52 bg-background border-r-2 border-r-secondary-bg px-4 py-4 rounded">
   <ul class="flex flex-col">
-    <li class="admin-sidebar-item">
-      <%= render Ui::Dropdown::LinkComponent.new(
-        url: admin_tracks_path,
-        text: t("label.tracks"),
-        icon: "music",
-        icon_size: 4
-      ) %>
-    </li>
-    <li class="admin-sidebar-item">
-      <%= render Ui::Dropdown::LinkComponent.new(
-        url: admin_licenses_path,
-        text: t("label.licenses"),
-        icon: "file",
-        icon_size: 4
-      ) %>
-    </li>
+    <% [
+      { url: admin_tracks_path, text: t("label.tracks"), icon: "music" },
+      { url: admin_licenses_path, text: t("label.licenses"), icon: "file" },
+    ].each do |data| %>
+      <li class="admin-sidebar-item">
+        <%= render Ui::Dropdown::LinkComponent.new(
+          url: data[:url],
+          text: data[:text],
+          icon: data[:icon],
+          text_classes: "max-sm:hidden",
+          icon_size: 4
+        ) %>
+      </li>
+    <% end %>
   </ul>
 </nav>
