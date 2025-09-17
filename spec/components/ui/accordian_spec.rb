@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Ui::AccordianComponent, type: :component do
+RSpec.describe Ui::AccordionComponent, type: :component do
   it "renders the summary and body slots" do
     render_inline(described_class.new) do |c|
       c.with_summary { "Summary" }
@@ -11,9 +11,9 @@ RSpec.describe Ui::AccordianComponent, type: :component do
 
     expect(page).to have_content("Summary")
     expect(page).to have_content("Body")
-    expect(page).to have_css("button[data-accordian-target='summary']")
-    expect(page).to have_css("div[data-accordian-target='body']")
-    expect(page).to have_css("svg[data-accordian-target='expandIcon']")
+    expect(page).to have_css("button[data-accordion-target='summary']")
+    expect(page).to have_css("div[data-accordion-target='body']")
+    expect(page).to have_css("svg[data-accordion-target='expandIcon']")
   end
 
   it "applies classes to button" do

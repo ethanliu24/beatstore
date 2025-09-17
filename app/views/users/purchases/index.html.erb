@@ -9,8 +9,8 @@
   <div class="flex flex-col justify-center items-center w-full mt-4">
     <% @purchases.each do |item| %>
       <div class="w-full">
-        <%= render Ui::AccordianComponent.new do |accordian| %>
-          <% accordian.with_summary do %>
+        <%= render Ui::AccordionComponent.new do |accordion| %>
+          <% accordion.with_summary do %>
             <div class="flex justify-start items-center w-full gap-4">
               <div class="rounded bg-secondary-bg w-8 h-8 min-w-8 min-h-8">
                 <%# TODO should duplicate the preview photo as well %>
@@ -33,7 +33,7 @@
               </div>
             </div>
           <% end %>
-          <% accordian.with_body do %>
+          <% accordion.with_body do %>
             <div class="flex flex-col gap-2 pb-4 pt-2">
               <% item.files.each do |file| %>
                 <%= link_to download_product_item_path(id: item.order.id, item_id: item.id, file_id: file.id), target: "_blank", rel: "noopener", class: "flex justify-start items-center gap-2 cursor-pointer underline" do %>
