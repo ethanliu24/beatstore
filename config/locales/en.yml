@@ -278,3 +278,9 @@ en:
       title: "Purchase or add track to cart"
       action_description: "Select the license you want to purchase or add to cart. You can review the details before you purchase."
       add_to_cart: "Add to cart"
+
+  sidebar:
+    admin:
+      tracks: "Tracks"
+      licenses: "Licenses"
+      transactions: "Transactions"

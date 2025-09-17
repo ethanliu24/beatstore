@@ -3,7 +3,7 @@
     <li class="admin-sidebar-item">
       <%= render Ui::Dropdown::LinkComponent.new(
         url: admin_tracks_path,
-        text: t("label.tracks"),
+        text: t("sidebar.admin.tracks"),
         icon: "music",
         icon_size: 4
       ) %>
@@ -11,8 +11,16 @@
     <li class="admin-sidebar-item">
       <%= render Ui::Dropdown::LinkComponent.new(
         url: admin_licenses_path,
-        text: t("label.licenses"),
+        text: t("sidebar.admin.licenses"),
         icon: "file",
+        icon_size: 4
+      ) %>
+    </li>
+    <li class="admin-sidebar-item">
+      <%= render Ui::Dropdown::LinkComponent.new(
+        url: admin_transactions_path,
+        text: t("sidebar.admin.transactions"),
+        icon: "currency-dollar",
         icon_size: 4
       ) %>
     </li>
