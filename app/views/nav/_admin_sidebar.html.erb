@@ -1,28 +1,19 @@
-<nav class="h-full w-52 min-w-52 bg-background border-r-2 border-r-secondary-bg px-4 py-4 rounded">
-  <ul class="flex flex-col">
-    <li class="admin-sidebar-item">
-      <%= render Ui::Dropdown::LinkComponent.new(
-        url: admin_tracks_path,
-        text: t("sidebar.admin.tracks"),
-        icon: "music",
-        icon_size: 4
-      ) %>
-    </li>
-    <li class="admin-sidebar-item">
-      <%= render Ui::Dropdown::LinkComponent.new(
-        url: admin_licenses_path,
-        text: t("sidebar.admin.licenses"),
-        icon: "file",
-        icon_size: 4
-      ) %>
-    </li>
-    <li class="admin-sidebar-item">
-      <%= render Ui::Dropdown::LinkComponent.new(
-        url: admin_transactions_path,
-        text: t("sidebar.admin.transactions"),
-        icon: "currency-dollar",
-        icon_size: 4
-      ) %>
-    </li>
+<nav class="h-full w-52 min-w-52 max-sm:w-fit max-sm:min-w-fit bg-background border-r-2 border-r-secondary-bg
+  px-4 py-4 max-sm:px-2 max-sm:py-2 rounded">
+  <ul class="flex flex-col max-sm:gap-1">
+    <% [
+      { url: admin_tracks_path, text: t("label.tracks"), icon: "music" },
+      { url: admin_licenses_path, text: t("label.licenses"), icon: "file" },
+    ].each do |data| %>
+      <li class="admin-sidebar-item">
+        <%= render Ui::Dropdown::LinkComponent.new(
+          url: data[:url],
+          text: data[:text],
+          icon: data[:icon],
+          text_classes: "max-sm:hidden",
+          icon_size: 4
+        ) %>
+      </li>
+    <% end %>
   </ul>
 </nav>
