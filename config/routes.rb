@@ -54,7 +54,7 @@ Rails.application.routes.draw do
         delete :remove_from_all
       end
     end
-    resources :transactions, only: [ :index ]
+    resources :transactions, only: [ :index, :show ]
   end
 
   namespace :api do
