@@ -1,5 +1,6 @@
-<nav class="h-full w-52 min-w-52 bg-background border-r-2 border-r-secondary-bg px-4 py-4 rounded">
-  <ul class="flex flex-col">
+<nav class="h-full w-52 min-w-52 max-sm:w-fit max-sm:min-w-fit bg-background border-r-2 border-r-secondary-bg
+  px-4 py-4 max-sm:px-2 max-sm:py-2 rounded">
+  <ul class="flex flex-col max-sm:gap-1">
     <% [
       { url: admin_tracks_path, text: t("label.tracks"), icon: "music" },
       { url: admin_licenses_path, text: t("label.licenses"), icon: "file" },
