@@ -1,0 +1,54 @@
+<% content_for :title, t("purchases.index.page_title") %>
+
+<%= render PageTitleComponent.new(
+  title: t("purchases.index.title"),
+  subtitle: t("purchases.index.subtitle")
+) %>
+
+<% unless @purchases.size == 0 %>
+  <div class="flex flex-col justify-center items-center w-full mt-4">
+    <% @purchases.each do |item| %>
+      <div class="w-full">
+        <%= render Ui::AccordionComponent.new do |accordion| %>
+          <% accordion.with_summary do %>
+            <div class="flex justify-start items-center w-full gap-4">
+              <div class="rounded bg-secondary-bg w-8 h-8 min-w-8 min-h-8">
+                <%# TODO should duplicate the preview photo as well %>
+                <% preview_photo = Track.find_by(id: item.product_snapshot["id"])&.cover_photo %>
+                <% if preview_photo.nil? %>
+                  <div class="flex justify-center items-center w-full h-full">
+                    <%= icon "photo-scan" %>
+                  </div>
+                <% else %>
+                  <%= image_tag url_for(preview_photo), class: "cover-photo object-cover rounded w-full h-full" %>
+                <% end %>
+              </div>
+              <div class="flex flex-col justify-center items-start flex-1 w-10 truncate">
+                <div class="text-sm w-full text-left truncate"><%= product_name(item) %></div>
+                <div class="text-[0.6rem] text-secondary-txt flex justify-start items-center gap-1">
+                  <%= item.product_type %>
+                  <%= seperator_char_ui %>
+                  <%= item.license_snapshot["title"] %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% accordion.with_body do %>
+            <div class="flex flex-col gap-2 pb-4 pt-2">
+              <% item.files.each do |file| %>
+                <%= link_to download_product_item_path(id: item.order.id, item_id: item.id, file_id: file.id), target: "_blank", rel: "noopener", class: "flex justify-start items-center gap-2 cursor-pointer underline" do %>
+                  <div class="text-sm"><%= file.filename.to_s %></div>
+                  <%= icon "download", class: "w-4 h-4 text-accent" %>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="w-full h-full flex justify-center items-center font-light italic text-secondary-txt">
+    <%= t("purchases.index.no_purchases") %>
+  </p>
+<% end %>

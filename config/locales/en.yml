@@ -253,6 +253,7 @@ en:
 
   orders:
     index:
+      page_title: "Orders"
       title: "Orders"
       subtitle: "See your order history"
       no_orders: "You haven't ordered anything yet"
@@ -262,6 +263,13 @@ en:
         date: "DATE"
         price: "PRICE"
         status: "STATUS"
+
+  purchases:
+    index:
+      page_title: "Purchases"
+      title: "Purchases"
+      subtitle: "See your purchase history and download what you bought"
+      no_purchases: "You haven't purchased anything yet"
 
   modal:
     title:

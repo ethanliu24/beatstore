@@ -1,7 +1,7 @@
 class DownloadsController < ApplicationController
-  before_action :set_track
-
   def free_download
+    @track = Track.find(params[:id])
+
     unless file_exists?(@track.tagged_mp3)
       # TODO should log error if track not exist
       redirect_back fallback_location: root_path
@@ -14,6 +14,22 @@ class DownloadsController < ApplicationController
       disposition: "attachment"
   end
 
+  def product_item
+    order = current_or_guest_user.orders.find(params[:id])
+    order_item = order.order_items.find(params[:item_id])
+    file = order_item.files.find(params[:file_id])
+
+    unless order.status == Order.statuses[:completed]
+      redirect_back fallback_location: root_path
+      return
+    end
+
+    send_data file.download,
+      filename: set_file_name(file),
+      type: file.blob.content_type,
+      disposition: "attachment"
+  end
+
   private
 
   def set_file_name(file)
@@ -22,9 +38,5 @@ class DownloadsController < ApplicationController
 
   def file_exists?(file)
     file.attached?
-  end
-
-  def set_track
-    @track = Track.find(params[:id])
   end
 end

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   namespace :users do
     resource :profile, only: [ :edit, :update ]
     resources :hearts, only: [ :index ]
+    resources :purchases, only: [ :index ]
   end
 
   resources :tracks, only: [ :index, :show ] do
@@ -42,9 +43,7 @@ Rails.application.routes.draw do
 
   resource :cart, only: [ :show ]
   resources :cart_items, only: [ :create, :destroy ]
-
   resource :checkout, only: [ :create ]
-
   resources :orders, only: [ :index ]
 
   namespace :admin do
@@ -74,6 +73,8 @@ Rails.application.routes.draw do
     scope "track/:id" do
       get "free", to: "free_download", as: "download_track_free"
     end
+
+    get "order/:id/item/:item_id/files/:file_id", to: "product_item", as: "download_product_item"
   end
 
   scope :location, controller: :locations do
