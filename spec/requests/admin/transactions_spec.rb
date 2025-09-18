@@ -4,7 +4,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin::Transactions", type: :request, admin: true do
-  let!(:customer) { create(:user) }
+  let!(:customer) { create(:user, email: "admin.transactions.customer@email.com", username: "admin.transactions.customer") }
 
   describe "#index" do
     let!(:order1) { create(:order, user: customer) }
@@ -22,15 +22,6 @@ RSpec.describe "Admin::Transactions", type: :request, admin: true do
     it "lists transactions in descending order of created_at" do
       get admin_transactions_url
       expect(assigns(:transactions)).to eq([ transaction3, transaction2, transaction1 ])
-    end
-
-    it "should not let non admins visit" do
-      [ :user, :guest ].each do |user_obj|
-        user = create(user_obj, email: "#{user_obj}show@email.com", username: "#{user_obj}index")
-        sign_in user, scope: :user
-        get admin_transactions_url
-        expect(response).to redirect_to(root_path)
-      end
     end
   end
 
@@ -51,14 +42,20 @@ RSpec.describe "Admin::Transactions", type: :request, admin: true do
       get admin_transaction_url(id: Transaction.count + 1)
       expect(response).to have_http_status(:not_found)
     end
+  end
 
-    it "should not let non admins visit" do
-      [ :user, :guest ].each do |user_obj|
-        user = create(user_obj, email: "#{user_obj}show@email.com", username: "#{user_obj}show")
-        sign_in user, scope: :user
-        get admin_transaction_url(transaction)
-        expect(response).to redirect_to(root_path)
-      end
+  describe "admin paths authorization test", authorization_test: true do
+    let!(:order) { create(:order, user: customer) }
+    let!(:transaction) { create(:payment_transaction, order:, order: order) }
+
+    it "only allows admin at #index" do
+      get admin_transactions_url
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "only allows admin at #show" do
+      get admin_transaction_url(transaction)
+      expect(response).to redirect_to(root_path)
     end
   end
 end
