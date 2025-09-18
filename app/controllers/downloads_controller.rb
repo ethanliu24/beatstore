@@ -16,7 +16,7 @@ class DownloadsController < ApplicationController
 
   def product_item
     order = if current_or_guest_user.admin?
-      Orders.find(params[:id])
+      Order.find(params[:id])
     else
       current_or_guest_user.orders.find(params[:id])
     end

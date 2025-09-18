@@ -72,7 +72,7 @@ RSpec.describe DownloadsController, type: :request do
     end
 
     it "should not return the file if user did not purchase the item" do
-      other_user = create(:admin)
+      other_user = create(:user)
       sign_in other_user, scope: :user
 
       get download_product_item_url(id: order.id, item_id: order_item.id, file_id: order_item.files.first.id)
@@ -96,6 +96,18 @@ RSpec.describe DownloadsController, type: :request do
       get download_product_item_url(id: order.id, item_id: order_item.id, file_id: order_item.files.first.id)
 
       expect(response).to redirect_to(root_url)
+    end
+
+    it "should let admins download any product" do
+      admin = create(:admin)
+      sign_in admin, scope: :user
+
+      get download_product_item_url(id: order.id, item_id: order_item.id, file_id: order_item.files.first.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
+      expect(response.content_type).to eq("audio/mpeg")
     end
   end
 end
