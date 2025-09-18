@@ -21,7 +21,7 @@ RSpec.describe "Admin::Transactions", type: :request, admin: true do
 
     it "lists transactions in descending order of created_at" do
       get admin_transactions_url
-      expect(assigns(:transactions)).to eq([transaction3, transaction2, transaction1])
+      expect(assigns(:transactions)).to eq([ transaction3, transaction2, transaction1 ])
     end
 
     it "should not let non admins visit" do
