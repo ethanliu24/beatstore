@@ -328,7 +328,7 @@ en:
 
   checkout:
     common:
-      histories_html: "See your %{order_history_link} and %{purchase_link} history"
+      histories_html: "See your %{order_history_link} and %{purchase_link}"
       order_history: "order history"
       purchase_history: "purchase history"
     success:
