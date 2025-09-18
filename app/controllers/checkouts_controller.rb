@@ -8,17 +8,19 @@ class CheckoutsController < ApplicationController
     session = Stripe::Checkout::Session.create({
       line_items: line_items,
       mode: "payment",
-      success_url: root_url,
-      cancel_url: root_url,
+      success_url: success_checkout_url,
+      cancel_url: cancel_checkout_url,
       metadata: {
         order_id: @order.id
       }
     })
 
-    # TODO add success and cancel page urls
-
     redirect_to session.url, status: :see_other, allow_other_host: true
   end
+
+  def success; end
+
+  def cancel; end
 
   private
 
