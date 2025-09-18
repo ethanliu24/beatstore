@@ -336,3 +336,8 @@ en:
       message_1: "Payment Successful!"
       message_2: "Your payment has been completed. You will recieve an email shortly with your purchased items."
       continue: "Back to homepage"
+    cancel:
+      title: "Checkout failed"
+      message_1: "Payment Failed"
+      message_2: "Your payment failed or has been canceled."
+      continue: "Back to homepage"
