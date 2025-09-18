@@ -23,6 +23,15 @@ class OrderItem < ApplicationRecord
     is_immutable
   end
 
+  def product_name
+    case product_type
+    when Track.name
+      product_snapshot["title"]
+    else
+      ""
+    end
+  end
+
   private
 
   def prevent_create_if_order_is_not_pending

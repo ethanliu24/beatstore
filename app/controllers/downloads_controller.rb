@@ -35,7 +35,30 @@ class DownloadsController < ApplicationController
   end
 
   def order_item_contract
-    
+    order_item = if current_user && current_user.admin?
+      OrderItem.find(params[:id])
+    else
+      current_or_guest_user.orders.order_items.find(params[:id])
+    end
+
+    license = License.new(**order_item.license_snapshot)
+    contract_markdown = if order_item.product_type == Track.name
+      track = Track.new(**order_item.product_snapshot)
+      customer_full_name = order_item.order.payment_transaction.customer_name
+      Contracts::RenderTracksContractService.new(license:, track:, customer_full_name:).call
+    else
+      ""
+    end
+
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    contract_html = markdown.render(contract_markdown)
+    pdf = Prawn::Document.new(page_size: "A4")
+    PrawnHtml.append_html(pdf, contract_html)
+
+    send_data pdf.render,
+      filename: "#{order_item.product_name} #{license.title}.pdf",
+      type: "application/pdf",
+      disposition: "attachment"
   end
 
   private
