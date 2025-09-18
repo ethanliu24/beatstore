@@ -78,7 +78,7 @@ class ModalsController < ApplicationController
       ""
     end
 
-    render_modal(partial: "modals/preview_contract", locals: { content: })
+    render_modal(partial: "modals/preview_contract", locals: { content:, order_item_id: params[:order_item_id] })
   end
 
   def track_purchase

@@ -34,6 +34,10 @@ class DownloadsController < ApplicationController
       disposition: "attachment"
   end
 
+  def order_item_contract
+    
+  end
+
   private
 
   def set_file_name(file)
