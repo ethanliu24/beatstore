@@ -325,3 +325,14 @@ en:
       tracks: "Tracks"
       licenses: "Licenses"
       transactions: "Transactions"
+
+  checkout:
+    common:
+      histories_html: "See your %{order_history_link} and %{purchase_link} history"
+      order_history: "order history"
+      purchase_history: "purchase history"
+    success:
+      title: "Checkout success"
+      message_1: "Payment Successful!"
+      message_2: "Your payment has been completed. You will recieve an email shortly with your purchased items."
+      continue: "Back to homepage"
