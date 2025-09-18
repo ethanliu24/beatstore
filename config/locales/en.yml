@@ -206,6 +206,7 @@ en:
           id: "ID: "
           quantity: "Quantity: "
           unit_price: "Unit Price: "
+          see_contract: "See contract"
           files: "Files: "
 
   profile:
