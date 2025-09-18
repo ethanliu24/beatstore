@@ -26,7 +26,7 @@
         <td class="py-2 <%= product_status_color(order.status) %>"><%= order.status %></td>
         <td class="py-2 text-accent">
           <% if order.completed? %>
-            <%= link_to t("orders.index.receipt"), order.payment_transaction.stripe_receipt_url,
+            <%= link_to t("orders.index.receipt"), order.payment_transaction.stripe_receipt_url.to_s,
               target: "_blank", rel: "noopener" %>
           <% end %>
         </td>
