@@ -216,7 +216,7 @@
           data-controller="contracts-reset"
           data-contracts-reset-url-value="<%= api_templates_contracts_path(contract_type:) %>">
           <div class="text-xs font-light">
-            <%= link_to preview_contract_modal_path(license_id: license.id, entity_type: Track.name, track_id: nil, contract_type: "free"),
+            <%= link_to preview_contract_modal_path(license_id: license.id.presence || License.count + 1, entity_type: Track.name, track_id: nil, contract_type:),
               data: { turbo_stream: true }, class: "text-accent hover:text-accent-dim" do %>
               <%= t("contracts.form.preview_contract") %>
             <% end %>

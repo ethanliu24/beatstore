@@ -94,5 +94,80 @@ RSpec.describe ModalsController, type: :request do
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_preview_contract")
     end
+
+    describe "#preview_contract" do
+      let!(:track) { create(:track) }
+      let!(:license) { create(
+        :license,
+        contract_details: {
+          "document_template" => Rails.configuration.templates[:contracts][License.contract_types[:free]]
+        }
+      )}
+
+      context "render with license_id" do
+        it "should render the default template if license_id not available" do
+          get preview_contract_modal_url(
+            license_id: License.count + 1,
+            entity_type: Track.name,
+            contract_type: License.contract_types[:free],
+            format: :turbo_stream
+          )
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include("{{ LICENSE_NAME }}")
+        end
+
+        it "should render the document contract defined in license if license_id is valid" do
+          license.update!(contract_details: { document_template: "123" })
+
+          get preview_contract_modal_url(license_id: license.id, track_id: track.id, format: :turbo_stream)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include("123")
+        end
+      end
+
+      context "render with order_item_id" do
+        let!(:user) { create(:user) }
+        let!(:order) { create(:order, user:) }
+        let!(:transaction) { create(:payment_transaction, order:, customer_name: "LeBron James") }
+        let!(:order_item) {
+          create(
+            :order_item,
+            order:,
+            product_snapshot: Snapshots::TakeTrackSnapshotService.new(track:).call,
+            license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license:).call
+          )
+        }
+
+        before do
+          sign_in user, scope: :user
+        end
+
+        it "should allow the user that purchased the product view contract" do
+          get preview_contract_modal_url(order_item_id: order_item.id, format: :turbo_stream)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include("<strong>LeBron James</strong>")
+        end
+
+        it "should let admin see what the user purchased" do
+          admin = create(:admin)
+          sign_in admin, scope: :user
+          get preview_contract_modal_url(order_item_id: order_item.id, format: :turbo_stream)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include("<strong>LeBron James</strong>")
+        end
+
+        it "should not let unrelated person see the contract" do
+          other_user = create(:guest)
+          sign_in other_user, scope: :user
+          get preview_contract_modal_url(order_item_id: order_item.id, format: :turbo_stream)
+
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
   end
 end
