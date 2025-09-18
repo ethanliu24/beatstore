@@ -13,14 +13,12 @@
           <% accordion.with_summary do %>
             <div class="flex justify-start items-center w-full gap-4">
               <div class="rounded bg-secondary-bg w-8 h-8 min-w-8 min-h-8">
-                <%# TODO should duplicate the preview photo as well %>
-                <% preview_photo = Track.find_by(id: item.product_snapshot["id"])&.cover_photo %>
-                <% if preview_photo.nil? %>
+                <% unless item.preview_image.attached? %>
                   <div class="flex justify-center items-center w-full h-full">
                     <%= icon "photo-scan" %>
                   </div>
                 <% else %>
-                  <%= image_tag url_for(preview_photo), class: "cover-photo object-cover rounded w-full h-full" %>
+                  <%= image_tag url_for(item.preview_image), class: "cover-photo object-cover rounded w-full h-full" %>
                 <% end %>
               </div>
               <div class="flex flex-col justify-center items-start flex-1 w-10 truncate">

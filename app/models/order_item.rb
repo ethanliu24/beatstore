@@ -7,6 +7,7 @@ class OrderItem < ApplicationRecord
   monetize :unit_price_cents
 
   belongs_to :order
+  has_one_attached :preview_image
   has_many_attached :files
 
   validates :quantity, numericality: { greater_than: 0 }

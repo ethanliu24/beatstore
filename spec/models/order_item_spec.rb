@@ -7,6 +7,7 @@ RSpec.describe OrderItem, type: :model do
   let!(:order_item) { create(:order_item, order:) }
 
   it { should belong_to(:order) }
+  it { should have_one_attached(:preview_image) }
   it { should have_many_attached(:files) }
   it { should validate_presence_of(:product_snapshot) }
   it { should validate_presence_of(:license_snapshot) }
