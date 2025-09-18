@@ -35,6 +35,11 @@ module Webhooks
               duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
               duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
               duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
+              item.preview_image.attach(
+                io: StringIO.new(track.cover_photo.download),
+                filename: "oi_preview_#{track.cover_photo.filename}",
+                content_type: track.cover_photo.blob&.content_type
+              )
             end
 
             item.update!(is_immutable: true)
