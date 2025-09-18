@@ -27,15 +27,23 @@
                   <%= item.product_type %>
                   <%= seperator_char_ui %>
                   <%= item.license_snapshot["title"] %>
+                  <%= seperator_char_ui %>
+                  <%= format_date(item.created_at) %>
                 </div>
               </div>
             </div>
           <% end %>
           <% accordion.with_body do %>
-            <div class="flex flex-col gap-2 pb-4 pt-2">
+            <div class="flex flex-col gap-2 pb-4 pt-2 text-sm">
+              <%= link_to preview_contract_modal_path(order_item_id: item.id), data: { turbo_stream: true },
+                class: "flex justify-start items-center gap-2 cursor-pointer italic hover:text-secondary-txt" do %>
+                <div><%= t("purchases.index.see_contract") %></div>
+                <%= icon "file", class: "w-4 h-4 text-accent" %>
+              <% end %>
               <% item.files.each do |file| %>
-                <%= link_to download_product_item_path(id: item.order.id, item_id: item.id, file_id: file.id), target: "_blank", rel: "noopener", class: "flex justify-start items-center gap-2 cursor-pointer underline" do %>
-                  <div class="text-sm"><%= file.filename.to_s %></div>
+                <%= link_to download_product_item_path(id: item.order.id, item_id: item.id, file_id: file.id),
+                  target: "_blank", rel: "noopener", class: "flex justify-start items-center gap-2 cursor-pointer underline" do %>
+                  <div><%= file.filename.to_s %></div>
                   <%= icon "download", class: "w-4 h-4 text-accent" %>
                 <% end %>
               <% end %>

@@ -109,7 +109,11 @@
               <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.unit_price")}" %></p>
               <p><%= "#{item.unit_price.format}" %></p>
             </div>
-            <%# TODO add contract view + download %>
+            <%= link_to preview_contract_modal_path(order_item_id: item.id), data: { turbo_stream: true },
+              class: "flex justify-start items-center gap-2 cursor-pointer" do %>
+              <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.see_contract")}" %></p>
+              <%= icon "file", class: "w-4 h-4 text-accent" %>
+            <% end %>
             <ul>
               <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.files")}" %></p>
               <% item.files.each do |file| %>

@@ -7,5 +7,15 @@
     </div>
   <% end %>
 
-  <%= modal.with_footer(cancel_label: t(t("label.close"))) %>
+  <%= modal.with_footer(cancel_label: t(t("label.close"))) do |footer| %>
+    <% if order_item_id.present? %>
+      <% footer.with_primary_action do %>
+        <%= link_to download_order_item_contract_path(id: order_item_id),
+          target: "_blank", rel: "noopener",
+          class: "button px-2 py-1" do %>
+          <%= t("modal.preview_contract.download_contract") %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

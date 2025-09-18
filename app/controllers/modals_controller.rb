@@ -39,23 +39,46 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/track_more_info", locals: { track: })
   end
 
-  # If license doesn't exist in DB, render default template, which requires contract_type in params.
-  # Else will decide which service to call to render the contract, which is specified by entity_type in params.
-  # It should be the class name of the entity that's associated with the license.
+  # There are two cases, either in params license_id is passed (with other neccessary params) or order_item_id.
+  # This is so that we render the right thing on different situation. Definitely a cleaner way to do this,
+  # but I cannot give a fuck at the moment.
   def preview_contract
-    license = License.find_by(id: params[:license_id])
-    entity_type = params[:entity_type]
+    content = if params[:license_id].present?
+      license = License.find_by(id: params[:license_id])
+      entity_type = params[:entity_type]
 
-    content = if license.nil?
-      Rails.configuration.templates[:contracts][params[:contract_type]]
-    elsif entity_type = Track.name
-      track = Track.find_by(id: params[:track_id])
-      Contracts::RenderTracksContractService.new(license:, track:).call
+      # If license doesn't exist in DB, render default template, which requires contract_type in params.
+      # Else will decide which service to call to render the contract, which is specified by entity_type in params.
+      # It should be the class name of the entity that's associated with the license.
+      if license.nil?
+        Rails.configuration.templates[:contracts][params[:contract_type]]
+      elsif entity_type = Track.name
+        track = Track.find_by(id: params[:track_id])
+        Contracts::RenderTracksContractService.new(license:, track:).call
+      else
+        ""
+      end
+    elsif params[:order_item_id].present?
+      order_item = OrderItem.find(params[:order_item_id])
+      customer_full_name = order_item.order.payment_transaction.customer_name
+
+      if order_item.order.user != current_or_guest_user && !current_or_guest_user.admin?
+        head :not_found and return
+      end
+
+      case order_item.product_type
+      when Track.name
+        track = Track.new(**order_item.product_snapshot)
+        license = License.new(**order_item.license_snapshot)
+        Contracts::RenderTracksContractService.new(license:, track:, customer_full_name:).call
+      else
+        ""
+      end
     else
       ""
     end
 
-    render_modal(partial: "modals/preview_contract", locals: { content: })
+    render_modal(partial: "modals/preview_contract", locals: { content:, order_item_id: params[:order_item_id] })
   end
 
   def track_purchase

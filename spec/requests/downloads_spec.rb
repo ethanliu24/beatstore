@@ -110,4 +110,81 @@ RSpec.describe DownloadsController, type: :request do
       expect(response.content_type).to eq("audio/mpeg")
     end
   end
+
+  context "#order_item_contract" do
+    let!(:user) { create(:user) }
+    let!(:track) { create(:track) }
+    let!(:license) { create(:license) }
+    let!(:order) { create(:order, user:) }
+    let!(:order_item) { create(
+      :order_item,
+      order:,
+      product_snapshot: Snapshots::TakeTrackSnapshotService.new(track:).call,
+      license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license:).call
+    )}
+    let!(:transaction) { create(:payment_transaction, order:, customer_name: "ABC") }
+
+    before do
+      order.update!(status: Order.statuses[:completed])
+      order.reload
+
+      sign_in user, scope: :user
+    end
+
+    it "lets the purchaser download the contract pdf" do
+      get download_order_item_contract_path(order_item.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.content_type).to eq("application/pdf")
+    end
+
+    it "lets the admin download the contract pdf" do
+      admin = create(:admin)
+      sign_in admin, scope: :user
+
+      get download_order_item_contract_path(order_item.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.content_type).to eq("application/pdf")
+    end
+
+    it "lets admin download the contract even if order is not completed" do
+      order.update!(status: Order.statuses[:pending])
+      admin = create(:admin)
+      sign_in admin, scope: :user
+
+      get download_order_item_contract_path(order_item.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.content_type).to eq("application/pdf")
+    end
+
+    it "does not let the admin download the contract pdf" do
+      other_user = create(:guest)
+      sign_in other_user, scope: :user
+
+      get download_order_item_contract_path(order_item.id)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "does not let the contract to be downloaded if the order has failed" do
+      order.update!(status: Order.statuses[:failed])
+
+      get download_order_item_contract_path(order_item.id)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "does not let the contract to be downloaded if the order is pending" do
+      order.update!(status: Order.statuses[:pending])
+
+      get download_order_item_contract_path(order_item.id)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
 end

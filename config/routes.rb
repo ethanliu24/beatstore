@@ -79,6 +79,7 @@ Rails.application.routes.draw do
     end
 
     get "order/:id/item/:item_id/files/:file_id", to: "product_item", as: "download_product_item"
+    get "order_item/:id/contract", to: "order_item_contract", as: "download_order_item_contract"
   end
 
   scope :location, controller: :locations do
