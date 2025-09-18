@@ -43,8 +43,11 @@ Rails.application.routes.draw do
 
   resource :cart, only: [ :show ]
   resources :cart_items, only: [ :create, :destroy ]
-  resource :checkout, only: [ :create ]
   resources :orders, only: [ :index ]
+  resource :checkout, only: [ :create ] do
+    get :success
+    get :cancel
+  end
 
   namespace :admin do
     resources :tracks, except: [ :show ]

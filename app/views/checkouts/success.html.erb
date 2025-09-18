@@ -1,0 +1,15 @@
+<% content_for :title, t("checkout.success.title") %>
+
+<div class="w-full h-full flex flex-col justify-center items-center">
+  <%= icon "circle-dashed-check", class: "text-success w-10 h-10" %>
+  <h1 class="text-xl font-bold mt-1"><%= t("checkout.success.message_1") %></h1>
+  <h2 class="font-light text-sm mt-2 max-w-80 text-center"><%= t("checkout.success.message_2") %></h2>
+  <h2 class="font-light text-sm mt-1 text-secondary-txt">
+    <%= t(
+      "checkout.common.histories_html",
+      order_history_link: link_to(t("checkout.common.order_history"), orders_path, class: "underline text-accent").html_safe,
+      purchase_link: link_to(t("checkout.common.purchase_history"), users_purchases_path, class: "underline text-accent").html_safe
+    ) %>
+  </h2>
+  <%= link_to t("checkout.success.continue"), root_path, class: "button text-xs w-80 py-1 mt-6" %>
+</div>
