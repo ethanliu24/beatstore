@@ -4,6 +4,8 @@
 class OrderItem < ApplicationRecord
   include Purchasable
 
+  monetize :unit_price_cents
+
   belongs_to :order
   has_many_attached :files
 

@@ -1,5 +1,5 @@
 module OrderHelper
-  def status_color(status)
+  def product_status_color(status)
     case status
     when Order.statuses[:completed]
       "text-success"
