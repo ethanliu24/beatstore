@@ -5,6 +5,20 @@
   subtitle: t("admin.transaction.index.page_subtitle")
 ) %>
 
+<div class="flex justify-start items-stretch text-xs w-full gap-2">
+  <%= link_to "https://dashboard.stripe.com", class: "button w-fit px-2 py-1 mb-2",
+    target: "_blank", rel: "noopener" do %>
+    <span class="mr-2"><%= t("admin.transaction.index.stripe_dashboard") %></span>
+    <%= icon "external-link", class: "w-4 h-4" %>
+  <% end %>
+  <%# TODO add stripe transactions page %>
+  <%= link_to "https://dashboard.stripe.com", class: "button w-fit px-2 py-1 mb-2",
+    target: "_blank", rel: "noopener" do %>
+    <span class="mr-2"><%= t("admin.transaction.index.stripe_transactions") %></span>
+    <%= icon "external-link", class: "w-4 h-4" %>
+  <% end %>
+</div>
+
 <% unless @transactions.count == 0 %>
   <table class="w-full mt-8">
     <tr>
@@ -31,8 +45,8 @@
         <td class="py-2 pr-2"><%= transaction.amount.format %></td>
         <td class="py-2 pr-2 <%= product_status_color(transaction.status) %>"><%= transaction.status %></td>
         <td class="py-2 pr-2"><%= transaction.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-        <td class="py-2 pr-2"><%= transaction.customer_name.presence || "---" %></td>
-        <td class="py-2 pr-2"><%= transaction.customer_email.presence || "---" %></td>
+        <td class="py-2 pr-2"><%= transaction.customer_name.presence || transaction.order.user.display_name %></td>
+        <td class="py-2 pr-2"><%= transaction.customer_email.presence || transaction.order.user.email %></td>
       </tr>
     <% end %>
   </table>

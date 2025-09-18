@@ -173,6 +173,8 @@ en:
         page_title: "Transactions"
         page_subtitle: "See all transactions here"
         no_transactions: "There are no transactions yet"
+        stripe_dashboard: "Stripe Dashboard"
+        stripe_transactions: "Stripe Transactions"
         table:
           amount: "AMOUNT"
           status: "STATUS"
