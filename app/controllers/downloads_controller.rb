@@ -35,16 +35,20 @@ class DownloadsController < ApplicationController
   end
 
   def order_item_contract
-    order_item = if current_user && current_user.admin?
-      OrderItem.find(params[:id])
-    else
-      current_or_guest_user.orders.order_items.find(params[:id])
+    order_item = OrderItem.find(params[:id])
+
+    if order_item.order.user != current_or_guest_user && !current_or_guest_user.admin?
+      head :unauthorized and return
+    end
+
+    if order_item.order.status != Order.statuses[:completed] && !current_or_guest_user.admin?
+      head :unauthorized and return
     end
 
     license = License.new(**order_item.license_snapshot)
+    customer_full_name = order_item.order.payment_transaction.customer_name
     contract_markdown = if order_item.product_type == Track.name
       track = Track.new(**order_item.product_snapshot)
-      customer_full_name = order_item.order.payment_transaction.customer_name
       Contracts::RenderTracksContractService.new(license:, track:, customer_full_name:).call
     else
       ""
