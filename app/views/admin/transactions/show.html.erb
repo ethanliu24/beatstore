@@ -38,7 +38,7 @@
         <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.stripe_charge_id")}" %></p>
         <p><%= "#{@transaction.stripe_charge_id}" %></p>
       </div>
-      <%= link_to @transaction.stripe_receipt_url, class: "flex justify-start items-center gap-2",
+      <%= link_to @transaction.stripe_receipt_url.to_s, class: "flex justify-start items-center gap-2",
         target: "_blank", rel: "noopener" do %>
         <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.stripe_receipt_url")}" %></p>
         <%= icon "external-link", class: "w-4 h-4 text-accent" %>
