@@ -167,6 +167,7 @@ en:
       destroy:
         success: "License was successfully deleted."
     transaction:
+      back_to_transactions: "Back to transactions"
       index:
         title: "Transactions"
         page_title: "Transactions"
@@ -178,6 +179,32 @@ en:
           date: "DATE"
           customer_email: "CUSTOMER EMAIL"
           customer_name: "CUSTOMER NAME"
+      show:
+        title: "Transaction %{id}"
+        transaction_section:
+          title: "Transaction"
+          id: "ID: "
+          status: "Status: "
+          customer_name: "Customer: "
+          customer_email: "Customer Email: "
+          amount: "Amount: "
+          stripe_charge_id: "Stripe Charge ID: "
+          stripe_receipt_url: "Stripe Receipt URL"
+        order_section:
+          title: "Order"
+          id: "ID: "
+          status: "Status: "
+          subtotal: "Subtotal: "
+          user_id: "User ID: "
+          user_display_name: "User Display Name: "
+          user_username: "Username: "
+          user_role: "User role: "
+        order_items_section:
+          title: "Order Items (%{count})"
+          id: "ID: "
+          quantity: "Quantity: "
+          unit_price: "Unit Price: "
+          files: "Files: "
 
   profile:
     manage_your_profile_here: "Manage your profile here"

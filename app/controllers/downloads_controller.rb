@@ -15,7 +15,11 @@ class DownloadsController < ApplicationController
   end
 
   def product_item
-    order = current_or_guest_user.orders.find(params[:id])
+    order = if current_or_guest_user.admin?
+      Orders.find(params[:id])
+    else
+      current_or_guest_user.orders.find(params[:id])
+    end
     order_item = order.order_items.find(params[:item_id])
     file = order_item.files.find(params[:file_id])
 

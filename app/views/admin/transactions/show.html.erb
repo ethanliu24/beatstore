@@ -1,1 +1,130 @@
-hi
+<% content_for :title, t("admin.transaction.show.title", id: @transaction.id) %>
+
+<a
+  href=<%= admin_transactions_path %>
+  class="text-xs font-light flex justify-center items-center gap-1 hover:bg-secondary-bg p-2 rounded-full w-fit whitespace-nowrap">
+  <%= icon "arrow-left", class: "w-4 h-4" %>
+  <%= t("admin.transaction.back_to_transactions") %>
+</a>
+
+<div class="flex flex-col gap-8 mt-4">
+  <div>
+    <div class="flex justify-start items-center gap-2 text-accent w-full">
+      <%= icon "currency-dollar", class: "w-6 h-6 aspect-square" %>
+      <h2 class="text-xl font-bold"><%= t("admin.transaction.show.transaction_section.title") %></h2>
+    </div>
+    <div class="flex flex-col text-sm mt-2 font-light">
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.id")}" %></p>
+        <p><%= "#{@transaction.id}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.status")}" %></p>
+        <p class="<%= product_status_color(@transaction.status) %>"><%= "#{@transaction.status}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.customer_name")}" %></p>
+        <p><%= "#{@transaction.customer_name}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.customer_email")}" %></p>
+        <p><%= "#{@transaction.customer_email}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.amount")}" %></p>
+        <p><%= "#{@transaction.amount.format}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.stripe_charge_id")}" %></p>
+        <p><%= "#{@transaction.stripe_charge_id}" %></p>
+      </div>
+      <%= link_to @transaction.stripe_receipt_url, class: "flex justify-start items-center gap-2",
+        target: "_blank", rel: "noopener" do %>
+        <p class="font-bold"><%= "#{t("admin.transaction.show.transaction_section.stripe_receipt_url")}" %></p>
+        <%= icon "external-link", class: "w-4 h-4 text-accent" %>
+      <% end %>
+    </div>
+  </div>
+  <div>
+    <div class="flex justify-start items-center gap-2 text-accent w-full">
+      <%= icon "basket-check", class: "w-6 h-6 aspect-square" %>
+      <h2 class="text-xl font-bold"><%= t("admin.transaction.show.order_section.title") %></h2>
+    </div>
+    <div class="flex flex-col font-light mt-2">
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.id")}" %></p>
+        <p><%= "#{@order.id}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.status")}" %></p>
+        <p class="<%= product_status_color(@order.status) %>"><%= "#{@order.status}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.subtotal")}" %></p>
+        <p><%= "#{@order.subtotal.format}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.user_id")}" %></p>
+        <p><%= "#{@order.user.id}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.user_display_name")}" %></p>
+        <p><%= "#{@order.user.display_name}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.user_username")}" %></p>
+        <p><%= "#{@order.user.username}" %></p>
+      </div>
+      <div class="flex gap-2">
+        <p class="font-bold"><%= "#{t("admin.transaction.show.order_section.user_role")}" %></p>
+        <p><%= "#{@order.user.role}" %></p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="flex justify-start items-center gap-2 text-accent w-full">
+      <%= icon "currency-dollar", class: "w-6 h-6 aspect-square" %>
+      <h2 class="text-xl font-bold"><%= t("admin.transaction.show.order_items_section.title", count: @order.order_items.count) %></h2>
+    </div>
+    <div class="mt-2">
+      <% @order.order_items.each do |item| %>
+        <%= render Ui::AccordionComponent.new do |accordion| %>
+          <% accordion.with_summary do %>
+            <div class="flex gap-2">
+              <p class="font-bold"><%= product_name(item) %></p>
+              <%= seperator_char_ui %>
+              <p class="font-light"><%= item.product_type %></p>
+            </div>
+          <% end %>
+          <% accordion.with_body do %>
+            <div class="flex gap-2 font-light">
+              <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.id")}" %></p>
+              <p><%= "#{item.id}" %></p>
+            </div>
+            <div class="flex gap-2 font-light">
+              <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.quantity")}" %></p>
+              <p><%= "#{item.quantity}" %></p>
+            </div>
+            <div class="flex gap-2 font-light">
+              <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.unit_price")}" %></p>
+              <p><%= "#{item.unit_price.format}" %></p>
+            </div>
+            <%# TODO add contract view + download %>
+            <ul>
+              <p class="font-bold"><%= "#{t("admin.transaction.show.order_items_section.files")}" %></p>
+              <% item.files.each do |file| %>
+                <li class="font-light list-disc ml-8">
+                  <%= link_to download_product_item_path(id: item.order.id, item_id: item.id, file_id: file.id),
+                    target: "_blank", rel: "noopener", class: "flex justify-start items-center gap-2 cursor-pointer" do %>
+                    <div class="text-sm"><%= file.filename.to_s %></div>
+                    <%= icon "download", class: "w-4 h-4 text-accent" %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
