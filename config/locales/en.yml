@@ -311,6 +311,7 @@ en:
       title: "Purchases"
       subtitle: "See your purchase history and download what you bought"
       no_purchases: "You haven't purchased anything yet"
+      see_contract: "See or download contract"
 
   modal:
     title:

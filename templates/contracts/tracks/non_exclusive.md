@@ -1,6 +1,6 @@
 # Non-Exclusive **{{ LICENSE_NAME }}** License Agreement
 
-This Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement") is made and effective as of **{{ CONTRACT_DATE }}** (the "Effective Date") by and between **{{ PRODUCT_OWNER_FULLNAME }}** p/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}** residing at **{{ CUSTOMER_ADDRESS }}** ("You" or "Licensee"). This Agreement sets forth the terms under which Licensee may use the Producer’s instrumental music file entitled **{{ PRODUCT_TITLE }}** (the "Beat") in exchange for payment of $ **{{ PRODUCT_PRICE }}** (the "License Fee").
+This Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement") is made and effective as of **{{ CONTRACT_DATE }}** (the "Effective Date") by and between **{{ PRODUCT_OWNER_FULLNAME }}** p/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}** ("You" or "Licensee"). This Agreement sets forth the terms under which Licensee may use the Producer’s instrumental music file entitled **{{ PRODUCT_TITLE }}** (the "Beat") in exchange for payment of $ **{{ PRODUCT_PRICE }}** (the "License Fee").
 
 ## 1. License Fee
 

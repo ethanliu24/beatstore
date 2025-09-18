@@ -2,11 +2,11 @@
 
 module Contracts
   class RenderTracksContractService
-    def initialize(license:, track:)
+    def initialize(license:, track:, customer_full_name: nil)
       @license = license
       @contract = license.contract
       @track = track
-      # TODO pass in customer fields
+      @customer_full_name = customer_full_name
     end
 
     def call
@@ -30,8 +30,7 @@ module Contracts
         "CONTRACT_DATE": Date.today,
         "PRODUCT_OWNER_FULLNAME": "Yichen Liu",
         "PRODUCER_ALIAS": "prodethan",
-        "CUSTOMER_FULLNAME": "UNKNOWN",  # TODO
-        "CUSTOMER_ADDRESS": "UNKNOWN",  # TODO
+        "CUSTOMER_FULLNAME": @customer_full_name,
         "TERMS_OF_YEARS": @contract[:terms_of_years],
         "PUBLISHING_SHARES": "50%",
         "TRACK_CONTRIBUTOR_ALIASES": format_collaborators,
@@ -45,8 +44,7 @@ module Contracts
         "CONTRACT_DATE": Date.today,
         "PRODUCT_OWNER_FULLNAME": "Yichen Liu",
         "PRODUCER_ALIAS": "prodethan",
-        "CUSTOMER_FULLNAME": "UNKNOWN",  # TODO
-        "CUSTOMER_ADDRESS": "UNKNOWN",  # TODO
+        "CUSTOMER_FULLNAME": @customer_full_name,
         "PRODUCT_TITLE": @track.present? ? @track.title : "UNKNOWN",
         "PRODUCT_PRICE": "#{@license.price.format} #{@license.currency}",
         "FILE_TYPE": file_type_delivered,

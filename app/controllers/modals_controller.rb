@@ -43,14 +43,34 @@ class ModalsController < ApplicationController
   # Else will decide which service to call to render the contract, which is specified by entity_type in params.
   # It should be the class name of the entity that's associated with the license.
   def preview_contract
-    license = License.find_by(id: params[:license_id])
-    entity_type = params[:entity_type]
+    content = if params[:license_id].present?
+      license = License.find_by(id: params[:license_id])
+      entity_type = params[:entity_type]
 
-    content = if license.nil?
-      Rails.configuration.templates[:contracts][params[:contract_type]]
-    elsif entity_type = Track.name
-      track = Track.find_by(id: params[:track_id])
-      Contracts::RenderTracksContractService.new(license:, track:).call
+      if license.nil?
+        Rails.configuration.templates[:contracts][params[:contract_type]]
+      elsif entity_type = Track.name
+        track = Track.find_by(id: params[:track_id])
+        Contracts::RenderTracksContractService.new(license:, track:).call
+      else
+        ""
+      end
+    elsif params[:order_item_id].present?
+      order_item = OrderItem.find(params[:order_item_id])
+      customer_full_name = order_item.order.payment_transaction.customer_name
+
+      if order_item.order.user != current_or_guest_user || !current_or_guest_user.admin?
+        head :not_found and return
+      end
+
+      case order_item.product_type
+      when Track.name
+        track = Track.new(**order_item.product_snapshot)
+        license = License.new(**order_item.license_snapshot)
+        Contracts::RenderTracksContractService.new(license:, track:, customer_full_name:).call
+      else
+        ""
+      end
     else
       ""
     end
