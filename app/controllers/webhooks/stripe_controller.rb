@@ -12,6 +12,7 @@ module Webhooks
         payment_intent = @event.data.object.payment_intent
         find_order(payment_intent:)
         update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
+        PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
       when "payment_intent.succeeded"
         payment_intent = @event.data.object.id
         find_order(payment_intent:)
@@ -91,7 +92,7 @@ module Webhooks
           io: StringIO.new(file.download),
           filename: file.blob&.filename,
           content_type: file.blob&.content_type
-          )
+        )
       end
     end
 
