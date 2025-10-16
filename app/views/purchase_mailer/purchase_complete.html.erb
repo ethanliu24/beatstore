@@ -1,0 +1,25 @@
+<div>
+  <p>Hey <%= @transaction.customer_name %>,</p>
+  <p>Thank you for your purchase! You can download the files here.</p>
+  <% @order.order_items.each do |item| %>
+    <p><%= "#{item.product_name} - #{item.license_snapshot["title"]}" %></p>
+    <ul>
+      <% item.files.each do |file| %>
+        <li>
+          <%= link_to file.filename.to_s,
+            download_product_item_url(id: @order.id, item_id: item.id, file_id: file.id) %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <p>
+    You can also download the files in from your purchase
+    <%= link_to "history.", users_purchases_url, target: "_blank", rel: "noopener" %>
+  </p>
+  <p>
+    See your receipt
+    <%= link_to "here.", @transaction.stripe_receipt_url, target: "_blank", rel: "noopener" %>
+    For any concerns please email ethanmadeit24@gmail.com.
+  </p>
+</div>
