@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Webhooks::StripeController, type: :controller do
+  include ActiveJob::TestHelper
+
   let(:user) { create(:user) }
   let(:track) { create(:track_with_files) }
   let(:license) { create(:license) }
@@ -26,6 +28,8 @@ RSpec.describe Webhooks::StripeController, type: :controller do
     allow(controller).to receive(:find_order) do
       controller.instance_variable_set(:@order, order)
     end
+
+    allow(controller).to receive(:current_or_guest_user).and_return(user)
   end
 
   describe "#payments" do
@@ -84,7 +88,10 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       event = build_event(type: "charge.succeeded", obj_id: "ch_1234")
       stub_event(event)
 
-      post :payments
+      perform_enqueued_jobs do
+        post :payments
+      end
+
       order.reload
       transaction = order.payment_transaction
 
@@ -95,6 +102,8 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       expect(transaction.customer_name).to eq("Customer")
       expect(transaction.amount_cents).to eq(9999)
       expect(transaction.currency).to eq("usd")
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
     end
 
     it "should update transaction with relavent information on charge updated" do
@@ -102,7 +111,10 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       stub_event(event)
       order.payment_transaction.update!(amount_cents: 1234)
 
-      post :payments
+      perform_enqueued_jobs do
+        post :payments
+      end
+
       order.reload
       transaction = order.payment_transaction
 
@@ -113,6 +125,8 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       expect(transaction.customer_name).to eq("Customer")
       expect(transaction.amount_cents).to eq(9999)
       expect(transaction.currency).to eq("usd")
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
     end
   end
 
