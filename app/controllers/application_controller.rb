@@ -54,7 +54,27 @@ class ApplicationController < ActionController::Base
   end
 
   def transfer_guest_to_user
-    # TODO transfer guest cart to user carts
+    return if guest_user.nil?
+
+    # DB Transaction guard so that if one action fails, all fails
+    ActiveRecord::Base.transaction do
+      guest_user.cart.cart_items.find_each do |item|
+        existing = user_cart.cart_items.find_by(
+          product_type: item.product_type,
+          product_id: item.product_id,
+          license_id: item.license_id
+        )
+
+        if existing
+          existing.increment!(:quantity, item.quantity)
+          item.destroy
+        else
+          item.update!(cart_id: user_cart.id)
+        end
+      end
+
+      guest_user.orders.update_all(user_id: current_user.id)
+    end
   end
 
   def create_guest_user
