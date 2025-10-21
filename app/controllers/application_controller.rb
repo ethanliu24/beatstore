@@ -9,7 +9,9 @@ class ApplicationController < ActionController::Base
     if current_user
       if session[:guest_user_id] && session[:guest_user_id] != current_user.id
         transfer_guest_to_user
-        guest_user(with_retry = false).try(:reload).try(:destroy)
+        guest = guest_user(with_retry = false)
+        guest.cart.destroy!
+        guest.try(:reload).try(:destroy)
         session[:guest_user_id] = nil
       end
 
@@ -54,7 +56,28 @@ class ApplicationController < ActionController::Base
   end
 
   def transfer_guest_to_user
-    # TODO transfer guest cart to user carts
+    return if current_user.nil?
+
+    # DB Transaction guard so that if one action fails, all fails
+    ActiveRecord::Base.transaction do
+      guest_user.cart.cart_items.find_each do |item|
+        existing = current_user.cart.cart_items.find_by(
+          product_type: item.product_type,
+          product_id: item.product_id,
+          license_id: item.license_id
+        )
+
+        # TODO should increment quantity for items that should be incremented.
+        # Track or Kit should not be incremented.
+        unless existing
+          item.update!(cart_id: current_user.cart.id)
+        else
+          item.destroy!
+        end
+      end
+
+      guest_user.orders.update_all(user_id: current_user.id)
+    end
   end
 
   def create_guest_user
