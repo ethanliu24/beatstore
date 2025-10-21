@@ -97,5 +97,6 @@ RSpec.describe ApplicationController, type: :controller do
 
     expect(user.cart.cart_items.count).to eq(1)
     expect(user.cart.cart_items.first).to eq(cart_item_user)
+    expect(guest.cart.cart_items.count).to eq(0)
   end
 end
