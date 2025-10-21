@@ -56,6 +56,8 @@ class ApplicationController < ActionController::Base
   end
 
   def transfer_guest_to_user
+    return if current_user.nil?
+
     # DB Transaction guard so that if one action fails, all fails
     ActiveRecord::Base.transaction do
       guest_user.cart.cart_items.find_each do |item|
