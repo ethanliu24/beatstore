@@ -73,7 +73,7 @@ end
 gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.3"
 gem "rails_icons", "~> 1.4"
-gem "view_component", "~> 4.0"
+gem "view_component", "~> 4.1"
 gem "cocoon"
 gem "countries", "~> 8.0"
 gem "redcarpet"
