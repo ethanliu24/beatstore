@@ -71,7 +71,7 @@ group :test do
 end
 
 gem "tailwindcss-ruby", "~> 4.1"
-gem "tailwindcss-rails", "~> 4.3"
+gem "tailwindcss-rails", "~> 4.4"
 gem "rails_icons", "~> 1.4"
 gem "view_component", "~> 4.1"
 gem "cocoon"
