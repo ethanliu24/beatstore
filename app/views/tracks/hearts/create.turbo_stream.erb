@@ -1,0 +1,7 @@
+<%= turbo_stream.update "track-show-heart" do %>
+  <%= render "tracks/hearts/show_heart", track: @track, user_liked: true %>
+<% end %>
+
+<%= turbo_stream.update dom_id(@track, :show_data) do %>
+  <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
+<% end %>
