@@ -23,6 +23,18 @@ class TracksController < ApplicationController
     end
   end
 
+  def play
+    base_scope = current_user&.admin? ? Track : Track.publicly_available
+    @track = base_scope.find(params[:id])
+
+    return head :unprocessable_entity unless @track.tagged_mp3.attached?
+
+    # TODO show toast if not available
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
+
   private
 
   def find_similar_tracks(base_track)

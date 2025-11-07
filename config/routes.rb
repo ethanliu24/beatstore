@@ -30,6 +30,9 @@ Rails.application.routes.draw do
   resources :tracks, only: [ :index, :show ] do
     resource :heart, only: [ :create, :destroy ], module: :tracks
     resource :play, only: [ :create ], module: :tracks, as: "increment_plays"
+    member do
+      get "play"
+    end
   end
 
   resources :comments, only: [ :create, :update, :destroy ] do
