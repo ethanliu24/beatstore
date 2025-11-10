@@ -16,19 +16,22 @@ export default class extends Controller {
   connect() {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
-      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks"
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
+      this.attachListeners();
+    });
+  }
 
-      this.audioTarget.addEventListener("ended", () => this.pauseAudio());
-      this.audioTarget.addEventListener("timeupdate", () => {
-        if (this.audioTarget.duration > 0) {
-          const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
-          this.progressBarTarget.value = percentage;
-        }
-      });
+  attachListeners() {
+    const audioTarget = document.getElementById("audio-player-src");
+    audioTarget.addEventListener("ended", () => this.repeatTrack());
+    audioTarget.addEventListener("timeupdate", () => {
+      if (audioTarget.duration > 0) {
+        const percentage = (audioTarget.currentTime / audioTarget.duration) * 100;
+        this.progressBarTarget.value = percentage;
+      }
     });
   }
 
@@ -136,61 +139,10 @@ export default class extends Controller {
     Turbo.visit(`/admin/tracks/${this.currentTrackId}/edit`);
   }
 
-  toggleLikeButton(liked) {
-    if (liked) {
-      this.unlikeBtnTarget.classList.remove("hidden");
-      this.likeBtnTarget.classList.add("hidden");
-    } else {
-      this.unlikeBtnTarget.classList.add("hidden");
-      this.likeBtnTarget.classList.remove("hidden");
-    }
-  }
-
-  likeTrack() {
-    fetch(`/tracks/${this.currentTrackId}/heart`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json"
-      }
-    })
-    .then();
-
-    this.toggleLikeButton(true);
-  }
-
-  unlikeTrack() {
-    fetch(`/tracks/${this.currentTrackId}/heart`, {
-      method: "DELETE",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json"
-      }
-    })
-    .then();
-
-    this.toggleLikeButton(false);
-  }
-
   navToTrack(e) {
     const navTrackId = parseInt(e.currentTarget.dataset.trackId);
     Turbo.visit(`/tracks/${navTrackId}`);
     this.stopPropagation(e);
-  }
-
-  async fetchTrackPurchaseModal(e) {
-    e.stopPropagation();
-    const url = e.currentTarget.dataset.trackPurchaseModalUrl;
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Accept": "text/vnd.turbo-stream.html"
-      }
-    })
-      .then(r => r.text())
-      .then(html => Turbo.renderStreamMessage(html))
-      .then();
   }
 
   async downloadTrack() {
@@ -248,71 +200,40 @@ export default class extends Controller {
       }
     }
 
-    fetch("/tracks/7/play", { method: "GET" })
-      .then(r => r.text())
-      .then(html => Turbo.renderStreamMessage(html))
-      .then(() => {
-        this.played = true;
-      })
-      .catch(err => console.log("Error fetching track: " + err.message));
-
-    return
-    const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
+    fetch(`/tracks/${trackId}/play`, {
       method: "GET",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json",
       }
     })
-    .then(async res => {
-      if (!res.ok) {
-        if (res.status === 404) {
-          console.error("No preview available");
-        } else {
-          console.error(`Error fetching track: ${res.statusText}`);
+      .then(res => {
+        if (!res.ok) {
+          if (res.status === 404) {
+            console.error("No preview available");
+          } else {
+            console.error(`Error fetching track: ${res.statusText}`);
+          }
+
+          this.played = false;
+          return;
         }
 
-        this.played = false;
-        return false;
-      }
+        return res.text();
+      })
+      .then(html => {
+        if (!html) return;
+        Turbo.renderStreamMessage(html);
+        this.played = true;
+        this.currentTrackId = trackId;
+        localStorage.setItem("cur_player_track", trackId);
 
-      const track = await res.json();
+        requestAnimationFrame(() => {
+          const controller = this;
+          controller.attachListeners();
+        });
+      })
+      .catch(err => console.log("Error fetching track: " + err.message));
 
-      this.currentTrackId = track.id;
-      localStorage.setItem("cur_player_track", track.id);
-
-      if (track.cover_photo_url === "") {
-        this.coverPhotoTarget.classList.add("hidden");
-      } else {
-        this.coverPhotoTarget.src = track.cover_photo_url;
-        this.coverPhotoTarget.classList.remove("hidden");
-      }
-      this.titleTarget.innerText = track.title;
-      this.keyTarget.innerText = track.key;
-      this.bpmTarget.innerText = `${track.bpm} BPM`;
-      this.priceBtnTarget.innerText = track.cheapest_price;
-      this.toggleLikeButton(track.liked_by_user);
-      this.pauseAudio();
-      this.resetAudio();
-      this.openPlayer();
-      this.audioTarget.src = track.preview_url;
-      this.audioTarget.load();
-      this.resumeAudio();
-      this.played = true;
-      return true;
-    })
-    .catch(error => {
-      alert("Error fetching track: " + error.message);
-      return false;
-    });
-
-    if (!playable || !this.currentTrackId) return;
-    fetch(`/tracks/${this.currentTrackId}/play`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json"
-      }
-    })
+    return;
   }
 }

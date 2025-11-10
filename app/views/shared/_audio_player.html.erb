@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background <%= hide ? "hidden" : "" %>">
-  <audio id="audio-player-src" data-audio-player-target="audio" src="<%= track ? url_for(track.tagged_mp3) : "" %>" autoplay playsinline></audio>
+  <audio id="audio-player-src" data-audio-player-target="audio" src="<%= track ? url_for(track.tagged_mp3) : "" %>" autoplay></audio>
   <div class="relative flex justify-between items-stretch gap-4 min-w-15">
     <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
       <% if track %>
@@ -8,12 +8,12 @@
         <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
       <% end %>
     </div>
-    <div class="flex flex-col justify-between items-start truncate whitespace-nowrap">
-      <p class="text-xs"><%= track&.title %></p>
-      <div class="flex justify-start items-center gap-1 text-[0.5rem] font-light text-secondary-txt">
-        <p data-audio-player-target="bpm"><%= track ? "#{track&.bpm} BPM" : "" %></p>
+    <div class="flex flex-col justify-between items-start truncate whitespace-nowrap w-30">
+      <p class="text-xs truncate w-full"><%= track&.title %></p>
+      <div class="flex justify-start items-center gap-1 text-[0.5rem] font-light text-secondary-txt w-full truncate">
+        <p><%= track ? "#{track&.bpm} BPM" : "" %></p>
         <%= seperator_char_ui %>
-        <p data-audio-player-target="key"><%= track&.key %></p>
+        <p class="truncate"><%= track&.key %></p>
       </div>
     </div>
   </div>
@@ -24,9 +24,9 @@
       <%= icon "arrows-shuffle", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "shuffle" } %>
     </div>
     <%= icon "player-track-prev", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "prevBtn" } %>
-    <%= icon "player-pause", variant: "filled", class: "aspect-square w-5 hidden",
+    <%= icon "player-pause", variant: "filled", class: "aspect-square w-5",
       data: { action: "click->audio-player#pauseAudio", audio_player_target: "pauseBtn" } %>
-    <%= icon "player-play", variant: "filled", class: "aspect-square w-5 max-sm:w-4",
+    <%= icon "player-play", variant: "filled", class: "aspect-square w-5 max-sm:w-4 hidden",
       data: { action: "click->audio-player#resumeAudio", audio_player_target: "resumeBtn" } %>
     <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "nextBtn" } %>
     <%= icon "rotate", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { action: "click->audio-player#repeatTrack", audio_player_target: "repeatBtn" } %>
