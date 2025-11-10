@@ -4,11 +4,9 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "container", "audio",
-    "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
-    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar",
-    "priceBtn",
+    "volumeOnBtn", "volumeOffBtn", "volumeBar",
   ];
 
   static values = {
@@ -250,6 +248,15 @@ export default class extends Controller {
       }
     }
 
+    fetch("/tracks/7/play", { method: "GET" })
+      .then(r => r.text())
+      .then(html => Turbo.renderStreamMessage(html))
+      .then(() => {
+        this.played = true;
+      })
+      .catch(err => console.log("Error fetching track: " + err.message));
+
+    return
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET",
       headers: {
