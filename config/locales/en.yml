@@ -209,6 +209,10 @@ en:
           see_contract: "See contract"
           files: "Files: "
 
+  tracks:
+    play:
+      unavailable: "This track is currently unavailable."
+
   profile:
     manage_your_profile_here: "Manage your profile here"
     display_name: "Display name"
