@@ -1,1 +1,9 @@
-<%= @total_stats %>
+<% content_for :title, "Dashboard" %>
+
+<h2 class="mb-4 text-3xl font-light">Quick Stats</h2>
+<div class="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 gap-x-6 gap-y-3 w-full">
+  <%= render partial: "admin/dashboards/quick_stats_tab", locals: { icon_name: "receipt-dollar", title: "Sales", stats: @cum_stats[:revenue] } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab", locals: { icon_name: "player-play", title: "Plays", stats: @cum_stats[:plays] } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab", locals: { icon_name: "heart", title: "Hearts", stats: @cum_stats[:hearts] } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab", locals: { icon_name: "message", title: "Comments", stats: @cum_stats[:comments] } %>
+</div>
