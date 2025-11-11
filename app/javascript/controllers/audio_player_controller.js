@@ -9,15 +9,12 @@ export default class extends Controller {
     "volumeOnBtn", "volumeOffBtn", "volumeBar",
   ];
 
-  static values = {
-    trackDataApiUrl: String
-  }
-
   connect() {
     this.containerTarget.classList.remove("slide-up-fade-in");
+    this.audioEl = null;
     this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
     this.played = false;
-    this.playerMode = "next";
+    this.playerMode = "repeat";
     this.PLAYER_MODES = ["next", "repeat", "shuffle"];
     this.attachListeners();
     window.addEventListener("audio:play", this.handleAudioPlayEvent.bind(this));
@@ -33,6 +30,7 @@ export default class extends Controller {
       }
     });
 
+    this.audioEl = audioTarget;
   }
 
   disconnect() {
@@ -149,12 +147,6 @@ export default class extends Controller {
     Turbo.visit(`/admin/tracks/${this.currentTrackId}/edit`);
   }
 
-  navToTrack(e) {
-    const navTrackId = parseInt(e.currentTarget.dataset.trackId);
-    Turbo.visit(`/tracks/${navTrackId}`);
-    this.stopPropagation(e);
-  }
-
   async fetchTrackPurchaseModal(e) {
     e.stopPropagation();
     const url = e.currentTarget.dataset.trackPurchaseModalUrl;
@@ -213,7 +205,7 @@ export default class extends Controller {
     }
   }
 
-  playAudio(trackId) {
+  async playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
         if (this.audioTarget.paused) {
@@ -232,7 +224,7 @@ export default class extends Controller {
         "Accept": "text/vnd.turbo-stream.html",
       }
     })
-      .then(res => {
+      .then(async res => {
         if (!res.ok) {
           if (res.status === 404) {
             console.error("No preview available");
@@ -257,6 +249,7 @@ export default class extends Controller {
         requestAnimationFrame(() => {
           this.resetAudio();
           this.attachListeners();
+          this.audioEl.play();
         });
       })
       .catch(err => console.log("Error fetching track: " + err.message));

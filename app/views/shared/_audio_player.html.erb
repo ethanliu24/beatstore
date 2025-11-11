@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background <%= hide ? "hidden" : "" %>">
-  <audio id="audio-player-src" data-audio-player-target="audio" src="<%= track&.tagged_mp3&.attached? ? url_for(track.tagged_mp3) : "" %>" autoplay></audio>
+  <audio id="audio-player-src" data-audio-player-target="audio" src="<%= track&.tagged_mp3&.attached? ? url_for(track.tagged_mp3) : "" %>"></audio>
   <div class="relative flex justify-between items-stretch gap-4 min-w-15">
     <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
       <% if track %>

@@ -1,5 +1,5 @@
 <div id="<%= dom_id track %>" class="track flex justify-between items-stretch w-full sm:w-auto rounded p-2 hover:bg-hover cursor-pointer"
-  data-controller="track" data-action="click->track#play" data-track-id="<%= track.id %>"
+  data-controller="track" data-action="click->track#play" data-track-track-id-value="<%= track.id %>"
 >
   <div class="flex justify-start itmes-center gap-4 truncate min-w-30">
     <div class="flex justify-center items-center rounded w-8 h-8 min-w-8 min-h-8 bg-secondary-bg">
@@ -12,7 +12,7 @@
     <div class="flex flex-col justify-between items-start">
       <%= content_tag :div, track.title, class: "text-sm cursor-pointer hover:underline",
         data: {
-          action: "click->audio-player#navToTrack",
+          action: "click->track#navToTrack",
           track_id: track.id,
         } %>
       <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
