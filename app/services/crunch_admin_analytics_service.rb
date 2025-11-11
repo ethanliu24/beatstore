@@ -1,29 +1,36 @@
 # frozen_string_literal: true
 
 class CrunchAdminAnalyticsService
-  def initialize(window)
+  def initialize(window, stats_type)
     @window = window
     @time_frame = time_frame(window)
+    @stats_type = stats_type  # :cummulative or :chronological
   end
 
   def call
     plays = get_analytics(Track::Play)
     hearts = get_analytics(Track::Heart)
     comments = get_analytics(Comment)
-    revenue = get_analytics(Transaction).where(status: Transaction.statuses[:completed])
+    sales = get_analytics(Transaction).where(status: Transaction.statuses[:completed])
     # TODO add free downloads model
     # free_downloads = get_analytics()
 
-    total_stats = {
-      plays: plays.count,
-      hearts: hearts.count,
-      comments: comments.count,
-      revenue: Money.new(revenue.reduce(0) { |acc, t| acc + t.amount_cents }).format
-    }
-
-    chrono_stats = {}
-
-    [ total_stats, chrono_stats ]
+    case @stats_type
+    when :chronological
+      {
+        plays: plays.order(created_at: :asc),
+        hearts: hearts.order(created_at: :asc),
+        comments: comments.order(created_at: :asc),
+        sales: sales.order(created_at: :asc)
+      }
+    else
+      {
+        plays: plays.count,
+        hearts: hearts.count,
+        comments: comments.count,
+        revenue: Money.new(sales.reduce(0) { |acc, t| acc + t.amount_cents }).format
+      }
+    end
   end
 
   private
