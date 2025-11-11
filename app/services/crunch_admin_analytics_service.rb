@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class CrunchAdminAnalyticsService
-  def initialize(window, stats_type)
-    @window = window
-    @time_frame = time_frame(window)
-    @stats_type = stats_type  # :cummulative or :chronological
+  def initialize(window_size:)
+    @window = window_size
+    @time_frame = time_frame(@window)
   end
 
   def call
@@ -37,6 +36,21 @@ class CrunchAdminAnalyticsService
 
   def get_analytics(entity)
     entity.where(created_at: @time_frame..Time.current)
+  end
+
+  def group_metrics_by_time(stats)
+    case @window
+    when WindowSize::ONE_HOUR
+      stats.group_by_minute(:created_at)
+    when WindowSize::TWELVE_HOURS, WindowSize::ONE_DAY, WindowSize::THREE_DAYS
+      stats.group_by_hour(:created_at)
+    when WindowSize::ONE_WEEK, WindowSize::ONE_MONTH
+      stats.group_by_day(:created_at)
+    when WindowSize::SIX_MONTHS, WindowSize::ONE_YEAR
+      stats.group_by_week(:created_at)
+    else
+      stats.group_by_day(:created_at)
+    end
   end
 
   def time_frame(window)
