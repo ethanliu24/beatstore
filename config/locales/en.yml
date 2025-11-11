@@ -326,6 +326,7 @@ en:
 
   sidebar:
     admin:
+      dashboard: "Dashboard"
       tracks: "Tracks"
       licenses: "Licenses"
       transactions: "Transactions"
