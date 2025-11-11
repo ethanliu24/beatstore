@@ -26,14 +26,15 @@ class TracksController < ApplicationController
   def play
     base_scope = current_user&.admin? ? Track : Track.publicly_available
     @track = base_scope.find(params[:id])
-    Track::Play.create!(track_id: @track.id, user_id: current_user&.id)
 
     respond_to do |format|
       unless @track.tagged_mp3.attached?
         flash.now[:alert] = t("tracks.play.unavailable")
         format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+        return
       end
 
+      Track::Play.create!(track_id: @track.id, user_id: current_user&.id)
       format.turbo_stream
     end
   end

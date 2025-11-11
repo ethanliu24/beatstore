@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background <%= hide ? "hidden" : "" %>">
-  <audio id="audio-player-src" data-audio-player-target="audio" src="<%= track ? url_for(track.tagged_mp3) : "" %>" autoplay></audio>
+  <audio id="audio-player-src" data-audio-player-target="audio" src="<%= track&.tagged_mp3&.attached? ? url_for(track.tagged_mp3) : "" %>" autoplay></audio>
   <div class="relative flex justify-between items-stretch gap-4 min-w-15">
     <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
       <% if track %>
@@ -138,9 +138,13 @@
 
     <%# implement get modal %>
     <div class="w-fit h-fit max-md:hidden">
-      <%= link_to track_purchase_modal_path(@track), class: "button px-3 py-1 text-xs w-full h-full",
-        data: { turbo_stream: true } do %>
-        <%= track ? track.cheapest_price : 0 %>
+      <% if track %>
+        <%= link_to track_purchase_modal_path(track), class: "button px-3 py-1 text-xs w-full h-full",
+          data: { turbo_stream: true } do %>
+          <%= track.cheapest_price %>
+        <% end %>
+      <% else %>
+        <p>$---</p>
       <% end %>
     </div>
 

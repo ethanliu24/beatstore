@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe TracksController, type: :request do
@@ -82,6 +84,49 @@ RSpec.describe TracksController, type: :request do
 
       get track_url(private_track)
       expect(response).to be_successful
+    end
+  end
+
+  describe "GET /:id/play" do
+    it "loads track via turbo stream and increments play count" do
+      track = create(:track_with_files)
+
+      expect {
+        get play_track_path(track), headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+      }.to change { Track::Play.count }.by(1)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("turbo-stream")
+    end
+
+
+    it "does not load track if preview does not exist" do
+      track = create(:track)
+
+      expect {
+        get play_track_path(track), headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+      }.to change { Track::Play.count }.by(0)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("turbo-stream")
+    end
+
+    it "allow admins only to fetch publically unavailable tracks" do
+      track = create(:track_with_files, is_public: false)
+
+      admin = create(:admin)
+      sign_in admin, scope: :user
+
+      get play_track_path(track), headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+      expect(response).to have_http_status(:ok)
+
+      user = create(:user)
+      sign_in user, scope: :user
+
+      get play_track_path(track), headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

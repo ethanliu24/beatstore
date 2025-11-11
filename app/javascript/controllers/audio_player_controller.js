@@ -228,8 +228,8 @@ export default class extends Controller {
         localStorage.setItem("cur_player_track", trackId);
 
         requestAnimationFrame(() => {
-          const controller = this;
-          controller.attachListeners();
+          this.resetAudio();
+          this.attachListeners();
         });
       })
       .catch(err => console.log("Error fetching track: " + err.message));
