@@ -37,6 +37,8 @@
       <span class="max-sm:hidden"><%= t("label.free").downcase %></span>
     <% end %>
 
+    <%# Using JavaScript to fetch the licenses because having the link embeded here would start the audio when clicked on. %>
+    <%# action: click->audio-player#stopPropagation does not work. This will have to be the solution for now. %>
     <%= content_tag :div,
       class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18",
       data: {

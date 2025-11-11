@@ -145,6 +145,21 @@ export default class extends Controller {
     this.stopPropagation(e);
   }
 
+  async fetchTrackPurchaseModal(e) {
+    e.stopPropagation();
+    const url = e.currentTarget.dataset.trackPurchaseModalUrl;
+    await fetch(url, {
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Accept": "text/vnd.turbo-stream.html"
+      }
+    })
+      .then(r => r.text())
+      .then(html => Turbo.renderStreamMessage(html))
+      .then();
+  }
+
   async downloadTrack() {
     try {
       const url = `/download/track/${this.currentTrackId}/free`;
@@ -204,6 +219,7 @@ export default class extends Controller {
       method: "GET",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Accept": "text/vnd.turbo-stream.html",
       }
     })
       .then(res => {
