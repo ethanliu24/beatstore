@@ -31,11 +31,10 @@ class TracksController < ApplicationController
       unless @track.tagged_mp3.attached?
         flash.now[:alert] = t("tracks.play.unavailable")
         format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
-        return
+      else
+        Track::Play.create!(track_id: @track.id, user_id: current_user&.id)
+        format.turbo_stream
       end
-
-      Track::Play.create!(track_id: @track.id, user_id: current_user&.id)
-      format.turbo_stream
     end
   end
 

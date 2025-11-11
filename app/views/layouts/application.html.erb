@@ -24,8 +24,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="flex flex-col justify-start w-full h-full items-stretch bg-background text-primary-txt mb-50"
-    data-controller="audio-player">
+  <body class="flex flex-col justify-start w-full h-full items-stretch bg-background text-primary-txt mb-50">
     <%= render "nav/navbar" %>
 
     <main id="main" class="flex-1 overflow-y-scroll transparent-scrollbar-background">
@@ -39,7 +38,10 @@
     <% end %>
 
     <% unless current_page == "layouts/auth_main" %>
-      <div id="audio-player" data-turbo-permanent class="fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2" data-audio-player-target="container">
+      <div id="audio-player" data-turbo-permanent
+        class="fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2"
+        data-controller="audio-player"
+        data-audio-player-target="container">
         <%= render "shared/audio_player", track: nil, hide: true %>
       </div>
     <% end %>

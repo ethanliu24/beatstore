@@ -14,14 +14,13 @@ export default class extends Controller {
   }
 
   connect() {
-    requestAnimationFrame(() => {
-      this.containerTarget.classList.remove("slide-up-fade-in");
-      this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
-      this.played = false;
-      this.playerMode = "next";
-      this.PLAYER_MODES = ["next", "repeat", "shuffle"];
-      this.attachListeners();
-    });
+    this.containerTarget.classList.remove("slide-up-fade-in");
+    this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
+    this.played = false;
+    this.playerMode = "next";
+    this.PLAYER_MODES = ["next", "repeat", "shuffle"];
+    this.attachListeners();
+    window.addEventListener("audio:play", this.handleAudioPlayEvent.bind(this));
   }
 
   attachListeners() {
@@ -33,6 +32,17 @@ export default class extends Controller {
         this.progressBarTarget.value = percentage;
       }
     });
+
+  }
+
+  disconnect() {
+    window.removeEventListener("audio:play", this.handleAudioPlayEvent.bind(this));
+  }
+
+  // Expects trackId in detail, i.e. detail: { trackId: trackId }
+  handleAudioPlayEvent(e) {
+    const { trackId } = e.detail;
+    this.playAudio(trackId);
   }
 
   openPlayer() {
@@ -58,8 +68,8 @@ export default class extends Controller {
     e.stopPropagation();
   }
 
-  async play(e) {
-    await this.#playAudio(parseInt(e.currentTarget.dataset.trackId));
+  play(e) {
+    playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   pauseAudio() {
@@ -203,7 +213,7 @@ export default class extends Controller {
     }
   }
 
-  async #playAudio(trackId) {
+  playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
         if (this.audioTarget.paused) {
@@ -242,6 +252,7 @@ export default class extends Controller {
         this.played = true;
         this.currentTrackId = trackId;
         localStorage.setItem("cur_player_track", trackId);
+        this.openPlayer();
 
         requestAnimationFrame(() => {
           this.resetAudio();
