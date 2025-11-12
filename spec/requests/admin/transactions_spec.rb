@@ -27,7 +27,7 @@ RSpec.describe "Admin::Transactions", type: :request, admin: true do
 
   describe "#show" do
     let!(:order) { create(:order, user: customer) }
-    let!(:transaction) { create(:payment_transaction, order:, order: order) }
+    let!(:transaction) { create(:payment_transaction, order:) }
 
     it "returns a successful response and assigns the right attributes" do
       get admin_transaction_url(transaction)
@@ -46,7 +46,7 @@ RSpec.describe "Admin::Transactions", type: :request, admin: true do
 
   describe "admin paths authorization test", authorization_test: true do
     let!(:order) { create(:order, user: customer) }
-    let!(:transaction) { create(:payment_transaction, order:, order: order) }
+    let!(:transaction) { create(:payment_transaction, order:) }
 
     it "only allows admin at #index" do
       get admin_transactions_url

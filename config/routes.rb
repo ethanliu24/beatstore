@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "pages#home"
-  get "admin", to: "admin/tracks#index", as: "admin"
+  get "admin", to: "admin/dashboards#show", as: "admin"
 
   devise_for :users, path: "", controllers: {
     registrations: "users/registrations",
@@ -50,6 +50,9 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resource :dashboard, only: [ :show ] do
+      get :update_quick_stats
+    end
     resources :tracks, except: [ :show ]
     resources :licenses, except: [ :show ] do
       member do

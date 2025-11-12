@@ -131,6 +131,14 @@ en:
         no_licenses: "There are no licenses available"
 
   admin:
+    dashboards:
+      tab_title: "Dashboard"
+      quick_stats_title: "Quick Stats"
+      quick_stats:
+        sales: "Sales"
+        plays: "Plays"
+        hearts: "Hearts"
+        comments: "Comments"
     track:
       upload_file: "Upload %{file_for}"
       back_to_tracks: "Back to tracks"
@@ -326,6 +334,7 @@ en:
 
   sidebar:
     admin:
+      dashboard: "Dashboard"
       tracks: "Tracks"
       licenses: "Licenses"
       transactions: "Transactions"
