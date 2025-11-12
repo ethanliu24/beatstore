@@ -250,8 +250,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
   add_foreign_key "comment_interactions", "comments"
   add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
-  add_foreign_key "free_downloads", "tracks"
-  add_foreign_key "free_downloads", "users"
+  add_foreign_key "free_downloads", "tracks", on_delete: :nullify
+  add_foreign_key "free_downloads", "users", on_delete: :nullify
   add_foreign_key "licenses_tracks", "licenses"
   add_foreign_key "licenses_tracks", "tracks"
   add_foreign_key "order_items", "orders"
