@@ -3,7 +3,7 @@
 module Admin
   class DashboardsController < Admin::BaseController
     def show
-      @window_size = WindowSize::ONE_HOUR
+      @window_size = WindowSize::ONE_MONTH
       @cum_stats, @chron_stats = CrunchAdminAnalyticsService.new(window_size: @window_size).call
     end
 

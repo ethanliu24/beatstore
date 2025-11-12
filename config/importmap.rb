@@ -11,3 +11,5 @@ pin "flowbite", to: "https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.t
 pin "jquery", to: "https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js", preload: true
 pin "cropperjs", to: "cropper.esm.js"
 pin "@nathanvda/cocoon", to: "@nathanvda--cocoon.js" # @1.2.14
+pin "chartkick", to: "chartkick.js"
+pin "Chart.bundle", to: "Chart.bundle.js"
