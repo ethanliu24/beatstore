@@ -9,4 +9,10 @@ class WindowSize
   ONE_MONTH = "one_month"
   SIX_MONTHS = "six_months"
   ONE_YEAR = "one_year"
+
+  class << self
+    def sizes
+      WindowSize.constants.map { |const_name| WindowSize.const_get(const_name) }
+    end
+  end
 end

@@ -50,7 +50,9 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resource :dashboard, only: [ :show ]
+    resource :dashboard, only: [ :show ] do
+      get :update_quick_stats
+    end
     resources :tracks, except: [ :show ]
     resources :licenses, except: [ :show ] do
       member do
