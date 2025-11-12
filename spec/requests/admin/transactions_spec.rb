@@ -46,7 +46,7 @@ RSpec.describe "Admin::Transactions", type: :request, admin: true do
 
   describe "admin paths authorization test", authorization_test: true do
     let!(:order) { create(:order, user: customer) }
-    let!(:transaction) { create(:payment_transaction, order:, order: order) }
+    let!(:transaction) { create(:payment_transaction, order:) }
 
     it "only allows admin at #index" do
       get admin_transactions_url
