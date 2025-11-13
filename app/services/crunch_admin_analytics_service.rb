@@ -13,23 +13,13 @@ class CrunchAdminAnalyticsService
     sales = get_analytics(Transaction).where(status: Transaction.statuses[:completed])
     free_downloads = get_analytics(FreeDownload)
 
-    cum_stats = {
-      plays: plays.count,
-      hearts: hearts.count,
-      comments: comments.count,
-      sales: Money.new(sales.reduce(0) { |acc, t| acc + t.amount_cents }).format,
-      free_downloads: free_downloads.count
-    }
-
-    records = {
+    {
       plays:,
       hearts:,
       comments:,
       sales:,
       free_downloads:
     }
-
-    [ cum_stats, records ]
   end
 
   private

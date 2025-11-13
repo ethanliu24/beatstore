@@ -4,14 +4,16 @@ module Admin
   class DashboardsController < Admin::BaseController
     def show
       @window_size = WindowSize::ONE_MONTH
-      @cum_stats, db_records = CrunchAdminAnalyticsService.new(window_size: @window_size).call
-      @chron_stats = group_records(db_records)
+      db_records = CrunchAdminAnalyticsService.new(window_size: @window_size).call
+      @cum_stats = process_cum_stats(db_records)
+      @chron_stats = process_chron_stats(db_records)
     end
 
     def update_quick_stats
       window_size = params[:window_size]
-      @cum_stats, db_records = CrunchAdminAnalyticsService.new(window_size:).call
-      @chron_stats = group_records(db_records)
+      db_records = CrunchAdminAnalyticsService.new(window_size:).call
+      @cum_stats = process_cum_stats(db_records)
+      @chron_stats = process_chron_stats(db_records)
 
       respond_to do |format|
         format.turbo_stream
@@ -20,7 +22,17 @@ module Admin
 
     private
 
-    def group_records(db_records)
+    def process_cum_stats(db_records)
+      {
+        plays: db_records[:plays].count,
+        hearts: db_records[:hearts].count,
+        comments: db_records[:comments].count,
+        sales: Money.new(db_records[:sales].reduce(0) { |acc, t| acc + t.amount_cents }).format,
+        free_downloads: db_records[:free_downloads].count
+      }
+    end
+
+    def process_chron_stats(db_records)
       {
         plays: group_metrics_by_time(db_records[:plays]).count,
         hearts: group_metrics_by_time(db_records[:hearts]).count,
