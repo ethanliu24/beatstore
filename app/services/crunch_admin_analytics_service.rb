@@ -11,21 +11,22 @@ class CrunchAdminAnalyticsService
     hearts = get_analytics(Track::Heart)
     comments = get_analytics(Comment)
     sales = get_analytics(Transaction).where(status: Transaction.statuses[:completed])
-    # TODO add free downloads model
-    # free_downloads = get_analytics()
+    free_downloads = get_analytics(FreeDownload)
 
     cum_stats = {
       plays: plays.count,
       hearts: hearts.count,
       comments: comments.count,
-      sales: Money.new(sales.reduce(0) { |acc, t| acc + t.amount_cents }).format
+      sales: Money.new(sales.reduce(0) { |acc, t| acc + t.amount_cents }).format,
+      free_downloads: free_downloads.count
     }
 
     chron_stats = {
       plays: group_metrics_by_time(plays).count,
       hearts: group_metrics_by_time(hearts).count,
       comments: group_metrics_by_time(comments).count,
-      sales: group_metrics_by_time(sales).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
+      sales: group_metrics_by_time(sales).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) },
+      free_downloads: group_metrics_by_time(free_downloads).count
     }
 
     [ cum_stats, chron_stats ]
