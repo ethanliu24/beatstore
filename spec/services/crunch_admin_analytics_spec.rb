@@ -18,7 +18,7 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       create(:free_download, created_at: 1.hour.ago, user:)
       create(:free_download, created_at: 2.days.ago, user:)
 
-      cum_stats, chron_stats = call_service(window_size: WindowSize::ONE_DAY)
+      cum_stats, records = call_service(window_size: WindowSize::ONE_DAY)
 
       # cumulative
       expect(cum_stats[:plays]).to eq(2)
@@ -27,19 +27,19 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       expect(cum_stats[:sales]).to eq(Money.new(4000).format) # 1500 + 2500
       expect(cum_stats[:free_downloads]).to eq(1)
 
-      # chronological
-      expect(chron_stats[:plays]).to be_a(Hash)
-      expect(chron_stats[:hearts]).to be_a(Hash)
-      expect(chron_stats[:comments]).to be_a(Hash)
-      expect(chron_stats[:sales]).to be_a(Hash)
-      expect(chron_stats[:free_downloads]).to be_a(Hash)
+      # records
+      expect(records[:plays]).to be_a(ActiveRecord::Relation)
+      expect(records[:hearts]).to be_a(ActiveRecord::Relation)
+      expect(records[:comments]).to be_a(ActiveRecord::Relation)
+      expect(records[:sales]).to be_a(ActiveRecord::Relation)
+      expect(records[:free_downloads]).to be_a(ActiveRecord::Relation)
 
-      expect(chron_stats[:plays].values.all? { |v| v.is_a?(Integer) }).to be true
-      expect(chron_stats[:sales].values.all? { |v| v.is_a?(Float) || v.is_a?(Numeric) }).to be true
+      expect(records[:plays].all? { |v| v.respond_to?(:id) }).to be true
+      expect(records[:sales].all? { |v| v.respond_to?(:id) }).to be true
     end
 
     it "returns zeroed cumulative stats and empty chron stats when no records exist" do
-      cum_stats, chron_stats = call_service(window_size: WindowSize::ONE_DAY)
+      cum_stats, records = call_service(window_size: WindowSize::ONE_DAY)
 
       expect(cum_stats[:plays]).to eq(0)
       expect(cum_stats[:hearts]).to eq(0)
@@ -47,11 +47,11 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       expect(cum_stats[:sales]).to eq(Money.new(0).format)
       expect(cum_stats[:free_downloads]).to eq(0)
 
-      expect(chron_stats[:plays]).to eq({})
-      expect(chron_stats[:hearts]).to eq({})
-      expect(chron_stats[:comments]).to eq({})
-      expect(chron_stats[:sales]).to eq({})
-      expect(chron_stats[:free_downloads]).to eq({})
+      expect(records[:plays]).to eq([])
+      expect(records[:hearts]).to eq([])
+      expect(records[:comments]).to eq([])
+      expect(records[:sales]).to eq([])
+      expect(records[:free_downloads]).to eq([])
     end
   end
 
