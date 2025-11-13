@@ -21,36 +21,21 @@ class CrunchAdminAnalyticsService
       free_downloads: free_downloads.count
     }
 
-    chron_stats = {
-      plays: group_metrics_by_time(plays).count,
-      hearts: group_metrics_by_time(hearts).count,
-      comments: group_metrics_by_time(comments).count,
-      sales: group_metrics_by_time(sales).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) },
-      free_downloads: group_metrics_by_time(free_downloads).count
+    records = {
+      plays:,
+      hearts:,
+      comments:,
+      sales:,
+      free_downloads:
     }
 
-    [ cum_stats, chron_stats ]
+    [ cum_stats, records ]
   end
 
   private
 
   def get_analytics(entity)
     entity.where(created_at: @time_frame..Time.current)
-  end
-
-  def group_metrics_by_time(stats)
-    case @window
-    when WindowSize::ONE_HOUR
-      stats.group_by_minute(:created_at)
-    when WindowSize::TWELVE_HOURS, WindowSize::ONE_DAY, WindowSize::THREE_DAYS
-      stats.group_by_hour(:created_at)
-    when WindowSize::ONE_WEEK, WindowSize::ONE_MONTH
-      stats.group_by_day(:created_at)
-    when WindowSize::SIX_MONTHS, WindowSize::ONE_YEAR
-      stats.group_by_week(:created_at)
-    else
-      stats.group_by_day(:created_at)
-    end
   end
 
   def time_frame(window)
