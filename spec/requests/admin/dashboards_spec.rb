@@ -74,7 +74,7 @@ RSpec.describe Admin::DashboardsController, type: :request, admin: true do
     let(:window_size) { WindowSize::ONE_WEEK }
 
     it "returns a successful Turbo Stream response and assigns stats" do
-      get update_quick_stats_admin_dashboard_url(format: :turbo_stream),
+      get quick_stats_admin_dashboard_url(format: :turbo_stream),
         params: { window_size: window_size },
         headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
@@ -85,7 +85,7 @@ RSpec.describe Admin::DashboardsController, type: :request, admin: true do
     end
 
     it "computes the correct stats" do
-      get update_quick_stats_admin_dashboard_url(format: :turbo_stream),
+      get quick_stats_admin_dashboard_url(format: :turbo_stream),
         params: { window_size: window_size },
         headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
@@ -111,7 +111,7 @@ RSpec.describe Admin::DashboardsController, type: :request, admin: true do
       Transaction.delete_all
       FreeDownload.delete_all
 
-      get update_quick_stats_admin_dashboard_url(format: :turbo_stream),
+      get quick_stats_admin_dashboard_url(format: :turbo_stream),
         params: { window_size: window_size },
         headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
@@ -138,7 +138,7 @@ RSpec.describe Admin::DashboardsController, type: :request, admin: true do
     end
 
     it "only allows admin at #update_quick_stats" do
-      get update_quick_stats_admin_dashboard_url, params: { window_size: WindowSize::ONE_MONTH }
+      get quick_stats_admin_dashboard_path, params: { window_size: WindowSize::ONE_MONTH }
       expect(response).to redirect_to(root_path)
     end
   end

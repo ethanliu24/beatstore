@@ -9,7 +9,7 @@ module Admin
       @chron_stats = process_chron_stats(db_records)
     end
 
-    def update_quick_stats
+    def quick_stats
       window_size = params[:window_size]
       db_records = CrunchAdminAnalyticsService.new(window_size:).call
       @cum_stats = process_cum_stats(db_records)
