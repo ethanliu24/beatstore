@@ -14,6 +14,7 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:role) }
     it { should define_enum_for(:role).with_values([ :customer, :admin, :guest ]) }
     it { should have_one_attached(:profile_picture) }
+    it { is_expected.to have_many(:free_downloads).dependent(:nullify) }
 
     context "password format" do
       it "is valid" do
@@ -225,6 +226,20 @@ RSpec.describe User, type: :model do
       expect(play.user_id).to be_nil
       expect(heart.track_id).to eq(track.id)
       expect(play.track_id).to eq(track.id)
+    end
+  end
+
+  describe "free download" do
+    let!(:user) { create(:user) }
+    let!(:free_download) { create(:free_download, user:) }
+
+    it "nullifies user_id in free_downloads when user is destroyed" do
+      expect { user.destroy }.to change {
+        free_download.reload.user_id
+      }.from(user.id).to(nil)
+
+      expect { user.destroy }.not_to change(FreeDownload, :count)
+      expect(free_download.reload).to be_persisted
     end
   end
 end

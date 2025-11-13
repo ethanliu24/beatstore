@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_11_183819) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -95,6 +95,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_183819) do
     t.datetime "updated_at", null: false
     t.index ["entity_type", "entity_id"], name: "index_comments_on_entity"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "free_downloads", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "track_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["track_id"], name: "index_free_downloads_on_track_id"
+    t.index ["user_id"], name: "index_free_downloads_on_user_id"
   end
 
   create_table "licenses", force: :cascade do |t|
@@ -241,6 +250,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_183819) do
   add_foreign_key "comment_interactions", "comments"
   add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
+  add_foreign_key "free_downloads", "tracks", on_delete: :nullify
+  add_foreign_key "free_downloads", "users", on_delete: :nullify
   add_foreign_key "licenses_tracks", "licenses"
   add_foreign_key "licenses_tracks", "tracks"
   add_foreign_key "order_items", "orders"
