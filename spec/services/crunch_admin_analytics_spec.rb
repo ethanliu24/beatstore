@@ -18,16 +18,8 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       create(:free_download, created_at: 1.hour.ago, user:)
       create(:free_download, created_at: 2.days.ago, user:)
 
-      cum_stats, records = call_service(window_size: WindowSize::ONE_DAY)
+      records = call_service(window_size: WindowSize::ONE_DAY)
 
-      # cumulative
-      expect(cum_stats[:plays]).to eq(2)
-      expect(cum_stats[:hearts]).to eq(1)
-      expect(cum_stats[:comments]).to eq(2)
-      expect(cum_stats[:sales]).to eq(Money.new(4000).format) # 1500 + 2500
-      expect(cum_stats[:free_downloads]).to eq(1)
-
-      # records
       expect(records[:plays]).to be_a(ActiveRecord::Relation)
       expect(records[:hearts]).to be_a(ActiveRecord::Relation)
       expect(records[:comments]).to be_a(ActiveRecord::Relation)
@@ -39,13 +31,7 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
     end
 
     it "returns zeroed cumulative stats and empty chron stats when no records exist" do
-      cum_stats, records = call_service(window_size: WindowSize::ONE_DAY)
-
-      expect(cum_stats[:plays]).to eq(0)
-      expect(cum_stats[:hearts]).to eq(0)
-      expect(cum_stats[:comments]).to eq(0)
-      expect(cum_stats[:sales]).to eq(Money.new(0).format)
-      expect(cum_stats[:free_downloads]).to eq(0)
+      records = call_service(window_size: WindowSize::ONE_DAY)
 
       expect(records[:plays]).to eq([])
       expect(records[:hearts]).to eq([])
