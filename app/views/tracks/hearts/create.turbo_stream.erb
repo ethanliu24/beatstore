@@ -1,0 +1,12 @@
+<%= turbo_stream.update "track-show-heart" do %>
+  <%= render "tracks/hearts/show_heart", track: @track, user_liked: true %>
+<% end %>
+
+<%= turbo_stream.update dom_id(@track, :show_data) do %>
+  <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
+<% end %>
+
+<%= turbo_stream.update dom_id(@track, :more_dropdown_like) do %>
+  <%= icon "heart", variant: "filled", class: "w-3 h-3" %>
+  <%= button_to t("track.heart_track"), track_heart_path(@track), method: :delete, class: "cursor-pointer" %>
+<% end %>
