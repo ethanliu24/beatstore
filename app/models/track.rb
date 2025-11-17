@@ -49,6 +49,7 @@ class Track < ApplicationRecord
   has_many :licenses_tracks_associations, class_name: "Licenses::LicensesTracksAssociation", dependent: :destroy
   has_many :licenses, through: :licenses_tracks_associations
   has_many :cart_items, as: :product, dependent: :nullify
+  has_many :free_downloads, dependent: :nullify
 
   # === Scopes ===
   scope :publicly_available, -> { where(is_public: true) }

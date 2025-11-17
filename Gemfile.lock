@@ -92,7 +92,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
-    brakeman (7.1.0)
+    brakeman (7.1.1)
       racc
     builder (3.3.0)
     capybara (3.40.0)
@@ -104,6 +104,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    chartkick (5.2.1)
     childprocess (5.1.0)
       logger (~> 1.5)
     cocoon (1.2.15)
@@ -147,6 +148,8 @@ GEM
       raabro (~> 1.4)
     globalid (1.3.0)
       activesupport (>= 6.1)
+    groupdate (6.7.0)
+      activesupport (>= 7.1)
     hashie (5.0.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -165,7 +168,7 @@ GEM
     json (2.12.0)
     jwt (3.0.0)
       base64
-    kamal (2.8.1)
+    kamal (2.8.2)
       activesupport (>= 7.0)
       base64 (~> 0.2)
       bcrypt_pbkdf (~> 1.0)
@@ -196,7 +199,7 @@ GEM
     marcel (1.1.0)
     matrix (0.4.2)
     mini_mime (1.1.5)
-    minitest (5.26.0)
+    minitest (5.26.1)
     monetize (1.13.0)
       money (~> 6.12)
     money (6.19.0)
@@ -423,9 +426,9 @@ GEM
       ansi
       ast
     ruby-progressbar (1.13.0)
-    rubyzip (3.2.0)
+    rubyzip (3.2.1)
     securerandom (0.4.1)
-    selenium-webdriver (4.37.0)
+    selenium-webdriver (4.38.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -470,16 +473,16 @@ GEM
       railties (>= 6.0.0)
     stringio (3.1.7)
     stripe (15.5.0)
-    tailwindcss-rails (4.3.0)
+    tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.12)
-    tailwindcss-ruby (4.1.12-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.12-aarch64-linux-musl)
-    tailwindcss-ruby (4.1.12-arm64-darwin)
-    tailwindcss-ruby (4.1.12-x86_64-darwin)
-    tailwindcss-ruby (4.1.12-x86_64-linux-gnu)
-    tailwindcss-ruby (4.1.12-x86_64-linux-musl)
+    tailwindcss-ruby (4.1.16)
+    tailwindcss-ruby (4.1.16-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.16-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.16-arm64-darwin)
+    tailwindcss-ruby (4.1.16-x86_64-darwin)
+    tailwindcss-ruby (4.1.16-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.16-x86_64-linux-musl)
     thor (1.4.0)
     thruster (0.1.16)
     thruster (0.1.16-aarch64-linux)
@@ -490,7 +493,7 @@ GEM
     tsort (0.2.0)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
-    turbo-rails (2.0.17)
+    turbo-rails (2.0.20)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
@@ -499,7 +502,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uri (1.1.0)
+    uri (1.1.1)
     useragent (0.16.11)
     version_gem (1.1.8)
     view_component (4.1.0)
@@ -538,11 +541,13 @@ DEPENDENCIES
   bootsnap
   brakeman
   capybara
+  chartkick
   cocoon
   countries (~> 8.0)
   debug
   devise (~> 4.9)
   factory_bot_rails
+  groupdate
   importmap-rails
   jbuilder
   kamal
@@ -573,7 +578,7 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   stripe
-  tailwindcss-rails (~> 4.3)
+  tailwindcss-rails (~> 4.4)
   tailwindcss-ruby (~> 4.1)
   thruster
   turbo-rails

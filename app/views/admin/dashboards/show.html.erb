@@ -1,0 +1,20 @@
+<% content_for :title, t("admin.dashboards.tab_title") %>
+
+<div class="flex justify-between items-center w-full">
+  <h2 class="mb-4 text-3xl font-light"><%= t("admin.dashboards.quick_stats_title") %></h2>
+  <select class="py-1 px-2 cursor-pointer bg-secondary-bg focus:outline-none focus:ring-0 focus:border-none roudned"
+    data-controller="selector-turbo"
+    data-selector-turbo-url-value="<%= quick_stats_admin_dashboard_path %>"
+    data-selector-turbo-param-value="window_size"
+    data-action="change->selector-turbo#change">
+    <% WindowSize.sizes.each do |size| %>
+      <option value="<%= size %>" <%= "selected" if size == @window_size %>>
+        <%= size.humanize %>
+      </option>
+    <% end %>
+  </select>
+</div>
+
+<div id="quick-stats">
+  <%= render partial: "admin/dashboards/quick_stats", locals: { cum_stats: @cum_stats, chrono_stats: @chrono_stats } %>
+</div>

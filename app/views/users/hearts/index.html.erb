@@ -1,14 +1,22 @@
 <% title(t("label.liked_tracks")) %>
 
-<div class="w-full">
+<div class="w-full h-full">
   <%= render PageTitleComponent.new(
     title: t("label.liked_tracks"),
     subtitle: t("profile.see_tracks_you_liked_here")
   ) %>
+
+  <div class="w-full flex justify-start mt-8 mb-3">
+    <%== pagy_info(@pagy) %>
+  </div>
 
   <%= render Tracks::ListComponent.new(
     tracks: @liked_tracks,
     current_user:,
     options: { empty_message: t("profile.no_tracks_liked") }
   ) %>
+
+  <div class="flex justify-center items-center w-full mt-8">
+    <%= render partial: "shared/pagy", locals: { pagy: @pagy } %>
+  </div>
 </div>

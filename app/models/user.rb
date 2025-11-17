@@ -48,6 +48,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :comment_interactions, class_name: "Comment::Interaction"
   has_many :orders
+  has_many :free_downloads, dependent: :nullify
 
   class << self
     def from_omniauth(auth)

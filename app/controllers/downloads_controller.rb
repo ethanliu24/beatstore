@@ -8,6 +8,8 @@ class DownloadsController < ApplicationController
       return
     end
 
+    FreeDownload.create!(user: current_user, track: @track)
+
     send_data @track.tagged_mp3.download,
       filename: set_file_name(@track.tagged_mp3),
       type: "audio/mpeg",

@@ -212,6 +212,7 @@ RSpec.describe Track, type: :model do
     it { should have_one_attached(:track_stems) }
     it { should have_one_attached(:project) }
     it { should have_one_attached(:cover_photo) }
+    it { is_expected.to have_many(:free_downloads).dependent(:nullify) }
 
     it "can have many licenses" do
       track = create(:track)
@@ -248,6 +249,18 @@ RSpec.describe Track, type: :model do
       expect(cart_item.product_id).to be_nil
       expect(cart_item.product_type).to be_nil
       expect(cart_item.available?).to be(false)
+    end
+
+    it "nullifies track_id in free_downloads when track is destroyed" do
+      track = create(:track)
+      free_download = create(:free_download, track:)
+
+      expect { track.destroy }.to change {
+        free_download.reload.track_id
+      }.from(track.id).to(nil)
+
+      expect { track.destroy }.not_to change(FreeDownload, :count)
+      expect(free_download.reload).to be_persisted
     end
   end
 

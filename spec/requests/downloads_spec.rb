@@ -31,6 +31,14 @@ RSpec.describe DownloadsController, type: :request do
         expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
         expect(response.content_type).to eq("audio/mpeg")
       end
+
+      it "adds a free download record" do
+        expect {
+          get download_track_free_url(track)
+        }.to change(FreeDownload, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+      end
     end
 
     describe "downloads when files are not attached" do

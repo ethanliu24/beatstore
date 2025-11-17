@@ -1,0 +1,24 @@
+<div class="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 gap-x-6 gap-y-3 w-full mb-10"
+  data-tabs-toggle="#admin-dashboard-quick-stats" role="tablist">
+  <%= render partial: "admin/dashboards/quick_stats_tab",
+    locals: { icon_name: "receipt-dollar", title: t("admin.dashboards.quick_stats.sales"), stats: @cum_stats[:sales], tab_id: :sales } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab",
+    locals: { icon_name: "player-play", title: t("admin.dashboards.quick_stats.plays"), stats: @cum_stats[:plays], tab_id: :plays } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab",
+    locals: { icon_name: "heart", title: t("admin.dashboards.quick_stats.hearts"), stats: @cum_stats[:hearts], tab_id: :hearts } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab",
+    locals: { icon_name: "message", title: t("admin.dashboards.quick_stats.comments"), stats: @cum_stats[:comments], tab_id: :comments } %>
+  <%= render partial: "admin/dashboards/quick_stats_tab",
+    locals: { icon_name: "file-download", title: t("admin.dashboards.quick_stats.free_downloads"), stats: @cum_stats[:free_downloads], tab_id: :free_downloads } %>
+</div>
+<div id="admin-dashboard-quick-stats" class="w-full h-full">
+  <% @chron_stats.each do |name, stats| %>
+    <div id="<%= "#{name}_chart" %>" class="<%= "#{name == :sales ? "" : "hidden"}" %>" role="tabpanel">
+      <div class="text-center font-bold text-secondary-txt mb-4"><%= "#{name}".humanize.upcase %></div>
+      <%= line_chart stats,
+        xtitle: "DATE",
+        ytitle: "#{name}".upcase
+      %>
+    </div>
+  <% end %>
+</div>
