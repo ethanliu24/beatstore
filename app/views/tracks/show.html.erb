@@ -1,20 +1,19 @@
 <% content_for :title, @track.title %>
 
-<%# TODO make it responsive %>
 <div class="flex flex-col justify-center items-center gap-12 w-full">
-  <section class="grid grid-cols-[auto_1fr] gap-x-8 w-full">
-    <div class="row-span-2 min-w-50 min-h-50 w-50 h-50">
+  <section class="w-full grid grid-cols-[auto_1fr] gap-x-8 max-sm:grid-cols-1 max-sm:grid-rows-[auto_auto_auto] max-sm:justify-items-center max-sm:gap-y-8">
+    <div class="row-span-2 max-sm:row-span-1 max-sm:order-2 min-w-50 min-h-50 w-50 h-50">
       <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 50) %>
     </div>
 
-    <div class="flex-1 self-start">
+    <div class="flex-1 self-start max-sm:order-1 max-sm:self-auto max-sm:h-auto max-sm:text-center">
       <h1 class="text-2xl truncate font-bold"><%= @track.title %></h1>
       <div id="<%= dom_id(@track, :show_data) %>" class="flex justify-start items-center gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
         <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
       </div>
-      <p class="text-xs mt-2"><%= @track.description %></p>
+      <p class="text-xs mt-2 max-sm:text-[0.6rem]"><%= @track.description %></p>
     </div>
-    <div class="flex flex-col justify-center items-start gap-2 w-full self-end">
+    <div class="flex flex-col justify-center items-start max-sm:items-center gap-2 w-full self-end max-sm:order-3 max-sm:self-auto">
       <div class="flex justify-start items-center gap-2">
         <% @track.tags.each do |tag| %>
           <%= render TagComponent.new(name: tag.name) %>
