@@ -3,7 +3,7 @@
 <% end %>
 
 <%= turbo_stream.update dom_id(@track, :show_data) do %>
-  <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
+  <%= render partial: "tracks/track_data", locals: { track: @track, icon_dimension: track_data_icon_dimension } %>
 <% end %>
 
 <%= turbo_stream.update dom_id(@track, :more_dropdown_like) do %>
