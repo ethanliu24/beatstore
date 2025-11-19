@@ -193,4 +193,21 @@ RSpec.describe Users::RegistrationsController, type: :request do
       expect(@user.respond_to?(:foo)).to be false
     end
   end
+
+  describe "DELETE #destroy" do
+    let(:user) { create(:user) }
+
+    before do
+      sign_in user, scope: :user
+    end
+
+    it "should discard the signed in user" do
+      delete user_registration_url
+      user.reload
+
+      expect(response).to have_http_status(:see_other)
+      expect(user.discarded?).to be(true)
+      expect(user.discarded_at).not_to be_nil
+    end
+  end
 end
