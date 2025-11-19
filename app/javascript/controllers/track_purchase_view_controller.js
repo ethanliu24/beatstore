@@ -18,7 +18,7 @@ export default class extends Controller {
     this.selectedLicenseId = e.currentTarget.dataset.licenseId;
   }
 
-  addToCart() {
+  addToCart(e) {
     if (!this.selectedLicenseId) return;
 
     const cartItemBody = {
@@ -28,12 +28,15 @@ export default class extends Controller {
       quantity: this.quantity
     }
 
-    fetch(this.createCartItemUrlValue, {
+    // Should redirect in the backend. The controller expects turbo stream so need to find a workaround
+    if (e.currentTarget.hasAttribute("data-purchase")) Turbo.visit("/cart");
+
+    fetch(`${this.createCartItemUrlValue}?${params.toString()}`, {
       method: "POST",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json",
-        "Accept": "text/vnd.turbo-stream.html"
+        // "Accept": "text/vnd.turbo-stream.html"
       },
       body: JSON.stringify({
         cart_item: cartItemBody
