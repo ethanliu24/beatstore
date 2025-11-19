@@ -82,7 +82,6 @@
           <li id="<%= dom_id(@track, :more_dropdown_like) %>" class="dropdown-item">
             <% user_liked = current_user && current_user.hearted?(@track) %>
             <%= icon "heart", variant: user_liked ? "filled" : "outline", class: icon_size %>
-            <%# TODO toast to show like successful %>
             <% if current_user %>
               <%= button_to t("track.heart_track"), track_heart_path(@track), method: user_liked ? :delete : :post, class: "cursor-pointer" %>
             <% else %>

@@ -108,11 +108,7 @@
               <%= icon "eye", class: icon_size %>
               <%= t("track.see_track") %>
             </li>
-            <li class="dropdown-item">
-              <%= icon "share",  class: icon_size %>
-              <%= t("label.share") %>
-            </li>
-            <li class="dropdown-item">
+            <li class="dropdown-item" data-action="click->audio-player#fetchTrackPurchaseModal">
               <%= icon "shopping-bag",  class: icon_size %>
               <%= t("track.add_to_cart") %>
             </li>
@@ -132,9 +128,9 @@
         <% end %>
       <% end %>
 
-      <%# implement get modal %>
       <div class="w-fit h-fit max-md:hidden">
-        <button class="button px-3 py-1 text-xs w-full h-full" data-audio-player-target="priceBtn"></button>
+        <button class="button px-3 py-1 text-xs w-full h-full" data-audio-player-target="priceBtn"
+        data-action="click->audio-player#fetchTrackPurchaseModal"></button>
       </div>
 
       <div class="w-6 h-6 p-1 rounded-full hover:bg-hover" data-action="click->audio-player#closePlayer">

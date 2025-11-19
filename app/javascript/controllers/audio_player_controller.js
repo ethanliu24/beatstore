@@ -182,7 +182,12 @@ export default class extends Controller {
 
   async fetchTrackPurchaseModal(e) {
     e.stopPropagation();
-    const url = e.currentTarget.dataset.trackPurchaseModalUrl;
+    let url = e.currentTarget.dataset.trackPurchaseModalUrl;
+    if (!url) {
+      if (!this.currentTrackId) return;
+      url = `/modal/track_purchase/${this.currentTrackId}`;
+    }
+
     await fetch(url, {
       method: "GET",
       headers: {
