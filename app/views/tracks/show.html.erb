@@ -2,56 +2,54 @@
 
 <%# TODO make it responsive %>
 <div class="flex flex-col justify-center items-center gap-12 w-full">
-  <section class="flex justify-start items-stretch gap-8 w-full">
-    <div class="min-w-50 min-h-50 w-50 h-50">
+  <section class="grid grid-cols-[auto_1fr] gap-x-8 w-full">
+    <div class="row-span-2 min-w-50 min-h-50 w-50 h-50">
       <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 50) %>
     </div>
 
-    <div class="flex-1 flex flex-col justify-between items-start">
-      <div class="flex-1">
-        <h1 class="text-2xl truncate font-bold"><%= @track.title %></h1>
-        <div id="<%= dom_id(@track, :show_data) %>" class="flex justify-start items-center gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
-          <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
-        </div>
-        <p class="text-xs mt-2"><%= @track.description %></p>
+    <div class="flex-1 self-start">
+      <h1 class="text-2xl truncate font-bold"><%= @track.title %></h1>
+      <div id="<%= dom_id(@track, :show_data) %>" class="flex justify-start items-center gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
+        <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
       </div>
-      <div class="flex flex-col justify-center items-start gap-2 w-full">
-        <div class="flex justify-start items-center gap-2">
-          <% @track.tags.each do |tag| %>
-            <%= render TagComponent.new(name: tag.name) %>
-          <% end %>
-        </div>
-        <div class="flex justify-start items-stretch gap-2">
-          <%= link_to track_purchase_modal_path(@track), class: "button px-2 py-1.5", data: { turbo_stream: true } do %>
-            <%= icon "shopping-bag", class: "mr-1" %>
-            <p class="text-sm font-light"><%= @track.cheapest_price %></p>
-          <% end %>
+      <p class="text-xs mt-2"><%= @track.description %></p>
+    </div>
+    <div class="flex flex-col justify-center items-start gap-2 w-full self-end">
+      <div class="flex justify-start items-center gap-2">
+        <% @track.tags.each do |tag| %>
+          <%= render TagComponent.new(name: tag.name) %>
+        <% end %>
+      </div>
+      <div class="flex justify-start items-stretch gap-2">
+        <%= link_to track_purchase_modal_path(@track), class: "button px-2 py-1.5", data: { turbo_stream: true } do %>
+          <%= icon "shopping-bag", class: "mr-1" %>
+          <p class="text-sm font-light"><%= @track.cheapest_price %></p>
+        <% end %>
 
-          <%# TODO add tool tips for the following %>
-          <% if current_user %>
-            <div id="track-show-heart">
-              <%= render "tracks/hearts/show_heart", track: @track, user_liked: current_user.hearted?(@track) %>
-            </div>
-          <% else %>
-            <%= link_to auth_prompt_modal_path, class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
-              <%= icon "heart", class: "text-accent w-5 h-5 cursor-pointer" %>
-            <% end %>
+        <%# TODO add tool tips for the following %>
+        <% if current_user %>
+          <div id="track-show-heart">
+            <%= render "tracks/hearts/show_heart", track: @track, user_liked: current_user.hearted?(@track) %>
+          </div>
+        <% else %>
+          <%= link_to auth_prompt_modal_path, class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
+            <%= icon "heart", class: "text-accent w-5 h-5 cursor-pointer" %>
           <% end %>
+        <% end %>
 
-          <%= link_to download_track_free_path(@track), target: "_blank", rel: "noopener", class: "track-show-icon-only-btn" do %>
-            <%= icon "download", class: "text-accent" %>
-          <% end %>
+        <%= link_to download_track_free_path(@track), target: "_blank", rel: "noopener", class: "track-show-icon-only-btn" do %>
+          <%= icon "download", class: "text-accent" %>
+        <% end %>
 
-          <%= link_to track_more_info_modal_path(@track), class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
-            <%= icon "library", class: "text-accent" %>
-          <% end %>
+        <%= link_to track_more_info_modal_path(@track), class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
+          <%= icon "library", class: "text-accent" %>
+        <% end %>
 
-          <% if current_user && current_user.admin? %>
-            <%= link_to edit_admin_track_path(@track), class: "track-show-icon-only-btn" do %>
-              <%= icon "pencil", class: "text-accent" %>
-            <% end %>
+        <% if current_user && current_user.admin? %>
+          <%= link_to edit_admin_track_path(@track), class: "track-show-icon-only-btn" do %>
+            <%= icon "pencil", class: "text-accent" %>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </div>
   </section>
