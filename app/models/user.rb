@@ -52,6 +52,8 @@ class User < ApplicationRecord
   has_many :orders
   has_many :free_downloads, dependent: :nullify
 
+  default_scope -> { kept }
+
   class << self
     def from_omniauth(auth)
       user = find_by(provider: auth.provider, uid: auth.uid)
