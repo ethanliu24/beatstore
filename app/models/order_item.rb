@@ -2,6 +2,7 @@
 
 # This should be immutable, except when attaching files
 class OrderItem < ApplicationRecord
+  include Discard::Model
   include Purchasable
 
   monetize :unit_price_cents

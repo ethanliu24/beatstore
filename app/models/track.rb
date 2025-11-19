@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Track < ApplicationRecord
+  include Discard::Model
+
   # before_validation :adjust_visibility
   before_validation { self.is_public = false if is_public.nil? }
 

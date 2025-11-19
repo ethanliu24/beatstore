@@ -2,6 +2,8 @@
 
 # This should be partly immutable except for status updates. Once transaction clears it should be readonly
 class Order < ApplicationRecord
+  include Discard::Model
+
   PUBLIC_ID_PREFIX = "OR"
   PUBLIC_ID_SUFFIX_LENGTH = 8
 

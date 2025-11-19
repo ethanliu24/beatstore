@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Transaction < ApplicationRecord
+  include Discard::Model
+
   belongs_to :order
 
   enum :status, {

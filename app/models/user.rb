@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Discard::Model
+
   devise \
     :database_authenticatable,
     :registerable,
