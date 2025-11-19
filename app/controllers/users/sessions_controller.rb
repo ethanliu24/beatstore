@@ -2,7 +2,7 @@
 
 class Users::SessionsController < Devise::SessionsController
   def create
-    user = User.find_by(email: params[:user][:email])
+    user = User.kept.find_by(email: params[:user][:email])
 
     # Initialize a new resource object if authentication fails
     self.resource = User.new(email: params[:user][:email])
