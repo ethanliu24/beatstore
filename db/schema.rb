@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_19_231535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,6 +93,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_comments_on_discarded_at"
     t.index ["entity_type", "entity_id"], name: "index_comments_on_entity"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -118,6 +120,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.boolean "default_for_new", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_licenses_on_discarded_at"
     t.index ["title"], name: "index_licenses_on_title", unique: true
   end
 
@@ -140,6 +144,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.jsonb "license_snapshot", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_order_items_on_discarded_at"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
 
@@ -152,6 +158,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_orders_on_discarded_at"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -202,6 +210,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.datetime "updated_at", null: false
     t.string "genre"
     t.text "description"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_tracks_on_discarded_at"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -215,6 +225,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_transactions_on_discarded_at"
     t.index ["order_id"], name: "index_transactions_on_order_id"
   end
 
@@ -236,7 +248,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_233610) do
     t.string "provider"
     t.string "uid"
     t.text "biography", default: "", null: false
+    t.datetime "discarded_at"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
