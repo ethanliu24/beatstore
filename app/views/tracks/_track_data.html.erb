@@ -1,26 +1,16 @@
-<% icon_dimension = "w-#{icon_size} h-#{icon_size}" %>
-
-<div class="flex justify-start items-center gap-1">
-  <%= icon "calendar", class: "#{icon_dimension}" %>
-  <p class="whitespace-nowrap"><%= format_date(track.created_at) %></p>
-</div>
-<div class="flex justify-start items-center gap-1">
-  <%= icon "activity-heartbeat", class: "#{icon_dimension}" %>
-  <p class="whitespace-nowrap"><%= track.bpm ? "#{track.bpm} BPM" : "_" %></p>
-</div>
-<div class="flex justify-start items-center gap-1">
-  <%= icon "piano", class: "#{icon_dimension}" %>
-  <p class="whitespace-nowrap"><%= track.key.presence || "_" %></p>
-</div>
-<div class="flex justify-start items-center gap-1">
-  <%= icon "music", class: "#{icon_dimension}" %>
-  <p class="whitespace-nowrap"><%= track.genre %></p>
-</div>
-<div class="flex justify-start items-center gap-1">
-  <%= icon "player-play", class: "#{icon_dimension}" %>
-  <p class="whitespace-nowrap"><%= track.num_plays %></p>
-</div>
-<div class="flex justify-start items-center gap-1">
-  <%= icon "heart", class: "#{icon_dimension}" %>
-  <p class="whitespace-nowrap"><%= track.num_hearts %></p>
+<div id="<%= dom_id(@track, :show_data) %>"
+  class="grid grid-flow-col auto-cols-max max-sm:grid-flow-row max-sm:grid-cols-3 max-sm:auto-cols-auto max-sm:gap-y-1 gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
+  <% [
+    { icon: "calendar", value: format_date(track.created_at) },
+    { icon: "activity-heartbeat", value: track.bpm ? "#{track.bpm} BPM" : "_" },
+    { icon: "piano", value: track.key.presence || "_" },
+    { icon: "music", value: track.genre },
+    { icon: "player-play", value: track.num_plays },
+    { icon: "heart", value: track.num_hearts },
+  ].each do |data| %>
+    <div class="flex justify-start items-center gap-1">
+      <%= icon data[:icon], class: "#{icon_dimension}" %>
+      <p class="whitespace-nowrap truncate"><%= data[:value] %></p>
+    </div>
+  <% end %>
 </div>
