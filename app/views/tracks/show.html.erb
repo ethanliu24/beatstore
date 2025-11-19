@@ -10,7 +10,7 @@
     <div class="flex-1 flex flex-col justify-between items-start">
       <div class="flex-1">
         <h1 class="text-2xl truncate font-bold"><%= @track.title %></h1>
-        <div class="flex justify-start items-center gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
+        <div id="<%= dom_id(@track, :show_data) %>" class="flex justify-start items-center gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
           <%= render partial: "tracks/track_data", locals: { track: @track, icon_size: "5" } %>
         </div>
         <p class="text-xs mt-2"><%= @track.description %></p>
@@ -29,19 +29,9 @@
 
           <%# TODO add tool tips for the following %>
           <% if current_user %>
-            <%= button_to track_heart_path(@track), form_class: "track-show-icon-only-btn",
-              class: "flex justify-center items-center w-full h-full",
-              method: current_user.hearted?(@track) ? :delete : :post,
-              data: {
-                controller: "like-button",
-                like_button_user_liked_value: current_user.hearted?(@track),
-                action: "click->like-button#toggle",
-              } do %>
-              <%= icon "heart", variant: "filled", class: "text-accent w-5 h-5 cursor-pointer hidden",
-                data: { like_button_target: "liked" } %>
-              <%= icon "heart", variant: "outline", class: "text-accent w-5 h-5 cursor-pointer hidden",
-                data: { like_button_target: "notLiked" } %>
-            <% end %>
+            <div id="track-show-heart">
+              <%= render "tracks/hearts/show_heart", track: @track, user_liked: current_user.hearted?(@track) %>
+            </div>
           <% else %>
             <%= link_to auth_prompt_modal_path, class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
               <%= icon "heart", class: "text-accent w-5 h-5 cursor-pointer" %>
