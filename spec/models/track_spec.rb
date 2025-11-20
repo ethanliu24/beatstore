@@ -313,4 +313,17 @@ RSpec.describe Track, type: :model do
       expect(track.available?).to be(false)
     end
   end
+
+  describe "#undiscarded_comments" do
+    it "should not return discarded comments" do
+      track = create(:track)
+      comment = create(:comment, entity: track)
+
+      comment.discard!
+      comment.reload
+      track.reload
+
+      expect(track.undiscarded_comments.count).to eq(0)
+    end
+  end
 end

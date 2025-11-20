@@ -108,6 +108,10 @@ class Track < ApplicationRecord
     is_public && kept?
   end
 
+  def undiscarded_comments
+    comments.kept
+  end
+
   private
 
   def shares_cannot_exceed_100_percent
