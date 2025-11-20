@@ -304,15 +304,20 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
   describe "DELETE #destroy" do
     let!(:license) { create(:license) }
 
-    it "destroys the request track" do
+    it "discards the request track" do
+      id = license.id
+
       expect {
         delete admin_license_url(license)
-      }.to change(License, :count).by(-1)
+      }.not_to change(License, :count)
 
-      expect(License.count).to eq(0)
-      expect(response).to have_http_status(303)
+      license.reload
+
+      expect(response).to have_http_status(:see_other)
       expect(response).to redirect_to(admin_licenses_url)
-      # TODO test if deletion also deletes from track
+      expect(license.discarded?).to be(true)
+      expect(License.kept.find_by(id:)).to be_nil
+      expect(License.find(id)).to eq(license)
     end
   end
 

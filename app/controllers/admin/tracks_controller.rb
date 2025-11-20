@@ -15,12 +15,12 @@ module Admin
 
     def new
       @track = Track.new
-      @licenses = License.order(Arel.sql("default_for_new DESC, created_at DESC"))
+      @licenses = License.kept.order(Arel.sql("default_for_new DESC, created_at DESC"))
     end
 
     def edit
       # Fine for now as there won't be a lot of licenses, if want to be optimize use raw sql
-      @licenses = (@track.licenses + License.all).uniq
+      @licenses = (@track.undiscarded_licenses + License.kept.all).uniq
     end
 
     def create
@@ -60,7 +60,7 @@ module Admin
     private
 
     def set_track
-      @track = Track.find(params[:id])
+      @track = Track.kept.find(params[:id])
     end
 
     def sanitize_track_params

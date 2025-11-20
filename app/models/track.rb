@@ -97,7 +97,7 @@ class Track < ApplicationRecord
   end
 
   def profitable_licenses
-    licenses.where.not(contract_type: License.contract_types[:free]).order(:price_cents)
+    undiscarded_licenses.where.not(contract_type: License.contract_types[:free]).order(:price_cents)
   end
 
   def cheapest_price
@@ -110,6 +110,10 @@ class Track < ApplicationRecord
 
   def undiscarded_comments
     comments.kept
+  end
+
+  def undiscarded_licenses
+    licenses.kept
   end
 
   private

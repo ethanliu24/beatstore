@@ -5,7 +5,7 @@ module Admin
     before_action :set_license, only: [ :edit, :update, :destroy, :apply_to_all, :remove_from_all ]
 
     def index
-      @licenses = License.order(updated_at: :desc)
+      @licenses = License.kept.order(updated_at: :desc)
     end
 
     def new
@@ -63,7 +63,7 @@ module Admin
     end
 
     def destroy
-      @license.destroy!
+      @license.discard!
 
       redirect_to admin_licenses_path, status: :see_other, notice: t("admin.license.destroy.success")
     end
@@ -123,7 +123,7 @@ module Admin
     end
 
     def set_license
-      @license = License.find(params[:id])
+      @license = License.kept.find(params[:id])
     end
 
     def sanitize_license_params

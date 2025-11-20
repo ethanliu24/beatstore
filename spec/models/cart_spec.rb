@@ -91,4 +91,22 @@ RSpec.describe Cart, type: :model do
       expect(cart.unavailable_items_count).to eq(2)
     end
   end
+
+  describe "#items" do
+    it "should not return unavailable items" do
+      user = create(:user)
+      track = create(:track)
+      license = create(:license)
+      cart_item = create(:cart_item, cart: user.cart, product: track, license:)
+
+      user.cart.cart_items << cart_item
+
+      expect(user.cart.items.first).to eq(cart_item)
+
+      license.discard!
+      license.reload
+
+      expect(user.cart.items.count).to eq(0)
+    end
+  end
 end
