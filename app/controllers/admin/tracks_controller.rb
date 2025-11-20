@@ -3,7 +3,7 @@ module Admin
     before_action :set_track, except: [ :index, :new, :create ]
 
     def index
-      base_scope = Track.order(created_at: :desc)
+      base_scope = Track.kept.order(created_at: :desc)
       @q = base_scope.ransack(params[:q], auth_object: current_user)
       queried_tracks = @q.result(distinct: true).includes(:tags)
       @pagy, @tracks = pagy(queried_tracks, limit: 8)
@@ -52,7 +52,7 @@ module Admin
     end
 
     def destroy
-      @track.destroy!
+      @track.discard!
 
       redirect_to admin_tracks_path, status: :see_other, notice: t("admin.track.destroy.success")
     end

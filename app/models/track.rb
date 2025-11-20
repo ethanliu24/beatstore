@@ -54,7 +54,7 @@ class Track < ApplicationRecord
   has_many :free_downloads, dependent: :nullify
 
   # === Scopes ===
-  scope :publicly_available, -> { where(is_public: true) }
+  scope :publicly_available, -> { kept.where(is_public: true) }
 
   class << self
     def ransackable_attributes(auth_object = nil)
@@ -105,7 +105,7 @@ class Track < ApplicationRecord
   end
 
   def available?
-    is_public
+    is_public && kept?
   end
 
   private

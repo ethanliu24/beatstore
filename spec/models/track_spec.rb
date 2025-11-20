@@ -198,6 +198,17 @@ RSpec.describe Track, type: :model do
 
       expect(track.collaborators.size).to eq(0)
     end
+
+    it "should delete all tags associated with it" do
+      track = create(:track)
+      tag1 = create(:track_tag, track: track, name: "t1")
+      tag2 = create(:track_tag, track: track, name: "t2")
+
+      expect(track.reload.tags.where(name: "t1").count).to eq(1)
+      expect(track.reload.tags.where(name: "t2").count).to eq(1)
+      expect { track.destroy }.to change { Track::Tag.count }.by(-2)
+      expect(Track::Tag.where(id: [ tag1.id, tag2.id ])).to be_empty
+    end
   end
 
   describe "associations" do
@@ -291,6 +302,13 @@ RSpec.describe Track, type: :model do
 
     it "should be unavailable if it's private" do
       track = create(:track, is_public: false)
+
+      expect(track.available?).to be(false)
+    end
+
+    it "should be unavailable if it's discarded" do
+      track = create(:track)
+      track.discard!
 
       expect(track.available?).to be(false)
     end
