@@ -63,20 +63,22 @@ RSpec.describe "Comments", type: :request do
       expect(response).to have_http_status(422)
     end
 
-    it "should delete the comment made by the current user" do
-      expect {
-        post comments_url(format: :turbo_stream), params: { comment: params }
-      }.to change(Comment, :count).by(1)
-
-      comment = Comment.last
-      expect(comment.content).to eq("Comment.")
+    it "should discard the comment made by the current user" do
+      comment = create(:comment, user:)
+      id = comment.id
 
       expect {
         delete comment_url(comment, format: :turbo_stream)
-      }.to change(Comment, :count).by(-1)
+      }.not_to change(Comment, :count)
+
+      comment.reload
 
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("text/vnd.turbo-stream.html")
+      expect(comment.discarded?).to be(true)
+      expect(comment.discarded_at).not_to be_nil
+      expect(Comment.kept.find_by(id:)).to be_nil
+      expect(Comment.find(id)).to eq(comment)
     end
   end
 
@@ -101,13 +103,20 @@ RSpec.describe "Comments", type: :request do
       expect(comment.user_id).to eq(user.id)
     end
 
-    it "should let admin delete a comment" do
+    it "should let admin discard a comment" do
       expect {
         delete comment_url(comment, format: :turbo_stream)
-      }.to change(Comment, :count).by(-1)
+      }.not_to change(Comment, :count)
+
+      id = comment.id
+      comment.reload
 
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("text/vnd.turbo-stream.html")
+      expect(comment.discarded?).to be(true)
+      expect(comment.discarded_at).not_to be_nil
+      expect(Comment.kept.find_by(id:)).to be_nil
+      expect(Comment.find(id)).to eq(comment)
     end
   end
 

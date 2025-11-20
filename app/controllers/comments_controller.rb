@@ -32,7 +32,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment.destroy!
+    @comment.discard!
 
     respond_to do |format|
       format.turbo_stream
