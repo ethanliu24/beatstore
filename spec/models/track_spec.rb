@@ -273,6 +273,20 @@ RSpec.describe Track, type: :model do
       expect { track.destroy }.not_to change(FreeDownload, :count)
       expect(free_download.reload).to be_persisted
     end
+
+    it "destroying track also destroys licenses associations" do
+      track = create(:track)
+      license = create(:license)
+      track.licenses << license
+
+      expect(Licenses::LicensesTracksAssociation.count).to eq(1)
+
+      track.destroy!
+
+      expect(track.licenses.count).to eq(0)
+      expect(license.tracks.count).to eq(0)
+      expect(Licenses::LicensesTracksAssociation.count).to eq(0)
+    end
   end
 
   describe "#cheapest_price" do

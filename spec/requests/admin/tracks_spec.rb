@@ -535,19 +535,6 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       expect(response).to have_http_status(302)
       expect(track.licenses.count).to eq(2)
     end
-
-    it "delets licenses associations when deleted" do
-      track.licenses << license1
-
-      expect(Licenses::LicensesTracksAssociation.count).to eq(1)
-
-      delete admin_track_url(track)
-
-      expect(response).to have_http_status(303)
-      expect(track.licenses.count).to eq(0)
-      expect(license1.tracks.count).to eq(0)
-      expect(Licenses::LicensesTracksAssociation.count).to eq(0)
-    end
   end
 
   describe "admin paths", authorization_test: true do
