@@ -153,28 +153,25 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested track" do
-      track = Track.create! valid_attributes
-      expect {
-        delete admin_track_path(track)
-      }.to change(Track, :count).by(-1)
+    it "discards the requested track" do
+      track = create(:track)
+      id = track.id
+
+      expect { delete admin_track_url(track) }.not_to change(Track, :count)
+
+      track.reload
+
+      expect(response).to have_http_status(:see_other)
+      expect(track.discarded?).to be(true)
+      expect(track.discarded_at).not_to be_nil
+      expect(Track.kept).not_to include(track)
+      expect(Track.find(id)).to eq(track)
     end
 
     it "redirects to the tracks list" do
       track = Track.create! valid_attributes
       delete admin_track_path(track.id)
       expect(response).to redirect_to(admin_tracks_url)
-    end
-
-    it "destroys all tags when the track is destroyed" do
-      track = create(:track)
-      tag1 = create(:track_tag, track: track, name: "t1")
-      tag2 = create(:track_tag, track: track, name: "t2")
-
-      expect(track.reload.tags.where(name: "t1").count).to eq(1)
-      expect(track.reload.tags.where(name: "t2").count).to eq(1)
-      expect { track.destroy }.to change { Track::Tag.count }.by(-2)
-      expect(Track::Tag.where(id: [ tag1.id, tag2.id ])).to be_empty
     end
   end
 
@@ -537,19 +534,6 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       expect(response).to have_http_status(302)
       expect(track.licenses.count).to eq(2)
-    end
-
-    it "delets licenses associations when deleted" do
-      track.licenses << license1
-
-      expect(Licenses::LicensesTracksAssociation.count).to eq(1)
-
-      delete admin_track_url(track)
-
-      expect(response).to have_http_status(303)
-      expect(track.licenses.count).to eq(0)
-      expect(license1.tracks.count).to eq(0)
-      expect(Licenses::LicensesTracksAssociation.count).to eq(0)
     end
   end
 

@@ -18,7 +18,8 @@ RSpec.describe Snapshots::TakeLicenseSnapshotService, type: :service do
       "province" => license.province,
       "default_for_new" => license.default_for_new,
       "created_at" => license.created_at,
-      "updated_at" => license.updated_at
+      "updated_at" => license.updated_at,
+      "discarded_at" => license.discarded_at
     }
 
     actual_snapshot = call_service(license:)

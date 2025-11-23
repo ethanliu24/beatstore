@@ -32,7 +32,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment.destroy!
+    @comment.discard!
 
     respond_to do |format|
       format.turbo_stream
@@ -66,9 +66,9 @@ class CommentsController < ApplicationController
 
   def set_comment
     @comment = if current_user.admin?
-      Comment.find(params[:id])
+      Comment.kept.find(params[:id])
     else
-      current_user.comments.find(params[:id])
+      current_user.comments.kept.find(params[:id])
     end
   end
 end

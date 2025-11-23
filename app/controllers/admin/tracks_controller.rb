@@ -3,7 +3,7 @@ module Admin
     before_action :set_track, except: [ :index, :new, :create ]
 
     def index
-      base_scope = Track.order(created_at: :desc)
+      base_scope = Track.kept.order(created_at: :desc)
       @q = base_scope.ransack(params[:q], auth_object: current_user)
       queried_tracks = @q.result(distinct: true).includes(:tags)
       @pagy, @tracks = pagy(queried_tracks, limit: 8)
@@ -15,12 +15,12 @@ module Admin
 
     def new
       @track = Track.new
-      @licenses = License.order(Arel.sql("default_for_new DESC, created_at DESC"))
+      @licenses = License.kept.order(Arel.sql("default_for_new DESC, created_at DESC"))
     end
 
     def edit
       # Fine for now as there won't be a lot of licenses, if want to be optimize use raw sql
-      @licenses = (@track.licenses + License.all).uniq
+      @licenses = (@track.undiscarded_licenses + License.kept.all).uniq
     end
 
     def create
@@ -52,7 +52,7 @@ module Admin
     end
 
     def destroy
-      @track.destroy!
+      @track.discard!
 
       redirect_to admin_tracks_path, status: :see_other, notice: t("admin.track.destroy.success")
     end
@@ -60,7 +60,7 @@ module Admin
     private
 
     def set_track
-      @track = Track.find(params[:id])
+      @track = Track.kept.find(params[:id])
     end
 
     def sanitize_track_params

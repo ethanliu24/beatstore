@@ -83,5 +83,18 @@ RSpec.describe TracksController, type: :request do
       get track_url(private_track)
       expect(response).to be_successful
     end
+
+    it "doesn't fetch discarded tracks" do
+      track = create(:track)
+      get track_url(track)
+
+      expect(response).to be_successful
+
+      track.discard!
+      track.reload
+      get track_url(track)
+
+      expect(response).to have_http_status(:not_found)
+    end
   end
 end

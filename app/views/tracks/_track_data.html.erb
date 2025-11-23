@@ -1,5 +1,6 @@
 <div id="<%= dom_id(@track, :show_data) %>"
-  class="grid grid-flow-col auto-cols-max max-sm:grid-flow-row max-sm:grid-cols-3 max-sm:auto-cols-auto max-sm:gap-y-1 gap-3 text-[0.6rem] text-secondary-txt w-full mt-1">
+  class="grid grid-flow-col auto-cols-max max-md gap-3 text-[0.6rem] text-secondary-txt w-full mt-1
+    max-md:grid-flow-row max-md:grid-cols-3 max-md:auto-cols-auto max-md:gap-y-1 max-sm:max-w-xs max-sm:mx-auto max-sm:justify-center">
   <% [
     { icon: "calendar", value: format_date(track.created_at) },
     { icon: "activity-heartbeat", value: track.bpm ? "#{track.bpm} BPM" : "_" },

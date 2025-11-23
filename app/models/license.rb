@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class License < ApplicationRecord
+  include Discard::Model
+
   after_initialize :set_defaults, if: :new_record?
 
   MAX_DESCRIPTION_LENGTH = 400

@@ -15,7 +15,8 @@ RSpec.describe Snapshots::TakeTrackSnapshotService, type: :service do
       "created_at" => track.created_at,
       "updated_at" => track.updated_at,
       "genre" => track.genre,
-      "description" => track.description
+      "description" => track.description,
+      "discarded_at" => track.discarded_at
     }
     actual_snapshot = call_service(track:)
 

@@ -39,15 +39,23 @@ RSpec.describe DownloadsController, type: :request do
 
         expect(response).to have_http_status(:ok)
       end
-    end
 
-    describe "downloads when files are not attached" do
-      let(:track) { create(:track) }
-
-      it "downloading a free tagged mp3 returns 404" do
+      it "doesn't download when track is discarded" do
+        track.discard!
+        track.reload
         get download_track_free_path(track)
 
-        expect(response).to redirect_to(root_url)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    describe "doesn't download when files are not attached" do
+      let(:track) { create(:track) }
+
+      it "downloading a free tagged mp3 returns " do
+        get download_track_free_path(track)
+
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

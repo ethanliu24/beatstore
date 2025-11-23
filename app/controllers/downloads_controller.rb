@@ -1,10 +1,10 @@
 class DownloadsController < ApplicationController
   def free_download
-    @track = Track.find(params[:id])
+    @track = Track.kept.find(params[:id])
 
     unless file_exists?(@track.tagged_mp3)
       # TODO should log error if track not exist
-      redirect_back fallback_location: root_path
+      head :not_found
       return
     end
 

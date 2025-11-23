@@ -11,11 +11,11 @@ class TracksController < ApplicationController
   end
 
   def show
-    base_scope = current_user&.admin? ? Track : Track.publicly_available
+    base_scope = current_user&.admin? ? Track.kept : Track.publicly_available
     @track = base_scope.find(params.expect(:id))
     @similar_tracks = find_similar_tracks(@track)
     @licenses = @track.profitable_licenses
-    @pagy, page_comments = pagy_keyset(@track.comments.order(created_at: :desc), limit: 10)
+    @pagy, page_comments = pagy_keyset(@track.undiscarded_comments.order(created_at: :desc), limit: 10)
     @comments = if current_user
       page_comments.partition { |c| c.user_id == current_user.id }.flatten
     else
