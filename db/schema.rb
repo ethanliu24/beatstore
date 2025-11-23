@@ -144,8 +144,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_19_231535) do
     t.jsonb "license_snapshot", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "discarded_at"
-    t.index ["discarded_at"], name: "index_order_items_on_discarded_at"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
 
@@ -158,8 +156,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_19_231535) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "discarded_at"
-    t.index ["discarded_at"], name: "index_orders_on_discarded_at"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
