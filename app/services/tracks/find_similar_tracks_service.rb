@@ -9,7 +9,7 @@ module Tracks
     end
 
     def call
-      Track.find_by_sql([
+      Track.kept.find_by_sql([
         <<~SQL,
           SELECT
             tracks.*,
