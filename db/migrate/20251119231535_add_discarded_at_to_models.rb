@@ -11,8 +11,5 @@ class AddDiscardedAtToModels < ActiveRecord::Migration[8.0]
 
     add_column :licenses, :discarded_at, :datetime
     add_index :licenses, :discarded_at
-
-    add_column :transactions, :discarded_at, :datetime
-    add_index :transactions, :discarded_at
   end
 end
