@@ -55,6 +55,16 @@ RSpec.describe "Comments", type: :request do
       expect(comment.respond_to?(:foo)).to be false
     end
 
+    it "#update should throw a 404 error if comment is discarded" do
+      comment = create(:comment, user:, entity: track)
+      comment.discard!
+      comment.reload
+
+      put comment_url(comment, format: :turbo_stream), params: { comment: { content: "updated", foo: "bar" } }
+
+      expect(response).to have_http_status(:not_found)
+    end
+
     it "should throw a 404 error if entity type is invalid" do
       expect {
         post comments_url, params: { comment: params.merge(entity_type: "Invalid") }
