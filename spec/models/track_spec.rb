@@ -198,6 +198,17 @@ RSpec.describe Track, type: :model do
 
       expect(track.collaborators.size).to eq(0)
     end
+
+    it "should delete all tags associated with it" do
+      track = create(:track)
+      tag1 = create(:track_tag, track: track, name: "t1")
+      tag2 = create(:track_tag, track: track, name: "t2")
+
+      expect(track.reload.tags.where(name: "t1").count).to eq(1)
+      expect(track.reload.tags.where(name: "t2").count).to eq(1)
+      expect { track.destroy }.to change { Track::Tag.count }.by(-2)
+      expect(Track::Tag.where(id: [ tag1.id, tag2.id ])).to be_empty
+    end
   end
 
   describe "associations" do
@@ -262,6 +273,20 @@ RSpec.describe Track, type: :model do
       expect { track.destroy }.not_to change(FreeDownload, :count)
       expect(free_download.reload).to be_persisted
     end
+
+    it "destroying track also destroys licenses associations" do
+      track = create(:track)
+      license = create(:license)
+      track.licenses << license
+
+      expect(Licenses::LicensesTracksAssociation.count).to eq(1)
+
+      track.destroy!
+
+      expect(track.licenses.count).to eq(0)
+      expect(license.tracks.count).to eq(0)
+      expect(Licenses::LicensesTracksAssociation.count).to eq(0)
+    end
   end
 
   describe "#cheapest_price" do
@@ -293,6 +318,26 @@ RSpec.describe Track, type: :model do
       track = create(:track, is_public: false)
 
       expect(track.available?).to be(false)
+    end
+
+    it "should be unavailable if it's discarded" do
+      track = create(:track)
+      track.discard!
+
+      expect(track.available?).to be(false)
+    end
+  end
+
+  describe "#undiscarded_comments" do
+    it "should not return discarded comments" do
+      track = create(:track)
+      comment = create(:comment, entity: track)
+
+      comment.discard!
+      comment.reload
+      track.reload
+
+      expect(track.undiscarded_comments.count).to eq(0)
     end
   end
 end

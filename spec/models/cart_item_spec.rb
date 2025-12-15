@@ -47,6 +47,19 @@ RSpec.describe CartItem, type: :model do
 
       expect(cart_item.available?).to be(false)
     end
+
+    it "should be false if license is discarded" do
+      track = create(:track)
+      license = create(:license)
+      cart_item = create(:cart_item, product: track, license:)
+
+      track.discard!
+      track.reload
+      license.discard!
+      license.reload
+
+      expect(cart_item.available?).to eq(false)
+    end
   end
 
   describe "#valid_product_types" do

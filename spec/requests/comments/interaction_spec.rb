@@ -66,6 +66,17 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.first.id).to eq(created_like.id)
           expect(Comment::Interaction.where(interaction_type: "dislike").size).to eq(0)
         end
+
+        it "should not find a discarded comment" do
+          comment.discard!
+          comment.reload
+
+          expect {
+            post like_comment_url(comment, format: :turbo_stream)
+          }.to change(Comment::Interaction, :count).by(0)
+
+          expect(response).to have_http_status(:not_found)
+        end
       end
 
       context "#unlike" do
@@ -92,6 +103,17 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(0)
+        end
+
+        it "should not find a discarded comment" do
+          comment.discard!
+          comment.reload
+
+          expect {
+            delete like_comment_url(comment, format: :turbo_stream)
+          }.to change(Comment::Interaction, :count).by(0)
+
+          expect(response).to have_http_status(:not_found)
         end
       end
     end
@@ -152,6 +174,17 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(user.comment_interactions.first.id).to eq(created_dislike.id)
           expect(Comment::Interaction.where(interaction_type: "like").size).to eq(0)
         end
+
+        it "should not find a discarded comment" do
+          comment.discard!
+          comment.reload
+
+          expect {
+            post dislike_comment_url(comment, format: :turbo_stream)
+          }.to change(Comment::Interaction, :count).by(0)
+
+          expect(response).to have_http_status(:not_found)
+        end
       end
 
       context "#undislike" do
@@ -178,6 +211,17 @@ RSpec.describe Comments::InteractionsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to include("text/vnd.turbo-stream.html")
           expect(user.comment_interactions.size).to eq(0)
+        end
+
+        it "should not find a discarded comment" do
+          comment.discard!
+          comment.reload
+
+          expect {
+            delete dislike_comment_url(comment, format: :turbo_stream)
+          }.to change(Comment::Interaction, :count).by(0)
+
+          expect(response).to have_http_status(:not_found)
         end
       end
     end

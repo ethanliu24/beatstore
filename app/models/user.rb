@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Discard::Model
+
   devise \
     :database_authenticatable,
     :registerable,
@@ -49,6 +51,8 @@ class User < ApplicationRecord
   has_many :comment_interactions, class_name: "Comment::Interaction"
   has_many :orders
   has_many :free_downloads, dependent: :nullify
+
+  default_scope -> { kept }
 
   class << self
     def from_omniauth(auth)

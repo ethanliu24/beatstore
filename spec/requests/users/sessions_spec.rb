@@ -48,5 +48,17 @@ RSpec.describe Users::SessionsController, type: :request do
       post new_user_session_path, params: { user: valid_params }
       expect(response).to have_http_status(:see_other)
     end
+
+    it "should not allow user to login if account is discarded" do
+      sign_in user, scope: :user
+      delete user_registration_url
+      expect(response).to have_http_status(:see_other)
+
+      user.reload
+
+      post new_user_session_url, params: { user: valid_params }
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("authentication.email_does_not_exist"))
+    end
   end
 end

@@ -63,5 +63,13 @@ RSpec.describe "Api::Tracks", type: :request do
 
       expect(response).to have_http_status(:not_found)
     end
+
+    it "should return 404 if track is discarded" do
+      track.discard!
+      track.reload
+      get api_track_url(track)
+
+      expect(response).to have_http_status(:not_found)
+    end
   end
 end

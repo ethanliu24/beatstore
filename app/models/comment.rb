@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Comment < ApplicationRecord
+  include Discard::Model
+
   MAX_COMMENT_LENGTH = 200
 
   validates :content, presence: true, length: { maximum: Comment::MAX_COMMENT_LENGTH }

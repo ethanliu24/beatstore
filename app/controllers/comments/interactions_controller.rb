@@ -42,7 +42,7 @@ class Comments::InteractionsController < ApplicationController
   private
 
   def set_comment
-    @comment = Comment.find(params[:id])
+    @comment = Comment.kept.find(params[:id])
   end
 
   def create_interaction(interaction_type)

@@ -7,7 +7,7 @@ class Users::SessionsController < Devise::SessionsController
     # Initialize a new resource object if authentication fails
     self.resource = User.new(email: params[:user][:email])
 
-    if user.nil?
+    if user.nil? || user.discarded?
       resource.errors.add(:email, t("authentication.email_does_not_exist"))
     elsif params[:user][:password].blank? || !user.valid_password?(params[:user][:password])
       resource.errors.add(:password, t("authentication.incorrect_password"))
@@ -19,5 +19,7 @@ class Users::SessionsController < Devise::SessionsController
     else
       respond_with(resource, location: new_user_session_path)
     end
+
+    clean_up_passwords(resource)
   end
 end

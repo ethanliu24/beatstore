@@ -30,12 +30,12 @@ class ModalsController < ApplicationController
   end
 
   def delete_comment
-    comment = Comment.find(params[:id])
+    comment = Comment.kept.find(params[:id])
     render_modal(partial: "modals/delete_comment", locals: { comment: })
   end
 
   def track_more_info
-    track = Track.find(params[:id])
+    track = Track.kept.find(params[:id])
     render_modal(partial: "modals/track_more_info", locals: { track: })
   end
 
@@ -44,7 +44,7 @@ class ModalsController < ApplicationController
   # but I cannot give a fuck at the moment.
   def preview_contract
     content = if params[:license_id].present?
-      license = License.find_by(id: params[:license_id])
+      license = License.kept.find_by(id: params[:license_id])
       entity_type = params[:entity_type]
 
       # If license doesn't exist in DB, render default template, which requires contract_type in params.
@@ -53,7 +53,7 @@ class ModalsController < ApplicationController
       if license.nil?
         Rails.configuration.templates[:contracts][params[:contract_type]]
       elsif entity_type = Track.name
-        track = Track.find_by(id: params[:track_id])
+        track = Track.kept.find_by(id: params[:track_id])
         Contracts::RenderTracksContractService.new(license:, track:).call
       else
         ""
@@ -82,7 +82,7 @@ class ModalsController < ApplicationController
   end
 
   def track_purchase
-    track = Track.find(params[:id])
+    track = Track.kept.find(params[:id])
     render_modal(partial: "modals/track_purchase", locals: { track: })
   end
 

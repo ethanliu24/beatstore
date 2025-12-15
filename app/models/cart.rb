@@ -9,6 +9,7 @@ class Cart < ApplicationRecord
     cart_items
       .order(Arel.sql("CASE WHEN license_id IS NOT NULL AND product_id IS NOT NULL THEN 0 ELSE 1 END"))
       .order(created_at: :desc)
+      .filter { |item| item.license.undiscarded? && item.product.undiscarded? }
   end
 
   def available_items

@@ -85,6 +85,15 @@ RSpec.describe Tracks::FindSimilarTracksService, type: :service do
       expect(similar_tracks[0]).to eq(rec_1)
       expect(similar_tracks[1]).to eq(rec_2)
     end
+
+    it "is scoped in kept tracks" do
+      track = create(:track)
+      track.discard!
+      track.reload
+      similar_tracks = find_similar_tracks(track:)
+
+      expect(similar_tracks.size).to eq(0)
+    end
   end
 
   private

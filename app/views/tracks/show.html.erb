@@ -9,9 +9,9 @@
     <div class="flex-1 self-start max-sm:order-1 max-sm:self-auto max-sm:h-auto max-sm:text-center">
       <h1 class="text-2xl font-bold"><%= @track.title %></h1>
       <%= render partial: "tracks/track_data", locals: { track: @track, icon_dimension: track_data_icon_dimension } %>
-      <p class="text-xs mt-2 max-sm:text-[0.6rem]"><%= @track.description %></p>
+      <p class="text-xs mt-2 max-sm:text-[0.6rem] max-sm:max-w-sm"><%= @track.description %></p>
     </div>
-    <div class="flex flex-col justify-center items-start max-sm:items-center gap-2 w-full self-end max-sm:order-3 max-sm:self-auto">
+    <div class="flex flex-col justify-center items-start max-sm:items-center gap-2 w-full mt-4 self-end max-sm:order-3 max-sm:self-auto">
       <div class="flex justify-start items-center gap-2">
         <% @track.tags.each do |tag| %>
           <%= render TagComponent.new(name: tag.name) %>
