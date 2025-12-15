@@ -24,6 +24,7 @@ export default class extends Controller {
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
 
+      document.addEventListener("audio-player:track", (e) => this.playAudio(e.detail.trackId));
       this.audioTarget.addEventListener("ended", () => this.pauseAudio());
       this.audioTarget.addEventListener("timeupdate", () => {
         if (this.audioTarget.duration > 0) {
@@ -58,7 +59,7 @@ export default class extends Controller {
   }
 
   async play(e) {
-    await this.#playAudio(parseInt(e.currentTarget.dataset.trackId));
+    await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   pauseAudio() {
@@ -243,7 +244,7 @@ export default class extends Controller {
     }
   }
 
-  async #playAudio(trackId) {
+  async playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
         if (this.audioTarget.paused) {

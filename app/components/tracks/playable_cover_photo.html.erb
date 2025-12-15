@@ -1,5 +1,6 @@
-<div class="<%= "relative cursor-pointer w-full h-full" %>"
-  data-controller="playable-cover-photo" data-playable-cover-photo-target="container">
+<div class="relative w-full h-full"
+  data-controller="playable-cover-photo" data-playable-cover-photo-target="container"
+  data-playable-cover-photo-track-id-value="<%= track.id %>">
   <% if track.cover_photo.attached? %>
     <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
   <% else %>
@@ -7,12 +8,9 @@
       <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
     </div>
   <% end %>
-  <div class="hidden absolute top-0 left-0 w-full h-full aspect-square bg-black/50"
-    data-playable-cover-photo-target="playTrigger" data-track-id="<%= track.id %>" data-action="click->audio-player#play">
-    <div class="w-full h-full flex justify-center items-center">
-      <button type="button" class="w-fit h-fit aspect-square p-2 rounded-full border-1 border-white cursor-pointer">
-        <%= icon "player-play", variant: "filled", class: "play-btn w-4 h-4 aspect-square text-white" %>
-      </button>
-    </div>
+  <div class="absolute bottom-2 right-2 bg-black rounded-full p-2 hover:bg-hover cursor-pointer select-none"
+    data-action="click->playable-cover-photo#play">
+    <%= icon "player-play", variant: "filled", class: "w-5 h-5" %>
+    <%= icon "player-pause", variant: "filled", class: "hidden w-5 h-5" %>
   </div>
 </div>
