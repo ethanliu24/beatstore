@@ -83,7 +83,8 @@ class ModalsController < ApplicationController
 
   def track_purchase
     track = Track.kept.find(params[:id])
-    render_modal(partial: "modals/track_purchase", locals: { track: })
+    initial_license_id = params[:initial_id].presence || track.profitable_licenses.first&.id
+    render_modal(partial: "modals/track_purchase", locals: { track:, initial_license_id: })
   end
 
   private
