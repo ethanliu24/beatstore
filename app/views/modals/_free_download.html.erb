@@ -1,12 +1,30 @@
-<%= render Ui::ModalComponent.new(size: :sm) do |modal| %>
+<%= render Ui::ModalComponent.new(size: :xs) do |modal| %>
   <%= modal.with_header(title: t("modal.free_download.title"), size: :sm) %>
 
   <%= modal.with_body do %>
-  HI
-  <% end %>
+    <div class="px-4 pt-2 pb-4">
+      <%= form_with model: @free_download, url: create_free_download_path(track),
+        method: :post, data: { turbo_frame: "free_download_form" } do |f| %>
+          <%# TODO show any errors %>
+          <p class="text-xs text-secondary-txt"><%= t("modal.free_download.instruction") %></p>
 
-  <%= modal.with_footer(size: :sm) do |footer| %>
-    <%= footer.with_primary_action do %>
-    <% end %>
+          <div class="flex flex-col justify-start items-stretch gap-2 my-4">
+            <div class="flex flex-col justify-start gap-1">
+              <%= f.label :customer_name, t("modal.free_download.form.customer_name"), class: "text-bold text-[0.6rem]" %>
+              <%= f.text_field :customer_name, autofocus: false, required: true,
+                class: "border-1 border-secondary-txt outline-none rounded text-sm px-1 py-1" %>
+            </div>
+
+            <div class="flex flex-col justify-start gap-1">
+              <%= f.label :email, t("modal.free_download.form.email"), class: "font-bold text-[0.6rem]" %>
+              <%= f.email_field :email, autofocus: false, required: true,
+                class: "border-1 border-secondary-txt outline-none rounded text-sm px-1 py-1" %>
+            </div>
+          </div>
+
+        <%# TODO get user to agree to contract and conditions %>
+        <%= f.submit t("modal.free_download.form.submit"), class: "button py-1.5 text-center w-full text-xs" %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>

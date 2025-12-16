@@ -1,19 +1,24 @@
 class DownloadsController < ApplicationController
-  def free_download
+  def create_free_download
     @track = Track.kept.find(params[:id])
 
-    unless file_exists?(@track.tagged_mp3)
-      # TODO should log error if track not exist
-      head :not_found
-      return
+    free_download = FreeDownload.new(
+      user: current_user,
+      track: @track,
+      **params.require(:free_download).permit(:email, :customer_name),
+    )
+
+    if file_exists?(@track.tagged_mp3) && free_download.save
+      send_data @track.tagged_mp3.download,
+        filename: set_file_name(@track.tagged_mp3),
+        type: "audio/mpeg",
+        disposition: "attachment"
+    else
+      respond_to do |format|
+        flash.now[:warning] = t("modal.free_download.download_error")
+        format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+      end
     end
-
-    FreeDownload.create!(user: current_user, track: @track)
-
-    send_data @track.tagged_mp3.download,
-      filename: set_file_name(@track.tagged_mp3),
-      type: "audio/mpeg",
-      disposition: "attachment"
   end
 
   def product_item
