@@ -12,7 +12,6 @@ export default class extends Controller {
 
   selectLicense(e) {
     this.selectedId = parseInt(e.currentTarget.dataset.licenseId);
-    console.log(this.selectedId);
   }
 
   fetchPurchaseModal() {

@@ -3,7 +3,7 @@
   data: {
     controller: "track-purchase-view",
     track_purchase_view_create_cart_item_url_value: cart_items_path,
-    track_purchase_view_initial_license_id_value: track.profitable_licenses.first&.id,
+    track_purchase_view_initial_license_id_value: initial_license_id,
     track_purchase_view_track_id_value: track.id,
     track_purchase_view_product_type_value: Track.name,
   }
@@ -16,7 +16,8 @@
       <%= render partial: "tracks/license_usages", locals: {
         licenses: track.profitable_licenses,
         partial_id: "license-tabs-track-purchase-modal",
-        location: "track_purchase_modal"
+        location: "track_purchase_modal",
+        initial_license_id:,
       } %>
     </div>
   <% end %>

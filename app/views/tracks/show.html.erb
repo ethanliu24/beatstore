@@ -54,7 +54,12 @@
   </section>
   <section class="w-full">
     <h2 class="font-bold text-lg mb-2"><%= t("track.licensing") %></h2>
-    <%= render partial: "tracks/license_usages", locals: { licenses: @licenses, partial_id: "license-tab-contents-page", location: "track_show" } %>
+    <%= render partial: "tracks/license_usages", locals: {
+      licenses: @licenses,
+      partial_id: "license-tab-contents-page",
+      location: "track_show",
+      initial_license_id: nil,
+    } %>
   </section>
   <section class="w-full">
     <h2 class="font-bold text-lg mb-2"><%= t("track.similar_tracks") %></h2>
