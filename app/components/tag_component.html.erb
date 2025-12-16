@@ -1,1 +1,5 @@
-<div class="tag chip text-secondary-txt text-[0.6rem]"><%= tag %></div>
+<%= link_to tracks_path(q: { tags_name_eq: tag_name }),
+  data: { action: "click->audio-player#stopPropagation" },
+  class: "tag chip text-secondary-txt text-[0.6rem]" do %>
+  <%= tag %>
+<% end %>

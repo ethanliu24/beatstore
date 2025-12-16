@@ -30,7 +30,7 @@
         component: Ui::Filter::MultiselectComponent,
         component_variables: {
           label: "genre",
-          query: :genre_cont_any,
+          query: :genre_in,
           options: genre_options,
           values: genre_options,
           container_data: { track_filter_target: "genreDropdown" },
@@ -58,7 +58,7 @@
         component: Ui::Filter::MultiselectComponent,
         component_variables: {
           label: "key",
-          query: :key_cont_any,
+          query: :key_in,
           options: key_options.drop(1),  # assumes key_options starts with nil
           values: key_options.drop(1),
           container_data: { track_filter_target: "keyDropdown" },
@@ -72,7 +72,7 @@
         component: Ui::Filter::MultiselectComponent,
         component_variables: {
           label: "tag",
-          query: :tags_name_cont_any,
+          query: :tags_name_in,
           options: tag_options,
           values: tag_options,
           container_data: { track_filter_target: "tagDropdown" },

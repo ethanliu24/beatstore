@@ -164,7 +164,7 @@
   }
 
   .chip {
-    @apply rounded-full bg-secondary-bg px-2 py-0.5 w-fit whitespace-nowrap;
+    @apply rounded-full bg-secondary-bg px-2 py-0.5 w-fit whitespace-nowrap hover:bg-hover;
   }
 
   .chip > button {

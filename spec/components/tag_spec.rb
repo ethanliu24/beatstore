@@ -8,6 +8,6 @@ RSpec.describe TagComponent, type: :component do
     tag = create(:track_tag, track:, name: "text")
     rendered = render_inline(described_class.new(name: tag.name))
 
-    expect(rendered).to have_css("div.tag", text: "#text")
+    expect(rendered).to have_css("a.tag", text: "#text")
   end
 end
