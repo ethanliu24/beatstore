@@ -17,7 +17,11 @@
       <% end %>
 
       <%= dropdown.with_section do %>
-        <audio src="<%= attachment.attached? ? url_for(attachment) : "" %>" controls data-track-upload-target="audio"
+        <audio
+          <% if attachment.attached? && attachment.record&.persisted? %>
+            src="<%= attachment.attached? ? url_for(attachment) : "" %>"
+          <% end %>
+          controls data-track-upload-target="audio"
           class="max-w-50 min-w-50 h-9"></audio>
       <% end %>
     <% end %>
@@ -31,7 +35,7 @@
     <label for="<%= generate_id(file_for) %>">
       <%= icon "upload", class: "w-4 h-4 cursor-pointer" %>
     </label>
-    <%= form.file_field field, id: generate_id(file_for), class: "hidden",
+    <%= form.file_field field, direct_upload: true, id: generate_id(file_for), class: "hidden",
       data: { action: "change->track-upload#upload", track_upload_target: "file" } %>
   </div>
 
