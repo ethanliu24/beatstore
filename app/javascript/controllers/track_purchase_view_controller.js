@@ -12,6 +12,9 @@ export default class extends Controller {
   connect() {
     this.selectedLicenseId = this.initialLicenseIdValue;
     this.quantity = 1;
+    requestAnimationFrame(() => {
+      this.activateInitialTab();
+    })
   }
 
   selectLicense(e) {
@@ -34,7 +37,7 @@ export default class extends Controller {
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json",
-        // "Accept": "text/vnd.turbo-stream.html"
+        "Accept": "text/vnd.turbo-stream.html"
       },
       body: JSON.stringify({
         cart_item: cartItemBody
@@ -48,5 +51,17 @@ export default class extends Controller {
     if (purchaseDirectly) {
       Turbo.visit("/cart");
     }
+  }
+
+  activateInitialTab() {
+    if (!this.initialLicenseIdValue) return;
+
+    const li = this.element.querySelector(`[data-license-id="${this.initialLicenseIdValue}"]`);
+    if (!li) return;
+
+    const button = li.querySelector("[role='tab']");
+    if (!button) return;
+
+    button.click();
   }
 }

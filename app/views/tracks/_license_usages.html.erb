@@ -8,7 +8,16 @@
       <% licenses.each_with_index do |license, i| %>
         <%= content_tag :li, {
           role: "presentation",
-          data: { action: "click->track-purchase-view#selectLicense", license_id: license.id }
+          data: {
+            license_id: license.id,
+            action: if location == "track_purchase_modal"
+              "click->track-purchase-view#selectLicense"
+            elsif location == "track_show"
+              "click->license-selection#selectLicense"
+            else
+              ""
+            end
+          }
         } do %>
           <button id=<%= dom_id(license, "#{:tab}_#{partial_id}") %>
             class="<%= "
