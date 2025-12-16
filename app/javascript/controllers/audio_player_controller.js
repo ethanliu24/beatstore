@@ -23,6 +23,7 @@ export default class extends Controller {
       this.played = false;
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
+      this.playController = null; // prevent overlapping fetches
 
       document.addEventListener("audio-player:track", (e) => this.playAudio(e.detail.trackId));
       document.addEventListener("audio-player:pause", (e) => this.pauseAudio() );
@@ -285,16 +286,18 @@ export default class extends Controller {
       }
     }
 
+    if (this.playController) this.playController.abort()
+    this.playController = new AbortController();
     this.coverPhotoTarget.classList.add("hidden");
     this.pauseAudio();
-    this.resetAudio();
 
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json",
-      }
+      },
+      signal: this.playController.signal
     })
     .then(async res => {
       if (!res.ok) {
@@ -307,7 +310,6 @@ export default class extends Controller {
         this.played = false;
         return false;
       }
-
       const track = await res.json();
 
       this.currentTrackId = track.id;
@@ -329,14 +331,15 @@ export default class extends Controller {
       this.openPlayer();
       this.audioTarget.src = track.preview_url;
       this.audioTarget.load();
+      this.resetAudio();
       this.resumeAudio();
       this.played = true;
       return true;
     })
     .catch(error => {
-      alert("Error fetching track: " + error.message);
+      console.error("Error fetching track: " + error.message);
       return false;
-    });
+    })
 
     if (!playable || !this.currentTrackId) return;
     fetch(`/tracks/${this.currentTrackId}/play`, {
