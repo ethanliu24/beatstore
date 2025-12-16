@@ -98,5 +98,6 @@ Rails.application.routes.draw do
     get "delete_comment/:id", action: "delete_comment", as: "delete_comment_modal"
     get "track_more_info/:id", action: "track_more_info", as: "track_more_info_modal"
     get "track_purchase/:id", action: "track_purchase", as: "track_purchase_modal"
+    get "free_download/:id", action: "free_download", as: "free_download_modal"
   end
 end

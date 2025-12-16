@@ -333,6 +333,8 @@ en:
       purchase: "Purchase"
     preview_contract:
       download_contract: "Download"
+    free_download:
+      title: "Free Download"
 
   sidebar:
     admin:

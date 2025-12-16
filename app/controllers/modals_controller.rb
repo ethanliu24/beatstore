@@ -87,6 +87,11 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/track_purchase", locals: { track:, initial_license_id: })
   end
 
+  def free_download
+    track = Track.kept.find(params[:id])
+    render_modal(partial: "modals/free_download", locals: { track: })
+  end
+
   private
 
   def render_modal(partial:, locals: {})

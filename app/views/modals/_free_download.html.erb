@@ -1,0 +1,12 @@
+<%= render Ui::ModalComponent.new(size: :sm) do |modal| %>
+  <%= modal.with_header(title: t("modal.free_download.title"), size: :sm) %>
+
+  <%= modal.with_body do %>
+  HI
+  <% end %>
+
+  <%= modal.with_footer(size: :sm) do |footer| %>
+    <%= footer.with_primary_action do %>
+    <% end %>
+  <% end %>
+<% end %>
