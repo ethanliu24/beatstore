@@ -55,6 +55,9 @@ Install all the gems with bundle:
 $ bundle install
 ```
 
+### Assets
+Precompile assets: `bin/rails assets:precompile`
+
 ### PostgreSQL
 First install Postgresql if haven't yet and create a super user.
 
