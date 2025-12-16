@@ -79,12 +79,24 @@ export default class extends Controller {
     this.audioTarget.pause();
     this.pauseBtnTarget.classList.add("hidden");
     this.resumeBtnTarget.classList.remove("hidden");
+    this.togglePlayableCoverPhotoIcon(false);
   }
 
   resumeAudio() {
     this.audioTarget.play();
     this.resumeBtnTarget.classList.add("hidden");
     this.pauseBtnTarget.classList.remove("hidden");
+    this.togglePlayableCoverPhotoIcon(true);
+  }
+
+  togglePlayableCoverPhotoIcon(playing) {
+    const event = new CustomEvent("playable-cover-photo:icon-toggle", {
+      detail: {
+        trackId: this.currentTrackId,
+        playing: playing
+      }
+    });
+    document.dispatchEvent(event);
   }
 
   isPlaying() {
