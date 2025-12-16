@@ -1,5 +1,8 @@
 FactoryBot.define do
   factory :free_download do
+    email { "admin@example.com" }
+    customer_name { "John Doe" }
+
     association :user
     association :track
 

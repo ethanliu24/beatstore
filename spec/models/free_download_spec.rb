@@ -4,6 +4,8 @@ require "rails_helper"
 
 RSpec.describe FreeDownload, type: :model do
   describe "associations" do
+    it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:customer_name) }
     it { is_expected.to belong_to(:user).optional }
     it { is_expected.to belong_to(:track).optional }
   end
@@ -11,10 +13,11 @@ RSpec.describe FreeDownload, type: :model do
   describe "foreign key behavior" do
     let!(:user) { create(:user) }
     let!(:track) { create(:track) }
+    let(:customer_data) { { email: "email@example.com", customer_name: "Diddy" } }
 
     context "when user is deleted" do
       it "nullifies the user_id on associated free_downloads" do
-        free_download = FreeDownload.create!(user:, track:)
+        free_download = FreeDownload.create!(user:, track:, **customer_data)
 
         expect { user.destroy }.to change {
           free_download.reload.user_id
@@ -26,7 +29,7 @@ RSpec.describe FreeDownload, type: :model do
 
     context "when track is deleted" do
       it "nullifies the track_id on associated free_downloads" do
-        free_download = FreeDownload.create!(user:, track:)
+        free_download = FreeDownload.create!(user:, track:, **customer_data)
 
         expect { track.destroy }.to change {
           free_download.reload.track_id
