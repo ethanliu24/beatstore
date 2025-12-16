@@ -10,15 +10,16 @@ export default class extends Controller {
     this.selectedId = null;
   }
 
-  selectLicense(event) {
-    this.selectedIdValue = parseInt(event.currentTarget.dataset.licenseId)
+  selectLicense(e) {
+    this.selectedId = parseInt(e.currentTarget.dataset.licenseId);
+    console.log(this.selectedId);
   }
 
   fetchPurchaseModal() {
-    const url = this.trackPreviewModalUrlValue;
+    const url = new URL(this.trackPreviewModalUrlValue);
     if (this.selectedId) url.searchParams.set("initial_id", this.selectedId);
 
-    fetch(url, {
+    fetch(url.toString(), {
       method: "GET",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,

@@ -15,7 +15,8 @@
       <%= content_tag :p, t("modal.track_purchase.action_description", track_title: track.title), class: "mb-6 font-light text-sm" %>
       <%= render partial: "tracks/license_usages", locals: {
         licenses: track.profitable_licenses,
-        partial_id: "license-tabs-track-purchase-modal"
+        partial_id: "license-tabs-track-purchase-modal",
+        location: "track_purchase_modal"
       } %>
     </div>
   <% end %>
