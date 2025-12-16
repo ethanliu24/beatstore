@@ -8,7 +8,7 @@
       <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
     </div>
   <% end %>
-  <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none"
+  <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none border-[1px]"
     data-action="click->playable-cover-photo#togglePlay">
     <%= icon "player-play", variant: "filled", class: "w-5 h-5", data: {
       playable_cover_photo_target: "play",
