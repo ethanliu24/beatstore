@@ -4,6 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { trackId: Number }
   static targets = ["container", "play", "pause"];
+  static outlets = ["audio-player"];
 
   connect() {
     this.isPlaying = false;
@@ -21,27 +22,13 @@ export default class extends Controller {
   }
 
   play() {
-    const event = new CustomEvent("audio-player:track", {
-      bubbles: true,
-      detail: {
-        trackId: this.trackIdValue
-      }
-    });
-
-    document.dispatchEvent(event);
+    this.audioPlayerOutlet.playAudio(this.trackIdValue);
     this.setIcon(true);
     this.isPlaying = true;
   }
 
   pause() {
-    const event = new CustomEvent("audio-player:pause", {
-      bubbles: true,
-      detail: {
-        trackId: this.trackIdValue
-      }
-     });
-
-    document.dispatchEvent(event);
+    this.audioPlayerOutlet.pauseAudio();
     this.setIcon(false);
     this.isPlaying = false;
   }
