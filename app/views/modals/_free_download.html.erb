@@ -3,8 +3,13 @@
 
   <%= modal.with_body do %>
     <div class="px-4 pt-2 pb-4">
-      <%= form_with model: @free_download, url: create_free_download_path(track),
-        method: :post, data: { turbo_frame: "free_download_form" } do |f| %>
+      <%= form_with model: free_download, url: track_free_download_path(track), method: :post,
+        data: {
+          controller: "free-download",
+          action: "submit->free_download#submit",
+          filename: track.tagged_mp3.blob&.filename,
+          turbo: false
+        } do |f| %>
           <%# TODO show any errors %>
           <p class="text-xs text-secondary-txt"><%= t("modal.free_download.instruction") %></p>
 
