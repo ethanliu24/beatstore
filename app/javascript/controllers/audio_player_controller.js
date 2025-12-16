@@ -25,6 +25,15 @@ export default class extends Controller {
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
 
       document.addEventListener("audio-player:track", (e) => this.playAudio(e.detail.trackId));
+      this.element.addEventListener("keydown", (e) => {
+        if (this.playerOpened()) {
+          if (e.key === " ") {
+            this.isPlaying() ? this.pauseAudio() : this.resumeAudio();
+          }
+        }
+
+        e.preventDefault();
+      });
       this.audioTarget.addEventListener("ended", () => this.pauseAudio());
       this.audioTarget.addEventListener("timeupdate", () => {
         if (this.audioTarget.duration > 0) {
@@ -36,7 +45,7 @@ export default class extends Controller {
   }
 
   openPlayer() {
-    if (localStorage.getItem("player_opened") !== "true") {
+    if (!this.playerOpened()) {
       this.containerTarget.classList.add("slide-up-fade-in");
     }
 
@@ -52,6 +61,10 @@ export default class extends Controller {
     document.getElementById("main").classList.remove("pb-20");
     this.audioTarget.pause();
     this.resetAudio();
+  }
+
+  playerOpened() {
+    return localStorage.getItem("player_opened") === "true"
   }
 
   stopPropagation(e) {
@@ -72,6 +85,10 @@ export default class extends Controller {
     this.audioTarget.play();
     this.resumeBtnTarget.classList.add("hidden");
     this.pauseBtnTarget.classList.remove("hidden");
+  }
+
+  isPlaying() {
+    return !this.audioTarget.paused;
   }
 
   resetAudio() {
@@ -255,6 +272,8 @@ export default class extends Controller {
         return;
       }
     }
+
+    this.coverPhotoTarget.classList.add("hidden");
 
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET",
