@@ -1,5 +1,6 @@
 <div class="relative w-full h-full"
   data-controller="playable-cover-photo" data-playable-cover-photo-target="container"
+  data-playable-cover-photo-audio-player-outlet="body"
   data-playable-cover-photo-track-id-value="<%= track.id %>">
   <% if track.cover_photo.attached? %>
     <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
@@ -8,7 +9,7 @@
       <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
     </div>
   <% end %>
-  <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none border-[1px]"
+  <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none"
     data-action="click->playable-cover-photo#togglePlay">
     <%= icon "player-play", variant: "filled", class: "w-5 h-5", data: {
       playable_cover_photo_target: "play",
