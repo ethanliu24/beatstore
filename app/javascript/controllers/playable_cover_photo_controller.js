@@ -2,25 +2,57 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="playable-cover-photo"
 export default class extends Controller {
-  static targets = ["container", "playTrigger"];
+  static values = { trackId: Number }
+  static targets = ["container", "play", "pause"];
 
   connect() {
-    this.handleHover = this.handleHover.bind(this);
-    this.handleUnhover = this.handleUnhover.bind(this);
-    this.containerTarget.addEventListener("mouseenter", this.handleHover);
-    this.containerTarget.addEventListener("mouseleave", this.handleUnhover);
+    this.isPlaying = false;
+    document.addEventListener("playable-cover-photo:icon-toggle", (e) => {
+      // Receiving this event means the audio player paused. We are only
+      // interested in updating the icons to match.
+      if (e.detail.trackId === this.trackIdValue) {
+        this.setIcon(e.detail.playing);
+      }
+    })
   }
 
-  disconnect() {
-    this.containerTarget.removeEventListener("mouseenter", this.handleHover);
-    this.containerTarget.removeEventListener("mouseleave", this.handleUnhover);
+  togglePlay() {
+    this.isPlaying ? this.pause() : this.play();
   }
 
-  handleHover() {
-    this.playTriggerTarget.classList.remove("hidden");
+  play() {
+    const event = new CustomEvent("audio-player:track", {
+      bubbles: true,
+      detail: {
+        trackId: this.trackIdValue
+      }
+    });
+
+    document.dispatchEvent(event);
+    this.setIcon(true);
+    this.isPlaying = true;
   }
 
-  handleUnhover() {
-    this.playTriggerTarget.classList.add("hidden");
+  pause() {
+    const event = new CustomEvent("audio-player:pause", {
+      bubbles: true,
+      detail: {
+        trackId: this.trackIdValue
+      }
+     });
+
+    document.dispatchEvent(event);
+    this.setIcon(false);
+    this.isPlaying = false;
+  }
+
+  setIcon(playing) {
+    if (playing) {
+      this.playTarget.classList.add("hidden");
+      this.pauseTarget.classList.remove("hidden");
+    } else {
+      this.pauseTarget.classList.add("hidden");
+      this.playTarget.classList.remove("hidden");
+    }
   }
 }

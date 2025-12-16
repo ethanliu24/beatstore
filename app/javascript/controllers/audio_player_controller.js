@@ -18,12 +18,23 @@ export default class extends Controller {
   connect() {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
-      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks"
+      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks";
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
+      this.playController = null; // prevent overlapping fetches
 
+      document.addEventListener("audio-player:track", (e) => this.playAudio(e.detail.trackId));
+      document.addEventListener("audio-player:pause", (e) => this.pauseAudio() );
+      this.element.addEventListener("keydown", (e) => {
+        if (this.playerOpened()) {
+          if (e.key === " ") {
+            this.isPlaying() ? this.pauseAudio() : this.resumeAudio();
+            e.preventDefault();
+          }
+        }
+      });
       this.audioTarget.addEventListener("ended", () => this.pauseAudio());
       this.audioTarget.addEventListener("timeupdate", () => {
         if (this.audioTarget.duration > 0) {
@@ -35,7 +46,7 @@ export default class extends Controller {
   }
 
   openPlayer() {
-    if (localStorage.getItem("player_opened") !== "true") {
+    if (!this.playerOpened()) {
       this.containerTarget.classList.add("slide-up-fade-in");
     }
 
@@ -53,24 +64,44 @@ export default class extends Controller {
     this.resetAudio();
   }
 
+  playerOpened() {
+    return localStorage.getItem("player_opened") === "true"
+  }
+
   stopPropagation(e) {
     e.stopPropagation();
   }
 
   async play(e) {
-    await this.#playAudio(parseInt(e.currentTarget.dataset.trackId));
+    await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   pauseAudio() {
     this.audioTarget.pause();
     this.pauseBtnTarget.classList.add("hidden");
     this.resumeBtnTarget.classList.remove("hidden");
+    this.togglePlayableCoverPhotoIcon(false);
   }
 
   resumeAudio() {
     this.audioTarget.play();
     this.resumeBtnTarget.classList.add("hidden");
     this.pauseBtnTarget.classList.remove("hidden");
+    this.togglePlayableCoverPhotoIcon(true);
+  }
+
+  togglePlayableCoverPhotoIcon(playing) {
+    const event = new CustomEvent("playable-cover-photo:icon-toggle", {
+      detail: {
+        trackId: this.currentTrackId,
+        playing: playing
+      }
+    });
+    document.dispatchEvent(event);
+  }
+
+  isPlaying() {
+    return !this.audioTarget.paused;
   }
 
   resetAudio() {
@@ -243,7 +274,7 @@ export default class extends Controller {
     }
   }
 
-  async #playAudio(trackId) {
+  async playAudio(trackId) {
     if (this.played) {
       if (this.currentTrackId == trackId) {
         if (this.audioTarget.paused) {
@@ -255,12 +286,18 @@ export default class extends Controller {
       }
     }
 
+    if (this.playController) this.playController.abort()
+    this.playController = new AbortController();
+    this.coverPhotoTarget.classList.add("hidden");
+    this.pauseAudio();
+
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json",
-      }
+      },
+      signal: this.playController.signal
     })
     .then(async res => {
       if (!res.ok) {
@@ -273,7 +310,6 @@ export default class extends Controller {
         this.played = false;
         return false;
       }
-
       const track = await res.json();
 
       this.currentTrackId = track.id;
@@ -295,14 +331,15 @@ export default class extends Controller {
       this.openPlayer();
       this.audioTarget.src = track.preview_url;
       this.audioTarget.load();
+      this.resetAudio();
       this.resumeAudio();
       this.played = true;
       return true;
     })
     .catch(error => {
-      alert("Error fetching track: " + error.message);
+      console.error("Error fetching track: " + error.message);
       return false;
-    });
+    })
 
     if (!playable || !this.currentTrackId) return;
     fetch(`/tracks/${this.currentTrackId}/play`, {
