@@ -25,8 +25,6 @@ export default class extends Controller {
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
       this.playController = null; // prevent overlapping fetches
 
-      document.addEventListener("audio-player:track", (e) => this.playAudio(e.detail.trackId));
-      document.addEventListener("audio-player:pause", (e) => this.pauseAudio() );
       this.element.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
           if (e.key === " ") {
@@ -286,11 +284,8 @@ export default class extends Controller {
       }
     }
 
-    if (this.playController) this.playController.abort()
+    if (this.playController) this.playController.abort();
     this.playController = new AbortController();
-    this.coverPhotoTarget.classList.add("hidden");
-    this.pauseAudio();
-
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET",
       headers: {
@@ -307,9 +302,12 @@ export default class extends Controller {
           console.error(`Error fetching track: ${res.statusText}`);
         }
 
+        this.togglePlayableCoverPhotoIcon(false);
         this.played = false;
         return false;
       }
+
+      this.coverPhotoTarget.classList.add("hidden");
       const track = await res.json();
 
       this.currentTrackId = track.id;

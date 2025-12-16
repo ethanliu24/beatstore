@@ -7,10 +7,10 @@ export default class extends Controller {
   static outlets = ["audio-player"];
 
   connect() {
-    this.isPlaying = false;
     document.addEventListener("playable-cover-photo:icon-toggle", (e) => {
       // Receiving this event means the audio player paused. We are only
       // interested in updating the icons to match.
+      this.setIcon(false);
       if (e.detail.trackId === this.trackIdValue) {
         this.setIcon(e.detail.playing);
       }
@@ -18,19 +18,17 @@ export default class extends Controller {
   }
 
   togglePlay() {
-    this.isPlaying ? this.pause() : this.play();
+    this.audioPlayerOutlet.isPlaying() ? this.pause() : this.play();
   }
 
   play() {
     this.audioPlayerOutlet.playAudio(this.trackIdValue);
     this.setIcon(true);
-    this.isPlaying = true;
   }
 
   pause() {
     this.audioPlayerOutlet.pauseAudio();
     this.setIcon(false);
-    this.isPlaying = false;
   }
 
   setIcon(playing) {
