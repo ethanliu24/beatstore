@@ -62,7 +62,6 @@ Licensee may not register the Beat or New Song with copyright authorities or con
 
 Licensee is responsible for clearing all third party samples used in this track. The samples used are as follows:
 
-<!-- Dynamically construct this chunk as a string in rb -->
 {{ SAMPLES }}
 
 ## 7. Mechanical License

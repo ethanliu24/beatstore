@@ -2,7 +2,7 @@
   <%= modal.with_header(title: t("modal.title.preview_contract"), size: :md) %>
 
   <%= modal.with_body do %>
-    <div class="px-8 py-4 font-light">
+    <div class="px-8 py-4 font-light markdown-body">
       <%= markdown(content) %>
     </div>
   <% end %>
