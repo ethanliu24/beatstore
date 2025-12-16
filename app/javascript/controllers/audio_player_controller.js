@@ -18,21 +18,21 @@ export default class extends Controller {
   connect() {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
-      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks"
+      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks";
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
 
       document.addEventListener("audio-player:track", (e) => this.playAudio(e.detail.trackId));
+      document.addEventListener("audio-player:pause", (e) => this.pauseAudio() );
       this.element.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
           if (e.key === " ") {
             this.isPlaying() ? this.pauseAudio() : this.resumeAudio();
+            e.preventDefault();
           }
         }
-
-        e.preventDefault();
       });
       this.audioTarget.addEventListener("ended", () => this.pauseAudio());
       this.audioTarget.addEventListener("timeupdate", () => {
@@ -274,6 +274,8 @@ export default class extends Controller {
     }
 
     this.coverPhotoTarget.classList.add("hidden");
+    this.pauseAudio();
+    this.resetAudio();
 
     const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
       method: "GET",

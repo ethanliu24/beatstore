@@ -8,9 +8,15 @@
       <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
     </div>
   <% end %>
-  <div class="absolute bottom-2 right-2 bg-black rounded-full p-2 hover:bg-hover cursor-pointer select-none"
-    data-action="click->playable-cover-photo#play">
-    <%= icon "player-play", variant: "filled", class: "w-5 h-5" %>
-    <%= icon "player-pause", variant: "filled", class: "hidden w-5 h-5" %>
+  <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none"
+    data-action="click->playable-cover-photo#togglePlay">
+    <%= icon "player-play", variant: "filled", class: "w-5 h-5", data: {
+      playable_cover_photo_target: "play",
+      action: "click->playable-cover-photo#pause"
+    } %>
+    <%= icon "player-pause", variant: "filled", class: "hidden w-5 h-5", data: {
+      playable_cover_photo_target: "pause",
+      action: "click->playable-cover-photo#play"
+    } %>
   </div>
 </div>
