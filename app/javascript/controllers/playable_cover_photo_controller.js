@@ -4,12 +4,13 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { trackId: Number }
   static targets = ["container", "play", "pause"];
+  static outlets = ["audio-player"];
 
   connect() {
-    this.isPlaying = false;
     document.addEventListener("playable-cover-photo:icon-toggle", (e) => {
       // Receiving this event means the audio player paused. We are only
       // interested in updating the icons to match.
+      this.setIcon(false);
       if (e.detail.trackId === this.trackIdValue) {
         this.setIcon(e.detail.playing);
       }
@@ -17,33 +18,17 @@ export default class extends Controller {
   }
 
   togglePlay() {
-    this.isPlaying ? this.pause() : this.play();
+    this.audioPlayerOutlet.isPlaying() ? this.pause() : this.play();
   }
 
   play() {
-    const event = new CustomEvent("audio-player:track", {
-      bubbles: true,
-      detail: {
-        trackId: this.trackIdValue
-      }
-    });
-
-    document.dispatchEvent(event);
+    this.audioPlayerOutlet.playAudio(this.trackIdValue);
     this.setIcon(true);
-    this.isPlaying = true;
   }
 
   pause() {
-    const event = new CustomEvent("audio-player:pause", {
-      bubbles: true,
-      detail: {
-        trackId: this.trackIdValue
-      }
-     });
-
-    document.dispatchEvent(event);
+    this.audioPlayerOutlet.pauseAudio();
     this.setIcon(false);
-    this.isPlaying = false;
   }
 
   setIcon(playing) {
