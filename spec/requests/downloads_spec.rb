@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require "pdf/reader"
+require "stringio"
 
 RSpec.describe DownloadsController, type: :request do
   include ActionDispatch::TestProcess::FixtureFile
@@ -235,6 +237,39 @@ RSpec.describe DownloadsController, type: :request do
       get download_order_item_contract_path(order_item.id)
 
       expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
+  context "#contract" do
+    let(:license) { create(:license) }
+    let(:track) { create(:track) }
+
+    it "renders a track contract and sends it" do
+      get download_contract_path(license, entity: Track.name, entity_id: track.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers['Content-Disposition']).to include("filename=\"Free Download - #{license.title}.pdf\"")
+      expect(response.content_type).to eq("application/pdf")
+    end
+
+    it "sends an empty contract if entity is not supported" do
+      get download_contract_path(license, entity: "Not Supported", entity_id: track.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers['Content-Disposition']).to include("filename=\"Free Download - #{license.title}.pdf\"")
+      expect(response.content_type).to eq("application/pdf")
+
+      reader = PDF::Reader.new(StringIO.new(response.body))
+      pdf_text = reader.pages.map(&:text).join("\n")
+      expect(pdf_text).to be_blank
+    end
+
+    it "returns 404 if license not found" do
+      get download_contract_path(0, entity: Track.name, entity_id: track.id)
+
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

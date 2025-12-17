@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (2.0.1)
     actioncable (8.0.3)
       actionpack (= 8.0.3)
       activesupport (= 8.0.3)
@@ -80,6 +81,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    afm (1.0.0)
     ansi (1.5.0)
     ast (2.4.3)
     base64 (0.3.0)
@@ -152,6 +154,7 @@ GEM
       activesupport (>= 6.1)
     groupdate (6.7.0)
       activesupport (>= 7.1)
+    hashery (2.1.2)
     hashie (5.0.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -283,6 +286,12 @@ GEM
       ast (~> 2.4.1)
       racc
     pdf-core (0.10.0)
+    pdf-reader (2.15.0)
+      Ascii85 (>= 1.0, < 3.0, != 2.0.0)
+      afm (>= 0.2.1, < 2)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (1.6.2)
     pg (1.6.2-aarch64-linux)
     pg (1.6.2-aarch64-linux-musl)
@@ -429,6 +438,7 @@ GEM
       ansi
       ast
     ruby-progressbar (1.13.0)
+    ruby-rc4 (0.1.5)
     rubyzip (3.2.2)
     securerandom (0.4.1)
     selenium-webdriver (4.39.0)
@@ -562,6 +572,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   pagy (~> 9.4)
+  pdf-reader
   pg (~> 1.6)
   prawn
   prawn-html
