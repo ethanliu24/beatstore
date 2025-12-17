@@ -8,12 +8,18 @@ class DownloadsController < ApplicationController
       **params.require(:free_download).permit(:email, :customer_name),
     )
 
-    if file_exists?(@track.tagged_mp3) && free_download.save
-      # TODO send email
-      send_data @track.tagged_mp3.download,
-        filename: set_file_name(@track.tagged_mp3),
-        type: "audio/mpeg",
-        disposition: "attachment"
+    if file_exists?(@track.tagged_mp3)
+      if free_download.save
+        # TODO send email
+        send_data @track.tagged_mp3.download,
+          filename: set_file_name(@track.tagged_mp3),
+          type: "audio/mpeg",
+          disposition: "attachment"
+      else
+        head :unprocessable_content
+      end
+    else
+      head :not_found
     end
   end
 
