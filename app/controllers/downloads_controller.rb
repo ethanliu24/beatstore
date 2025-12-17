@@ -57,15 +57,7 @@ class DownloadsController < ApplicationController
       ""
     end
 
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-    contract_html = markdown.render(contract_markdown)
-    pdf = Prawn::Document.new(page_size: "A4")
-    PrawnHtml.append_html(pdf, contract_html)
-
-    send_data pdf.render,
-      filename: "#{order_item.product_name} #{license.title}.pdf",
-      type: "application/pdf",
-      disposition: "attachment"
+    construct_and_send_contract(markdown: contract_markdown, name: "#{order_item.product_name} #{license.title}")
   end
 
   def contract
@@ -82,15 +74,7 @@ class DownloadsController < ApplicationController
       ""
     end
 
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-    contract_html = markdown.render(contract_markdown)
-    pdf = Prawn::Document.new(page_size: "A4")
-    PrawnHtml.append_html(pdf, contract_html)
-
-    send_data pdf.render,
-      filename: "Free Download - #{license.title}.pdf",
-      type: "application/pdf",
-      disposition: "attachment"
+    construct_and_send_contract(markdown: contract_markdown, name: "Free Download - #{license.title}")
   end
 
   private
@@ -101,5 +85,17 @@ class DownloadsController < ApplicationController
 
   def file_exists?(file)
     file.attached?
+  end
+
+  def construct_and_send_contract(markdown:, name:)
+    markdown_renderer = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    contract_html = markdown_renderer.render(markdown)
+    pdf = Prawn::Document.new(page_size: "A4")
+    PrawnHtml.append_html(pdf, contract_html)
+
+    send_data pdf.render,
+      filename: "#{name}.pdf",
+      type: "application/pdf",
+      disposition: "attachment"
   end
 end
