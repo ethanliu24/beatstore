@@ -18,6 +18,7 @@ en:
     password: "Password"
     password_confirmation: "Password Confirmation"
     terms_of_service: "Terms of Service"
+    privacy_policy: "Privacy Policy"
     account_settings: "Account Settings"
     orders: "Orders"
     purchases: "Purchases"
@@ -341,6 +342,8 @@ en:
         customer_name: "Full Name"
         submit: "Download"
       download_error: "There's some error downloading the track. A free download may not be available at the moment."
+      policy: "Free download policy"
+      aggrement_html: "By continuing, you agree to the %{tos_link}, %{privacy_link} and %{free_license_link}."
 
   sidebar:
     admin:

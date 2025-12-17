@@ -1,4 +1,4 @@
-<%= render Ui::ModalComponent.new(size: :xs) do |modal| %>
+<%= render Ui::ModalComponent.new(size: :sm) do |modal| %>
   <%= modal.with_header(title: t("modal.free_download.title"), size: :sm) %>
 
   <%= modal.with_body do %>
@@ -10,7 +10,6 @@
           filename: track.tagged_mp3.blob&.filename,
           turbo: false
         } do |f| %>
-          <%# TODO show any errors %>
           <p class="text-xs text-secondary-txt"><%= t("modal.free_download.instruction") %></p>
 
           <div class="flex flex-col justify-start items-stretch gap-2 my-4">
@@ -27,8 +26,19 @@
             </div>
           </div>
 
-        <%# TODO get user to agree to contract and conditions %>
-        <%= f.submit t("modal.free_download.form.submit"), class: "button py-1.5 text-center w-full text-xs" %>
+        <%# TODO link tos and privacy %>
+        <% free_license = track.licenses.kept.find { |l| l.price_cents == 0 } %>
+        <p class="text-[0.6rem] italic font-light text-secondary-txt"><%= t(
+          "modal.free_download.aggrement_html",
+          tos_link: link_to(t("label.terms_of_service"), root_path,
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          privacy_link: link_to(t("label.privacy_policy"), root_path,
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          free_license_link: link_to(t("modal.free_download.policy"),
+            download_contract_path(free_license, entity: Track.name, entity_id: track.id),
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe
+        ) %></p>
+        <%= f.submit t("modal.free_download.form.submit"), class: "button mt-4 py-1.5 text-center w-full text-xs" %>
       <% end %>
     </div>
   <% end %>

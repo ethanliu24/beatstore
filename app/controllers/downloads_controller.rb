@@ -14,11 +14,6 @@ class DownloadsController < ApplicationController
         filename: set_file_name(@track.tagged_mp3),
         type: "audio/mpeg",
         disposition: "attachment"
-    else
-      respond_to do |format|
-        flash.now[:warning] = t("modal.free_download.download_error")
-        format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
-      end
     end
   end
 
@@ -69,6 +64,31 @@ class DownloadsController < ApplicationController
 
     send_data pdf.render,
       filename: "#{order_item.product_name} #{license.title}.pdf",
+      type: "application/pdf",
+      disposition: "attachment"
+  end
+
+  def contract
+    license = License.kept.find(params[:id])
+    entity = if params[:entity] == Track.name
+      Track.kept.find(params[:entity_id])
+    else
+      nil
+    end
+
+    contract_markdown = if params[:entity] == Track.name
+      Contracts::RenderTracksContractService.new(license:, track: entity, customer_full_name: "DOWNLOADER").call
+    else
+      ""
+    end
+
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    contract_html = markdown.render(contract_markdown)
+    pdf = Prawn::Document.new(page_size: "A4")
+    PrawnHtml.append_html(pdf, contract_html)
+
+    send_data pdf.render,
+      filename: "Free Download - #{license.title}.pdf",
       type: "application/pdf",
       disposition: "attachment"
   end

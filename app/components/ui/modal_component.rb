@@ -20,7 +20,7 @@ module Ui
       when :xs
         "max-w-1/3 max-h-1/2 max-sm:max-w-[90vw]"
       when :sm
-        "max-w-md max-h-2/5 max-sm:max-w-[90vw]"
+        "max-w-md max-h-3/5 max-sm:max-w-[90vw]"
       when :md
         "max-w-xl max-h-4/5 max-sm:max-w-[90vw]"
       when :xl

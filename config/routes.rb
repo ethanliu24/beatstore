@@ -78,11 +78,12 @@ Rails.application.routes.draw do
 
   scope :download, controller: :downloads do
     scope "track/:id" do
-      post "free", to: "free_download", as: "track_free_download"
+      post :free_download, as: "track_free_download"
     end
 
     get "order/:id/item/:item_id/files/:file_id", to: "product_item", as: "download_product_item"
     get "order_item/:id/contract", to: "order_item_contract", as: "download_order_item_contract"
+    get "license/:id/:entity/:entity_id/contract", to: "contract", as: "download_contract"
   end
 
   scope :location, controller: :locations do

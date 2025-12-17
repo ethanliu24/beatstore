@@ -1,6 +1,6 @@
 # Free Non-Exclusive **{{ LICENSE_NAME }}** License Agreement
 
-This Free Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement"), effective as of **{{ CONTRACT_DATE }}** (the "Effective Date"), is entered into by and between **{{ PRODUCT_OWNER_FULLNAME }}** a/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}** ("You" or "Licensee"). This Agreement governs your use of the instrumental music file(s) (the "Track"). For clarity, “Track” includes all files comprising the Track, individually and collectively.
+This Free Non-Exclusive **{{ LICENSE_NAME }}** License Agreement (the "Agreement"), effective as of **{{ CONTRACT_DATE }}** (the "Effective Date"), is entered into by and between **{{ PRODUCT_OWNER_FULLNAME }}** a/k/a **{{ PRODUCER_ALIAS }}** (the "Producer" or "Licensor") and **{{ CUSTOMER_FULLNAME }}** ("You" or "Licensee", the person downloading this). This Agreement governs your use of the instrumental music file(s) (the "Track"). For clarity, “Track” includes all files comprising the Track, individually and collectively.
 
 This Agreement is issued solely for the Licensee's use of the Track under the terms and conditions set forth below.
 

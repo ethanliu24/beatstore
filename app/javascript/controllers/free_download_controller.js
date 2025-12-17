@@ -27,7 +27,6 @@ export default class extends Controller {
       })
       .catch(err => {
         console.error("Download error:", err)
-        alert(err.error || err.errors?.join(", "))
       })
   }
 }
