@@ -71,6 +71,7 @@ export default class extends Controller {
   }
 
   async play(e) {
+    if (e.target.closest("[data-prevent-play]")) return;
     await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 

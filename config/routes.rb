@@ -78,11 +78,12 @@ Rails.application.routes.draw do
 
   scope :download, controller: :downloads do
     scope "track/:id" do
-      get "free", to: "free_download", as: "download_track_free"
+      post :free_download, as: "track_free_download"
     end
 
     get "order/:id/item/:item_id/files/:file_id", to: "product_item", as: "download_product_item"
     get "order_item/:id/contract", to: "order_item_contract", as: "download_order_item_contract"
+    get "license/:id/:entity/:entity_id/contract", to: "contract", as: "download_contract"
   end
 
   scope :location, controller: :locations do
@@ -98,5 +99,6 @@ Rails.application.routes.draw do
     get "delete_comment/:id", action: "delete_comment", as: "delete_comment_modal"
     get "track_more_info/:id", action: "track_more_info", as: "track_more_info_modal"
     get "track_purchase/:id", action: "track_purchase", as: "track_purchase_modal"
+    get "free_download/:id", action: "free_download", as: "free_download_modal"
   end
 end

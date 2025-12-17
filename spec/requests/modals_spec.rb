@@ -41,6 +41,12 @@ RSpec.describe ModalsController, type: :request do
       get preview_contract_modal_url(license_id: license.id)
       expect(response).to redirect_to(root_path)
     end
+
+    it "does not allow visits to #free_download" do
+      track = create(:track)
+      get free_download_modal_url(track)
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "where request are from turbo frame" do
@@ -167,6 +173,36 @@ RSpec.describe ModalsController, type: :request do
 
           expect(response).to have_http_status(:not_found)
         end
+      end
+    end
+
+    describe "#free_download" do
+      it "fetches modal if there are free contracts" do
+        track = create(:track)
+        free_license = create(:license, contract_type: License.contract_types[:free])
+        track.licenses << free_license
+
+        get free_download_modal_url(track, format: :turbo_stream), headers: @headers
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template(partial: "modals/_free_download")
+      end
+
+      it "fetches modal if there are no free contracts" do
+        track = create(:track)
+        license = create(:license, contract_type: License.contract_types[:non_exclusive])
+        track.licenses << license
+
+        get free_download_modal_url(track, format: :turbo_stream), headers: @headers
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template(partial: "modals/_free_download")
+      end
+
+      it "fetches modal if there are no contracts at all" do
+        track = create(:track)
+
+        get free_download_modal_url(track, format: :turbo_stream), headers: @headers
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template(partial: "modals/_free_download")
       end
     end
   end
