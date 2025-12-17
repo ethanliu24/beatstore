@@ -68,6 +68,7 @@ group :test do
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "simplecov-lcov", require: false
+  gem "pdf-reader"
 end
 
 gem "tailwindcss-ruby", "~> 4.1"

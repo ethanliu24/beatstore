@@ -1,21 +1,31 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require "pdf/reader"
+require "stringio"
 
 RSpec.describe DownloadsController, type: :request do
   include ActionDispatch::TestProcess::FixtureFile
 
   context "#free_download" do
-    describe "downloads when files are attached" do
-      let(:track) { create(:track_with_files) }
-      let(:user) { create(:user) }
+    let(:track) { create(:track_with_files) }
+    let!(:user) { create(:user) }
+    let(:params) {
+      {
+        free_download: {
+          customer_name: "ABC",
+          email: user.email
+        }
+      }
+    }
 
+    describe "downloads when files are attached" do
       before do
         sign_in user, scope: :user
       end
 
       it "#free_download returns the file as attachment for track" do
-        get download_track_free_url(track)
+        post track_free_download_path(track, params:)
 
         expect(response).to have_http_status(:ok)
         expect(response.headers["Content-Disposition"]).to include("attachment")
@@ -24,7 +34,7 @@ RSpec.describe DownloadsController, type: :request do
       end
 
       it "#free_download should let unauthed users download" do
-        get download_track_free_url(track)
+        post track_free_download_path(track, params:)
 
         expect(response).to have_http_status(:ok)
         expect(response.headers["Content-Disposition"]).to include("attachment")
@@ -34,7 +44,7 @@ RSpec.describe DownloadsController, type: :request do
 
       it "adds a free download record" do
         expect {
-          get download_track_free_url(track)
+          post track_free_download_path(track, params:)
         }.to change(FreeDownload, :count).by(1)
 
         expect(response).to have_http_status(:ok)
@@ -43,7 +53,7 @@ RSpec.describe DownloadsController, type: :request do
       it "doesn't download when track is discarded" do
         track.discard!
         track.reload
-        get download_track_free_path(track)
+        post track_free_download_path(track, params:)
 
         expect(response).to have_http_status(:not_found)
       end
@@ -52,10 +62,36 @@ RSpec.describe DownloadsController, type: :request do
     describe "doesn't download when files are not attached" do
       let(:track) { create(:track) }
 
-      it "downloading a free tagged mp3 returns " do
-        get download_track_free_path(track)
+      it "downloading a free tagged mp3 returns 404" do
+        post track_free_download_path(track, params:)
 
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    describe "invalid free download params" do
+      it "should not download if customer email is missing and returns 422" do
+        params = {
+          free_download: { customer_name: "ABC" }
+        }
+
+        expect {
+          post track_free_download_path(track, params:)
+        }.not_to change(FreeDownload, :count)
+
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "should not download if customer name is missing and returns 422" do
+        params = {
+          free_download: { email: "email@example.com" }
+        }
+
+        expect {
+          post track_free_download_path(track, params:)
+        }.not_to change(FreeDownload, :count)
+
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -201,6 +237,39 @@ RSpec.describe DownloadsController, type: :request do
       get download_order_item_contract_path(order_item.id)
 
       expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
+  context "#contract" do
+    let(:license) { create(:license) }
+    let(:track) { create(:track) }
+
+    it "renders a track contract and sends it" do
+      get download_contract_path(license, entity: Track.name, entity_id: track.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers['Content-Disposition']).to include("filename=\"Free Download - #{license.title}.pdf\"")
+      expect(response.content_type).to eq("application/pdf")
+    end
+
+    it "sends an empty contract if entity is not supported" do
+      get download_contract_path(license, entity: "Not Supported", entity_id: track.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers['Content-Disposition']).to include("filename=\"Free Download - #{license.title}.pdf\"")
+      expect(response.content_type).to eq("application/pdf")
+
+      reader = PDF::Reader.new(StringIO.new(response.body))
+      pdf_text = reader.pages.map(&:text).join("\n")
+      expect(pdf_text).to be_blank
+    end
+
+    it "returns 404 if license not found" do
+      get download_contract_path(0, entity: Track.name, entity_id: track.id)
+
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

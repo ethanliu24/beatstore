@@ -1,0 +1,45 @@
+<%= render Ui::ModalComponent.new(size: :sm) do |modal| %>
+  <%= modal.with_header(title: t("modal.free_download.title"), size: :sm) %>
+
+  <%= modal.with_body do %>
+    <div class="px-4 pt-2 pb-4">
+      <%= form_with model: free_download, url: track_free_download_path(track), method: :post,
+        data: {
+          controller: "free-download",
+          action: "submit->free_download#submit",
+          filename: track.tagged_mp3.blob&.filename,
+          turbo: false
+        } do |f| %>
+          <p class="text-xs text-secondary-txt"><%= t("modal.free_download.instruction") %></p>
+
+          <div class="flex flex-col justify-start items-stretch gap-2 my-4">
+            <div class="flex flex-col justify-start gap-1">
+              <%= f.label :customer_name, t("modal.free_download.form.customer_name"), class: "text-bold text-[0.6rem]" %>
+              <%= f.text_field :customer_name, autofocus: false, required: true,
+                class: "border-1 border-secondary-txt outline-none rounded text-sm px-1 py-1" %>
+            </div>
+
+            <div class="flex flex-col justify-start gap-1">
+              <%= f.label :email, t("modal.free_download.form.email"), class: "font-bold text-[0.6rem]" %>
+              <%= f.email_field :email, autofocus: false, required: true,
+                class: "border-1 border-secondary-txt outline-none rounded text-sm px-1 py-1" %>
+            </div>
+          </div>
+
+        <%# TODO link tos and privacy %>
+        <% free_license = track.licenses.kept.find { |l| l.price_cents == 0 } %>
+        <p class="text-[0.6rem] italic font-light text-secondary-txt"><%= t(
+          "modal.free_download.aggrement_html",
+          tos_link: link_to(t("label.terms_of_service"), root_path,
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          privacy_link: link_to(t("label.privacy_policy"), root_path,
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          free_license_link: link_to(t("modal.free_download.policy"),
+            download_contract_path(id: free_license.presence || 0, entity: Track.name, entity_id: track.id),
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe
+        ) %></p>
+        <%= f.submit t("modal.free_download.form.submit"), class: "button mt-4 py-1.5 text-center w-full text-xs" %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

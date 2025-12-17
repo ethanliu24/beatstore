@@ -36,7 +36,7 @@
           <% end %>
         <% end %>
 
-        <%= link_to download_track_free_path(@track), target: "_blank", rel: "noopener", class: "track-show-icon-only-btn" do %>
+        <%= link_to free_download_modal_path(@track), class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
           <%= icon "download", class: "text-accent" %>
         <% end %>
 

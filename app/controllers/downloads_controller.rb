@@ -2,18 +2,25 @@ class DownloadsController < ApplicationController
   def free_download
     @track = Track.kept.find(params[:id])
 
-    unless file_exists?(@track.tagged_mp3)
-      # TODO should log error if track not exist
+    free_download = FreeDownload.new(
+      user: current_user,
+      track: @track,
+      **params.require(:free_download).permit(:email, :customer_name),
+    )
+
+    if file_exists?(@track.tagged_mp3)
+      if free_download.save
+        # TODO send email
+        send_data @track.tagged_mp3.download,
+          filename: set_file_name(@track.tagged_mp3),
+          type: "audio/mpeg",
+          disposition: "attachment"
+      else
+        head :unprocessable_content
+      end
+    else
       head :not_found
-      return
     end
-
-    FreeDownload.create!(user: current_user, track: @track)
-
-    send_data @track.tagged_mp3.download,
-      filename: set_file_name(@track.tagged_mp3),
-      type: "audio/mpeg",
-      disposition: "attachment"
   end
 
   def product_item
@@ -56,15 +63,24 @@ class DownloadsController < ApplicationController
       ""
     end
 
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-    contract_html = markdown.render(contract_markdown)
-    pdf = Prawn::Document.new(page_size: "A4")
-    PrawnHtml.append_html(pdf, contract_html)
+    construct_and_send_contract(markdown: contract_markdown, name: "#{order_item.product_name} #{license.title}")
+  end
 
-    send_data pdf.render,
-      filename: "#{order_item.product_name} #{license.title}.pdf",
-      type: "application/pdf",
-      disposition: "attachment"
+  def contract
+    license = License.kept.find(params[:id])
+    entity = if params[:entity] == Track.name
+      Track.kept.find(params[:entity_id])
+    else
+      nil
+    end
+
+    contract_markdown = if params[:entity] == Track.name
+      Contracts::RenderTracksContractService.new(license:, track: entity, customer_full_name: "DOWNLOADER").call
+    else
+      ""
+    end
+
+    construct_and_send_contract(markdown: contract_markdown, name: "Free Download - #{license.title}")
   end
 
   private
@@ -75,5 +91,17 @@ class DownloadsController < ApplicationController
 
   def file_exists?(file)
     file.attached?
+  end
+
+  def construct_and_send_contract(markdown:, name:)
+    markdown_renderer = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    contract_html = markdown_renderer.render(markdown)
+    pdf = Prawn::Document.new(page_size: "A4")
+    PrawnHtml.append_html(pdf, contract_html)
+
+    send_data pdf.render,
+      filename: "#{name}.pdf",
+      type: "application/pdf",
+      disposition: "attachment"
   end
 end
