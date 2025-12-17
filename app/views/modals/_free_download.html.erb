@@ -35,7 +35,7 @@
           privacy_link: link_to(t("label.privacy_policy"), root_path,
             target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
           free_license_link: link_to(t("modal.free_download.policy"),
-            download_contract_path(free_license, entity: Track.name, entity_id: track.id),
+            download_contract_path(id: free_license.presence || 0, entity: Track.name, entity_id: track.id),
             target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe
         ) %></p>
         <%= f.submit t("modal.free_download.form.submit"), class: "button mt-4 py-1.5 text-center w-full text-xs" %>
