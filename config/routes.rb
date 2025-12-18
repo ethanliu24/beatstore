@@ -77,9 +77,9 @@ Rails.application.routes.draw do
   end
 
   scope :download, controller: :downloads do
+    get "free_download/:id", to: "get_free_download", as: "get_free_download"
     scope "track/:id" do
-      get :free_download, to: "get_free_download", as: "free_download"
-      post :free_download, to: "create_free_download", as: "free_download"
+      post :create_free_download, as: "create_free_download"
     end
 
     get "order/:id/item/:item_id/files/:file_id", to: "product_item", as: "download_product_item"

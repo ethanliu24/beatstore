@@ -1,15 +1,17 @@
 class DownloadsController < ApplicationController
   def get_free_download
-    @track = Track.kept.find(params[:id])
+    @free_download = FreeDownload.find(params[:id])
+    @track = @free_download.track
 
-    if file_exists?(@track.tagged_mp3)
-      send_data @track.tagged_mp3.download,
-        filename: set_file_name(@track.tagged_mp3),
-        type: "audio/mpeg",
-        disposition: "attachment"
-    else
+    unless file_exists?(@track.tagged_mp3)
       head :not_found
+      return
     end
+
+    send_data @track.tagged_mp3.download,
+      filename: set_file_name(@track.tagged_mp3),
+      type: "audio/mpeg",
+      disposition: "attachment"
   end
 
   def create_free_download
@@ -24,7 +26,7 @@ class DownloadsController < ApplicationController
     if file_exists?(@track.tagged_mp3)
       if free_download.save
         # TODO send email
-        head :ok
+        render json: { download_url: get_free_download_path(free_download) }
       else
         head :unprocessable_content
       end
