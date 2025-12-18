@@ -71,7 +71,8 @@ export default class extends Controller {
   }
 
   async play(e) {
-    if (e.target.closest("[data-prevent-play]")) return;
+    const el = e.target.closest("[data-prevent-play]");
+    if (el && el.dataset.preventPlay === "true") return;
     await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
@@ -202,12 +203,6 @@ export default class extends Controller {
     .then();
 
     this.toggleLikeButton(false);
-  }
-
-  navToTrack(e) {
-    const navTrackId = parseInt(e.currentTarget.dataset.trackId);
-    Turbo.visit(`/tracks/${navTrackId}`);
-    this.stopPropagation(e);
   }
 
   async fetchTrackPurchaseModal(e) {

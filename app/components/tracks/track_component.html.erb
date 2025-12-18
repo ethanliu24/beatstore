@@ -10,18 +10,16 @@
       <% end %>
     </div>
     <div class="flex flex-col justify-between items-start">
-      <%= content_tag :div, track.title, class: "text-sm cursor-pointer hover:underline",
-        data: {
-          action: "click->audio-player#navToTrack",
-          track_id: track.id,
-        } %>
-      <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
-        <span><%= "#{track.bpm} BPM" %></span>
-        <%= seperator_char_ui %>
-        <span><%= track.key %></span>
-        <%= seperator_char_ui %>
-        <span><%= track.genre %></span>
-      </div>
+      <%= link_to track_path(@track), data: { prevent_play: true } do %>
+        <div class="text-sm cursor-pointer hover:underline"><%= track.title %></div>
+        <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
+          <span><%= "#{track.bpm} BPM" %></span>
+          <%= seperator_char_ui %>
+          <span><%= track.key %></span>
+          <%= seperator_char_ui %>
+          <span><%= track.genre %></span>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="flex justify-end items-center gap-4 shrink-0 cursor-pointer">
@@ -65,14 +63,19 @@
 
       <%= dropdown.with_section do %>
         <ul>
-          <li class="dropdown-item" data-track-id="<%= @track.id %>" data-action="click->audio-player#play">
-            <%= icon "player-play", class: icon_size %>
-            <%= t("label.play") %>
+          <li>
+            <%= content_tag :div, class: "dropdown-item",
+              data: { track_id: @track.id, action: "click->audio-player#play", prevent_play: false } do %>
+              <%= icon "player-play", class: icon_size %>
+              <%= t("label.play") %>
+            <% end %>
           </li>
-          <li class="dropdown-item" data-action="click->audio-player#fetchTrackPurchaseModal"
-            data-track-purchase-modal-url="<%= track_purchase_modal_path(@track) %>">
-            <%= icon "shopping-bag", class: icon_size %>
-            <%= t("track.add_to_cart") %>
+          <li>
+            <%= link_to track_purchase_modal_url(@track), data: { prevent_play: true, turbo_stream: true },
+              class: "dropdown-item" do %>
+              <%= icon "shopping-bag", class: icon_size %>
+              <%= t("track.add_to_cart") %>
+            <% end %>
           </li>
         </ul>
       <% end %>
