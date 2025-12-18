@@ -1,6 +1,4 @@
 class Tracks::HeartsController < ApplicationController
-  include ExtractSlugToTrackId
-
   before_action :authenticate_user!
   before_action :set_track
 
@@ -24,7 +22,6 @@ class Tracks::HeartsController < ApplicationController
   private
 
   def set_track
-    id = extract_track_id(params.expect(:track_id))
-    @track = Track.find(id)
+    @track = Track.find(params[:track_id])
   end
 end

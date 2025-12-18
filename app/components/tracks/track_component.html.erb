@@ -10,7 +10,7 @@
       <% end %>
     </div>
     <div class="flex flex-col justify-between items-start">
-      <%= link_to track_path(@track), data: { prevent_play: true } do %>
+      <%= link_to track_path(id: @track.slug_param), data: { prevent_play: true } do %>
         <div class="text-sm cursor-pointer hover:underline"><%= track.title %></div>
         <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
           <span><%= "#{track.bpm} BPM" %></span>
@@ -86,7 +86,7 @@
             <% user_liked = current_user && current_user.hearted?(@track) %>
             <%= icon "heart", variant: user_liked ? "filled" : "outline", class: icon_size %>
             <% if current_user %>
-              <%= button_to t("track.heart_track"), track_heart_path(track_id: @track.id), method: user_liked ? :delete : :post, class: "cursor-pointer" %>
+              <%= button_to t("track.heart_track"), track_heart_path(@track), method: user_liked ? :delete : :post, class: "cursor-pointer" %>
             <% else %>
               <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
                 <%= t("track.heart_track") %>
@@ -108,7 +108,7 @@
         <ul>
           <li class="dropdown-item">
             <%= render Ui::Dropdown::LinkComponent.new(
-              url: track_path(@track),
+              url: track_path(id: @track.slug_param),
               text: t("track.see_track"),
               icon: "eye",
               icon_size: 3

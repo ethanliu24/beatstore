@@ -1,7 +1,5 @@
 module Admin
   class TracksController < Admin::BaseController
-    include ExtractSlugToTrackId
-
     before_action :set_track, except: [ :index, :new, :create ]
 
     def index
@@ -62,8 +60,7 @@ module Admin
     private
 
     def set_track
-      id = extract_track_id(params.expect(:id))
-      @track = Track.kept.find(id)
+      @track = Track.kept.find(params[:id])
     end
 
     def sanitize_track_params

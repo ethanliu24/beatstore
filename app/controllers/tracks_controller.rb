@@ -18,8 +18,8 @@ class TracksController < ApplicationController
     base_scope = current_user&.admin? ? Track.kept : Track.publicly_available
     @track = base_scope.find(id)
 
-    if param_id != @track.to_param
-      redirect_to track_path(@track), status: :moved_permanently
+    if param_id != @track.slug_param
+      redirect_to track_path(id: @track.slug_param), status: :moved_permanently
     end
 
     @similar_tracks = find_similar_tracks(@track)

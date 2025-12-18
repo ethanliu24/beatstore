@@ -1,4 +1,4 @@
-<%= button_to track_heart_path(track_id: track.id), form_class: "track-show-icon-only-btn",
+<%= button_to track_heart_path(track), form_class: "track-show-icon-only-btn",
   class: "flex justify-center items-center w-full h-full",
   method: user_liked ? :delete : :post do %>
   <%= icon "heart", variant: user_liked ? "filled" : "outline", class: "text-accent w-5 h-5 cursor-pointer" %>

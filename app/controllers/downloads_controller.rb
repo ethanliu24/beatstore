@@ -1,6 +1,4 @@
 class DownloadsController < ApplicationController
-  include ExtractSlugToTrackId
-
   def get_free_download
     @free_download = FreeDownload.find(params[:id])
     @track = @free_download.track
@@ -17,8 +15,7 @@ class DownloadsController < ApplicationController
   end
 
   def create_free_download
-    id = extract_track_id(params.expect(:id))
-    @track = Track.kept.find(id)
+    @track = Track.kept.find(params[:id])
 
     free_download = FreeDownload.new(
       user: current_user,

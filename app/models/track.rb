@@ -89,7 +89,7 @@ class Track < ApplicationRecord
   #   self.is_public = !required_files.all?(&:blank?)
   # end
 
-  def to_param
+  def slug_param
     "#{slug}#{SLUG_SEPERATOR}#{id}"
   end
 

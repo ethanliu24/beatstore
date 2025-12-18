@@ -65,7 +65,7 @@
           </li>
           <li class="dropdown-item">
             <%= render Ui::Dropdown::LinkComponent.new(
-              url: track_path(track),
+              url: track_path(id: track.slug_param),
               text: t("admin.see_track"),
               icon: "eye",
               icon_size: 3
