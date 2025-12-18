@@ -2,10 +2,6 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="free-download"
 export default class extends Controller {
-  static values = {
-    getFreedDownloadUrl: String
-  };
-
   submit(event) {
     // need these to stop form from submiting directly
     event.preventDefault();
