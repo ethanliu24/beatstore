@@ -6,6 +6,7 @@ class Track < ApplicationRecord
   # before_validation :adjust_visibility
   before_validation { self.is_public = false if is_public.nil? }
   before_validation :generate_slug, on: :create
+  before_validation :update_slug, if: :will_save_change_to_title?
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
@@ -86,6 +87,10 @@ class Track < ApplicationRecord
   #   self.is_public = !required_files.all?(&:blank?)
   # end
 
+  def to_param
+    "#{slug}-#{id}"
+  end
+
   def is_public?
     is_public
   end
@@ -129,12 +134,19 @@ class Track < ApplicationRecord
   end
 
   def generate_slug
-    return if slug.present?
-
-    base = title.split.join("-")
+    base = title.to_s.downcase.parameterize(separator: "_")
     loop do
-      slug = "#{base}-#{SecureRandom.alphanumeric(6)}"
+      suffix = SecureRandom.alphanumeric(6)
+      slug = "#{base}-#{suffix}"
       break self.slug = slug unless Track.exists?(slug:)
     end
+  end
+
+  def update_slug
+    return if slug.blank?
+
+    base = title.to_s.downcase.parameterize(separator: "_")
+    suffix = slug.split("-").last
+    self.slug = "#{base}-#{suffix}"
   end
 end
