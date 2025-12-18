@@ -5,6 +5,7 @@ class Track < ApplicationRecord
 
   # before_validation :adjust_visibility
   before_validation { self.is_public = false if is_public.nil? }
+  before_validation :generate_slug, on: :create
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
@@ -16,6 +17,7 @@ class Track < ApplicationRecord
   validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, presence: true
   validates :genre, presence: true, inclusion: { in: GENRES }
+  validates :slug, presence: true, uniqueness: true
   validates :key, format: {
     with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
     message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
@@ -123,6 +125,16 @@ class Track < ApplicationRecord
     total_publishing = collaborators.sum { |c| c.profit_share.to_d }
     if total_profit > 100 || total_publishing > 100
       errors.add(:base, I18n.t("admin.track.error.invalid_share_sum"))
+    end
+  end
+
+  def generate_slug
+    return if slug.present?
+
+    base = title.split.join("-")
+    loop do
+      slug = "#{base}-#{SecureRandom.alphanumeric(6)}"
+      break self.slug = slug unless Track.exists?(slug:)
     end
   end
 end

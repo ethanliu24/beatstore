@@ -211,7 +211,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_202907) do
     t.datetime "discarded_at"
     t.string "slug"
     t.index ["discarded_at"], name: "index_tracks_on_discarded_at"
-    t.index ["slug"], name: "index_tracks_on_slug"
+    t.index ["slug"], name: "index_tracks_on_slug", unique: true
   end
 
   create_table "transactions", force: :cascade do |t|
