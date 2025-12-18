@@ -1,5 +1,20 @@
 class DownloadsController < ApplicationController
-  def free_download
+  def get_free_download
+    @free_download = FreeDownload.find(params[:id])
+    @track = @free_download.track
+
+    unless file_exists?(@track.tagged_mp3)
+      head :not_found
+      return
+    end
+
+    send_data @track.tagged_mp3.download,
+      filename: set_file_name(@track.tagged_mp3),
+      type: "audio/mpeg",
+      disposition: "attachment"
+  end
+
+  def create_free_download
     @track = Track.kept.find(params[:id])
 
     free_download = FreeDownload.new(
@@ -10,11 +25,8 @@ class DownloadsController < ApplicationController
 
     if file_exists?(@track.tagged_mp3)
       if free_download.save
-        # TODO send email
-        send_data @track.tagged_mp3.download,
-          filename: set_file_name(@track.tagged_mp3),
-          type: "audio/mpeg",
-          disposition: "attachment"
+        FreeDownloadMailer.with(free_download:).download.deliver_later
+        render json: { download_url: get_free_download_path(free_download) }
       else
         head :unprocessable_content
       end
@@ -68,6 +80,7 @@ class DownloadsController < ApplicationController
 
   def contract
     license = License.kept.find(params[:id])
+    customer_full_name = params[:customer_name].presence || "THE PERSON DOWNLOADING"
     entity = if params[:entity] == Track.name
       Track.kept.find(params[:entity_id])
     else
@@ -75,7 +88,7 @@ class DownloadsController < ApplicationController
     end
 
     contract_markdown = if params[:entity] == Track.name
-      Contracts::RenderTracksContractService.new(license:, track: entity, customer_full_name: "DOWNLOADER").call
+      Contracts::RenderTracksContractService.new(license:, track: entity, customer_full_name:).call
     else
       ""
     end

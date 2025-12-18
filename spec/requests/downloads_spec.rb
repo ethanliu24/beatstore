@@ -7,7 +7,34 @@ require "stringio"
 RSpec.describe DownloadsController, type: :request do
   include ActionDispatch::TestProcess::FixtureFile
 
-  context "#free_download" do
+  context "#get_free_download" do
+    let(:user) { create(:user) }
+
+    before do
+      sign_in user, scope: :user
+    end
+
+    it "should return downloaded file if it exists" do
+      track = create(:track_with_files)
+      free_download = create(:free_download, user:, track:)
+      get get_free_download_path(free_download)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
+      expect(response.content_type).to eq("audio/mpeg")
+    end
+
+    it "should not return downloaded file if it does not exist and return 404" do
+      track = create(:track)
+      free_download = create(:free_download, user:, track:)
+      get get_free_download_path(free_download)
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  context "#create_free_download" do
     let(:track) { create(:track_with_files) }
     let!(:user) { create(:user) }
     let(:params) {
@@ -19,76 +46,96 @@ RSpec.describe DownloadsController, type: :request do
       }
     }
 
-    describe "downloads when files are attached" do
+    describe "creates download record when files are attached" do
       before do
         sign_in user, scope: :user
       end
 
-      it "#free_download returns the file as attachment for track" do
-        post track_free_download_path(track, params:)
+      it "returns the get href download link for free download" do
+        post create_free_download_path(track, params:)
 
         expect(response).to have_http_status(:ok)
-        expect(response.headers["Content-Disposition"]).to include("attachment")
-        expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
-        expect(response.content_type).to eq("audio/mpeg")
+        expect(response.content_type).to include("application/json")
+
+        json = JSON.parse(response.body)
+        free_download = FreeDownload.last
+
+        expect(json).to include("download_url")
+        expect(json["download_url"]).to eq(get_free_download_path(free_download))
       end
 
-      it "#free_download should let unauthed users download" do
-        post track_free_download_path(track, params:)
+      it "should let unauthed users create" do
+        sign_out user
+        post create_free_download_path(track, params:)
 
         expect(response).to have_http_status(:ok)
-        expect(response.headers["Content-Disposition"]).to include("attachment")
-        expect(response.headers['Content-Disposition']).to include("filename=\"tagged_mp3.mp3\"")
-        expect(response.content_type).to eq("audio/mpeg")
+        expect(response.content_type).to include("application/json")
+
+        json = JSON.parse(response.body)
+        free_download = FreeDownload.last
+
+        expect(json).to include("download_url")
+        expect(json["download_url"]).to eq(get_free_download_path(free_download))
       end
 
       it "adds a free download record" do
         expect {
-          post track_free_download_path(track, params:)
+          post create_free_download_path(track, params:)
         }.to change(FreeDownload, :count).by(1)
 
         expect(response).to have_http_status(:ok)
       end
 
-      it "doesn't download when track is discarded" do
+      it "doesn't create download record when track is discarded" do
         track.discard!
         track.reload
-        post track_free_download_path(track, params:)
+        post create_free_download_path(track, params:)
 
         expect(response).to have_http_status(:not_found)
       end
+
+      it "should send an email to user" do
+        perform_enqueued_jobs do
+          expect {
+            post create_free_download_path(track, params:)
+          }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        expect(response).to have_http_status(:ok)
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Download - #{track.title}")
+      end
     end
 
-    describe "doesn't download when files are not attached" do
+    describe "doesn't create download record when files are not attached" do
       let(:track) { create(:track) }
 
       it "downloading a free tagged mp3 returns 404" do
-        post track_free_download_path(track, params:)
+        post create_free_download_path(track, params:)
 
         expect(response).to have_http_status(:not_found)
       end
     end
 
     describe "invalid free download params" do
-      it "should not download if customer email is missing and returns 422" do
+      it "should not create download record if customer email is missing and returns 422" do
         params = {
           free_download: { customer_name: "ABC" }
         }
 
         expect {
-          post track_free_download_path(track, params:)
+          post create_free_download_path(track, params:)
         }.not_to change(FreeDownload, :count)
 
         expect(response).to have_http_status(:unprocessable_content)
       end
 
-      it "should not download if customer name is missing and returns 422" do
+      it "should not create download record if customer name is missing and returns 422" do
         params = {
           free_download: { email: "email@example.com" }
         }
 
         expect {
-          post track_free_download_path(track, params:)
+          post create_free_download_path(track, params:)
         }.not_to change(FreeDownload, :count)
 
         expect(response).to have_http_status(:unprocessable_content)
@@ -251,6 +298,11 @@ RSpec.describe DownloadsController, type: :request do
       expect(response.headers["Content-Disposition"]).to include("attachment")
       expect(response.headers['Content-Disposition']).to include("filename=\"Free Download - #{license.title}.pdf\"")
       expect(response.content_type).to eq("application/pdf")
+
+      reader = PDF::Reader.new(StringIO.new(response.body))
+      pdf_text = reader.pages.map(&:text).join("\n").gsub(/\s*\n\s*/, " ")
+
+      expect(pdf_text).to include("THE PERSON DOWNLOADING")
     end
 
     it "sends an empty contract if entity is not supported" do
@@ -264,6 +316,17 @@ RSpec.describe DownloadsController, type: :request do
       reader = PDF::Reader.new(StringIO.new(response.body))
       pdf_text = reader.pages.map(&:text).join("\n")
       expect(pdf_text).to be_blank
+    end
+
+    it "uses the customer name passed in parameter" do
+      get download_contract_path(license, entity: Track.name, entity_id: track.id, customer_name: "ABCD")
+
+      expect(response).to have_http_status(:ok)
+
+      reader = PDF::Reader.new(StringIO.new(response.body))
+      pdf_text = reader.pages.map(&:text).join("\n")
+
+      expect(pdf_text).to include("ABCD")
     end
 
     it "returns 404 if license not found" do
