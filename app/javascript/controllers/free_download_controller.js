@@ -3,30 +3,29 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="free-download"
 export default class extends Controller {
   submit(event) {
-    event.preventDefault(); // need this to stop form from submiting directly
+    // need these to stop form from submiting directly
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const freeDownloadUrl = form.action;
 
-    fetch(form.action, {
+    fetch(freeDownloadUrl, {
       method: form.method,
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+      },
       body: formData
     })
-      .then(response => {
-        if (!response.ok) return response.json().then(err => Promise.reject(err));
-        return response.blob(); // audio file
-      })
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = form.dataset.filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
+      .then(res => res.json())
+      .then(data => {
+        if (data.download_url) {
+          window.location.href = data.download_url;
+        }
       })
       .catch(err => {
-        console.error("Download error:", err)
+        console.error("Download error:", err);
       })
   }
 }
