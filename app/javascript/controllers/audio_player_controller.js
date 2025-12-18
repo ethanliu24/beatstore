@@ -12,7 +12,7 @@ export default class extends Controller {
   ];
 
   static values = {
-    trackDataApiUrl: String
+    trackDataApiUrl: String,
   }
 
   connect() {
@@ -71,7 +71,8 @@ export default class extends Controller {
   }
 
   async play(e) {
-    if (e.target.closest("[data-prevent-play]")) return;
+    const el = e.target.closest("[data-prevent-play]");
+    if (el && el.dataset.preventPlay === "true") return;
     await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
@@ -204,12 +205,6 @@ export default class extends Controller {
     this.toggleLikeButton(false);
   }
 
-  navToTrack(e) {
-    const navTrackId = parseInt(e.currentTarget.dataset.trackId);
-    Turbo.visit(`/tracks/${navTrackId}`);
-    this.stopPropagation(e);
-  }
-
   async fetchTrackPurchaseModal(e) {
     e.stopPropagation();
     let url = e.currentTarget.dataset.trackPurchaseModalUrl;
@@ -226,51 +221,20 @@ export default class extends Controller {
       }
     })
       .then(r => r.text())
-      .then(html => Turbo.renderStreamMessage(html))
-      .then();
+      .then(html => Turbo.renderStreamMessage(html));
   }
 
-  async downloadTrack() {
-    try {
-      const url = `/download/track/${this.currentTrackId}/free`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-          "Content-Type": "audio/mpeg"
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Download failed with status ${response.status}`);
+  downloadTrack() {
+    fetch(`/modal/free_download/${this.currentTrackId}`, {
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Accept": "text/vnd.turbo-stream.html"
       }
-
-      const contentDisposition = response.headers.get("Content-Disposition");
-      if (!contentDisposition || !contentDisposition.includes("filename=")) {
-        throw new Error("Filename missing from response");
-      }
-
-      const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-      if (!filenameMatch || !filenameMatch[1]) {
-        throw new Error("Could not extract filename");
-      }
-
-      const filename = filenameMatch[1];
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download error:", error);
-      alert("Could not download the file.");
-    }
+    })
+      .then(r => r.text())
+      .then(html => Turbo.renderStreamMessage(html))
+      .catch(err => console.error(err));
   }
 
   async playAudio(trackId) {
