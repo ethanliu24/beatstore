@@ -12,6 +12,7 @@ RSpec.describe Snapshots::TakeTrackSnapshotService, type: :service do
       "key" => track.key,
       "bpm" => track.bpm,
       "is_public" => track.is_public,
+      "slug" => track.slug,
       "created_at" => track.created_at,
       "updated_at" => track.updated_at,
       "genre" => track.genre,

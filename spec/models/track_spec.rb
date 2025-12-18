@@ -340,4 +340,31 @@ RSpec.describe Track, type: :model do
       expect(track.undiscarded_comments.count).to eq(0)
     end
   end
+
+  describe "slugs" do
+    subject(:track) { build(:track) }
+
+    it "generates a slug if one does not exist when created" do
+      track.title = "slug"
+      track.save!
+
+      expect(track.slug).to match(/^slug-[a-zA-Z0-9]{6}$/)
+    end
+
+    it "slug base is normalized" do
+      track.title = "Lofi Chill Beat"
+      track.save!
+
+      expect(track.slug).to match(/^lofi_chill_beat-[a-zA-Z0-9]{6}$/)
+    end
+
+    it "should update slug if title changes" do
+      track.save!
+      old_slug = track.slug
+      track.update!(title: "New")
+
+      expect(track.slug).not_to eq(old_slug)
+      expect(track.slug).to match(/^new-[a-zA-Z0-9]{6}$/)
+    end
+  end
 end

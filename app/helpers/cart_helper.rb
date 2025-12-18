@@ -45,7 +45,7 @@ module CartHelper
     case cart_item.product_type
     when Track.name
       track = cart_item.product
-      link_to(track.title, track_path(track))
+      link_to(track.title, track_path(id: track.slug_param))
     else
       ""
     end
