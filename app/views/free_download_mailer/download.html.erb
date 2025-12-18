@@ -1,6 +1,16 @@
 <div>
   <p>Hey <%= @free_download.customer_name %>,</p>
-  <br>
-  <p>Here is your download for track <%= @track.title %>. If you make something with it, feel free to share!</p>
-  <%= link_to "Download Track", users_purchases_url, target: "_blank", rel: "noopener" %>
+  <p>
+    Here is your download for track "<%= @track.title %>", please reach out if theres any issues.
+    If you make something with it, feel free to share!
+  </p>
+
+  <p><%= link_to "Download Track", get_free_download_url(@free_download), target: "_blank", rel: "noopener" %></p>
+
+  <% unless @free_license.nil? %>
+    <p>
+      <%= link_to "Download License", download_contract_url(id: @free_license.id, entity: Track.name, entity_id: @track.id),
+        target: "_blank", rel: "noopener" %>
+    </p>
+  <% end %>
 </div>
