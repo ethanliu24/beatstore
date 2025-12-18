@@ -12,6 +12,8 @@ class Track < ApplicationRecord
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
   MAX_DESCRIPTION_LENGTH = 200
   GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
+  SLUG_SEPERATOR = "-"
+  SLUG_SUFFIX_LENGTH = 6
 
   # === Validations ===
   validates :title, presence: true
@@ -88,7 +90,7 @@ class Track < ApplicationRecord
   # end
 
   def to_param
-    "#{slug}-#{id}"
+    "#{slug}#{SLUG_SEPERATOR}#{id}"
   end
 
   def is_public?
@@ -136,17 +138,15 @@ class Track < ApplicationRecord
   def generate_slug
     base = title.to_s.downcase.parameterize(separator: "_")
     loop do
-      suffix = SecureRandom.alphanumeric(6)
-      slug = "#{base}-#{suffix}"
+      suffix = SecureRandom.alphanumeric(SLUG_SUFFIX_LENGTH)
+      slug = "#{base}#{SLUG_SEPERATOR}#{suffix}"
       break self.slug = slug unless Track.exists?(slug:)
     end
   end
 
   def update_slug
-    return if slug.blank?
-
     base = title.to_s.downcase.parameterize(separator: "_")
-    suffix = slug.split("-").last
-    self.slug = "#{base}-#{suffix}"
+    suffix = slug.split(SLUG_SEPERATOR).last
+    self.slug = "#{base}#{SLUG_SEPERATOR}#{suffix}"
   end
 end
