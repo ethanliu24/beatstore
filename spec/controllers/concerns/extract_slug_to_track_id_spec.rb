@@ -30,4 +30,3 @@ RSpec.describe ExtractSlugToTrackId, type: :model do
     end
   end
 end
-
