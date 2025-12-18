@@ -80,6 +80,7 @@ class DownloadsController < ApplicationController
 
   def contract
     license = License.kept.find(params[:id])
+    customer_full_name = params[:customer_name].presence || "THE PERSON DOWNLOADING"
     entity = if params[:entity] == Track.name
       Track.kept.find(params[:entity_id])
     else
@@ -87,7 +88,7 @@ class DownloadsController < ApplicationController
     end
 
     contract_markdown = if params[:entity] == Track.name
-      Contracts::RenderTracksContractService.new(license:, track: entity, customer_full_name: "DOWNLOADER").call
+      Contracts::RenderTracksContractService.new(license:, track: entity, customer_full_name:).call
     else
       ""
     end

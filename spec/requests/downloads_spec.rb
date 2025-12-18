@@ -298,6 +298,11 @@ RSpec.describe DownloadsController, type: :request do
       expect(response.headers["Content-Disposition"]).to include("attachment")
       expect(response.headers['Content-Disposition']).to include("filename=\"Free Download - #{license.title}.pdf\"")
       expect(response.content_type).to eq("application/pdf")
+
+      reader = PDF::Reader.new(StringIO.new(response.body))
+      pdf_text = reader.pages.map(&:text).join("\n").gsub(/\s*\n\s*/, " ")
+
+      expect(pdf_text).to include("THE PERSON DOWNLOADING")
     end
 
     it "sends an empty contract if entity is not supported" do
@@ -311,6 +316,17 @@ RSpec.describe DownloadsController, type: :request do
       reader = PDF::Reader.new(StringIO.new(response.body))
       pdf_text = reader.pages.map(&:text).join("\n")
       expect(pdf_text).to be_blank
+    end
+
+    it "uses the customer name passed in parameter" do
+      get download_contract_path(license, entity: Track.name, entity_id: track.id, customer_name: "ABCD")
+
+      expect(response).to have_http_status(:ok)
+
+      reader = PDF::Reader.new(StringIO.new(response.body))
+      pdf_text = reader.pages.map(&:text).join("\n")
+
+      expect(pdf_text).to include("ABCD")
     end
 
     it "returns 404 if license not found" do
