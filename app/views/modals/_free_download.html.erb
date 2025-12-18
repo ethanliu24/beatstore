@@ -3,7 +3,7 @@
 
   <%= modal.with_body do %>
     <div class="px-4 pt-2 pb-4">
-      <%= form_with model: free_download, url: track_free_download_path(track), method: :post,
+      <%= form_with model: free_download, url: free_download_path(track), method: :post,
         data: {
           controller: "free-download",
           action: "submit->free_download#submit",

@@ -1,5 +1,5 @@
 class FreeDownloadMailer < ApplicationMailer
-  def purchase_complete
+  def download
     @free_download = params[:free_download]
     @track = @free_download.track
 
