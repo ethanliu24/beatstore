@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_16_201927) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_18_202907) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -209,7 +209,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_16_201927) do
     t.string "genre"
     t.text "description"
     t.datetime "discarded_at"
+    t.string "slug"
     t.index ["discarded_at"], name: "index_tracks_on_discarded_at"
+    t.index ["slug"], name: "index_tracks_on_slug"
   end
 
   create_table "transactions", force: :cascade do |t|
