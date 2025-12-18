@@ -52,7 +52,7 @@ RSpec.describe TracksController, type: :request do
 
     it "renders a successful response" do
       track = Track.create! valid_attributes
-      get track_url(track)
+      get track_url(id: track.slug_param)
       expect(response).to be_successful
     end
 
@@ -64,7 +64,7 @@ RSpec.describe TracksController, type: :request do
         Track.create! valid_attributes
       end
 
-      get track_url(track)
+      get track_url(id: track.slug_param)
       expect(response.body.scan("RECOMMENDED_TRACK").size).to eq(TracksController::SIMILAR_TRACKS_RECOMMENDATION_LIMIT)
     end
 
@@ -72,7 +72,7 @@ RSpec.describe TracksController, type: :request do
       user = create(:user)
       sign_in user, scope: :user
 
-      get track_url(private_track)
+      get track_url(id: private_track.slug_param)
       expect(response).to have_http_status(:not_found)
     end
 
@@ -80,13 +80,13 @@ RSpec.describe TracksController, type: :request do
       admin = create(:admin)
       sign_in admin, scope: :user
 
-      get track_url(private_track)
+      get track_url(id: private_track.slug_param)
       expect(response).to be_successful
     end
 
     it "doesn't fetch discarded tracks" do
       track = create(:track)
-      get track_url(track)
+      get track_url(id: track.slug_param)
 
       expect(response).to be_successful
 
@@ -95,6 +95,34 @@ RSpec.describe TracksController, type: :request do
       get track_url(track)
 
       expect(response).to have_http_status(:not_found)
+    end
+
+    it "fetches tracks with the slugified param" do
+      track = create(:track)
+      get track_url(id: track.slug_param)
+      expect(response).to be_successful
+    end
+
+    it "redirects to the newest slugified url" do
+      track = create(:track)
+      slug_param = track.slug_param
+      url = track_url(id: slug_param)
+      track.update!(title: "New")
+      track.reload
+
+      get url
+
+      expect(slug_param).not_to eq(track.slug_param)
+      expect(response).to have_http_status(:moved_permanently)
+      expect(response).to redirect_to(track_url(id: track.slug_param))
+    end
+
+    it "redirects to the slugified url if param id is the original bigint id" do
+      track = create(:track)
+      get track_path(track)
+
+      expect(response).to have_http_status(:moved_permanently)
+      expect(response).to redirect_to(track_url(id: track.slug_param))
     end
   end
 end
