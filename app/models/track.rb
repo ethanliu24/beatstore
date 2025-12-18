@@ -5,17 +5,22 @@ class Track < ApplicationRecord
 
   # before_validation :adjust_visibility
   before_validation { self.is_public = false if is_public.nil? }
+  before_validation :generate_slug, on: :create
+  before_validation :update_slug, if: :will_save_change_to_title?
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
   MAX_DESCRIPTION_LENGTH = 200
   GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
+  SLUG_SEPERATOR = "-"
+  SLUG_SUFFIX_LENGTH = 6
 
   # === Validations ===
   validates :title, presence: true
   validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH }, allow_blank: true
   validates :bpm, numericality: { only_integer: true, greater_than: 0 }, presence: true
   validates :genre, presence: true, inclusion: { in: GENRES }
+  validates :slug, presence: true, uniqueness: true
   validates :key, format: {
     with: /\A(#{VALID_KEYS.join('|')}) (MAJOR|MINOR)\z/,
     message: "must be a valid key, e.g. 'C MAJOR' or 'A# MINOR'"
@@ -84,6 +89,16 @@ class Track < ApplicationRecord
   #   self.is_public = !required_files.all?(&:blank?)
   # end
 
+  # This is the id to use on track_path(id:). For user facing urls, we want a readable and
+  # SEO friendly slug, so all track_path calls should pass in the id track_path(id: track.slug_param)
+  # instead of the original bigint id.
+  #
+  # The last part of the slug_param should always be the original bigint id, so extraction from urls
+  # would always work on both slug and bigint ids.
+  def slug_param
+    "#{slug}#{SLUG_SEPERATOR}#{id}"
+  end
+
   def is_public?
     is_public
   end
@@ -124,5 +139,20 @@ class Track < ApplicationRecord
     if total_profit > 100 || total_publishing > 100
       errors.add(:base, I18n.t("admin.track.error.invalid_share_sum"))
     end
+  end
+
+  def generate_slug
+    base = title.to_s.downcase.parameterize(separator: "_")
+    loop do
+      suffix = SecureRandom.alphanumeric(SLUG_SUFFIX_LENGTH)
+      slug = "#{base}#{SLUG_SEPERATOR}#{suffix}"
+      break self.slug = slug unless Track.exists?(slug:)
+    end
+  end
+
+  def update_slug
+    base = title.to_s.downcase.parameterize(separator: "_")
+    suffix = slug.split(SLUG_SEPERATOR).last
+    self.slug = "#{base}#{SLUG_SEPERATOR}#{suffix}"
   end
 end
