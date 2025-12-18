@@ -89,6 +89,12 @@ class Track < ApplicationRecord
   #   self.is_public = !required_files.all?(&:blank?)
   # end
 
+  # This is the id to use on track_path(id:). For user facing urls, we want a readable and
+  # SEO friendly slug, so all track_path calls should pass in the id track_path(id: track.slug_param)
+  # instead of the original bigint id.
+  #
+  # The last part of the slug_param should always be the original bigint id, so extraction from urls
+  # would always work on both slug and bigint ids.
   def slug_param
     "#{slug}#{SLUG_SEPERATOR}#{id}"
   end
