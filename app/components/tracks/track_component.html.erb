@@ -86,7 +86,7 @@
             <% user_liked = current_user && current_user.hearted?(@track) %>
             <%= icon "heart", variant: user_liked ? "filled" : "outline", class: icon_size %>
             <% if current_user %>
-              <%= button_to t("track.heart_track"), track_heart_path(@track), method: user_liked ? :delete : :post, class: "cursor-pointer" %>
+              <%= button_to t("track.heart_track"), track_heart_path(track_id: @track.id), method: user_liked ? :delete : :post, class: "cursor-pointer" %>
             <% else %>
               <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
                 <%= t("track.heart_track") %>

@@ -1,4 +1,6 @@
 class TracksController < ApplicationController
+  include ExtractSlugToTrackId
+
   SIMILAR_TRACKS_RECOMMENDATION_LIMIT = 10
 
   def index
@@ -11,8 +13,9 @@ class TracksController < ApplicationController
   end
 
   def show
+    id = extract_track_id(params.expect(:id))
     base_scope = current_user&.admin? ? Track.kept : Track.publicly_available
-    @track = base_scope.find(params.expect(:id))
+    @track = base_scope.find(id)
     @similar_tracks = find_similar_tracks(@track)
     @licenses = @track.profitable_licenses
     @pagy, page_comments = pagy_keyset(@track.undiscarded_comments.order(created_at: :desc), limit: 10)

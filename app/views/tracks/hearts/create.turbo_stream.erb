@@ -8,5 +8,5 @@
 
 <%= turbo_stream.update dom_id(@track, :more_dropdown_like) do %>
   <%= icon "heart", variant: "filled", class: "w-3 h-3" %>
-  <%= button_to t("track.heart_track"), track_heart_path(@track), method: :delete, class: "cursor-pointer" %>
+  <%= button_to t("track.heart_track"), track_heart_path(track_id: @track.id), method: :delete, class: "cursor-pointer" %>
 <% end %>

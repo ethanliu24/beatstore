@@ -2,12 +2,14 @@
 
 class Api::TracksController < ApplicationController
   include ActiveStorage::SetCurrent
+  include ExtractSlugToTrackId
 
   # Track data for audio player
   def show
-    track = Track.kept.find_by(id: params[:id])
+    id = extract_track_id(params.expect(:id))
+    track = Track.kept.find(id)
 
-    if track && track.tagged_mp3.attached? && (current_user&.admin? || track.available?)
+    if track.tagged_mp3.attached? && (current_user&.admin? || track.available?)
       render json: {
         id: track.id,
         title: track.title,

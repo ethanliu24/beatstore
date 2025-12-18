@@ -1,4 +1,6 @@
 class ModalsController < ApplicationController
+  include ExtractSlugToTrackId
+
   before_action :ensure_turbo_request
 
   def auth_prompt
@@ -35,7 +37,8 @@ class ModalsController < ApplicationController
   end
 
   def track_more_info
-    track = Track.kept.find(params[:id])
+    id = extract_track_id(params.expect(:id))
+    track = Track.kept.find(id)
     render_modal(partial: "modals/track_more_info", locals: { track: })
   end
 
@@ -82,13 +85,15 @@ class ModalsController < ApplicationController
   end
 
   def track_purchase
-    track = Track.kept.find(params[:id])
+    track_id = extract_track_id(params.expect(:id))
+    track = Track.kept.find(track_id)
     initial_license_id = params[:initial_id].presence || track.profitable_licenses.first&.id
     render_modal(partial: "modals/track_purchase", locals: { track:, initial_license_id: })
   end
 
   def free_download
-    track = Track.kept.find(params[:id])
+    id = extract_track_id(params.expect(:id))
+    track = Track.kept.find(id)
     free_download = FreeDownload.new
     render_modal(partial: "modals/free_download", locals: { track:, free_download: })
   end
