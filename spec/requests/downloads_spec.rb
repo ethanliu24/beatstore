@@ -46,7 +46,7 @@ RSpec.describe DownloadsController, type: :request do
       }
     }
 
-    describe "sends correct data when files are attached" do
+    describe "creates download record when files are attached" do
       before do
         sign_in user, scope: :user
       end
@@ -92,6 +92,17 @@ RSpec.describe DownloadsController, type: :request do
         post create_free_download_path(track, params:)
 
         expect(response).to have_http_status(:not_found)
+      end
+
+      it "should send an email to user" do
+        perform_enqueued_jobs do
+          expect {
+            post create_free_download_path(track, params:)
+          }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        expect(response).to have_http_status(:ok)
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Download - #{track.title}")
       end
     end
 

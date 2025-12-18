@@ -25,7 +25,7 @@ class DownloadsController < ApplicationController
 
     if file_exists?(@track.tagged_mp3)
       if free_download.save
-        # TODO send email
+        FreeDownloadMailer.with(free_download:).download.deliver_later
         render json: { download_url: get_free_download_path(free_download) }
       else
         head :unprocessable_content
