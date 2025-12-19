@@ -6,7 +6,7 @@ module Ui
 
     def initialize(anchor_id:, position:)
       @anchor_id = anchor_id
-      @position = position
+      @position = position  # valid values: top, left, right, bottom, defaults to top
     end
 
     private

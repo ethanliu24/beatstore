@@ -4,7 +4,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["container"];
   static values = {
-    anchorId: String
+    anchorId: String,
+    position: String
   };
 
   connect() {
@@ -27,7 +28,6 @@ export default class extends Controller {
     this.anchor.addEventListener("mouseenter", this.hoverHandler);
     this.anchor.addEventListener("mouseleave", this.unhoverHandler);
     window.addEventListener("resize", this.positionUpdateHandler);
-    this.updateTooltipPosition();
   }
 
   disconnect() {
@@ -39,10 +39,12 @@ export default class extends Controller {
   }
 
   showTooltip() {
+    this.updateTooltipPosition();
     this.containerTarget.classList.remove("hidden");
   }
 
   hideTooltip() {
+    this.updateTooltipPosition();
     this.containerTarget.classList.add("hidden");
   }
 
@@ -50,9 +52,28 @@ export default class extends Controller {
     const tooltip = this.containerTarget;
     const anchorRect = this.anchor.getBoundingClientRect();
     const tooltipRect = this.tooltipSize;
+    const offsetX = 16;
+    const offsetY = 12;
+    let x, y;
 
-    const x = anchorRect.left + (anchorRect.width / 2) - (tooltipRect.width / 2);
-    const y = anchorRect.top - tooltipRect.height - 8;
+    switch (this.positionValue) {
+      case "left":
+        x = anchorRect.left - tooltipRect.width - offsetX;
+        y = anchorRect.top + (anchorRect.height / 2) - (tooltipRect.height / 2);
+        break;
+      case "right":
+        x = anchorRect.right + offsetX;
+        y = anchorRect.top + (anchorRect.height / 2) - (tooltipRect.height / 2);
+        break;
+      case "bottom":
+        x = anchorRect.left + (anchorRect.width / 2) - (tooltipRect.width / 2);
+        y = anchorRect.bottom + offsetY;
+        break;
+      case "top":
+      default:
+        x = anchorRect.left + (anchorRect.width / 2) - (tooltipRect.width / 2);
+        y = anchorRect.top - tooltipRect.height - offsetY;
+    }
 
     tooltip.style.left = `${Math.round(x)}px`;
     tooltip.style.top = `${Math.round(y)}px`;
