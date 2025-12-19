@@ -8,6 +8,8 @@
   --color-primary-txt: #121212;
   --color-secondary-txt: #888888;
   --color-hover: #eeeeee;
+  --color-tooltip-bg: var(--color-primary-txt);
+  --color-tooltip-text: var(--color-background);
 
   --color-accent: #9244ff;
   --color-accent-light: #dcd6fb;
