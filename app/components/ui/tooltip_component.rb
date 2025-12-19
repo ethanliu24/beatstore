@@ -5,7 +5,7 @@ module Ui
     renders_one :body
 
     def initialize(anchor_id:, position:)
-      @anchor = anchor_id
+      @anchor_id = anchor_id
       @position = position
     end
 
