@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="tooltip-manager"
 export default class extends Controller {
-  static targets = ["container"];
+  static targets = ["container", "arrowX", "arrowY"];
   static values = {
     anchorId: String,
     position: String
@@ -18,8 +18,12 @@ export default class extends Controller {
 
     // if start with tooltip hidden the dimensions would be all 0
     this.tooltipSize = this.containerTarget.getBoundingClientRect();
+    this.arrowXSize = this.arrowXTarget.getBoundingClientRect();
+    this.arrowYSize = this.arrowYTarget.getBoundingClientRect();
     this.hideTooltip();
     this.containerTarget.classList.remove("opacity-0");
+    this.offsetX = 16;
+    this.offsetY = 12;
 
     this.hoverHandler = this.showTooltip.bind(this);
     this.unhoverHandler = this.hideTooltip.bind(this);
@@ -44,7 +48,6 @@ export default class extends Controller {
   }
 
   hideTooltip() {
-    this.updateTooltipPosition();
     this.containerTarget.classList.add("hidden");
   }
 
@@ -52,8 +55,8 @@ export default class extends Controller {
     const tooltip = this.containerTarget;
     const anchorRect = this.anchor.getBoundingClientRect();
     const tooltipRect = this.tooltipSize;
-    const offsetX = 16;
-    const offsetY = 12;
+    const offsetX = this.offsetX;
+    const offsetY = this.offsetY;
     let x, y;
 
     switch (this.positionValue) {
@@ -75,7 +78,54 @@ export default class extends Controller {
         y = anchorRect.top - tooltipRect.height - offsetY;
     }
 
-    tooltip.style.left = `${Math.round(x)}px`;
-    tooltip.style.top = `${Math.round(y)}px`;
+    x = Math.round(x);
+    y = Math.round(y);
+
+    tooltip.style.left = `${x}px`;
+    tooltip.style.top = `${y}px`;
+
+    this.updateArrowPosition(x, y);
+  }
+
+  updateArrowPosition(tooltipX, tooltipY) {
+    const arrowX = this.arrowXTarget;
+    const arrowY = this.arrowYTarget;
+    const arrowXRect = this.arrowXSize;
+    const arrowYRect = this.arrowYSize;
+
+    const xMid = tooltipX + (this.tooltipSize.width / 2) - (arrowYRect.width / 2);
+    const yMid = tooltipY + (this.tooltipSize.height / 2) - (arrowXRect.height / 2);
+
+    if (this.positionValue === "left" || this.positionValue === "right") {
+      arrowX.classList.remove("hidden");
+      arrowY.classList.add("hidden");
+    } else {
+      arrowX.classList.add("hidden");
+      arrowY.classList.remove("hidden");
+    }
+
+    switch (this.positionValue) {
+      case "left":
+        arrowX.style.left = `${tooltipX + this.tooltipSize.width - 1}px`;
+        arrowX.style.top = `${yMid}px`;
+        arrowX.style.rotate = `180deg`;
+        break;
+      case "right":
+        arrowX.style.left = `${tooltipX - arrowXRect.width + 1}px`;
+        arrowX.style.top = `${yMid}px`;
+        arrowX.style.rotate = `0deg`;
+        break;
+      case "bottom":
+        arrowY.style.left = `${xMid}px`;
+        arrowY.style.top = `${tooltipY - arrowYRect.height + 1}px`;
+        arrowY.style.rotate = `0deg`;
+        break;
+      case "top":
+      default:
+        console.log(xMid)
+        arrowY.style.left = `${xMid}px`;
+        arrowY.style.top = `${tooltipY + this.tooltipSize.height - 1}px`;
+        arrowY.style.rotate = `180deg`;
+    }
   }
 }
