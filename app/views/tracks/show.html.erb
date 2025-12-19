@@ -58,7 +58,7 @@
         ].each do |data| %>
           <% continue unless data[:render] %>
 
-          <%= render Ui::TooltipComponent.new(anchor_id: data[:anchor_id], position: data[:position]) do |tooltip| %>
+          <%= render Ui::TooltipComponent.new(anchor_id: data[:anchor_id], position: data[:position], color_pallet: "accent") do |tooltip| %>
             <% tooltip.with_body do %>
               <%= data[:text] %>
             <% end %>
