@@ -19,6 +19,8 @@ module Ui
       case color_pallet
       when "accent"
         "accent"
+      when "default"
+        "tooltip-bg"
       else
         "tooltip-bg"
       end
@@ -28,6 +30,8 @@ module Ui
       case color_pallet
       when "accent"
         "white"
+      when "default"
+        "tooltip-text"
       else
         "tooltip-text"
       end
