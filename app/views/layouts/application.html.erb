@@ -31,13 +31,6 @@
     data-controller="audio-player">
     <%= render "nav/navbar" %>
 
-    <div id="tooltip-anchor">Test</div>
-    <%= render Ui::TooltipComponent.new(anchor_id: "tooltip-anchor", position: "") do |tooltip| %>
-      <% tooltip.with_body do %>
-        <div>HIIHIHIHIH</div>
-      <% end %>
-    <% end %>
-
     <main id="main" class="flex-1 overflow-y-scroll transparent-scrollbar-background">
       <%= render current_page %>
     </main>
