@@ -31,22 +31,37 @@
             <%= render "tracks/hearts/show_heart", track: @track, user_liked: current_user.hearted?(@track) %>
           </div>
         <% else %>
-          <%= link_to auth_prompt_modal_path, class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
+          <%= link_to auth_prompt_modal_path, id: "track-show-heart", class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
             <%= icon "heart", class: "text-accent w-5 h-5 cursor-pointer" %>
           <% end %>
         <% end %>
 
-        <%= link_to free_download_modal_path(@track), class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
+        <%= link_to free_download_modal_path(@track), id: "track-show-download", class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
           <%= icon "download", class: "text-accent" %>
         <% end %>
 
-        <%= link_to track_more_info_modal_path(@track), class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
+        <%= link_to track_more_info_modal_path(@track), id: "track-show-more-info", class: "track-show-icon-only-btn", data: { turbo_stream: true } do %>
           <%= icon "library", class: "text-accent" %>
         <% end %>
 
         <% if current_user && current_user.admin? %>
-          <%= link_to edit_admin_track_path(@track), class: "track-show-icon-only-btn" do %>
+          <%= link_to edit_admin_track_path(@track), id: "track-show-edit", class: "track-show-icon-only-btn" do %>
             <%= icon "pencil", class: "text-accent" %>
+          <% end %>
+        <% end %>
+
+        <% [
+          { anchor_id: "track-show-heart", position: "top", text: t("track.show.like_tooltip"), render: true },
+          { anchor_id: "track-show-download", position: "top", text: t("track.show.download_tooltip"), render: true },
+          { anchor_id: "track-show-more-info", position: "top", text: t("track.show.more_info_tooltip"), render: true },
+          { anchor_id: "track-show-edit", position: "top", text: t("track.show.edit_tooltip"), render: current_user && current_user.admin? }
+        ].each do |data| %>
+          <% continue unless data[:render] %>
+
+          <%= render Ui::TooltipComponent.new(anchor_id: data[:anchor_id], position: data[:position]) do |tooltip| %>
+            <% tooltip.with_body do %>
+              <%= data[:text] %>
+            <% end %>
           <% end %>
         <% end %>
       </div>
