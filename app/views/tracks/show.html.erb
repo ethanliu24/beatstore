@@ -56,7 +56,7 @@
           { anchor_id: "track-show-more-info", position: "top", text: t("track.show.more_info_tooltip"), render: true },
           { anchor_id: "track-show-edit", position: "top", text: t("track.show.edit_tooltip"), render: current_user && current_user.admin? }
         ].each do |data| %>
-          <% continue unless data[:render] %>
+          <% next unless data[:render] %>
 
           <%= render Ui::TooltipComponent.new(anchor_id: data[:anchor_id], position: data[:position], color_pallet: "accent") do |tooltip| %>
             <% tooltip.with_body do %>
