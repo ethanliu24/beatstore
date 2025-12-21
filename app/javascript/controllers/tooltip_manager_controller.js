@@ -122,7 +122,6 @@ export default class extends Controller {
         break;
       case "top":
       default:
-        console.log(xMid)
         arrowY.style.left = `${xMid}px`;
         arrowY.style.top = `${tooltipY + this.tooltipSize.height - 1}px`;
         arrowY.style.rotate = `180deg`;
