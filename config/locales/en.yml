@@ -130,6 +130,10 @@ en:
         has_radio_broadcasting_rights: "%{stations} RADIO STATIONS BROADCASTING RIGHTS"
         unlimited: "UNLIMITED"
         no_licenses: "There are no licenses available"
+      like_tooltip: "Like"
+      download_tooltip: "Download"
+      more_info_tooltip: "More Track Info"
+      edit_tooltip: "Edit"
 
   admin:
     dashboards:

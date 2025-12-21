@@ -53,4 +53,26 @@ RSpec.describe Ui::TooltipComponent, type: :component do
     expect(page).to have_css(".text-tooltip-text")
     expect(page).to have_css(".rounded")
   end
+
+  it "renders the right color pallet for accent pallet" do
+    render_inline(
+      described_class.new(anchor_id: "anchor", position: "top", color_pallet: "accent")
+    ) { "Styled tooltip" }
+
+    expect(page).to have_css(".bg-accent")
+    expect(page).to have_css(".text-white")
+  end
+
+  it "renders the default color pallet if default, nothing or unsupported pallets are passed" do
+    pallets = [ "default", nil, "unsupported" ]
+
+    pallets.each do |color_pallet|
+      render_inline(
+        described_class.new(anchor_id: "anchor", position: "top", color_pallet: "default")
+      ) { "Styled tooltip" }
+
+      expect(page).to have_css(".bg-tooltip-bg")
+      expect(page).to have_css(".text-tooltip-text")
+    end
+  end
 end
