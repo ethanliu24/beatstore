@@ -2,31 +2,35 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="audio"
 export default class extends Controller {
+  static outlets = ["audio-player"];
+
   connect() {
-    console.log(this)
+    this.playController = null; // prevent overlapping fetches
   }
 
   async play(e) {
     const el = e.target.closest("[data-prevent-play]");
     if (el && el.dataset.preventPlay === "true") return;
-    await this.playerOutlet.playAudio(parseInt(e.currentTarget.dataset.trackId));
+    await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   async playAudio(trackId) {
-    if (this.played) {
-      if (this.currentTrackId == trackId) {
-        if (this.audioTarget.paused) {
-          this.resumeAudio();
+    const currentTrackId = this.audioPlayerOutlet.currentTrackId;
+
+    if (this.audioPlayerOutlet.played) {
+      if (currentTrackId == trackId) {
+        if (this.audioPlayerOutlet.audioTarget.paused) {
+          this.audioPlayerOutlet.resumeAudio();
         }
 
-        this.openPlayer();
+        this.audioPlayerOutlet.openPlayer();
         return;
       }
     }
 
     if (this.playController) this.playController.abort();
     this.playController = new AbortController();
-    const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
+    const playable = await fetch(`${"/api/tracks"}/${trackId}`, {
       method: "GET",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
@@ -42,36 +46,14 @@ export default class extends Controller {
           console.error(`Error fetching track: ${res.statusText}`);
         }
 
-        this.togglePlayableCoverPhotoIcon(false);
-        this.played = false;
+        this.audioPlayerOutlet.playfailed();
         return false;
       }
 
-      this.coverPhotoTarget.classList.add("hidden");
+
       const track = await res.json();
+      this.audioPlayerOutlet.setTrackInformation(track);
 
-      this.currentTrackId = track.id;
-      localStorage.setItem("cur_player_track", track.id);
-
-      if (track.cover_photo_url === "") {
-        this.coverPhotoTarget.classList.add("hidden");
-      } else {
-        this.coverPhotoTarget.src = track.cover_photo_url;
-        this.coverPhotoTarget.classList.remove("hidden");
-      }
-      this.titleTarget.innerText = track.title;
-      this.keyTarget.innerText = track.key;
-      this.bpmTarget.innerText = `${track.bpm} BPM`;
-      this.priceBtnTarget.innerText = track.cheapest_price;
-      this.toggleLikeButton(track.liked_by_user);
-      this.pauseAudio();
-      this.resetAudio();
-      this.openPlayer();
-      this.audioTarget.src = track.preview_url;
-      this.audioTarget.load();
-      this.resetAudio();
-      this.resumeAudio();
-      this.played = true;
       return true;
     })
     .catch(error => {
@@ -79,8 +61,8 @@ export default class extends Controller {
       return false;
     })
 
-    if (!playable || !this.currentTrackId) return;
-    fetch(`/tracks/${this.currentTrackId}/play`, {
+    if (!playable || !currentTrackId) return;
+    fetch(`/tracks/${currentTrackId}/play`, {
       method: "POST",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,

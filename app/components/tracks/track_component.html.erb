@@ -1,5 +1,5 @@
 <div id="<%= dom_id track %>" class="track flex justify-between items-stretch w-full sm:w-auto rounded p-2 hover:bg-hover cursor-pointer"
-  data-track-id="<%= track.id %>" data-action="click->audio-player#play"
+  data-track-id="<%= track.id %>" data-action="click->audio#play"
 >
   <div class="flex justify-start itmes-center gap-4 truncate min-w-30">
     <div class="flex justify-center items-center rounded w-8 h-8 min-w-8 min-h-8 bg-secondary-bg">
@@ -65,7 +65,7 @@
         <ul>
           <li>
             <%= content_tag :div, class: "dropdown-item",
-              data: { track_id: @track.id, action: "click->audio-player#play", prevent_play: false } do %>
+              data: { track_id: @track.id, action: "click->audio#play", prevent_play: false } do %>
               <%= icon "player-play", class: icon_size %>
               <%= t("label.play") %>
             <% end %>

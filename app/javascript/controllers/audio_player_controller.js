@@ -11,19 +11,13 @@ export default class extends Controller {
     "priceBtn",
   ];
 
-  static values = {
-    trackDataApiUrl: String,
-  }
-
   connect() {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
-      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks";
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
-      this.playController = null; // prevent overlapping fetches
 
       this.element.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
@@ -229,5 +223,38 @@ export default class extends Controller {
       .then(r => r.text())
       .then(html => Turbo.renderStreamMessage(html))
       .catch(err => console.error(err));
+  }
+
+  setTrackInformation(track) {
+    this.coverPhotoTarget.classList.add("hidden");
+
+    this.currentTrackId = track.id;
+    localStorage.setItem("cur_player_track", track.id);
+
+    if (track.cover_photo_url === "") {
+      this.coverPhotoTarget.classList.add("hidden");
+    } else {
+      this.coverPhotoTarget.src = track.cover_photo_url;
+      this.coverPhotoTarget.classList.remove("hidden");
+    }
+
+    this.titleTarget.innerText = track.title;
+    this.keyTarget.innerText = track.key;
+    this.bpmTarget.innerText = `${track.bpm} BPM`;
+    this.priceBtnTarget.innerText = track.cheapest_price;
+    this.toggleLikeButton(track.liked_by_user);
+    this.pauseAudio();
+    this.resetAudio();
+    this.openPlayer();
+    this.audioTarget.src = track.preview_url;
+    this.audioTarget.load();
+    this.resetAudio();
+    this.resumeAudio();
+    this.played = true;
+  }
+
+  playFailed() {
+    this.audioPlayerOutlet.togglePlayableCoverPhotoIcon(false);
+    this.played = false;
   }
 }
