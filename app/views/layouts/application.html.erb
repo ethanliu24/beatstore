@@ -25,10 +25,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   </head>
 
-  <%# the audio player controller is referenced by playableCoverPhoto controller through the <body> tag %>
-  <%# if moving this somewhere else, need to modify that too %>
   <body class="flex flex-col justify-start w-full h-full items-stretch bg-background text-primary-txt mb-50"
-    data-controller="audio-player">
+    data-controller="audio" id="audio-controller" data-audio-audio-player-outlet="#audio-player">
     <%= render "nav/navbar" %>
 
     <main id="main" class="flex-1 overflow-y-scroll transparent-scrollbar-background">
