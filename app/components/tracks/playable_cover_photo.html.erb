@@ -1,6 +1,7 @@
 <div class="relative w-full h-full"
   data-controller="playable-cover-photo" data-playable-cover-photo-target="container"
-  data-playable-cover-photo-audio-player-outlet="body"
+  data-playable-cover-photo-audio-outlet="#audio-controller"
+  data-playable-cover-photo-audio-player-outlet="#audio-player"
   data-playable-cover-photo-track-id-value="<%= track.id %>">
   <% if track.cover_photo.attached? %>
     <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
