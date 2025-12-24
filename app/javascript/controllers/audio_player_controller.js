@@ -11,21 +11,15 @@ export default class extends Controller {
     "priceBtn",
   ];
 
-  static values = {
-    trackDataApiUrl: String,
-  }
-
   connect() {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
-      this.trackDataApiUrl = this.trackDataApiUrlValue || "/api/tracks";
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
-      this.playController = null; // prevent overlapping fetches
 
-      this.element.addEventListener("keydown", (e) => {
+      document.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
           if (e.key === " ") {
             this.isPlaying() ? this.pauseAudio() : this.resumeAudio();
@@ -68,12 +62,6 @@ export default class extends Controller {
 
   stopPropagation(e) {
     e.stopPropagation();
-  }
-
-  async play(e) {
-    const el = e.target.closest("[data-prevent-play]");
-    if (el && el.dataset.preventPlay === "true") return;
-    await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
   }
 
   pauseAudio() {
@@ -161,14 +149,6 @@ export default class extends Controller {
     }
   }
 
-  goToTrack() {
-    Turbo.visit(`/tracks/${this.currentTrackId}`);
-  }
-
-  goToEditTrackPage() {
-    Turbo.visit(`/admin/tracks/${this.currentTrackId}/edit`);
-  }
-
   toggleLikeButton(liked) {
     if (liked) {
       this.unlikeBtnTarget.classList.remove("hidden");
@@ -179,138 +159,36 @@ export default class extends Controller {
     }
   }
 
-  likeTrack() {
-    fetch(`/tracks/${this.currentTrackId}/heart`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json"
-      }
-    })
-    .then();
+  setTrackInformation(track) {
+    this.coverPhotoTarget.classList.add("hidden");
 
-    this.toggleLikeButton(true);
-  }
+    this.currentTrackId = track.id;
+    localStorage.setItem("cur_player_track", track.id);
 
-  unlikeTrack() {
-    fetch(`/tracks/${this.currentTrackId}/heart`, {
-      method: "DELETE",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json"
-      }
-    })
-    .then();
-
-    this.toggleLikeButton(false);
-  }
-
-  async fetchTrackPurchaseModal(e) {
-    e.stopPropagation();
-    let url = e.currentTarget.dataset.trackPurchaseModalUrl;
-    if (!url) {
-      if (!this.currentTrackId) return;
-      url = `/modal/track_purchase/${this.currentTrackId}`;
-    }
-
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Accept": "text/vnd.turbo-stream.html"
-      }
-    })
-      .then(r => r.text())
-      .then(html => Turbo.renderStreamMessage(html));
-  }
-
-  downloadTrack() {
-    fetch(`/modal/free_download/${this.currentTrackId}`, {
-      method: "GET",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Accept": "text/vnd.turbo-stream.html"
-      }
-    })
-      .then(r => r.text())
-      .then(html => Turbo.renderStreamMessage(html))
-      .catch(err => console.error(err));
-  }
-
-  async playAudio(trackId) {
-    if (this.played) {
-      if (this.currentTrackId == trackId) {
-        if (this.audioTarget.paused) {
-          this.resumeAudio();
-        }
-
-        this.openPlayer();
-        return;
-      }
-    }
-
-    if (this.playController) this.playController.abort();
-    this.playController = new AbortController();
-    const playable = await fetch(`${this.trackDataApiUrl}/${trackId}`, {
-      method: "GET",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json",
-      },
-      signal: this.playController.signal
-    })
-    .then(async res => {
-      if (!res.ok) {
-        if (res.status === 404) {
-          console.error("No preview available");
-        } else {
-          console.error(`Error fetching track: ${res.statusText}`);
-        }
-
-        this.togglePlayableCoverPhotoIcon(false);
-        this.played = false;
-        return false;
-      }
-
+    if (track.cover_photo_url === "") {
       this.coverPhotoTarget.classList.add("hidden");
-      const track = await res.json();
+    } else {
+      this.coverPhotoTarget.src = track.cover_photo_url;
+      this.coverPhotoTarget.classList.remove("hidden");
+    }
 
-      this.currentTrackId = track.id;
-      localStorage.setItem("cur_player_track", track.id);
+    this.titleTarget.innerText = track.title;
+    this.keyTarget.innerText = track.key;
+    this.bpmTarget.innerText = `${track.bpm} BPM`;
+    this.priceBtnTarget.innerText = track.cheapest_price;
+    this.toggleLikeButton(track.liked_by_user);
+    this.pauseAudio();
+    this.resetAudio();
+    this.openPlayer();
+    this.audioTarget.src = track.preview_url;
+    this.audioTarget.load();
+    this.resetAudio();
+    this.resumeAudio();
+    this.played = true;
+  }
 
-      if (track.cover_photo_url === "") {
-        this.coverPhotoTarget.classList.add("hidden");
-      } else {
-        this.coverPhotoTarget.src = track.cover_photo_url;
-        this.coverPhotoTarget.classList.remove("hidden");
-      }
-      this.titleTarget.innerText = track.title;
-      this.keyTarget.innerText = track.key;
-      this.bpmTarget.innerText = `${track.bpm} BPM`;
-      this.priceBtnTarget.innerText = track.cheapest_price;
-      this.toggleLikeButton(track.liked_by_user);
-      this.pauseAudio();
-      this.resetAudio();
-      this.openPlayer();
-      this.audioTarget.src = track.preview_url;
-      this.audioTarget.load();
-      this.resetAudio();
-      this.resumeAudio();
-      this.played = true;
-      return true;
-    })
-    .catch(error => {
-      console.error("Error fetching track: " + error.message);
-      return false;
-    })
-
-    if (!playable || !this.currentTrackId) return;
-    fetch(`/tracks/${this.currentTrackId}/play`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
-        "Content-Type": "application/json"
-      }
-    })
+  playFailed() {
+    this.audioPlayerOutlet.togglePlayableCoverPhotoIcon(false);
+    this.played = false;
   }
 }

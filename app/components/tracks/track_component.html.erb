@@ -35,12 +35,9 @@
       <span class="max-sm:hidden"><%= t("label.free").downcase %></span>
     <% end %>
 
-    <%= content_tag :div,
-      class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18",
-      data: {
-        track_purchase_modal_url: track_purchase_modal_path(@track),
-        action: "click->audio-player#fetchTrackPurchaseModal"
-      } do %>
+    <%# TODO %>
+    <%= link_to track_purchase_modal_path(@track), data: { turbo_stream: true, prevent_play: true },
+      class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18" do %>
       <%= icon "shopping-bag", class: "w-4 h-4" %>
       <% unless track.profitable_licenses.count == 0 %>
         <span class="max-sm:hidden"><%= track.cheapest_price %></span>
@@ -65,7 +62,7 @@
         <ul>
           <li>
             <%= content_tag :div, class: "dropdown-item",
-              data: { track_id: @track.id, action: "click->audio-player#play", prevent_play: false } do %>
+              data: { track_id: @track.id, action: "click->audio#play", prevent_play: false } do %>
               <%= icon "player-play", class: icon_size %>
               <%= t("label.play") %>
             <% end %>
