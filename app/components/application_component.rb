@@ -8,4 +8,5 @@ class ApplicationComponent < ViewComponent::Base
 
   delegate :icon, to: :helpers
   delegate :sort_link, to: :helpers
+  delegate :player_queue_context_id, to: :helpers
 end

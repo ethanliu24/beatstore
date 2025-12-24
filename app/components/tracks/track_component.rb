@@ -2,10 +2,10 @@
 
 module Tracks
   class TrackComponent < ApplicationComponent
-    def initialize(track:, current_user:, scope:)
+    def initialize(track:, current_user:, track_scope:)
       @track = track
       @current_user = current_user
-      @scope = scope
+      @scope = track_scope
     end
 
     private
