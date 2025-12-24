@@ -35,11 +35,12 @@
       <span class="max-sm:hidden"><%= t("label.free").downcase %></span>
     <% end %>
 
+    <%# TODO %>
     <%= content_tag :div,
       class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18",
       data: {
         track_purchase_modal_url: track_purchase_modal_path(@track),
-        action: "click->audio-player#fetchTrackPurchaseModal"
+        action: "click->audio-player-user-actions#fetchTrackPurchaseModal"
       } do %>
       <%= icon "shopping-bag", class: "w-4 h-4" %>
       <% unless track.profitable_licenses.count == 0 %>

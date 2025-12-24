@@ -1,141 +1,143 @@
 <div id="audio-player" data-turbo-permanent class="hidden fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2"
-  data-controller="audio-player" data-audio-player-target="container" data-audio-player-outlet>
-  <audio id="audio-player-src" data-audio-player-target="audio"></audio>
-  <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background">
-    <div class="relative flex justify-between items-stretch gap-4 min-w-15">
-      <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
-        <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
-        <img data-audio-player-target="coverPhoto" src="" draggable="false" class="w-7 aspect-square rounded hidden absolute top-0 left-0">
-      </div>
-      <div class="flex flex-col justify-between items-start truncate whitespace-nowrap">
-        <p class="text-xs" data-audio-player-target="title"></p>
-        <div class="flex justify-start items-center gap-1 text-[0.5rem] font-light text-secondary-txt">
-          <p data-audio-player-target="bpm"></p>
-          <%= seperator_char_ui %>
-          <p data-audio-player-target="key"></p>
+  data-controller="audio-player" data-audio-player-target="container">
+  <div data-controller="audio-player-user-actions" data-audio-player-user-actions-audio-player-outlet="#audio-player" class="w-full h-full">
+    <audio id="audio-player-src" data-audio-player-target="audio"></audio>
+    <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background">
+      <div class="relative flex justify-between items-stretch gap-4 min-w-15">
+        <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
+          <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
+          <img data-audio-player-target="coverPhoto" src="" draggable="false" class="w-7 aspect-square rounded hidden absolute top-0 left-0">
+        </div>
+        <div class="flex flex-col justify-between items-start truncate whitespace-nowrap">
+          <p class="text-xs" data-audio-player-target="title"></p>
+          <div class="flex justify-start items-center gap-1 text-[0.5rem] font-light text-secondary-txt">
+            <p data-audio-player-target="bpm"></p>
+            <%= seperator_char_ui %>
+            <p data-audio-player-target="key"></p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="flex justify-center items-center gap-4 max-sm:gap-2 cursor-pointer">
-      <div class="w-fit" data-audio-player-target="playerModeContainer" data-action="click->audio-player#switchMode">
-        <%= icon "arrow-forward-up", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { player_mode: "next" } %>
-        <%= icon "repeat", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "repeat" } %>
-        <%= icon "arrows-shuffle", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "shuffle" } %>
+      <div class="flex justify-center items-center gap-4 max-sm:gap-2 cursor-pointer">
+        <div class="w-fit" data-audio-player-target="playerModeContainer" data-action="click->audio-player#switchMode">
+          <%= icon "arrow-forward-up", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { player_mode: "next" } %>
+          <%= icon "repeat", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "repeat" } %>
+          <%= icon "arrows-shuffle", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "shuffle" } %>
+        </div>
+        <%= icon "player-track-prev", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "prevBtn" } %>
+        <%= icon "player-pause", variant: "filled", class: "aspect-square w-5 hidden",
+          data: { action: "click->audio-player#pauseAudio", audio_player_target: "pauseBtn" } %>
+        <%= icon "player-play", variant: "filled", class: "aspect-square w-5 max-sm:w-4",
+          data: { action: "click->audio-player#resumeAudio", audio_player_target: "resumeBtn" } %>
+        <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "nextBtn" } %>
+        <%= icon "rotate", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { action: "click->audio-player#repeatTrack", audio_player_target: "repeatBtn" } %>
       </div>
-      <%= icon "player-track-prev", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "prevBtn" } %>
-      <%= icon "player-pause", variant: "filled", class: "aspect-square w-5 hidden",
-        data: { action: "click->audio-player#pauseAudio", audio_player_target: "pauseBtn" } %>
-      <%= icon "player-play", variant: "filled", class: "aspect-square w-5 max-sm:w-4",
-        data: { action: "click->audio-player#resumeAudio", audio_player_target: "resumeBtn" } %>
-      <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "nextBtn" } %>
-      <%= icon "rotate", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { action: "click->audio-player#repeatTrack", audio_player_target: "repeatBtn" } %>
-    </div>
-    <input
-      id="audio-player-progress"
-      type="range"
-      min="0"
-      max="100"
-      value="0"
-      step="0.1"
-      class="flex-1 min-w-12 h-[2px] cursor-pointer accent-accent max-2xs:hidden"
-      data-action="change->audio-player#seek"
-      data-audio-player-target="progressBar"
-    />
-    <div class="flex justify-between items-center gap-5 max-sm:gap-3 cursor-pointer">
-      <div class="max-md:hidden">
-        <% if current_user %>
-          <%= icon "heart", class: "w-3 h-3",
-            data: { action: "click->audio-player#likeTrack", audio_player_target: "likeBtn" } %>
-        <% else %>
-          <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
-            <%= icon "heart", class: "w-3 h-3", data: { audio_player_target: "likeBtn" } %>
+      <input
+        id="audio-player-progress"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+        class="flex-1 min-w-12 h-[2px] cursor-pointer accent-accent max-2xs:hidden"
+        data-action="change->audio-player#seek"
+        data-audio-player-target="progressBar"
+      />
+      <div class="flex justify-between items-center gap-5 max-sm:gap-3 cursor-pointer">
+        <div class="max-md:hidden">
+          <% if current_user %>
+            <%= icon "heart", class: "w-3 h-3",
+              data: { action: "click->audio-player-user-actions#likeTrack", audio_player_target: "likeBtn" } %>
+          <% else %>
+            <%= link_to auth_prompt_modal_path, data: { turbo_stream: true } do %>
+              <%= icon "heart", class: "w-3 h-3", data: { audio_player_target: "likeBtn" } %>
+            <% end %>
+          <% end %>
+        <%= icon "heart", variant: "filled", class: "w-3 h-3",
+          data: { action: "click->audio-player-user-actions#unlikeTrack", audio_player_target: "unlikeBtn" } %>
+        </div>
+
+        <%= render Ui::DropdownComponent.new(
+          id: "volume-slider",
+          classes: "z-10 hidden p-2 w-32 bg-secondary-bg border-1 border-background rounded"
+        ) do |dropdown| %>
+          <%= dropdown.with_trigger_button(
+            id: "volume-slider",
+            classes: "w-fit h-fit max-sm:hidden",
+            data: {
+              dropdown_trigger: "hover",
+              dropdown_placement: "top",
+              action: "click->audio-player#stopPropagation"
+            }
+          ) do %>
+            <%= icon "volume", class: "w-4 h-4", data: { audio_player_target: "volumeOnBtn" } %>
+            <%= icon "volume-off", class: "w-4 h-4 hidden", data: { audio_player_target: "volumeOffBtn" } %>
+          <% end %>
+
+          <%= dropdown.with_section do %>
+            <div class="flex justify-center items-center w-full h-full">
+              <input
+                id="audio-player-volume"
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+                step="1"
+                class="w-full h-1 cursor-pointer accent-primary-txt"
+                data-action="change->audio-player#adjustVolume"
+                data-audio-player-target="volumeBar"
+              />
+            </div>
           <% end %>
         <% end %>
-      <%= icon "heart", variant: "filled", class: "w-3 h-3",
-        data: { action: "click->audio-player#unlikeTrack", audio_player_target: "unlikeBtn" } %>
-      </div>
 
-      <%= render Ui::DropdownComponent.new(
-        id: "volume-slider",
-        classes: "z-10 hidden p-2 w-32 bg-secondary-bg border-1 border-background rounded"
-      ) do |dropdown| %>
-        <%= dropdown.with_trigger_button(
-          id: "volume-slider",
-          classes: "w-fit h-fit max-sm:hidden",
-          data: {
-            dropdown_trigger: "hover",
-            dropdown_placement: "top",
-            action: "click->audio-player#stopPropagation"
-          }
-        ) do %>
-          <%= icon "volume", class: "w-4 h-4", data: { audio_player_target: "volumeOnBtn" } %>
-          <%= icon "volume-off", class: "w-4 h-4 hidden", data: { audio_player_target: "volumeOffBtn" } %>
-        <% end %>
-
-        <%= dropdown.with_section do %>
-          <div class="flex justify-center items-center w-full h-full">
-            <input
-              id="audio-player-volume"
-              type="range"
-              min="0"
-              max="100"
-              value="100"
-              step="1"
-              class="w-full h-1 cursor-pointer accent-primary-txt"
-              data-action="change->audio-player#adjustVolume"
-              data-audio-player-target="volumeBar"
-            />
-          </div>
-        <% end %>
-      <% end %>
-
-      <%# More dropdown %>
-      <%= render Ui::DropdownComponent.new(
-        id: "audio-player-more",
-      ) do |dropdown| %>
-        <%= dropdown.with_trigger_button(
+        <%# More dropdown %>
+        <%= render Ui::DropdownComponent.new(
           id: "audio-player-more",
-          data: { dropdown_placement: "top", action: "click->audio-player#stopPropagation" },
-        ) do %>
-          <%= icon "dots", class: "w-4 h-4 cursor-pointer" %>
-        <% end %>
+        ) do |dropdown| %>
+          <%= dropdown.with_trigger_button(
+            id: "audio-player-more",
+            data: { dropdown_placement: "top", action: "click->audio-player#stopPropagation" },
+          ) do %>
+            <%= icon "dots", class: "w-4 h-4 cursor-pointer" %>
+          <% end %>
 
-        <%= dropdown.with_section do %>
-          <% icon_size = "w-3 h-3" %>
+          <%= dropdown.with_section do %>
+            <% icon_size = "w-3 h-3" %>
 
-          <%# TODO implement the rest of the dropdown options %>
-          <ul>
-            <li class="dropdown-item" data-action="click->audio-player#goToTrack">
-              <%= icon "eye", class: icon_size %>
-              <%= t("track.see_track") %>
-            </li>
-            <li class="dropdown-item" data-action="click->audio-player#fetchTrackPurchaseModal">
-              <%= icon "shopping-bag",  class: icon_size %>
-              <%= t("track.add_to_cart") %>
-            </li>
-            <li class="dropdown-item" data-action="click->audio-player#downloadTrack">
-              <%= icon "download", class: icon_size %>
-              <%= t("label.download") %>
-            </li>
-            <% if current_user %>
-              <% if current_user.admin? %>
-                <li class="dropdown-item" data-action="click->audio-player#goToEditTrackPage">
-                  <%= icon "lock", class: icon_size %>
-                  <%= t("label.edit") %>
-                </li>
+            <%# TODO implement the rest of the dropdown options %>
+            <ul>
+              <li class="dropdown-item" data-action="click->audio-player-user-actions#goToTrack">
+                <%= icon "eye", class: icon_size %>
+                <%= t("track.see_track") %>
+              </li>
+              <li class="dropdown-item" data-action="click->audio-player-user-actions#fetchTrackPurchaseModal">
+                <%= icon "shopping-bag",  class: icon_size %>
+                <%= t("track.add_to_cart") %>
+              </li>
+              <li class="dropdown-item" data-action="click->audio-player-user-actions#downloadTrack">
+                <%= icon "download", class: icon_size %>
+                <%= t("label.download") %>
+              </li>
+              <% if current_user %>
+                <% if current_user.admin? %>
+                  <li class="dropdown-item" data-action="click->audio-player-user-actions#goToEditTrackPage">
+                    <%= icon "lock", class: icon_size %>
+                    <%= t("label.edit") %>
+                  </li>
+                <% end %>
               <% end %>
-            <% end %>
-          </ul>
+            </ul>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <div class="w-fit h-fit max-md:hidden">
-        <button class="button px-3 py-1 text-xs w-full h-full" data-audio-player-target="priceBtn"
-        data-action="click->audio-player#fetchTrackPurchaseModal"></button>
-      </div>
+        <div class="w-fit h-fit max-md:hidden">
+          <button class="button px-3 py-1 text-xs w-full h-full" data-audio-player-target="priceBtn"
+          data-action="click->audio-player-user-actions#fetchTrackPurchaseModal"></button>
+        </div>
 
-      <div class="w-6 h-6 p-1 rounded-full hover:bg-hover" data-action="click->audio-player#closePlayer">
-        <%= icon "x", class: "w-full h-full" %>
+        <div class="w-6 h-6 p-1 rounded-full hover:bg-hover" data-action="click->audio-player#closePlayer">
+          <%= icon "x", class: "w-full h-full" %>
+        </div>
       </div>
     </div>
   </div>
