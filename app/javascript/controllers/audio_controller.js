@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="audio"
 export default class extends Controller {
-  static outlets = ["audio-player"];
+  static outlets = ["audio-player", "audio-queue"];
 
   connect() {
     this.playController = null; // prevent overlapping fetches
@@ -49,7 +49,6 @@ export default class extends Controller {
         this.audioPlayerOutlet.playfailed();
         return false;
       }
-
 
       const track = await res.json();
       this.audioPlayerOutlet.setTrackInformation(track);
