@@ -81,7 +81,7 @@
     <%= render Tracks::ListComponent.new(
       tracks: @similar_tracks,
       current_user:,
-      queue_scope: player_queue_context_id,
+      queue_scope: "tracks:show",
       options: { render_message_if_empty: false }
     ) %>
   </section>

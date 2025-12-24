@@ -9,7 +9,7 @@ class TracksController < ApplicationController
     queried_tracks = @q.result(distinct: true).includes(:tags).order(created_at: :desc)
     # Sorting is disabled due to incompatibilty with ransack and pagy_keyset.
     # If really need to sort, use pagy(...)
-    @pagy, @tracks = pagy_keyset(queried_tracks, limit: 20)
+    @pagy, @tracks = pagy_keyset(queried_tracks, limit: 1)
   end
 
   def show

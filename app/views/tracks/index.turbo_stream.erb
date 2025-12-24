@@ -3,7 +3,7 @@
     <%= render Tracks::ListComponent.new(
       tracks: @tracks,
       current_user:,
-      queue_scope: player_queue_context_id,
+      queue_scope: "tracks:index",
       options: { empty_message: t("track.no_tracks_found") }
     ) %>
   <% end %>
@@ -11,4 +11,6 @@
   <%= turbo_stream.replace "load-more" do %>
     <%= render "shared/load_more", pagy: @pagy %>
   <% end %>
+
+  <div data-controller="track-loaded"></div>
 <% end %>

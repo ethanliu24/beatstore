@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   before_action :store_previous_location, if: :storable_location?
 
-  helper_method :current_or_guest_user, :player_queue_context_id
+  helper_method :current_or_guest_user
 
   def current_or_guest_user
     if current_user
@@ -27,10 +27,6 @@ class ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound
      session[:guest_user_id] = nil
      guest_user if with_retry
-  end
-
-  def player_queue_context_id
-    "#{SecureRandom.urlsafe_base64}_#{Time.current.to_i}"
   end
 
   def after_sign_in_path_for(resource)
