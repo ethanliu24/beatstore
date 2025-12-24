@@ -11,7 +11,12 @@ export default class extends Controller {
   async play(e) {
     const el = e.target.closest("[data-prevent-play]");
     if (el && el.dataset.preventPlay === "true") return;
-    await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
+
+    const trackId = parseInt(e.currentTarget.dataset.trackId);
+    const queueScope = e.currentTarget.dataset.queueScope;
+
+    this.audioQueueOutlet.updateQueue(queueScope);
+    await this.playAudio(trackId);
   }
 
   async playAudio(trackId) {

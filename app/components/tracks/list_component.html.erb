@@ -1,6 +1,8 @@
+<% queue_scope = player_queue_context_id %>
+
 <% if tracks.any? %>
   <% tracks.each do |track| %>
-    <%= render Tracks::TrackComponent.new(track:, current_user:, track_scope: player_queue_context_id ) %>
+    <%= render Tracks::TrackComponent.new(track:, current_user:, queue_scope:) %>
   <% end %>
 <% elsif render_message_if_empty %>
   <p id="no-tracks-message" class="text-center my-16 text-secondary-txt font-light">
