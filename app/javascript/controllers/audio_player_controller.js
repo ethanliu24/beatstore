@@ -19,7 +19,7 @@ export default class extends Controller {
       this.playerMode = "next";
       this.PLAYER_MODES = ["next", "repeat", "shuffle"];
 
-      this.element.addEventListener("keydown", (e) => {
+      document.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
           if (e.key === " ") {
             this.isPlaying() ? this.pauseAudio() : this.resumeAudio();
