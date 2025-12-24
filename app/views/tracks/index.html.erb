@@ -13,6 +13,7 @@
       <%= render Tracks::ListComponent.new(
         tracks: @tracks,
         current_user:,
+        queue_scope: player_queue_context_id,
         options: { empty_message: t("track.no_tracks_found") }
       ) %>
     <% end %>

@@ -1,5 +1,3 @@
-<% queue_scope = player_queue_context_id %>
-
 <% if tracks.any? %>
   <% tracks.each do |track| %>
     <%= render Tracks::TrackComponent.new(track:, current_user:, queue_scope:) %>
