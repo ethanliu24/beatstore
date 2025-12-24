@@ -2,9 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="playable-cover-photo"
 export default class extends Controller {
-  static values = { trackId: Number }
+  static values = { trackId: Number };
   static targets = ["container", "play", "pause"];
-  static outlets = ["audio-player"];
+  static outlets = ["audio", "audio-player"];
 
   connect() {
     document.addEventListener("playable-cover-photo:icon-toggle", (e) => {
@@ -22,7 +22,7 @@ export default class extends Controller {
   }
 
   play() {
-    this.audioPlayerOutlet.playAudio(this.trackIdValue);
+    this.audioOutlet.playAudio(this.trackIdValue);
     this.setIcon(true);
   }
 
