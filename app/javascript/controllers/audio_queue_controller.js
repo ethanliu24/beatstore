@@ -5,18 +5,21 @@ export default class extends Controller {
   connect() {
     this.queue = [];
     this.activeScopeCtx = null;
+
+    document.addEventListener("update-queue", (e) => this.updateQueue(e.detail.queueScope, true));
   }
 
-  updateQueue(queueScope) {
-    if (this.activeScopeCtx !== queueScope) {
-      const tracks = document.querySelectorAll(`[data-queue-scope="${queueScope}"]`);
-      this.activeScopeCtx = queueScope;
-
-      this.queue = Array.from(tracks).map((el, cursor) => {
-        return {
-          trackId: el.dataset.trackId
-        };
-      });
+  updateQueue(queueScope, ignoreSameCtxCheck = false) {
+    if (!ignoreSameCtxCheck && this.activeScopeCtx !== queueScope) {
+      return;
     }
+
+    this.activeScopeCtx = queueScope;
+    const tracks = document.querySelectorAll(`[data-queue-scope="${queueScope}"]`);
+    this.queue = Array.from(tracks).map((el, cursor) => {
+      return {
+        trackId: el.dataset.trackId
+      };
+    });
   }
 }
