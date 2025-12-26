@@ -58,7 +58,7 @@ export default class extends Controller {
   }
 
   playerOpened() {
-    return localStorage.getItem("player_opened") === "true"
+    return localStorage.getItem("player_opened") === "true";
   }
 
   stopPropagation(e) {
