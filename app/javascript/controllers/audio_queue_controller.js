@@ -25,12 +25,18 @@ export default class extends Controller {
     });
   }
 
-  pickTrack(mode) {
+  pickTrack(mode, cursor) {
     switch (mode) {
       case PlayerModes.NEXT:
-        break;
+        return this.pickNextTrack(cursor);
       default:
         console.error(`Unknown player mode: ${mode}`);
     }
+  }
+
+  pickNextTrack(cursor) {
+    const nextIndex = (cursor + 1) % this.queue.length;
+    const track = this.queue.at(nextIndex);
+    return track.trackId;
   }
 }
