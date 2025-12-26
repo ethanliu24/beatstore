@@ -6,7 +6,8 @@ RSpec.describe Tracks::TrackComponent, type: :component do
   let!(:track) { create(:track) }
   let!(:tag) { create(:track_tag, track:) }
   let!(:current_user) { create(:user) }
-  subject(:rendered) { render_inline(described_class.new(track:, current_user:)) }
+  let(:queue_scope) { "tracks:track_component:spec" }
+  subject(:rendered) { render_inline(described_class.new(track:, current_user:, queue_scope:)) }
 
   it "renders the neccessary track fields" do
     expect(rendered.text).to have_content("Track 1")
@@ -23,7 +24,7 @@ RSpec.describe Tracks::TrackComponent, type: :component do
   it "renders an icon if cover photo is not attached" do
     track.cover_photo.purge
     track.reload
-    rendered = render_inline(Tracks::TrackComponent.new(track:, current_user:))
+    rendered = render_inline(Tracks::TrackComponent.new(track:, current_user:, queue_scope:))
 
     expect(rendered).to have_css("svg.cover-photo")
     expect(rendered.css("svg.cover-photo").count).to eq(1)

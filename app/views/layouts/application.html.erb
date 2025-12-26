@@ -26,7 +26,10 @@
   </head>
 
   <body class="flex flex-col justify-start w-full h-full items-stretch bg-background text-primary-txt mb-50"
-    data-controller="audio" id="audio-controller" data-audio-audio-player-outlet="#audio-player">
+    id="audio-controller" data-controller="audio"
+    data-audio-audio-player-outlet="#audio-player"
+    data-audio-audio-queue-outlet="#audio-queue"
+  >
     <%= render "nav/navbar" %>
 
     <main id="main" class="flex-1 overflow-y-scroll transparent-scrollbar-background">

@@ -13,6 +13,7 @@
   <%= render Tracks::ListComponent.new(
     tracks: @liked_tracks,
     current_user:,
+    queue_scope: "users:hearts:index",
     options: { empty_message: t("profile.no_tracks_liked") }
   ) %>
 
