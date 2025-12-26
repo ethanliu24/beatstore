@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { PlayerModes } from "helpers/audio_player"
 
 // Connects to data-controller="audio-player"
 export default class extends Controller {
@@ -16,8 +17,8 @@ export default class extends Controller {
       this.containerTarget.classList.remove("slide-up-fade-in");
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
-      this.playerMode = "next";
-      this.PLAYER_MODES = ["next", "repeat", "shuffle"];
+      this.PLAYER_MODES = [PlayerModes.NEXT, PlayerModes.REPEAT, PlayerModes.SHUFFLE];
+      this.playerMode = this.PLAYER_MODES[0]; // next
 
       document.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {

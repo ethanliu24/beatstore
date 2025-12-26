@@ -4,17 +4,18 @@ require "rails_helper"
 
 RSpec.describe Tracks::ListComponent, type: :component do
   let!(:current_user) { create(:user) }
-  subject(:rendered) { render_inline(described_class.new(track:, current_user:)) }
+  let(:queue_scope) { "tracks:list_component:spec" }
+  subject(:rendered) { render_inline(described_class.new(track:, current_user:, queue_scope:)) }
 
   it "renders all tracks in the given list" do
     tracks = create_list(:track, 3)
-    rendered = render_inline(described_class.new(tracks: tracks, current_user:))
+    rendered = render_inline(described_class.new(tracks: tracks, current_user:, queue_scope:))
 
     expect(rendered.css("div.track").count).to eq(3)
   end
 
   it "renders a message that indicates no tracks if there are none as default" do
-    rendered = render_inline(described_class.new(tracks: [], current_user:))
+    rendered = render_inline(described_class.new(tracks: [], current_user:, queue_scope:))
 
     expect(rendered).to have_css("p#no-tracks-message")
   end
@@ -23,6 +24,7 @@ RSpec.describe Tracks::ListComponent, type: :component do
     rendered = render_inline(described_class.new(
       tracks: [],
       current_user:,
+      queue_scope:,
       options: { render_message_if_empty: true }
     ))
 
@@ -33,6 +35,7 @@ RSpec.describe Tracks::ListComponent, type: :component do
     rendered = render_inline(described_class.new(
       tracks: [],
       current_user:,
+      queue_scope:,
       options: { render_message_if_empty: false }
     ))
 
@@ -43,6 +46,7 @@ RSpec.describe Tracks::ListComponent, type: :component do
     rendered = render_inline(described_class.new(
       tracks: [],
       current_user:,
+      queue_scope:,
     ))
 
     expect(rendered).to have_css("p#no-tracks-message", text: "")
@@ -53,6 +57,7 @@ RSpec.describe Tracks::ListComponent, type: :component do
     rendered = render_inline(described_class.new(
       tracks: [],
       current_user:,
+      queue_scope:,
       options: { empty_message: custom_message }
     ))
 

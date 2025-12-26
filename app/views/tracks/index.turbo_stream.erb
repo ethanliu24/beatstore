@@ -1,8 +1,11 @@
+<% queue_scope = "tracks:index" %>
+
 <% if @tracks.any? %>
   <%= turbo_stream.append "track-list" do %>
     <%= render Tracks::ListComponent.new(
       tracks: @tracks,
       current_user:,
+      queue_scope:,
       options: { empty_message: t("track.no_tracks_found") }
     ) %>
   <% end %>
@@ -10,4 +13,6 @@
   <%= turbo_stream.replace "load-more" do %>
     <%= render "shared/load_more", pagy: @pagy %>
   <% end %>
+
+  <div data-controller="queue-update" data-queue-update-queue-scope-value="<%= queue_scope %>"></div>
 <% end %>

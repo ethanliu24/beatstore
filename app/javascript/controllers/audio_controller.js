@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="audio"
 export default class extends Controller {
-  static outlets = ["audio-player"];
+  static outlets = ["audio-player", "audio-queue"];
 
   connect() {
     this.playController = null; // prevent overlapping fetches
@@ -11,7 +11,12 @@ export default class extends Controller {
   async play(e) {
     const el = e.target.closest("[data-prevent-play]");
     if (el && el.dataset.preventPlay === "true") return;
-    await this.playAudio(parseInt(e.currentTarget.dataset.trackId));
+
+    const trackId = parseInt(e.currentTarget.dataset.trackId);
+    const queueScope = e.currentTarget.dataset.queueScope;
+
+    this.audioQueueOutlet.updateQueue(queueScope);
+    await this.playAudio(trackId);
   }
 
   async playAudio(trackId) {
@@ -49,7 +54,6 @@ export default class extends Controller {
         this.audioPlayerOutlet.playfailed();
         return false;
       }
-
 
       const track = await res.json();
       this.audioPlayerOutlet.setTrackInformation(track);
