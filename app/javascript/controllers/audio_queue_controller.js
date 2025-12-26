@@ -29,6 +29,10 @@ export default class extends Controller {
     switch (mode) {
       case PlayerModes.NEXT:
         return this.pickNextTrack(cursor);
+      case PlayerModes.REPEAT:
+        return this.queue.at(cursor).trackId;
+      case PlayerModes.SHUFFLE:
+        return this.pickNextTrackShuffle(cursor);
       default:
         console.error(`Unknown player mode: ${mode}`);
     }
@@ -37,6 +41,12 @@ export default class extends Controller {
   pickNextTrack(cursor) {
     const nextIndex = (cursor + 1) % this.queue.length;
     const track = this.queue.at(nextIndex);
+    return track.trackId;
+  }
+
+  pickNextTrackShuffle(current) {
+    const selections = [...this.queue].splice(current, 1);
+    const track = selections[Math.floor(Math.random() * this.queue.length)];
     return track.trackId;
   }
 }

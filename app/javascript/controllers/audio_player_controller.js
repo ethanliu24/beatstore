@@ -16,6 +16,7 @@ export default class extends Controller {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
+      this.currentTrackCursor = null;
       this.played = false;
       this.PLAYER_MODES = [PlayerModes.NEXT, PlayerModes.REPEAT, PlayerModes.SHUFFLE];
       this.playerMode = this.PLAYER_MODES[0]; // next
