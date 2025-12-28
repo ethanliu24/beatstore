@@ -38,17 +38,15 @@ export default class extends Controller {
         }
       });
 
-      // ended
-      this.audioTarget.addEventListener("timeupdate", () => {
+      this.audioTarget.addEventListener("ended", () => {
         const nextId = this.audioQueueOutlet.pickTrack(this.playerMode, this.currentTrackId);
-        console.log(this.audioQueueOutlet.queue)
 
         if (nextId === null) {
-          console.error("Unable to handle 'ended'event");
+          console.error("Unable to handle 'ended' event");
           return;
         };
 
-        console.log(nextId);
+        this.audioOutlet.playAudio(nextId);
       });
     });
   }
