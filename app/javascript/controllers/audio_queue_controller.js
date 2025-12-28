@@ -20,24 +20,14 @@ export default class extends Controller {
     this.queue = Array.from(tracks).map((el, cursor) => {
       return {
         cursor: cursor,
-        trackId: el.dataset.trackId
+        trackId: Number(el.dataset.trackId)
       };
     });
   }
 
-  getTrackCursor(trackId) {
-    this.queue.forEach((t) => {
-      if (t.trackId === trackId) {
-        return t.cursor;
-      }
-    });
-
-    return null;
-  }
-
   pickTrack(mode, trackId) {
     const cursor = this.getTrackCursor(trackId);
-    if (!cursor) return null;
+    if (cursor === null) return null;
 
     switch (mode) {
       case PlayerModes.NEXT:
@@ -50,6 +40,11 @@ export default class extends Controller {
         console.error(`Unknown player mode: ${mode}`);
         return null;
     }
+  }
+
+  getTrackCursor(trackId) {
+    const track = this.queue.find(t => t.trackId === trackId);
+    return track ? track.cursor : null;
   }
 
   pickNextTrack(cursor) {
@@ -65,10 +60,10 @@ export default class extends Controller {
   }
 
   pickNextTrackShuffle(current) {
-    if (!this.queue) return null;
+    if (this.queue.length <= 1) return null;
 
-    const selections = [...this.queue].splice(current, 1);
-    const track = selections[Math.floor(Math.random() * this.queue.length)];
+    const selections = this.queue.filter(t => t.cursor !== current);
+    const track = selections[Math.floor(Math.random() * selections.length)];
     return track.trackId;
   }
 }

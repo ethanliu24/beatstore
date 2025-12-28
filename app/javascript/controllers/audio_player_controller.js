@@ -3,6 +3,7 @@ import { PlayerModes } from "helpers/audio_player"
 
 // Connects to data-controller="audio-player"
 export default class extends Controller {
+  static outlets = ["audio", "audio-queue"];
   static targets = [
     "container", "audio",
     "title", "bpm", "key", "coverPhoto",
@@ -29,12 +30,25 @@ export default class extends Controller {
           }
         }
       });
-      this.audioTarget.addEventListener("ended", () => this.pauseAudio());
+
       this.audioTarget.addEventListener("timeupdate", () => {
         if (this.audioTarget.duration > 0) {
           const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
           this.progressBarTarget.value = percentage;
         }
+      });
+
+      // ended
+      this.audioTarget.addEventListener("timeupdate", () => {
+        const nextId = this.audioQueueOutlet.pickTrack(this.playerMode, this.currentTrackId);
+        console.log(this.audioQueueOutlet.queue)
+
+        if (nextId === null) {
+          console.error("Unable to handle 'ended'event");
+          return;
+        };
+
+        console.log(nextId);
       });
     });
   }
@@ -162,8 +176,6 @@ export default class extends Controller {
   }
 
   setTrackInformation(track) {
-    this.coverPhotoTarget.classList.add("hidden");
-
     this.currentTrackId = track.id;
     localStorage.setItem("cur_player_track", track.id);
 
