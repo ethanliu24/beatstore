@@ -3,6 +3,7 @@ import { PlayerModes } from "helpers/audio_player"
 
 // Connects to data-controller="audio-player"
 export default class extends Controller {
+  static outlets = ["audio", "audio-queue"];
   static targets = [
     "container", "audio",
     "title", "bpm", "key", "coverPhoto",
@@ -16,6 +17,7 @@ export default class extends Controller {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
+      this.currentTrackCursor = null;
       this.played = false;
       this.PLAYER_MODES = [PlayerModes.NEXT, PlayerModes.REPEAT, PlayerModes.SHUFFLE];
       this.playerMode = this.PLAYER_MODES[0]; // next
@@ -28,12 +30,23 @@ export default class extends Controller {
           }
         }
       });
-      this.audioTarget.addEventListener("ended", () => this.pauseAudio());
+
       this.audioTarget.addEventListener("timeupdate", () => {
         if (this.audioTarget.duration > 0) {
           const percentage = (this.audioTarget.currentTime / this.audioTarget.duration) * 100;
           this.progressBarTarget.value = percentage;
         }
+      });
+
+      this.audioTarget.addEventListener("ended", () => {
+        const nextId = this.audioQueueOutlet.pickTrack(this.playerMode, this.currentTrackId);
+
+        if (nextId === null) {
+          console.error("Unable to handle 'ended' event");
+          return;
+        };
+
+        this.audioOutlet.playAudio(nextId);
       });
     });
   }
@@ -58,7 +71,7 @@ export default class extends Controller {
   }
 
   playerOpened() {
-    return localStorage.getItem("player_opened") === "true"
+    return localStorage.getItem("player_opened") === "true";
   }
 
   stopPropagation(e) {
@@ -161,8 +174,6 @@ export default class extends Controller {
   }
 
   setTrackInformation(track) {
-    this.coverPhotoTarget.classList.add("hidden");
-
     this.currentTrackId = track.id;
     localStorage.setItem("cur_player_track", track.id);
 

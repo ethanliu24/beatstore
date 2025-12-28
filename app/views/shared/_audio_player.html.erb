@@ -1,8 +1,9 @@
-<div id="audio-player" data-turbo-permanent class="hidden fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2"
-  data-controller="audio-player" data-audio-player-target="container">
-  <div id="audio-queue" data-controller="audio-queue"></div>
+<div id="audio-player-controller" data-turbo-permanent class="hidden fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2"
+  data-controller="audio-player" data-audio-player-target="container"
+  data-audio-player-audio-outlet="#audio-controller" data-audio-player-audio-queue-outlet="#audio-queue-controller">
+  <div id="audio-queue-controller" data-controller="audio-queue"></div>
 
-  <div data-controller="audio-player-user-actions" data-audio-player-user-actions-audio-player-outlet="#audio-player" class="w-full h-full">
+  <div data-controller="audio-player-user-actions" data-audio-player-user-actions-audio-player-outlet="#audio-player-controller" class="w-full h-full">
     <audio id="audio-player-src" data-audio-player-target="audio"></audio>
     <div class="flex justify-between items-center gap-8 max-sm:gap-4 w-full py-2 px-8 max-sm:px-2 rounded-full border-1 border-secondary-txt/30 bg-background">
       <div class="relative flex justify-between items-stretch gap-4 min-w-15">

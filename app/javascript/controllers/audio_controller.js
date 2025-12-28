@@ -55,6 +55,7 @@ export default class extends Controller {
         return false;
       }
 
+      this.audioPlayerOutlet.coverPhotoTarget.classList.add("hidden");
       const track = await res.json();
       this.audioPlayerOutlet.setTrackInformation(track);
 
