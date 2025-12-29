@@ -1,8 +1,10 @@
 <% include_in_queue = track.tagged_mp3.attached? %>
 
 <div id="<%= dom_id track %>" class="track flex justify-between items-stretch w-full sm:w-auto rounded p-2 hover:bg-hover cursor-pointer"
-  data-track-id="<%= track.id %>" data-action="click->audio#play" data-track-title="<%= track.title %>"
-  data-track-image-url="<%= url_for(track.cover_photo) %>" data-track-metadata="<%= "#{track.bpm} • #{track.key} • #{track.genre}" %>"
+  data-track-id="<%= track.id %>" data-action="click->audio#play"
+  data-track-title="<%= track.title %>"
+  data-track-image-url="<%= track.cover_photo.attached? ? track.cover_photo.url : "" %>"
+  data-track-metadata="<%= "#{track.bpm} • #{track.key} • #{track.genre}" %>"
   <% if include_in_queue %>
     data-queue-scope="<%= queue_scope %>"
   <% end %>

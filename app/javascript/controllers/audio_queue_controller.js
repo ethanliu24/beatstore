@@ -3,9 +3,12 @@ import { PlayerModes } from "helpers/audio_player"
 
 // Connects to data-controller="audio-queue"
 export default class extends Controller {
+  static targets = ["list"];
+
   connect() {
     this.queue = [];
     this.activeScopeCtx = null;
+    this.queueTrackTemplate = document.getElementById("queue-track-template");
 
     document.addEventListener("update-queue", (e) => this.updateQueue(e.detail.queueScope, true));
   }
@@ -23,9 +26,11 @@ export default class extends Controller {
         trackId: Number(el.dataset.trackId),
         title: el.dataset.trackTitle,
         metadata: el.dataset.trackMetadata,
-        imageUrl: el.dataset.imageUrl
+        imageUrl: el.dataset.trackImageUrl
       };
     });
+
+    this.updateTrackDOM();
   }
 
   pickTrack(mode, trackId) {
@@ -68,5 +73,20 @@ export default class extends Controller {
     const selections = this.queue.filter(t => t.cursor !== current);
     const track = selections[Math.floor(Math.random() * selections.length)];
     return track.trackId;
+  }
+
+  updateTrackDOM() {
+    this.listTarget.innerHTML = "";
+    this.queue.forEach((track) => this.addTrackDOM(track));
+  }
+
+  addTrackDOM(track) {
+    const node = this.queueTrackTemplate.content.cloneNode(true);
+
+    node.querySelector("[data-queue-track-image]").src = track.imageUrl;
+    node.querySelector("[data-queue-track-title]").textContent = track.title;
+    node.querySelector("[data-queue-track-metadata]").textContent = track.metadata;
+
+    this.listTarget.appendChild(node);
   }
 }

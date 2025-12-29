@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Api::TracksController < ApplicationController
-  include ActiveStorage::SetCurrent
-
   # Track data for audio player
   def show
     track = Track.kept.find(params[:id])

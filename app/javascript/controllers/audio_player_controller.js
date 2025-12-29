@@ -178,7 +178,6 @@ export default class extends Controller {
   }
 
   toggleQueue() {
-    console.log(this.queueContainerTarget)
     if (this.queueIsOpen()) {
       this.queueContainerTarget.classList.add("hidden");
     } else {
