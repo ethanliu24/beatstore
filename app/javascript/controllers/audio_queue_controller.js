@@ -14,7 +14,7 @@ export default class extends Controller {
   }
 
   updateQueue(queueScope, ignoreSameCtxCheck = false) {
-    if (!ignoreSameCtxCheck && this.activeScopeCtx === queueScope) {
+    if (!queueScope || (!ignoreSameCtxCheck && this.activeScopeCtx === queueScope)) {
       return;
     }
 
@@ -82,16 +82,19 @@ export default class extends Controller {
 
   addTrackDOM(track) {
     const node = this.queueTrackTemplate.content.cloneNode(true);
+    const el = node.querySelector("[data-queue-track]");
 
-    node.querySelector("[data-queue-track-title]").textContent = track.title;
-    node.querySelector("[data-queue-track-metadata]").textContent = track.metadata;
+    el.dataset.trackId = track.trackId;
+    el.dataset.action = "click->audio#play";
+    el.querySelector("[data-queue-track-title]").textContent = track.title;
+    el.querySelector("[data-queue-track-metadata]").textContent = track.metadata;
 
     if (track.imageUrl) {
-      const imageNode = node.querySelector("[data-queue-track-image]");
+      const imageNode = el.querySelector("[data-queue-track-image]");
+      imageNode.classList.remove("hidden");
       imageNode.src = track.imageUrl;
-      imageNode.classList.remove("hidden"); 
     }
 
-    this.listTarget.appendChild(node);
+    this.listTarget.appendChild(el);
   }
 }
