@@ -9,7 +9,7 @@ export default class extends Controller {
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
-    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar",
+    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar", "queueBtn", "queueContainer",
     "priceBtn",
   ];
 
@@ -170,6 +170,19 @@ export default class extends Controller {
     } else {
       this.unlikeBtnTarget.classList.add("hidden");
       this.likeBtnTarget.classList.remove("hidden");
+    }
+  }
+
+  queueIsOpen() {
+    return !this.queueContainerTarget.classList.contains("hidden");
+  }
+
+  toggleQueue() {
+    console.log(this.queueContainerTarget)
+    if (this.queueIsOpen()) {
+      this.queueContainerTarget.classList.add("hidden");
+    } else {
+      this.queueContainerTarget.classList.remove("hidden");
     }
   }
 
