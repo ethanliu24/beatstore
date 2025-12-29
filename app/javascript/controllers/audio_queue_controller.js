@@ -83,9 +83,14 @@ export default class extends Controller {
   addTrackDOM(track) {
     const node = this.queueTrackTemplate.content.cloneNode(true);
 
-    node.querySelector("[data-queue-track-image]").src = track.imageUrl;
     node.querySelector("[data-queue-track-title]").textContent = track.title;
     node.querySelector("[data-queue-track-metadata]").textContent = track.metadata;
+
+    if (track.imageUrl) {
+      const imageNode = node.querySelector("[data-queue-track-image]");
+      imageNode.src = track.imageUrl;
+      imageNode.classList.remove("hidden"); 
+    }
 
     this.listTarget.appendChild(node);
   }
