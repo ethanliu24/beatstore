@@ -1,8 +1,9 @@
 <template id="queue-track-template">
-  <div class="flex justify-center items-start gap-2 p-1 hover:bg-hover cursor-pointer rounded" data-queue-track>
+  <div class="flex justify-start items-center gap-2 p-1 hover:bg-hover cursor-pointer rounded" data-queue-track data-prevent-play="false">
+    <div class="text-[0.6rem] text-secondary-txt" data-queue-track-index></div>
     <div class="flex justify-center items-center bg-secondary-bg rounded w-7 h-7 aspect-square">
       <%= icon "photo-scan", class: "w-3/4 h-3/4" %>
-      <img src="" class="hidden w-7 aspect-square rounded" alt="Track Cover Photo" data-queue-track-image>
+      <img src="" class="hidden w-7 h-7 rounded" alt="Track Cover Photo" data-queue-track-image>
     </div>
     <div class="flex-1 truncate">
       <div class="text-xs truncate" data-queue-track-title></div>

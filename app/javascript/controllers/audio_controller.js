@@ -51,13 +51,14 @@ export default class extends Controller {
           console.error(`Error fetching track: ${res.statusText}`);
         }
 
-        this.audioPlayerOutlet.playfailed();
+        this.audioPlayerOutlet.playFailed();
         return false;
       }
 
       this.audioPlayerOutlet.coverPhotoTarget.classList.add("hidden");
       const track = await res.json();
       this.audioPlayerOutlet.setTrackInformation(track);
+      this.audioQueueOutlet.highlightTrackInQueue(track.id);
 
       return true;
     })
@@ -73,6 +74,6 @@ export default class extends Controller {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json"
       }
-    })
+    });
   }
 }

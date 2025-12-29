@@ -7,8 +7,8 @@ export default class extends Controller {
 
   connect() {
     this.queue = [];
-    this.activeScopeCtx = null;
     this.queueTrackTemplate = document.getElementById("queue-track-template");
+    this.activeScopeCtx = null;
 
     document.addEventListener("update-queue", (e) => this.updateQueue(e.detail.queueScope, true));
   }
@@ -77,10 +77,10 @@ export default class extends Controller {
 
   updateTrackDOM() {
     this.listTarget.innerHTML = "";
-    this.queue.forEach((track) => this.addTrackDOM(track));
+    this.queue.forEach((track, i) => this.addTrackDOM(track, i + 1));
   }
 
-  addTrackDOM(track) {
+  addTrackDOM(track, index) {
     const node = this.queueTrackTemplate.content.cloneNode(true);
     const el = node.querySelector("[data-queue-track]");
 
@@ -88,13 +88,32 @@ export default class extends Controller {
     el.dataset.action = "click->audio#play";
     el.querySelector("[data-queue-track-title]").textContent = track.title;
     el.querySelector("[data-queue-track-metadata]").textContent = track.metadata;
+    el.querySelector("[data-queue-track-index]").textContent = index;
 
     if (track.imageUrl) {
       const imageNode = el.querySelector("[data-queue-track-image]");
+      el.querySelector("svg").classList.add("hidden");
       imageNode.classList.remove("hidden");
       imageNode.src = track.imageUrl;
     }
 
     this.listTarget.appendChild(el);
+  }
+
+  highlightTrackInQueue(trackId) {
+    document.querySelectorAll("[data-queue-track]").forEach((el) => {
+      const trackTitle = el.querySelector("[data-queue-track-title]");
+      const trackIndex = el.querySelector("[data-queue-track-index]");
+
+      if (Number(el.dataset.trackId) === trackId) {
+        trackTitle.classList.add("text-accent-text");
+        trackIndex.classList.add("text-accent-text");
+        trackIndex.classList.remove("text-secondary-txt");
+      } else {
+        trackTitle.classList.remove("text-accent-text");
+        trackIndex.classList.remove("text-accent-text");
+        trackIndex.classList.add("text-secondary-txt");
+      }
+    });
   }
 }
