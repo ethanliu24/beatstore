@@ -20,7 +20,10 @@ export default class extends Controller {
     this.queue = Array.from(tracks).map((el, cursor) => {
       return {
         cursor: cursor,
-        trackId: Number(el.dataset.trackId)
+        trackId: Number(el.dataset.trackId),
+        title: el.dataset.trackTitle,
+        metadata: el.dataset.trackMetadata,
+        imageUrl: el.dataset.imageUrl
       };
     });
   }
