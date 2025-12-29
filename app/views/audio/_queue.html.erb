@@ -1,6 +1,9 @@
 <div id="audio-queue" class="hidden rounded bg-secondary-bg border-1 border-background py-2 px-4 text-xs"
   data-audio-player-target="queueContainer">
-  <div class="text-md font-bold mb-2"><%= t("audio.queue.title") %></div>
+  <div class="flex justify-between items-center">
+    <div class="text-md font-bold mb-2"><%= t("audio.queue.title") %></div>
+    <%= icon "x", class: "w-4 h-4 cursor-pointer", data: { action: "click->audio-player#closeQueue" } %>
+  </div>
   <div data-audio-queue-target="list" class="flex flex-col justify-start items-stretch gap-0.5 w-full"></div>
   <%= render "audio/queue_track" %>
 </div>

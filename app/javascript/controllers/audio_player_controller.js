@@ -178,11 +178,15 @@ export default class extends Controller {
   }
 
   toggleQueue() {
-    if (this.queueIsOpen()) {
-      this.queueContainerTarget.classList.add("hidden");
-    } else {
-      this.queueContainerTarget.classList.remove("hidden");
-    }
+    this.queueIsOpen() ? this.closeQueue() : this.openQueue();
+  }
+
+  openQueue() {
+    this.queueContainerTarget.classList.remove("hidden");
+  }
+
+  closeQueue() {
+    this.queueContainerTarget.classList.add("hidden");
   }
 
   setTrackInformation(track) {
