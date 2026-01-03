@@ -3,15 +3,18 @@ import { PlayerModes } from "helpers/audio_player"
 
 // Connects to data-controller="audio-queue"
 export default class extends Controller {
+  static targets = ["list"];
+
   connect() {
     this.queue = [];
+    this.queueTrackTemplate = document.getElementById("queue-track-template");
     this.activeScopeCtx = null;
 
     document.addEventListener("update-queue", (e) => this.updateQueue(e.detail.queueScope, true));
   }
 
   updateQueue(queueScope, ignoreSameCtxCheck = false) {
-    if (!ignoreSameCtxCheck && this.activeScopeCtx === queueScope) {
+    if (!queueScope || (!ignoreSameCtxCheck && this.activeScopeCtx === queueScope)) {
       return;
     }
 
@@ -20,9 +23,14 @@ export default class extends Controller {
     this.queue = Array.from(tracks).map((el, cursor) => {
       return {
         cursor: cursor,
-        trackId: Number(el.dataset.trackId)
+        trackId: Number(el.dataset.trackId),
+        title: el.dataset.trackTitle,
+        metadata: el.dataset.trackMetadata,
+        imageUrl: el.dataset.trackImageUrl
       };
     });
+
+    this.updateTrackDOM();
   }
 
   pickTrack(mode, trackId) {
@@ -65,5 +73,47 @@ export default class extends Controller {
     const selections = this.queue.filter(t => t.cursor !== current);
     const track = selections[Math.floor(Math.random() * selections.length)];
     return track.trackId;
+  }
+
+  updateTrackDOM() {
+    this.listTarget.innerHTML = "";
+    this.queue.forEach((track, i) => this.addTrackDOM(track, i + 1));
+  }
+
+  addTrackDOM(track, index) {
+    const node = this.queueTrackTemplate.content.cloneNode(true);
+    const el = node.querySelector("[data-queue-track]");
+
+    el.dataset.trackId = track.trackId;
+    el.dataset.action = "click->audio#play";
+    el.querySelector("[data-queue-track-title]").textContent = track.title;
+    el.querySelector("[data-queue-track-metadata]").textContent = track.metadata;
+    el.querySelector("[data-queue-track-index]").textContent = index;
+
+    if (track.imageUrl) {
+      const imageNode = el.querySelector("[data-queue-track-image]");
+      el.querySelector("svg").classList.add("hidden");
+      imageNode.classList.remove("hidden");
+      imageNode.src = track.imageUrl;
+    }
+
+    this.listTarget.appendChild(el);
+  }
+
+  highlightTrackInQueue(trackId) {
+    document.querySelectorAll("[data-queue-track]").forEach((el) => {
+      const trackTitle = el.querySelector("[data-queue-track-title]");
+      const trackIndex = el.querySelector("[data-queue-track-index]");
+
+      if (Number(el.dataset.trackId) === trackId) {
+        trackTitle.classList.add("text-accent-text");
+        trackIndex.classList.add("text-accent-text");
+        trackIndex.classList.remove("text-secondary-txt");
+      } else {
+        trackTitle.classList.remove("text-accent-text");
+        trackIndex.classList.remove("text-accent-text");
+        trackIndex.classList.add("text-secondary-txt");
+      }
+    });
   }
 }

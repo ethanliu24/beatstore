@@ -9,7 +9,7 @@ export default class extends Controller {
     "title", "bpm", "key", "coverPhoto",
     "pauseBtn", "resumeBtn", "prevBtn", "nextBtn", "repeatBtn", "playerModeContainer",
     "progressBar",
-    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar",
+    "likeBtn", "unlikeBtn", "volumeOnBtn", "volumeOffBtn", "volumeBar", "queueBtn", "queueContainer",
     "priceBtn",
   ];
 
@@ -171,6 +171,22 @@ export default class extends Controller {
       this.unlikeBtnTarget.classList.add("hidden");
       this.likeBtnTarget.classList.remove("hidden");
     }
+  }
+
+  queueIsOpen() {
+    return !this.queueContainerTarget.classList.contains("hidden");
+  }
+
+  toggleQueue() {
+    this.queueIsOpen() ? this.closeQueue() : this.openQueue();
+  }
+
+  openQueue() {
+    this.queueContainerTarget.classList.remove("hidden");
+  }
+
+  closeQueue() {
+    this.queueContainerTarget.classList.add("hidden");
   }
 
   setTrackInformation(track) {

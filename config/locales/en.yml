@@ -371,3 +371,7 @@ en:
       message_1: "Payment Failed"
       message_2: "Your payment failed or has been canceled."
       continue: "Back to homepage"
+
+  audio:
+    queue:
+      title: "Queue"

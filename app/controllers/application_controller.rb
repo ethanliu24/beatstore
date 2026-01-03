@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
+  include ActiveStorage::SetCurrent
 
   before_action :store_previous_location, if: :storable_location?
 
