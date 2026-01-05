@@ -1,7 +1,10 @@
 <div id="audio-player-controller" data-turbo-permanent class="hidden fixed bottom-0 left-0 w-screen py-4 px-8 max-sm:px-2"
   data-controller="audio-player" data-audio-player-target="container"
   data-audio-player-audio-outlet="#audio-controller" data-audio-player-audio-queue-outlet="#audio-queue-controller">
-  <div id="audio-queue-controller" data-controller="audio-queue"></div>
+  <div id="audio-queue-controller" data-controller="audio-queue" data-audio-queue-audio-outlet="#audio-controller"
+    class="absolute bottom-full right-0 w-60 max-w-60 max-h-[60vh] overflow-y-auto mr-8">
+    <%= render "audio/queue" %>
+  </div>
 
   <div data-controller="audio-player-user-actions" data-audio-player-user-actions-audio-player-outlet="#audio-player-controller" class="w-full h-full">
     <audio id="audio-player-src" data-audio-player-target="audio"></audio>
@@ -91,6 +94,9 @@
             </div>
           <% end %>
         <% end %>
+
+        <%= icon "list-details", class: "w-4 h-4",
+          data: { audio_player_target: "queueBtn", action: "click->audio-player#toggleQueue" } %>
 
         <%# More dropdown %>
         <%= render Ui::DropdownComponent.new(
