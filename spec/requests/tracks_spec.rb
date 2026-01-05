@@ -65,7 +65,10 @@ RSpec.describe TracksController, type: :request do
       end
 
       get track_url(id: track.slug_param)
-      expect(response.body.scan("RECOMMENDED_TRACK").size).to eq(TracksController::SIMILAR_TRACKS_RECOMMENDATION_LIMIT)
+      expect(Capybara.string(response.body)).to have_css(
+        "[data-track-title='RECOMMENDED_TRACK']",
+        count: TracksController::SIMILAR_TRACKS_RECOMMENDATION_LIMIT
+      )
     end
 
     it "doesn't allow non admins to see private tracks" do
