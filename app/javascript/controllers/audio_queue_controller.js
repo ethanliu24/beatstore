@@ -44,6 +44,8 @@ export default class extends Controller {
         return this.pickCurrentTrack(cursor);
       case PlayerModes.SHUFFLE:
         return this.pickNextTrackShuffle(cursor);
+      case PlayerModes.PREVIOUS:
+        return this.pickPreviousTrack(cursor);
       default:
         console.error(`Unknown player mode: ${mode}`);
         return null;
@@ -68,10 +70,19 @@ export default class extends Controller {
   }
 
   pickNextTrackShuffle(current) {
-    if (this.queue.length <= 1) return null;
+    if (this.queue.length === 0) return null;
+    if (this.queue.length === 1) return this.queue[0].trackId;
 
     const selections = this.queue.filter(t => t.cursor !== current);
     const track = selections[Math.floor(Math.random() * selections.length)];
+    return track.trackId;
+  }
+
+  pickPreviousTrack(cursor) {
+    if (this.queue.length === 0) return;
+
+    let prevIndex = cursor === 0 ? this.queue.length - 1 : cursor - 1;
+    const track = this.queue.at(prevIndex);
     return track.trackId;
   }
 

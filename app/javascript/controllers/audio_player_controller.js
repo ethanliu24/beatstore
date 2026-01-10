@@ -17,10 +17,11 @@ export default class extends Controller {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
-      this.currentTrackCursor = null;
       this.played = false;
       this.PLAYER_MODES = [PlayerModes.NEXT, PlayerModes.REPEAT, PlayerModes.SHUFFLE];
       this.playerMode = this.PLAYER_MODES[0]; // next
+      this.history = []; // history of track ids played
+      this.historyIndex = null;
 
       document.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
@@ -189,6 +190,58 @@ export default class extends Controller {
     this.queueContainerTarget.classList.add("hidden");
   }
 
+  addToHistory(trackId) {
+    this.history = this.history.slice(0, this.historyIndex + 1);
+
+    if (this.history.length == 0 || this.history.at(-1) !== trackId) {
+      this.history.push(trackId);
+    }
+
+    this.historyIndex = this.history.length - 1;
+  }
+
+  prevTrack() {
+    let trackFromHistory;
+    let trackId;
+
+    if (this.history.length === 0 || this.historyIndex === 0) {
+      trackId = this.audioQueueOutlet.pickTrack(PlayerModes.PREVIOUS, this.currentTrackId);
+      if (trackId === null) {
+        console.error("Cannot fetch `previous` track");
+        return;
+      };
+
+      trackFromHistory = false;
+    } else {
+      this.historyIndex -= 1;
+      trackId = this.history[this.historyIndex];
+      trackFromHistory = true
+    }
+
+    this.audioOutlet.playAudio(trackId, trackFromHistory);
+  }
+
+  nextTrack() {
+    let trackFromHistory;
+    let trackId;
+
+    if (this.historyIndex === this.history.length - 1) {
+      trackId = this.audioQueueOutlet.pickTrack(PlayerModes.NEXT, this.currentTrackId);
+      if (trackId === null) {
+        console.error("Cannot fetch `next` track");
+        return;
+      };
+
+      trackFromHistory = false;
+    } else {
+      this.historyIndex += 1;
+      trackId = this.history[this.historyIndex];
+      trackFromHistory = true;
+    }
+
+    this.audioOutlet.playAudio(trackId, trackFromHistory);
+  }
+
   setTrackInformation(track) {
     this.currentTrackId = track.id;
     localStorage.setItem("cur_player_track", track.id);
@@ -216,7 +269,7 @@ export default class extends Controller {
   }
 
   playFailed() {
-    this.audioPlayerOutlet.togglePlayableCoverPhotoIcon(false);
+    this.togglePlayableCoverPhotoIcon(false);
     this.played = false;
   }
 }

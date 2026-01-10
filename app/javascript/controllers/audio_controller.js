@@ -19,17 +19,17 @@ export default class extends Controller {
     await this.playAudio(trackId);
   }
 
-  async playAudio(trackId) {
+  async playAudio(trackId, trackFromHistory = false) {
     const currentTrackId = this.audioPlayerOutlet.currentTrackId;
 
     if (this.audioPlayerOutlet.played) {
-      if (currentTrackId == trackId) {
+      if (currentTrackId === trackId) {
         if (this.audioPlayerOutlet.audioTarget.paused) {
           this.audioPlayerOutlet.resumeAudio();
         }
 
         this.audioPlayerOutlet.openPlayer();
-        return;
+        return null;
       }
     }
 
@@ -59,6 +59,7 @@ export default class extends Controller {
       const track = await res.json();
       this.audioPlayerOutlet.setTrackInformation(track);
       this.audioQueueOutlet.highlightTrackInQueue(track.id);
+      if (!trackFromHistory) this.audioPlayerOutlet.addToHistory(track.id);
 
       return true;
     })
@@ -67,13 +68,15 @@ export default class extends Controller {
       return false;
     })
 
-    if (!playable || !currentTrackId) return;
-    fetch(`/tracks/${currentTrackId}/play`, {
+    if (!playable || !currentTrackId) return null;
+    fetch(`/tracks/${trackId}/play`, {
       method: "POST",
       headers: {
         "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
         "Content-Type": "application/json"
       }
     });
+
+    return currentTrackId;;
   }
 }

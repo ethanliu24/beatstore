@@ -29,12 +29,14 @@
           <%= icon "repeat", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "repeat" } %>
           <%= icon "arrows-shuffle", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent hidden", data: { player_mode: "shuffle" } %>
         </div>
-        <%= icon "player-track-prev", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "prevBtn" } %>
+        <%= icon "player-track-prev", variant: "filled", class: "aspect-square w-3",
+          data: { action: "click->audio-player#prevTrack", audio_player_target: "prevBtn" } %>
         <%= icon "player-pause", variant: "filled", class: "aspect-square w-5 hidden",
           data: { action: "click->audio-player#pauseAudio", audio_player_target: "pauseBtn" } %>
         <%= icon "player-play", variant: "filled", class: "aspect-square w-5 max-sm:w-4",
           data: { action: "click->audio-player#resumeAudio", audio_player_target: "resumeBtn" } %>
-        <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "nextBtn" } %>
+        <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3",
+          data: { action: "click->audio-player#nextTrack", audio_player_target: "nextBtn" } %>
         <%= icon "rotate", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { action: "click->audio-player#repeatTrack", audio_player_target: "repeatBtn" } %>
       </div>
       <input
