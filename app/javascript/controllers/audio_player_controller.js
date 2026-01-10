@@ -17,10 +17,11 @@ export default class extends Controller {
     requestAnimationFrame(() => {
       this.containerTarget.classList.remove("slide-up-fade-in");
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
-      this.currentTrackCursor = null;
       this.played = false;
       this.PLAYER_MODES = [PlayerModes.NEXT, PlayerModes.REPEAT, PlayerModes.SHUFFLE];
       this.playerMode = this.PLAYER_MODES[0]; // next
+      this.history = []; // history of track ids played
+      this.historyIndex = null;
 
       document.addEventListener("keydown", (e) => {
         if (this.playerOpened()) {
@@ -171,6 +172,14 @@ export default class extends Controller {
       this.unlikeBtnTarget.classList.add("hidden");
       this.likeBtnTarget.classList.remove("hidden");
     }
+  }
+
+  addToHistory(trackId) {
+    if (this.history.length == 0 || this.history.at(-1) !== trackId) {
+      this.history.push(trackId);
+    }
+
+    this.historyIndex = this.history.length - 1;
   }
 
   setTrackInformation(track) {
