@@ -182,6 +182,15 @@ export default class extends Controller {
     this.historyIndex = this.history.length - 1;
   }
 
+  prevTrack() {
+    if (this.history.length === 0 || this.historyIndex === 0) {
+      return;
+    }
+    this.historyIndex -= 1;
+    const trackId = this.history[this.historyIndex];
+    this.audioOutlet.playAudio(trackId, true);
+  }
+
   setTrackInformation(track) {
     this.currentTrackId = track.id;
     localStorage.setItem("cur_player_track", track.id);
