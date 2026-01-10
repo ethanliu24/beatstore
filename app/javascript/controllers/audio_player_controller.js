@@ -216,7 +216,7 @@ export default class extends Controller {
     if (this.historyIndex === this.history.length - 1) {
       trackId = this.audioQueueOutlet.pickTrack(PlayerModes.NEXT, this.currentTrackId);
 
-      if (nextId === null) {
+      if (trackId === null) {
         console.error("Unable to handle 'ended' event");
         return;
       };
