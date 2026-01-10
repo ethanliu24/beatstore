@@ -179,6 +179,7 @@ export default class extends Controller {
       this.history.push(trackId);
     }
 
+    // TODO truncate everything after history index
     this.historyIndex = this.history.length - 1;
   }
 
@@ -186,9 +187,32 @@ export default class extends Controller {
     if (this.history.length === 0 || this.historyIndex === 0) {
       return;
     }
+
     this.historyIndex -= 1;
     const trackId = this.history[this.historyIndex];
     this.audioOutlet.playAudio(trackId, true);
+  }
+
+  nextTrack() {
+    let trackFromHistory;
+    let trackId;
+
+    if (this.historyIndex === this.history.length - 1) {
+      trackId = this.audioQueueOutlet.pickTrack(PlayerModes.NEXT, this.currentTrackId);
+
+      if (nextId === null) {
+        console.error("Unable to handle 'ended' event");
+        return;
+      };
+
+      trackFromHistory = false;
+    } else {
+      this.historyIndex += 1;
+      trackId = this.history[this.historyIndex];
+      trackFromHistory = true;
+    }
+
+    this.audioOutlet.playAudio(trackId, trackFromHistory);
   }
 
   setTrackInformation(track) {

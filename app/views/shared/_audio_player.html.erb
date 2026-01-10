@@ -32,7 +32,8 @@
           data: { action: "click->audio-player#pauseAudio", audio_player_target: "pauseBtn" } %>
         <%= icon "player-play", variant: "filled", class: "aspect-square w-5 max-sm:w-4",
           data: { action: "click->audio-player#resumeAudio", audio_player_target: "resumeBtn" } %>
-        <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3", data: { audio_player_target: "nextBtn" } %>
+        <%= icon "player-track-next", variant: "filled", class: "aspect-square w-3",
+          data: { action: "click->audio-player#nextTrack", audio_player_target: "nextBtn" } %>
         <%= icon "rotate", class: "aspect-square w-3 max-xs:hidden text-secondary-txt hover:text-accent", data: { action: "click->audio-player#repeatTrack", audio_player_target: "repeatBtn" } %>
       </div>
       <input
