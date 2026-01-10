@@ -191,11 +191,12 @@ export default class extends Controller {
   }
 
   addToHistory(trackId) {
+    this.history = this.history.slice(0, this.historyIndex + 1);
+
     if (this.history.length == 0 || this.history.at(-1) !== trackId) {
       this.history.push(trackId);
     }
 
-    // TODO truncate everything after history index
     this.historyIndex = this.history.length - 1;
   }
 
@@ -217,7 +218,7 @@ export default class extends Controller {
       trackId = this.audioQueueOutlet.pickTrack(PlayerModes.NEXT, this.currentTrackId);
 
       if (trackId === null) {
-        console.error("Unable to handle 'ended' event");
+        console.error("Cannot fetch `next` track");
         return;
       };
 
@@ -258,7 +259,7 @@ export default class extends Controller {
   }
 
   playFailed() {
-    this.audioPlayerOutlet.togglePlayableCoverPhotoIcon(false);
+    this.togglePlayableCoverPhotoIcon(false);
     this.played = false;
   }
 }
