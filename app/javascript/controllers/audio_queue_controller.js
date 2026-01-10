@@ -81,7 +81,7 @@ export default class extends Controller {
   pickPreviousTrack(cursor) {
     if (this.queue.length === 0) return;
 
-    const prevIndex = (cursor - 1) % this.queue.length;
+    let prevIndex = cursor === 0 ? this.queue.length - 1 : cursor - 1;
     const track = this.queue.at(prevIndex);
     return track.trackId;
   }

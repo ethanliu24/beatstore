@@ -201,13 +201,24 @@ export default class extends Controller {
   }
 
   prevTrack() {
+    let trackFromHistory;
+    let trackId;
+
     if (this.history.length === 0 || this.historyIndex === 0) {
-      return;
+      trackId = this.audioQueueOutlet.pickTrack(PlayerModes.PREVIOUS, this.currentTrackId);
+      if (trackId === null) {
+        console.error("Cannot fetch `previous` track");
+        return;
+      };
+
+      trackFromHistory = false;
+    } else {
+      this.historyIndex -= 1;
+      trackId = this.history[this.historyIndex];
+      trackFromHistory = true
     }
 
-    this.historyIndex -= 1;
-    const trackId = this.history[this.historyIndex];
-    this.audioOutlet.playAudio(trackId, true);
+    this.audioOutlet.playAudio(trackId, trackFromHistory);
   }
 
   nextTrack() {
@@ -216,7 +227,6 @@ export default class extends Controller {
 
     if (this.historyIndex === this.history.length - 1) {
       trackId = this.audioQueueOutlet.pickTrack(PlayerModes.NEXT, this.currentTrackId);
-
       if (trackId === null) {
         console.error("Cannot fetch `next` track");
         return;
