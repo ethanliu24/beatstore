@@ -19,7 +19,8 @@ export default class extends Controller {
       this.currentTrackId = parseInt(localStorage.getItem("cur_player_track")) || null;
       this.played = false;
       this.PLAYER_MODES = [PlayerModes.NEXT, PlayerModes.REPEAT, PlayerModes.SHUFFLE];
-      this.playerMode = this.PLAYER_MODES[0]; // next
+      this.playerMode = localStorage.getItem("player_mode") || this.PLAYER_MODES[0]; // next
+      this.showPlayerModeIcon(this.playerMode);
       this.history = []; // history of track ids played
       this.historyIndex = null;
 
@@ -115,8 +116,13 @@ export default class extends Controller {
   switchMode() {
     const nextModeIdx = (this.PLAYER_MODES.indexOf(this.playerMode) + 1) % this.PLAYER_MODES.length;
     this.playerMode = this.PLAYER_MODES[nextModeIdx];
+    localStorage.setItem("player_mode", this.playerMode);
+    this.showPlayerModeIcon(this.playerMode);
+  }
+
+  showPlayerModeIcon(playerMode) {
     Array.from(this.playerModeContainerTarget.children).forEach((element) => {
-      element.dataset.playerMode === this.playerMode
+      element.dataset.playerMode === playerMode
         ? element.classList.remove("hidden")
         : element.classList.add("hidden");
     });
