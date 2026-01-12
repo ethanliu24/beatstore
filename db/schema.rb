@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_18_202907) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_12_192018) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,6 +97,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_202907) do
     t.index ["discarded_at"], name: "index_comments_on_discarded_at"
     t.index ["entity_type", "entity_id"], name: "index_comments_on_entity"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "subject", null: false
+    t.string "message", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
   create_table "free_downloads", force: :cascade do |t|
@@ -262,6 +273,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_202907) do
   add_foreign_key "comment_interactions", "comments"
   add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
+  add_foreign_key "contacts", "users"
   add_foreign_key "free_downloads", "tracks", on_delete: :nullify
   add_foreign_key "free_downloads", "users", on_delete: :nullify
   add_foreign_key "licenses_tracks", "licenses"
