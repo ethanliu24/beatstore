@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Contact, type: :model do
+RSpec.describe InboundEmail, type: :model do
   describe "associations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:email) }
@@ -13,7 +13,7 @@ RSpec.describe Contact, type: :model do
 
   context "foreign key behavior" do
     let!(:user) { create(:user) }
-    let(:contact_data) {
+    let(:email_data) {
       {
         name: "Diddy",
         email: "email@example.com",
@@ -24,13 +24,13 @@ RSpec.describe Contact, type: :model do
 
     describe "when user is deleted" do
       it "nullifies the user_id on associated free_downloads" do
-        contact = Contact.create!(user:, **contact_data)
+        email = InboundEmail.create!(user:, **email_data)
 
         expect { user.destroy }.to change {
-          contact.reload.user_id
+          email.reload.user_id
         }.from(user.id).to(nil)
 
-        expect(Contact.exists?(contact.id)).to be true
+        expect(InboundEmail.exists?(email.id)).to be true
       end
     end
   end

@@ -5,8 +5,8 @@ class ContactsController < ApplicationController
   end
 
   def create
-    contact_data = sanaitize_contact_params
-    contact = Contact.new(user: current_user, **contact_data)
+    email_data = sanaitize_contact_params
+    contact = InboundEmail.new(user: current_user, **email_data)
 
     respond_to do |format|
       if contact.save
@@ -22,6 +22,6 @@ class ContactsController < ApplicationController
   private
 
   def sanaitize_contact_params
-    params.require(:contact).permit(:name, :email, :subject, :message)
+    params.require(:inbound_email).permit(:name, :email, :subject, :message)
   end
 end

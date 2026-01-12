@@ -10,7 +10,7 @@ RSpec.describe ContactsController, type: :request do
 
   describe "#create" do
     let(:user) { create(:user) }
-    let(:contact_data) {
+    let(:email_data) {
       {
         name: "diddy",
         email: "example@email.com",
@@ -25,17 +25,17 @@ RSpec.describe ContactsController, type: :request do
 
     it "creates a contact record" do
       expect {
-        post contact_url(format: :turbo_stream), params: { contact: contact_data }
-      }.to change(Contact, :count).by(1)
+        post contact_url(format: :turbo_stream), params: { inbound_email: email_data }
+      }.to change(InboundEmail, :count).by(1)
 
-      contact_info = Contact.last
+      email = InboundEmail.last
 
       expect(response).to have_http_status(:success)
-      expect(contact_info.name).to eq("diddy")
-      expect(contact_info.email).to eq("example@email.com")
-      expect(contact_info.subject).to eq("need baby oil urgently")
-      expect(contact_info.message).to eq("yo twin i needa thousand bottles of baby oil")
-      expect(contact_info.user.id).to eq(user.id)
+      expect(email.name).to eq("diddy")
+      expect(email.email).to eq("example@email.com")
+      expect(email.subject).to eq("need baby oil urgently")
+      expect(email.message).to eq("yo twin i needa thousand bottles of baby oil")
+      expect(email.user.id).to eq(user.id)
     end
   end
 end

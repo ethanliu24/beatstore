@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Contact < ApplicationRecord
+class InboundEmail < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true
   validates :subject, presence: true
