@@ -63,7 +63,8 @@ Rails.application.routes.draw do
     resources :transactions, only: [ :index, :show ]
   end
 
-  resource :contact, only: [ :show, :create ]
+  get "contact", to: "contacts#new", as: :contact
+  post "contact", to: "contacts#create"
 
   namespace :api do
     resources :tracks, only: [ :show ]
