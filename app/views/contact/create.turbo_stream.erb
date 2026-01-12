@@ -1,0 +1,7 @@
+<%= if @persisted %>
+  <%= turbo_stream.update "toasts" do %>
+    <%= render "shared/toasts" %>
+  <% end %>
+<% else %>
+  <%# For updating error fields %>
+<% end %>

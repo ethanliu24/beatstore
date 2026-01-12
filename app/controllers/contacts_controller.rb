@@ -8,14 +8,9 @@ class ContactsController < ApplicationController
     email_data = sanaitize_contact_params
     contact = InboundEmail.new(user: current_user, **email_data)
 
-    respond_to do |format|
-      if contact.save
-        flash.now[:notice] = t("contact.create.success")
-      else
-        flash.now[:warning] = t("contact.create.failure")
-      end
-
-      format.turbo_stream { render turbo_stream: turbo_stream.update("toasts", partial: "shared/toasts") }
+    @success = contact.save
+    if contact.save
+      flash.now[:notice] = t("contact.create.success")
     end
   end
 

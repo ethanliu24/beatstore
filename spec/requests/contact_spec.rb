@@ -23,7 +23,7 @@ RSpec.describe ContactsController, type: :request do
       sign_in user, scope: :user
     end
 
-    it "creates a contact record" do
+    it "creates a inbound email record" do
       expect {
         post contact_url(format: :turbo_stream), params: { inbound_email: email_data }
       }.to change(InboundEmail, :count).by(1)
@@ -36,6 +36,15 @@ RSpec.describe ContactsController, type: :request do
       expect(email.subject).to eq("need baby oil urgently")
       expect(email.message).to eq("yo twin i needa thousand bottles of baby oil")
       expect(email.user.id).to eq(user.id)
+    end
+
+    it "should not create a inbound email record if params not valid" do
+      expect {
+        email_data[:email] = nil
+        post contact_url(format: :turbo_stream), params: { inbound_email: email_data }
+      }.to change(InboundEmail, :count).by(0)
+
+      expect(response).to have_http_status(:no_content)
     end
   end
 end
