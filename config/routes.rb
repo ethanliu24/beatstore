@@ -63,6 +63,8 @@ Rails.application.routes.draw do
     resources :transactions, only: [ :index, :show ]
   end
 
+  resource :contact, only: [ :show, :create ]
+
   namespace :api do
     resources :tracks, only: [ :show ]
     namespace :templates do
