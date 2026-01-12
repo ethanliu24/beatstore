@@ -12,7 +12,7 @@
     </li>
     <%# TODO add path to these patges when available %>
     <li class="nav-responsive">
-      <a href="<%= tracks_path %>"><%= t("label.contact") %></a>
+      <a href="<%= contact_path %>"><%= t("label.contact") %></a>
     </li>
     <% if current_user && current_user.admin? %>
       <li>
@@ -169,7 +169,7 @@
             </li>
             <li class="dropdown-item">
               <%= render Ui::Dropdown::LinkComponent.new(
-                url: tracks_path,
+                url: contact_path,
                 text: t("label.contacts"),
                 icon: "address-book",
                 icon_size: 4

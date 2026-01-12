@@ -329,6 +329,9 @@ en:
       see_contract: "See or download contract"
 
   contact:
+    new:
+      page_title: "Contact"
+      title: "Contact"
     create:
       success: "Message sent!"
       failure: "An error has occurred. Please try again."
