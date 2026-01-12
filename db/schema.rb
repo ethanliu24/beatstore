@@ -104,7 +104,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_192018) do
     t.string "email", null: false
     t.string "subject", null: false
     t.string "message", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_contacts_on_user_id"
@@ -273,7 +273,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_192018) do
   add_foreign_key "comment_interactions", "comments"
   add_foreign_key "comment_interactions", "users", on_delete: :nullify
   add_foreign_key "comments", "users"
-  add_foreign_key "contacts", "users"
+  add_foreign_key "contacts", "users", on_delete: :nullify
   add_foreign_key "free_downloads", "tracks", on_delete: :nullify
   add_foreign_key "free_downloads", "users", on_delete: :nullify
   add_foreign_key "licenses_tracks", "licenses"

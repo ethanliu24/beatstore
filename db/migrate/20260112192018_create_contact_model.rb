@@ -6,7 +6,7 @@ class CreateContactModel < ActiveRecord::Migration[8.0]
       t.string :subject, null: false
       t.string :message, null: false
 
-      t.references :user, null: false, foreign_key: true
+      t.references :user, null: true, foreign_key: { on_delete: :nullify }
 
       t.timestamps
     end
