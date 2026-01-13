@@ -2,6 +2,9 @@
   <%= turbo_stream.update "toasts" do %>
     <%= render "shared/toasts" %>
   <% end %>
+  <%= turbo_stream.replace "contact-form" do %>
+    <%= render "contacts/form" %>
+  <% end %>
 <% else %>
   <%# For updating error fields %>
 <% end %>

@@ -4,9 +4,7 @@ class CreateInboundEmailModel < ActiveRecord::Migration[8.0]
       t.string :name, null: false
       t.string :email, null: false
       t.string :subject, null: false
-      t.string :message, null: false
-
-      t.references :user, null: true, foreign_key: { on_delete: :nullify }
+      t.text :message, null: false
 
       t.timestamps
     end

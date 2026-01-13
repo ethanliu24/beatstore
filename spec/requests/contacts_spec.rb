@@ -1,15 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ContactsController, type: :request do
-  describe "#show" do
-    # it "returns http success" do
-    #   get contact_url
-    #   expect(response).to have_http_status(:success)
-    # end
+  describe "#new" do
+    it "returns http success" do
+      get contact_url
+      expect(response).to have_http_status(:success)
+    end
   end
 
   describe "#create" do
-    let(:user) { create(:user) }
     let(:email_data) {
       {
         name: "diddy",
@@ -18,10 +17,6 @@ RSpec.describe ContactsController, type: :request do
         message: "yo twin i needa thousand bottles of baby oil"
       }
     }
-
-    before do
-      sign_in user, scope: :user
-    end
 
     it "creates a inbound email record" do
       expect {
@@ -35,7 +30,19 @@ RSpec.describe ContactsController, type: :request do
       expect(email.email).to eq("example@email.com")
       expect(email.subject).to eq("need baby oil urgently")
       expect(email.message).to eq("yo twin i needa thousand bottles of baby oil")
-      expect(email.user.id).to eq(user.id)
+    end
+
+    it "should send an email" do
+      perform_enqueued_jobs do
+        expect {
+          post contact_url(format: :turbo_stream), params: { inbound_email: email_data }
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      inbound_email = InboundEmail.last
+
+      expect(response).to have_http_status(:ok)
+      expect(ActionMailer::Base.deliveries.last.subject).to eq(inbound_email.subject)
     end
 
     it "should not create a inbound email record if params not valid" do
