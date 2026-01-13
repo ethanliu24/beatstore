@@ -114,11 +114,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_192018) do
     t.string "name", null: false
     t.string "email", null: false
     t.string "subject", null: false
-    t.string "message", null: false
-    t.bigint "user_id"
+    t.text "message", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_inbound_emails_on_user_id"
   end
 
   create_table "licenses", force: :cascade do |t|
@@ -275,7 +273,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_192018) do
   add_foreign_key "comments", "users"
   add_foreign_key "free_downloads", "tracks", on_delete: :nullify
   add_foreign_key "free_downloads", "users", on_delete: :nullify
-  add_foreign_key "inbound_emails", "users", on_delete: :nullify
   add_foreign_key "licenses_tracks", "licenses"
   add_foreign_key "licenses_tracks", "tracks"
   add_foreign_key "order_items", "orders"
