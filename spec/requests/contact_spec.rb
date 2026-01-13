@@ -44,7 +44,7 @@ RSpec.describe ContactsController, type: :request do
         post contact_url(format: :turbo_stream), params: { inbound_email: email_data }
       }.to change(InboundEmail, :count).by(0)
 
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
     end
   end
 end
