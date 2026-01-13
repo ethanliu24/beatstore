@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
 
   def create
     email_data = sanaitize_contact_params
-    contact = InboundEmail.new(user: current_user, **email_data)
+    contact = InboundEmail.new(**email_data)
 
     @success = contact.save
     if @success

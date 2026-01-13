@@ -5,6 +5,4 @@ class InboundEmail < ApplicationRecord
   validates :email, presence: true
   validates :subject, presence: true
   validates :message, presence: true
-
-  belongs_to :user, optional: true
 end

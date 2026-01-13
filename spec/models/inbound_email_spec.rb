@@ -8,7 +8,6 @@ RSpec.describe InboundEmail, type: :model do
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:subject) }
     it { should validate_presence_of(:message) }
-    it { is_expected.to belong_to(:user).optional }
   end
 
   context "foreign key behavior" do
