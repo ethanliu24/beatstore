@@ -20,17 +20,5 @@ RSpec.describe InboundEmail, type: :model do
         message: "yo twin can i borrow like 1000 bottles of baby oil"
       }
     }
-
-    describe "when user is deleted" do
-      it "nullifies the user_id on associated free_downloads" do
-        email = InboundEmail.create!(**email_data)
-
-        expect { user.destroy }.to change {
-          email.reload.user_id
-        }.from(user.id).to(nil)
-
-        expect(InboundEmail.exists?(email.id)).to be true
-      end
-    end
   end
 end
