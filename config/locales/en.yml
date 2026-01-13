@@ -328,6 +328,16 @@ en:
       no_purchases: "You haven't purchased anything yet"
       see_contract: "See or download contract"
 
+  contact:
+    new:
+      page_title: "Contact"
+      title: "Contact"
+      form:
+        submit: "Send message"
+    create:
+      success: "Message sent!"
+      failure: "An error has occurred. Please try again."
+
   modal:
     title:
       preview_contract: "Preview Contract"
