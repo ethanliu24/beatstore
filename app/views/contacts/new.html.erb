@@ -3,5 +3,20 @@
 <div class="flex justify-center items-start w-full h-full">
   <div class="mt-6">
     <%= content_tag :h1, t("contact.new.page_title"), class: "text-2xl font-bold" %>
+
+    <%= form_with(
+      model: InboundEmail.new,
+      url: contact_path,
+      method: :post,
+    ) do |form| %>
+      <%= render Ui::FloatingInputComponent.new(form:, field: :name, label: :name,
+        field_type: :text_field, id: "contact-name", label_classes: "text-[0.8rem]") %>
+      <%= render Ui::FloatingInputComponent.new(form:, field: :email, label: :email,
+        field_type: :text_field, id: "contact-email", label_classes: "text-[0.8rem]") %>
+      <%= render Ui::FloatingInputComponent.new(form:, field: :subject, label: :subject,
+        field_type: :text_field, id: "contact-subject", label_classes: "text-[0.8rem]") %>
+      <%= render Ui::FloatingInputComponent.new(form:, field: :message, label: :message,
+        field_type: :text_area, id: "contact-message", label_classes: "text-[0.8rem]") %>
+    <% end %>
   </div>
 </div>
