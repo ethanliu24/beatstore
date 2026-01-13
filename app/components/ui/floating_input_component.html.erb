@@ -1,10 +1,10 @@
 <div class="field text-input w-full mb-2 relative z-0">
-  <%= form.send(field_type, field, { placeholder: " ", autofocus: false, id:, rows: 1,
-    class: "block py-1 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 min-h-8
+  <%= form.send(field_type, field, { placeholder: " ", autofocus: false, required: true, autocomplete: "off", rows: 1, id:,
+    class: "block py-1 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 min-h-8 focus:border-accent
       border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer #{input_classes}"
     }) %>
   <%= form.label label, for: id, class: "inline-flex items-center absolute text-sm text-body duration-300
-    transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand
+    transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-focus:text-accent
     peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5
     rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto #{label_classes}" %>
 </div>

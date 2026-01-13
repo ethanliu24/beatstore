@@ -120,7 +120,7 @@
   }
 
   .button {
-    @apply flex justify-around items-center bg-accent hover:bg-accent-dim rounded cursor-pointer text-white;
+    @apply flex justify-around items-center bg-accent hover:bg-accent-dim rounded-[4px] cursor-pointer text-white;
   }
 
   .button-secondary {

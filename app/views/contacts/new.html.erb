@@ -1,22 +1,26 @@
 <% content_for :title, t("contact.new.page_title") %>
 
 <div class="flex justify-center items-start w-full h-full">
-  <div class="mt-6">
-    <%= content_tag :h1, t("contact.new.page_title"), class: "text-2xl font-bold" %>
+  <div class="mt-6 w-[45vw]">
+    <%= content_tag :h1, t("contact.new.page_title"), class: "text-2xl font-bold text-center mb-8" %>
 
     <%= form_with(
       model: InboundEmail.new,
       url: contact_path,
       method: :post,
+      class: "flex flex-col justify-center items-stretch gap-6"
     ) do |form| %>
-      <%= render Ui::FloatingInputComponent.new(form:, field: :name, label: :name,
-        field_type: :text_field, id: "contact-name", label_classes: "text-[0.8rem]") %>
-      <%= render Ui::FloatingInputComponent.new(form:, field: :email, label: :email,
-        field_type: :text_field, id: "contact-email", label_classes: "text-[0.8rem]") %>
+      <div class="flex justify-between items-stretch gap-8">
+        <%= render Ui::FloatingInputComponent.new(form:, field: :name, label: :name,
+          field_type: :text_field, id: "contact-name", label_classes: "text-[0.8rem]") %>
+        <%= render Ui::FloatingInputComponent.new(form:, field: :email, label: :email,
+          field_type: :email_field, id: "contact-email", label_classes: "text-[0.8rem]") %>
+      </div>
       <%= render Ui::FloatingInputComponent.new(form:, field: :subject, label: :subject,
         field_type: :text_field, id: "contact-subject", label_classes: "text-[0.8rem]") %>
       <%= render Ui::FloatingInputComponent.new(form:, field: :message, label: :message,
         field_type: :text_area, id: "contact-message", label_classes: "text-[0.8rem]") %>
+      <%= form.submit t("contact.new.form.submit"), class: "button w-fit py-2 px-2 font-semibold text-sm" %>
     <% end %>
   </div>
 </div>

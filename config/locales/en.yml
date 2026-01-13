@@ -332,6 +332,8 @@ en:
     new:
       page_title: "Contact"
       title: "Contact"
+      form:
+        submit: "Send message"
     create:
       success: "Message sent!"
       failure: "An error has occurred. Please try again."
