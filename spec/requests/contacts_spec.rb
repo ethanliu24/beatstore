@@ -32,6 +32,19 @@ RSpec.describe ContactsController, type: :request do
       expect(email.message).to eq("yo twin i needa thousand bottles of baby oil")
     end
 
+    it "should send an email" do
+      perform_enqueued_jobs do
+        expect {
+          post contact_url(format: :turbo_stream), params: { inbound_email: email_data }
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      inbound_email = InboundEmail.last
+
+      expect(response).to have_http_status(:ok)
+      expect(ActionMailer::Base.deliveries.last.subject).to eq(inbound_email.subject)
+    end
+
     it "should not create a inbound email record if params not valid" do
       expect {
         email_data[:email] = nil

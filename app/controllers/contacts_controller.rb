@@ -7,11 +7,12 @@ class ContactsController < ApplicationController
 
   def create
     email_data = sanaitize_contact_params
-    contact = InboundEmail.new(**email_data)
+    inbound_email = InboundEmail.new(**email_data)
 
-    @success = contact.save
+    @success = inbound_email.save
     if @success
       flash.now[:notice] = t("contact.create.success")
+      ContactMailer.with(inbound_email:).contact.deliver_later
     end
   end
 
