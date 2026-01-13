@@ -10,7 +10,7 @@ class ContactsController < ApplicationController
     contact = InboundEmail.new(user: current_user, **email_data)
 
     @success = contact.save
-    if contact.save
+    if @success
       flash.now[:notice] = t("contact.create.success")
     end
   end
