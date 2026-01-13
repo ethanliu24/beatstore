@@ -23,7 +23,7 @@ RSpec.describe InboundEmail, type: :model do
 
     describe "when user is deleted" do
       it "nullifies the user_id on associated free_downloads" do
-        email = InboundEmail.create!(user:, **email_data)
+        email = InboundEmail.create!(**email_data)
 
         expect { user.destroy }.to change {
           email.reload.user_id
