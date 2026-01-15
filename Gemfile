@@ -86,7 +86,7 @@ gem "omniauth-google-oauth2"
 
 gem "ransack"
 gem "pagy", "~> 9.4"
-gem "money-rails", "~> 1.12"
+gem "money-rails", "~> 3.0"
 gem "stripe"
 gem "active_storage_validations", "~> 3.0"
 gem "prawn"
