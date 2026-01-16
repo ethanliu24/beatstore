@@ -8,6 +8,11 @@ class ContactMailer < ApplicationMailer
 
     sender_email = inbound_email.email
 
-    mail(subject: @subject, to: PRODUCER_EMAIL, reply_to: sender_email, cc: DOMAIN_EMAIL)
+    mail(
+      subject: @subject,
+      to: EmailCredentials.producer_email,
+      reply_to: sender_email,
+      cc: EmailCredentials.domain_email
+    )
   end
 end

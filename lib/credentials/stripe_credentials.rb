@@ -7,15 +7,15 @@ module StripeCredentials
   include CredentialResolver
 
   def secret_key
-    resolve_credential(namespace, app_env, :secret_key, namespace:)
+    resolve_credential(:stripe, app_env, :secret_key, namespace:)
   end
 
   def payments_webhook_secret
-    resolve_credential(namespace, app_env, :payments_webhook_secret, namespace:)
+    resolve_credential(:stripe, app_env, :payments_webhook_secret, namespace:)
   end
 
   def public_key
-    resolve_credential(namespace, app_env, :public_key, namespace:)
+    resolve_credential(:stripe, app_env, :public_key, namespace:)
   end
 
   private
