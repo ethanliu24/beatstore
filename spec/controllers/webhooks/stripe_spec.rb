@@ -30,6 +30,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
     end
 
     allow(controller).to receive(:current_or_guest_user).and_return(user)
+    allow(::Credentials::Stripe).to receive(:payments_webhook_secret).and_return("whsc_test")
   end
 
   describe "#payments" do
