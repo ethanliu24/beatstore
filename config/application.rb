@@ -22,10 +22,6 @@ module Beatstore
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-
-    [ "lib", "lib/credentials" ].each do |path|
-      config.autoload_paths << Rails.root.join(path)
-      config.eager_load_paths << Rails.root.join(path)
-    end
+    # config.eager_load_paths << Rails.root.join("extras")
   end
 end

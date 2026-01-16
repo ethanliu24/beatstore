@@ -10,9 +10,9 @@ class ContactMailer < ApplicationMailer
 
     mail(
       subject: @subject,
-      to: ::EmailCredentials.producer_email,
+      to: ::Credentials::Email.producer_email,
       reply_to: sender_email,
-      cc: ::EmailCredentials.domain_email
+      cc: ::Credentials::Email.domain_email
     )
   end
 end
