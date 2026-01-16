@@ -6,10 +6,14 @@ module Credentials
     include CredentialResolver
 
     def producer_email
+      return "producer@example.com" if Rails.env.test?
+
       resolve_credential(:email, :producer, namespace:)
     end
 
     def domain_email
+      return "domain@example.com" if Rails.env.test?
+
       resolve_credential(:email, :domain, app_env, namespace:)
     end
 
