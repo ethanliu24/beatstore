@@ -1,7 +1,4 @@
 class ContactMailer < ApplicationMailer
-  default to: PRODUCER_EMAIL
-  default from: DOMAIN_EMAIL
-
   def contact
     inbound_email = params[:inbound_email]
 
@@ -11,6 +8,6 @@ class ContactMailer < ApplicationMailer
 
     sender_email = inbound_email.email
 
-    mail(subject: @subject, reply_to: sender_email, cc: DOMAIN_EMAIL)
+    mail(subject: @subject, to: PRODUCER_EMAIL, reply_to: sender_email, cc: DOMAIN_EMAIL)
   end
 end
