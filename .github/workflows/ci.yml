@@ -103,6 +103,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://beatstore:beatstore@localhost:5432
+          DEPENDABOT: ${{ github.actor == 'dependabot[bot]' }}
           # REDIS_URL: redis://localhost:6379/0
         run: bundle exec rspec
 

@@ -1,7 +1,7 @@
 require "stripe"
 
-begin
-  Stripe.api_key = ::Credentials::Stripe.api_key
-rescue => e
-  Rails.logger.error("[Stripe] disabled: #{e.message}")
-end
+Stripe.api_key = Rails.application.credentials.dig(
+  :stripe,
+  Rails.env.production? ? :live : :test,
+  :secret_key
+)
