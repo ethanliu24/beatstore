@@ -6,15 +6,20 @@ RSpec.describe ContactMailer, type: :mailer do
   let!(:inbound_email) { create(:inbound_email) }
   let(:mailer) { ContactMailer.with(inbound_email:).contact }
 
+  before do
+    allow(::Credentials::Email).to receive(:producer_email).and_return("producer@email.com")
+    allow(::Credentials::Email).to receive(:domain_email).and_return("domain@email.com")
+  end
+
   describe "#contact" do
     it "sends email to both producer email, cc's itself and replies to the customer email" do
-      expect(mailer.to).to include(PRODUCER_EMAIL)
+      expect(mailer.to).to include("producer@email.com")
       expect(mailer.to.length).to eq(1)
 
       expect(mailer.reply_to).to include(inbound_email.email)
       expect(mailer.reply_to.length).to eq(1)
 
-      expect(mailer.cc).to include(DOMAIN_EMAIL)
+      expect(mailer.cc).to include("domain@email.com")
       expect(mailer.cc.length).to eq(1)
 
       expect(mailer.subject).to eq(inbound_email.subject)
