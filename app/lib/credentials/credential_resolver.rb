@@ -13,5 +13,9 @@ module Credentials
     def missing!(namespace, keys)
       raise "Missing #{namespace} credential: #{keys.join('.')}"
     end
+
+    def dependabot?
+      ENV["DEPENDABOT"].to_s.downcase == "true"
+    end
   end
 end

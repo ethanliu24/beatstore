@@ -26,9 +26,5 @@ module Credentials
     def app_env
       Rails.env.production? ? :prod : :dev
     end
-
-    def dependabot?
-      ENV["DEPENDABOT"].to_s.downcase == "true"
-    end
   end
 end
