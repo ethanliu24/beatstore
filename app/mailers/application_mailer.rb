@@ -1,4 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: -> { ::Credentials::Email.domain_email }
+  # TODO change to domain name
+  default from: "from@example.com"
   layout "mailer"
 end
