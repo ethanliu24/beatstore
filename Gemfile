@@ -76,7 +76,7 @@ gem "tailwindcss-rails", "~> 4.4"
 gem "rails_icons", "~> 1.5"
 gem "view_component", "~> 4.2"
 gem "cocoon"
-gem "countries", "~> 8.0"
+gem "countries", "~> 8.1"
 gem "redcarpet"
 
 gem "devise", "~> 4.9"
