@@ -310,7 +310,7 @@ GEM
       oga (~> 3.3)
       prawn (~> 2.4)
     prettyprint (0.2.0)
-    prism (1.7.0)
+    prism (1.8.0)
     propshaft (1.3.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -378,7 +378,7 @@ GEM
       activerecord (>= 7.2)
       activesupport (>= 7.2)
       i18n
-    rdoc (7.0.3)
+    rdoc (7.1.0)
       erb
       psych (>= 4.0.0)
       tsort
@@ -507,7 +507,7 @@ GEM
     tsort (0.2.0)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
-    turbo-rails (2.0.20)
+    turbo-rails (2.0.21)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
