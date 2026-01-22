@@ -535,6 +535,44 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       expect(response).to have_http_status(302)
       expect(track.licenses.count).to eq(2)
     end
+
+    it "does not create the track if files delivered doesn't match license contracts" do
+      license = create(:license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true })
+
+      expect {
+        post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license.id ]) }
+      }.not_to change(Track, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "creates the track if files delivered match license contracts" do
+      license = create(:license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
+
+      expect {
+        post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license.id ]) }
+      }.to change(Track, :count).by(1)
+
+      expect(response).to have_http_status(:found)
+    end
+
+    it "does not update the track if files delivered doesn't match license contracts" do
+      license = create(:license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
+      track.licenses << license
+      license.update!(contract_details: { delivers_mp3: true })
+
+      put admin_track_url(track), params: { track: { description: "ABC" } }
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "updates the track if files delivered match license contracts" do
+      license = create(:license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
+      track.licenses << license
+
+      put admin_track_url(track), params: { track: { description: "ABC" } }
+
+      expect(response).to have_http_status(:found)
+    end
   end
 
   describe "admin paths", authorization_test: true do
