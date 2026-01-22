@@ -319,7 +319,7 @@ RSpec.describe Track, type: :model do
   end
 
   describe "#cheapest_price" do
-    let(:track) { create(:track) }
+    let(:track) { create(:track_with_files) }
 
     it "should return cheapest price of profitable licenses" do
       l1 = create(:non_exclusive_license, price_cents: 1000)
@@ -374,7 +374,7 @@ RSpec.describe Track, type: :model do
     it "should return all licenses that are profitable, i.e. not free" do
       track = create(:track_with_files)
       l1 = create(:license, title: "Unprofitable License", contract_type: License.contract_types[:free])
-      l2 = create(:license, title: "Profitable License", contract_type: License.contract_types[:non_exclusive])
+      l2 = create(:non_exclusive_license, title: "Profitable License")
 
       track.licenses << l1
       track.licenses << l2

@@ -512,8 +512,9 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
   describe "licenses" do
     let(:track) { create(:track) }
-    let(:license1) { create(:license) }
-    let(:license2) { create(:non_exclusive_license) }
+    let(:contract_details) { { delivers_mp3: false, delivers_wav: false, delivers_stems: false } }
+    let(:license1) { create(:license, contract_details:) }
+    let(:license2) { create(:non_exclusive_license, contract_details:) }
 
     it "creates track with given licenses" do
       expect {

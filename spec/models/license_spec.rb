@@ -57,11 +57,14 @@ RSpec.describe License, type: :model do
 
   describe "associations" do
     it "should have many tracks" do
-      track1 = create(:track)
-      track2 = create(:track)
+      track1 = create(:track_with_files)
+      track2 = create(:track_with_files)
       license = create(:license)
 
       license.tracks << [ track1, track2 ]
+      license.reload
+      track1.reload
+      track2.reload
 
       expect(license.tracks.count).to eq(2)
       expect(track1.licenses).to include(license)
