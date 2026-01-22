@@ -118,7 +118,18 @@ class Track < ApplicationRecord
   end
 
   def profitable_licenses
-    undiscarded_licenses.where.not(contract_type: License.contract_types[:free]).order(:price_cents)
+    undiscarded_licenses
+      .where
+      .not(contract_type: License.contract_types[:free])
+      .order(:price_cents)
+      .select do |l|
+        contract = license.contract
+
+        # Only keep licenses whose deliverables match actual attached files
+        (!contract[:delivers_mp3] || FILE_DELIVERY_RULES[:mp3].call(self)) &&
+        (!contract[:delivers_wav] || FILE_DELIVERY_RULES[:wav].call(self)) &&
+        (!contract[:delivers_stems] || FILE_DELIVERY_RULES[:stems].call(self))
+      end
   end
 
   def cheapest_price
