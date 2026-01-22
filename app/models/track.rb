@@ -14,6 +14,11 @@ class Track < ApplicationRecord
   GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
   SLUG_SEPERATOR = "-"
   SLUG_SUFFIX_LENGTH = 6
+  FILE_DELIVERY_RULES = {
+    mp3: ->(track) { track.tagged_mp3.attached? && track.untagged_mp3.attached? },
+    wav: ->(track) { track.untagged_wav.attached? },
+    stems: ->(track) { track.track_stems.attached? }
+  }.freeze
 
   # === Validations ===
   validates :title, presence: true
@@ -34,6 +39,7 @@ class Track < ApplicationRecord
   validates :cover_photo, content_type: [ "image/png" ], if: -> { cover_photo.attached? }
 
   validate :shares_cannot_exceed_100_percent
+  validate :license_selected_matches_available_files
 
   # === Relationships ===
   has_one_attached :tagged_mp3
@@ -112,7 +118,18 @@ class Track < ApplicationRecord
   end
 
   def profitable_licenses
-    undiscarded_licenses.where.not(contract_type: License.contract_types[:free]).order(:price_cents)
+    undiscarded_licenses
+      .where
+      .not(contract_type: License.contract_types[:free])
+      .order(:price_cents)
+      .select do |l|
+        contract = l.contract
+
+        # Only keep licenses whose deliverables match actual attached files
+        (!contract[:delivers_mp3] || FILE_DELIVERY_RULES[:mp3].call(self)) &&
+        (!contract[:delivers_wav] || FILE_DELIVERY_RULES[:wav].call(self)) &&
+        (!contract[:delivers_stems] || FILE_DELIVERY_RULES[:stems].call(self))
+      end
   end
 
   def cheapest_price
@@ -138,6 +155,24 @@ class Track < ApplicationRecord
     total_publishing = collaborators.sum { |c| c.profit_share.to_d }
     if total_profit > 100 || total_publishing > 100
       errors.add(:base, I18n.t("admin.track.error.invalid_share_sum"))
+    end
+  end
+
+  def license_selected_matches_available_files
+    required_deliverables = licenses.each_with_object(Set.new) do |license, required|
+      contract = license.contract
+
+      required << :mp3 if contract[:delivers_mp3]
+      required << :wav if contract[:delivers_wav]
+      required << :stems if contract[:delivers_stems]
+    end
+
+    missing = required_deliverables.reject do |type|
+      FILE_DELIVERY_RULES[type].call(self)
+    end
+
+    unless missing.empty?
+      errors.add(:base, I18n.t("admin.track.error.unmatching_license_file_delivered", required_files: missing))
     end
   end
 

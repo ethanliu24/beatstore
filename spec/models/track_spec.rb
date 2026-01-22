@@ -157,6 +157,35 @@ RSpec.describe Track, type: :model do
         expect(track_with_files).not_to be_valid
       end
     end
+
+    context "matching deliverable with license" do
+      let(:track) { build(:track) }
+      let(:license) { build(:license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true }) }
+
+      it "adds errors to base if files are unmatching with what license provides" do
+        track.licenses << license
+        track.validate
+
+        expect(track.errors[:base]).to include(/:mp3/)
+        expect(track.errors[:base]).to include(/:stem/)
+      end
+
+      it "does not add errors" do
+        track = create(:track_with_files)
+        track.licenses << license
+
+        track.validate
+
+        expect(track.errors[:base]).to be_empty
+      end
+
+      it "does not add erros if no licenses are selected" do
+        track = create(:track)
+        track.reload.validate
+
+        expect(track.errors[:base]).to be_empty
+      end
+    end
   end
 
   describe "destroy" do
@@ -290,7 +319,7 @@ RSpec.describe Track, type: :model do
   end
 
   describe "#cheapest_price" do
-    let(:track) { create(:track) }
+    let(:track) { create(:track_with_files) }
 
     it "should return cheapest price of profitable licenses" do
       l1 = create(:non_exclusive_license, price_cents: 1000)
@@ -338,6 +367,39 @@ RSpec.describe Track, type: :model do
       track.reload
 
       expect(track.undiscarded_comments.count).to eq(0)
+    end
+  end
+
+  describe "#profitable_licenses" do
+    it "should return all licenses that are profitable, i.e. not free" do
+      track = create(:track_with_files)
+      l1 = create(:license, title: "Unprofitable License", contract_type: License.contract_types[:free])
+      l2 = create(:non_exclusive_license, title: "Profitable License")
+
+      track.licenses << l1
+      track.licenses << l2
+
+      expect(track.profitable_licenses).not_to include(l1)
+      expect(track.profitable_licenses).to include(l2)
+    end
+
+    it "should return all licenses that matches the files delivered" do
+      track = create(:track)
+      license = create(
+        :license,
+        contract_type: License.contract_types[:non_exclusive],
+        contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false }
+      )
+
+      track.licenses << license
+
+      expect(track.profitable_licenses).to include(license)
+
+      license.update!(contract_details: { delivers_mp3: true })
+      track.validate
+
+      expect(track.profitable_licenses).to be_empty
+      expect(track.errors[:base]).not_to be_empty
     end
   end
 
