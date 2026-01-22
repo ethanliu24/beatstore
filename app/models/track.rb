@@ -123,7 +123,7 @@ class Track < ApplicationRecord
       .not(contract_type: License.contract_types[:free])
       .order(:price_cents)
       .select do |l|
-        contract = license.contract
+        contract = l.contract
 
         # Only keep licenses whose deliverables match actual attached files
         (!contract[:delivers_mp3] || FILE_DELIVERY_RULES[:mp3].call(self)) &&

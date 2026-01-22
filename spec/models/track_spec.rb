@@ -370,6 +370,39 @@ RSpec.describe Track, type: :model do
     end
   end
 
+  describe "#profitable_licenses" do
+    it "should return all licenses that are profitable, i.e. not free" do
+      track = create(:track_with_files)
+      l1 = create(:license, title: "Unprofitable License", contract_type: License.contract_types[:free])
+      l2 = create(:license, title: "Profitable License", contract_type: License.contract_types[:non_exclusive])
+
+      track.licenses << l1
+      track.licenses << l2
+
+      expect(track.profitable_licenses).not_to include(l1)
+      expect(track.profitable_licenses).to include(l2)
+    end
+
+    it "should return all licenses that matches the files delivered" do
+      track = create(:track)
+      license = create(
+        :license,
+        contract_type: License.contract_types[:non_exclusive],
+        contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false }
+      )
+
+      track.licenses << license
+
+      expect(track.profitable_licenses).to include(license)
+
+      license.update!(contract_details: { delivers_mp3: true })
+      track.validate
+
+      expect(track.profitable_licenses).to be_empty
+      expect(track.errors[:base]).not_to be_empty
+    end
+  end
+
   describe "slugs" do
     subject(:track) { build(:track) }
 
