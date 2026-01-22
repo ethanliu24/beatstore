@@ -157,6 +157,35 @@ RSpec.describe Track, type: :model do
         expect(track_with_files).not_to be_valid
       end
     end
+
+    context "matching deliverable with license" do
+      let(:track) { build(:track) }
+      let(:license) { build(:license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true }) }
+
+      it "adds errors to base if files are unmatching with what license provides" do
+        track.licenses << license
+        track.validate
+
+        expect(track.errors[:base]).to include(/:mp3/)
+        expect(track.errors[:base]).to include(/:stem/)
+      end
+
+      it "does not add errors" do
+        track = create(:track_with_files)
+        track.licenses << license
+
+        track.validate
+
+        expect(track.errors[:base]).to be_empty
+      end
+
+      it "does not add erros if no licenses are selected" do
+        track = create(:track)
+        track.reload.validate
+
+        expect(track.errors[:base]).to be_empty
+      end
+    end
   end
 
   describe "destroy" do
