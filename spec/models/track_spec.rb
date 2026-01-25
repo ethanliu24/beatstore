@@ -162,12 +162,38 @@ RSpec.describe Track, type: :model do
       let(:track) { build(:track) }
       let(:license) { build(:license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true }) }
 
-      it "adds errors to base if files are unmatching with what license provides" do
-        track.licenses << license
-        track.validate
+      describe "if files are unmatching with what license provides" do
+        it "adds errors to base for preview" do
+          license = create(:license, contract_type: License.contract_types[:free])
+          track.licenses << license
+          track.validate
 
-        expect(track.errors[:base]).to include(/:mp3/)
-        expect(track.errors[:base]).to include(/:stem/)
+          expect(track.errors[:base]).to include(/:preview/)
+        end
+
+        it "adds errors to base for mp3" do
+          license = create(:non_exclusive_license, contract_details: { delivers_mp3: true })
+          track.licenses << license
+          track.validate
+
+          expect(track.errors[:base]).to include(/:mp3/)
+        end
+
+        it "adds errors to base for wav" do
+          license = create(:non_exclusive_license, contract_details: { delivers_wav: true })
+          track.licenses << license
+          track.validate
+
+          expect(track.errors[:base]).to include(/:wav/)
+        end
+
+        it "adds errors to base for stems" do
+          license = create(:non_exclusive_license, contract_details: { delivers_stems: true })
+          track.licenses << license
+          track.validate
+
+          expect(track.errors[:base]).to include(/:stems/)
+        end
       end
 
       it "does not add errors" do

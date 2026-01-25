@@ -513,12 +513,17 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
   describe "licenses" do
     let(:track) { create(:track) }
     let(:contract_details) { { delivers_mp3: false, delivers_wav: false, delivers_stems: false } }
-    let(:license1) { create(:license, contract_details:) }
+    let(:license1) { create(:license, contract_type: License.contract_types[:free], contract_details:) }
     let(:license2) { create(:non_exclusive_license, contract_details:) }
 
     it "creates track with given licenses" do
       expect {
-        post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license1.id ]) }
+        post admin_tracks_url, params: {
+          track: valid_attributes.merge(
+            license_ids: [ license1.id ],
+            tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg")
+          )
+        }
       }.to change(Track, :count).by(1)
 
       created_track = Track.last
@@ -531,14 +536,19 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     it "updates track with given licenses" do
       track.licenses << license1
 
-      put admin_track_url(track), params: { track: { license_ids: [ license1.id, license2.id ] } }
+      put admin_track_url(track), params: {
+        track: {
+          license_ids: [ license1.id, license2.id ],
+          tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg")
+        }
+      }
 
       expect(response).to have_http_status(302)
       expect(track.licenses.count).to eq(2)
     end
 
     it "does not create the track if files delivered doesn't match license contracts" do
-      license = create(:license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true })
+      license = create(:non_exclusive_license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true })
 
       expect {
         post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license.id ]) }
@@ -548,7 +558,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
 
     it "creates the track if files delivered match license contracts" do
-      license = create(:license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
+      license = create(:non_exclusive_license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
 
       expect {
         post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license.id ]) }
@@ -558,7 +568,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
 
     it "does not update the track if files delivered doesn't match license contracts" do
-      license = create(:license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
+      license = create(:non_exclusive_license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
       track.licenses << license
       license.update!(contract_details: { delivers_mp3: true })
 
@@ -567,7 +577,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
 
     it "updates the track if files delivered match license contracts" do
-      license = create(:license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
+      license = create(:non_exclusive_license, contract_details: { delivers_mp3: false, delivers_wav: false, delivers_stems: false })
       track.licenses << license
 
       put admin_track_url(track), params: { track: { description: "ABC" } }
