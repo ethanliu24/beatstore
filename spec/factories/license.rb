@@ -11,7 +11,7 @@ FactoryBot.define do
         terms_of_years: 1,
         delivers_mp3: true,
         delivers_wav: false,
-        delivers_stems: true,
+        delivers_stems: false,
         document_template: Rails.configuration.templates[:contracts][License.contract_types[:free]]
       }
     }

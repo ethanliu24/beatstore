@@ -37,7 +37,7 @@ module Admin
 
     def update
       begin
-        if track_valid_after_purge?
+        if track_valid_after_file_change?
           if @track.update(sanitize_track_params)
             purge_files(@track, purge_params)
             redirect_to admin_tracks_path, notice: t("admin.track.update.success")
@@ -78,16 +78,37 @@ module Admin
         end
     end
 
-    def track_valid_after_purge?
+    def track_valid_after_file_change?
+      # 4 steps to duplicate track file state
+      # 1) Attach the newly uploaded file if there is one
+      # 2) Attach the original file otherwise
+      # 3) Apply purges
+      # 4) Apply updated licenses
+
       sandbox = @track.dup
-      [ :tagged_mp3, :untagged_mp3, :untagged_wav, :track_stems, :project ].each do |key|
+      attachment_keys = [ :tagged_mp3, :untagged_mp3, :untagged_wav, :track_stems, :project ]
+
+      attachment_keys.each do |key|
+        # Step 1)
+        if sanitize_track_params[key].present?
+          sandbox.send(key).attach(sanitize_track_params[key])
+          next
+        end
+
+        # Step 2)
         attachment = @track.send(key)
-        sandbox.send(key).attach(attachment.blob) if attachment.attached?
+        if attachment.attached? && attachment.blob.persisted?
+          sandbox.send(key).attach(attachment.blob)
+          next
+        end
       end
 
+      # Step 3)
+      purge_files(sandbox, purge_params)
+
+      # Step 4)
       updated_license_ids = sanitize_track_params[:license_ids]&.reject(&:blank?) || []
       sandbox.licenses = License.where(id: updated_license_ids)
-      purge_files(sandbox, purge_params)
 
       if sandbox.valid?
         true
