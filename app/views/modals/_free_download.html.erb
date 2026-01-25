@@ -7,7 +7,7 @@
         data: {
           controller: "free-download",
           action: "submit->free-download#submit",
-          filename: track.tagged_mp3.blob&.filename
+          filename: track.preview.blob&.filename
         }, turbo: false do |f| %>
           <p class="text-xs text-secondary-txt"><%= t("modal.free_download.instruction") %></p>
 

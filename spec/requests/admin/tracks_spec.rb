@@ -112,6 +112,49 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
           post admin_tracks_url, params: { track: valid_attributes }
         }.to change(Track, :count).by(1)
       end
+
+      it "creates a new track if files match with licenses" do
+        license = create(:license)
+        file_params = {
+          tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg"),
+          license_ids: [ license.id ]
+        }
+
+        expect {
+          post admin_tracks_url, params: { track: valid_attributes.merge(file_params) }
+        }.to change(Track, :count).by(1)
+
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "does not create a new track if files doesn't match with licenses" do
+        license = create(
+          :non_exclusive_license,
+          contract_details: { delivers_mp3: true, delivers_wav: true, delivers_stems: true }
+        )
+        file_params = {
+          tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg"),
+          license_ids: [ license.id ]
+        }
+
+        expect {
+          post admin_tracks_url, params: { track: valid_attributes.merge(file_params) }
+        }.to change(Track, :count).by(0)
+
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "creates a new track with the new files if no licenses are selected" do
+        file_params = {
+          tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg")
+        }
+
+        expect {
+          post admin_tracks_url, params: { track: valid_attributes.merge(file_params) }
+        }.to change(Track, :count).by(1)
+
+        expect(response).to redirect_to(admin_tracks_url)
+      end
     end
 
     context "with invalid parameters" do
@@ -128,7 +171,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
   end
 
-  describe "PATCH /update" do
+  describe "PUT /update" do
     context "with valid parameters" do
       let(:new_attributes) {
         {
@@ -137,16 +180,97 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       }
 
       it "updates the requested track" do
-        track = Track.create! valid_attributes
-        patch admin_track_url(track), params: { track: new_attributes }
+        track = create(:track_with_files)
+        put admin_track_url(track), params: { track: new_attributes }
         track.reload
         expect(track.title).to eq("New Title")
       end
 
       it "redirects to the track" do
         track = Track.create! valid_attributes
-        patch admin_track_url(track), params: { track: new_attributes }
+        put admin_track_url(track), params: { track: new_attributes }
         track.reload
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "does not purge any files if all remove params are 0" do
+        purge_params = {
+          remove_tagged_mp3: "0",
+          remove_untagged_mp3: "0",
+          remove_untagged_wav: "0",
+          remove_track_stems: "0",
+          remove_project: "0"
+        }
+        track = create(:track_with_files)
+        license = create(:non_exclusive_license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: purge_params }
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "fails the update if deleted deliverables are makes track unmatch license" do
+        purge_params = { remove_tagged_mp3: "1" }
+        track = create(:track_with_files)
+        license = create(:license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: purge_params }
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "updates if deleted files still match with license" do
+        purge_params = { remove_untagged_mp3: "1" }
+        track = create(:track_with_files)
+        license = create(:license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: purge_params }
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "updates if there are deleted files but there are no selected licenses after" do
+        track_params = { remove_tagged_mp3: "1", license_ids: [] }
+        track = create(:track_with_files)
+        license = create(:license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: track_params }
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "updates if the new files uploaded matches with the licenses" do
+        track = create(:track)
+        license = create(:license)
+        track_params = {
+          tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg"),
+          license_ids: [ license.id ]
+        }
+
+        put admin_track_url(track), params: { track: track_params }
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "does not update if new files uploaded doesn't match with the licenses" do
+        track = create(:track)
+        license = create(
+          :non_exclusive_license,
+          contract_details: { delivers_mp3: true, delivers_wav: true, delivers_stems: true }
+        )
+        track_params = {
+          tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg"),
+          license_ids: [ license.id ]
+        }
+
+        put admin_track_url(track), params: { track: track_params }
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "updates if new files uploaded and no selected licenses" do
+        track = create(:track)
+        track_params = { tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg") }
+
+        put admin_track_url(track), params: { track: track_params }
         expect(response).to redirect_to(admin_tracks_url)
       end
     end

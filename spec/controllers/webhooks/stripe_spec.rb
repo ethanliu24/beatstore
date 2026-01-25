@@ -7,7 +7,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
 
   let(:user) { create(:user) }
   let(:track) { create(:track_with_files) }
-  let(:license) { create(:license) }
+  let(:license) { create(:non_exclusive_license, contract_details: { delivers_mp3: true, delivers_wav: false, delivers_stems: true }) }
   let(:order) { create(:order, user:) }
   let!(:transaction) { create(:payment_transaction, order:) }
 

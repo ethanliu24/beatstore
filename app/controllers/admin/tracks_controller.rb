@@ -29,22 +29,30 @@ module Admin
         else
           render :new, status: :unprocessable_content
         end
-      rescue ArgumentError => _e
-        @track.errors.add(:role, "is invalid")
+      rescue ArgumentError => e
+        @track.errors.add(:base, "Update Failed: #{e}")
         render :new, status: :unprocessable_content
       end
     end
 
     def update
       begin
-        if @track.update(sanitize_track_params)
-          redirect_to admin_tracks_path, notice: t("admin.track.update.success")
-        else
-          render :new, status: :unprocessable_content
+        if track_valid_after_file_change?
+          if @track.update(sanitize_track_params)
+            purge_files(@track, purge_params)
+            redirect_to admin_tracks_path, notice: t("admin.track.update.success")
+            return
+          end
         end
-      rescue ArgumentError => _e
-        @track.errors.add(:role, "is invalid")
-        render :new, status: :unprocessable_content
+
+        # dedup any errors after sandbox
+        base_errors = @track.errors[:base].uniq
+        @track.errors.delete(:base)
+        base_errors.each { |msg| @track.errors.add(:base, msg) }
+        render :edit, status: :unprocessable_content
+      rescue ArgumentError => e
+        @track.errors.add(:base, "Update Failed: #{e}")
+        render :edit, status: :unprocessable_content
       end
     end
 
@@ -70,6 +78,61 @@ module Admin
         end
     end
 
+    def track_valid_after_file_change?
+      # 4 steps to duplicate track file state
+      # 1) Attach the newly uploaded file if there is one
+      # 2) Attach the original file otherwise
+      # 3) Apply purges
+      # 4) Apply updated licenses
+
+      sandbox = @track.dup
+      attachment_keys = [ :tagged_mp3, :untagged_mp3, :untagged_wav, :track_stems, :project ]
+
+      attachment_keys.each do |key|
+        # Step 1)
+        if sanitize_track_params[key].present?
+          sandbox.send(key).attach(sanitize_track_params[key])
+          next
+        end
+
+        # Step 2)
+        attachment = @track.send(key)
+        if attachment.attached? && attachment.blob.persisted?
+          sandbox.send(key).attach(attachment.blob)
+          next
+        end
+      end
+
+      # Step 3)
+      purge_files(sandbox, purge_params)
+
+      # Step 4)
+      if sanitize_track_params[:license_ids].present?
+        updated_license_ids = sanitize_track_params[:license_ids].reject(&:blank?)
+        sandbox.licenses = License.where(id: updated_license_ids)
+      else
+        sandbox.licenses = @track.licenses.to_a
+      end
+
+      if sandbox.valid?
+        true
+      else
+        sandbox.errors[:base].each do |message|
+          @track.errors.add(:base, message)
+        end
+
+        false
+      end
+    end
+
+    def purge_files(track, purge_options)
+      track.tagged_mp3.purge if purge_options[:remove_tagged_mp3] == "1"
+      track.untagged_mp3.purge if purge_options[:remove_untagged_mp3] == "1"
+      track.untagged_wav.purge if purge_options[:remove_untagged_wav] == "1"
+      track.track_stems.purge if purge_options[:remove_track_stems] == "1"
+      track.project.purge if purge_options[:remove_project] == "1"
+    end
+
     def sanitize_track_params
       params.require(:track).permit(
         :title,
@@ -88,6 +151,16 @@ module Admin
         collaborators_attributes: [ :id, :name, :role, :profit_share, :publishing_share, :notes, :_destroy ],
         samples_attributes: [ :id, :name, :artist, :link, :_destroy ],
         license_ids: []
+      )
+    end
+
+    def purge_params
+      params.require(:track).permit(
+        :remove_tagged_mp3,
+        :remove_untagged_mp3,
+        :remove_untagged_wav,
+        :remove_track_stems,
+        :remove_project,
       )
     end
   end

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe CartItem, type: :model do
   let(:user) { create(:user) }
   let(:cart) { create(:cart, user:) }
-  let(:track) { create(:track) }
+  let(:track) { create(:track_with_files) }
   subject { build(:cart_item, cart:, product: track) }
 
   describe "associations" do
@@ -16,7 +16,7 @@ RSpec.describe CartItem, type: :model do
 
   describe "validations" do
     it "allows valid product_type" do
-      cart_item = build(:cart_item, product: build(:track))
+      cart_item = build(:cart_item, product: build(:track_with_files))
       expect(cart_item).to be_valid
     end
 
@@ -37,7 +37,7 @@ RSpec.describe CartItem, type: :model do
 
   describe "#available?" do
     it "should be true if license and product are both defined" do
-      cart_item = create(:cart_item)
+      cart_item = create(:cart_item, product: create(:track_with_files))
 
       expect(cart_item.available?).to be(true)
     end
@@ -49,7 +49,7 @@ RSpec.describe CartItem, type: :model do
     end
 
     it "should be false if license is discarded" do
-      track = create(:track)
+      track = create(:track_with_files)
       license = create(:license)
       cart_item = create(:cart_item, product: track, license:)
 
@@ -72,7 +72,7 @@ RSpec.describe CartItem, type: :model do
     let(:cart) { create(:cart) }
 
     it "should return true if nothing makes the item unavailable" do
-      item = create(:cart_item, cart:)
+      item = create(:cart_item, cart:, product: create(:track_with_files))
 
       expect(item.available?).to be(true)
     end
@@ -86,7 +86,7 @@ RSpec.describe CartItem, type: :model do
     end
 
     it "should return false if track is unavailable" do
-      track = create(:track, is_public: false)
+      track = create(:track_with_files, is_public: false)
       item = create(:cart_item, cart:, product: track)
 
       expect(item.available?).to be(false)

@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="track-upload"
 export default class extends Controller {
-  static targets = ["uploaded", "audio", "file", "fileName", "fileSize", "fileInfoSeperator"];
+  static targets = ["uploaded", "audio", "file", "fileName", "fileSize", "fileInfoSeperator", "removeField"];
   static values = {
     acceptedFileTypes: Array,
   }
@@ -37,6 +37,10 @@ export default class extends Controller {
 
     if (window.confirm("Remove file?")) {
       this.fileTarget.value = "";
+      if (this.hasRemoveFieldTarget) {
+        this.removeFieldTarget.value = "1";
+      }
+
       this.uploadedTarget.classList.remove("text-accent");
       this.uploadedTarget.classList.add("text-secondary-txt");
       this.fileNameTarget.innerHTML = "";
