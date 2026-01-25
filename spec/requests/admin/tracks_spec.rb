@@ -128,7 +128,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
     end
   end
 
-  describe "PATCH /update" do
+  describe "PUT /update" do
     context "with valid parameters" do
       let(:new_attributes) {
         {
@@ -137,16 +137,62 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       }
 
       it "updates the requested track" do
-        track = Track.create! valid_attributes
-        patch admin_track_url(track), params: { track: new_attributes }
+        track = Track.create(:track_with_files)
+        put admin_track_url(track), params: { track: new_attributes }
         track.reload
         expect(track.title).to eq("New Title")
       end
 
       it "redirects to the track" do
         track = Track.create! valid_attributes
-        patch admin_track_url(track), params: { track: new_attributes }
+        put admin_track_url(track), params: { track: new_attributes }
         track.reload
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "does not purge any files if all remove params are 0" do
+        purge_params = {
+          remove_tagged_mp3: "0",
+          remove_untagged_mp3: "0",
+          remove_untagged_wav: "0",
+          remove_track_stems: "0",
+          remove_project: "0"
+        }
+        track = create(:track_with_files)
+        license = create(:non_exclusive_license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: purge_params }
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "fails the update if deleted deliverables are makes track unmatch license" do
+        purge_params = { remove_tagged_mp3: "1" }
+        track = create(:track_with_files)
+        license = create(:license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: purge_params }
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "updates if deleted files still match with license" do
+        purge_params = { remove_untagged_mp3: "1" }
+        track = create(:track_with_files)
+        license = create(:license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: purge_params }
+        expect(response).to redirect_to(admin_tracks_url)
+      end
+
+      it "updates if there are deleted files but there are no selected licenses after" do
+        track_params = { remove_tagged_mp3: "1", license_ids: [] }
+        track = create(:track_with_files)
+        license = create(:license)
+        track.licenses << license
+
+        put admin_track_url(track), params: { track: track_params }
         expect(response).to redirect_to(admin_tracks_url)
       end
     end

@@ -85,7 +85,7 @@ module Admin
         sandbox.send(key).attach(attachment.blob) if attachment.attached?
       end
 
-      updated_license_ids = sanitize_track_params[:license_ids].reject(&:blank?)
+      updated_license_ids = sanitize_track_params[:license_ids]&.reject(&:blank?) || []
       sandbox.licenses = License.where(id: updated_license_ids)
       purge_files(sandbox, purge_params)
 
