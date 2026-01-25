@@ -15,6 +15,7 @@ class Track < ApplicationRecord
   SLUG_SEPERATOR = "-"
   SLUG_SUFFIX_LENGTH = 6
   FILE_DELIVERY_RULES = {
+    preview: ->(track) { track.tagged_mp3.attached? },
     mp3: ->(track) { track.tagged_mp3.attached? && track.untagged_mp3.attached? },
     wav: ->(track) { track.untagged_wav.attached? },
     stems: ->(track) { track.track_stems.attached? }
@@ -162,6 +163,7 @@ class Track < ApplicationRecord
     required_deliverables = licenses.each_with_object(Set.new) do |license, required|
       contract = license.contract
 
+      required << :preview if license.contract_type == License.contract_types[:free]
       required << :mp3 if contract[:delivers_mp3]
       required << :wav if contract[:delivers_wav]
       required << :stems if contract[:delivers_stems]
