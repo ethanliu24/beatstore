@@ -364,18 +364,25 @@ RSpec.describe Track, type: :model do
 
   describe "#available?" do
     it "should indicate that the track is available" do
-      track = create(:track)
+      track = create(:track_with_files)
 
       expect(track.available?).to be(true)
     end
 
     it "should be unavailable if it's private" do
-      track = create(:track, is_public: false)
+      track = create(:track_with_files, is_public: false)
 
       expect(track.available?).to be(false)
     end
 
     it "should be unavailable if it's discarded" do
+      track = create(:track_with_files)
+      track.discard!
+
+      expect(track.available?).to be(false)
+    end
+
+    it "should be unavailable if preview's not attached" do
       track = create(:track)
       track.discard!
 

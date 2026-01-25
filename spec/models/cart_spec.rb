@@ -42,7 +42,7 @@ RSpec.describe Cart, type: :model do
       cart = create(:cart)
       license1 = create(:license, price_cents: 1000)
       license2 = create(:license, title: "L2", price_cents: 1234)
-      track = create(:track)
+      track = create(:track_with_files)
       create(:cart_item, cart:, product: track, license: license1)
       create(:cart_item, cart:, product: track, license: license2)
 
@@ -53,7 +53,7 @@ RSpec.describe Cart, type: :model do
       cart = create(:cart)
       license1 = create(:license, price_cents: 0001)
       license2 = create(:license, title: "L2", price_cents: 0002)
-      track = create(:track)
+      track = create(:track_with_files)
       create(:cart_item, cart:, product: track, license: license1)
       create(:cart_item, cart:, product: track, license: license2)
 
@@ -64,8 +64,8 @@ RSpec.describe Cart, type: :model do
   describe "#available_items" do
     it "should return the available items and " do
       cart = create(:cart)
-      t1 = create(:track, is_public: false)
-      t2 = create(:track)
+      t1 = create(:track_with_files, is_public: false)
+      t2 = create(:track_with_files)
       license = create(:license)
 
       item1 = create(:cart_item, cart:, product: t2, license:)
@@ -80,8 +80,8 @@ RSpec.describe Cart, type: :model do
   describe "#unavailable_items_count" do
     it "should return the correct available items count" do
       cart = create(:cart)
-      t1 = create(:track, is_public: false)
-      t2 = create(:track)
+      t1 = create(:track_with_files, is_public: false)
+      t2 = create(:track_with_files)
       license = create(:license)
 
       create(:cart_item, cart:, product: t2, license:)

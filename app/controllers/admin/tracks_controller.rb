@@ -107,8 +107,12 @@ module Admin
       purge_files(sandbox, purge_params)
 
       # Step 4)
-      updated_license_ids = sanitize_track_params[:license_ids]&.reject(&:blank?) || []
-      sandbox.licenses = License.where(id: updated_license_ids)
+      if sanitize_track_params[:license_ids].present?
+        updated_license_ids = sanitize_track_params[:license_ids].reject(&:blank?)
+        sandbox.licenses = License.where(id: updated_license_ids)
+      else
+        sandbox.licenses = @track.licenses.to_a
+      end
 
       if sandbox.valid?
         true

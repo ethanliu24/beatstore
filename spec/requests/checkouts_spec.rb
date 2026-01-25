@@ -12,7 +12,7 @@ RSpec.describe CheckoutsController, type: :request do
   describe "#create" do
     let(:user) { create(:user) }
     let(:cart) { create(:cart, user:) }
-    let(:product) { create(:track) }
+    let(:product) { create(:track_with_files) }
     let(:l1) { create(:license, title: "L1") }
     let(:l2) { create(:license, title: "L2") }
     let!(:cart_item1) { create(:cart_item, cart:, product:, license: l1) }
@@ -51,14 +51,14 @@ RSpec.describe CheckoutsController, type: :request do
       expect(order_items.first.currency).to eq("USD")
       expect(order_items.first.unit_price_cents).to eq(1000)
       expect(order_items.first.product_type).to eq(Track.name)
-      expect(order_items.first.product_snapshot["title"]).to eq("Track 1")
+      expect(order_items.first.product_snapshot["title"]).to eq("Track with files")
       expect(order_items.first.license_snapshot["title"]).to eq("L1")
 
       expect(order_items.last.quantity).to eq(1)
       expect(order_items.last.currency).to eq("USD")
       expect(order_items.last.unit_price_cents).to eq(1000)
       expect(order_items.last.product_type).to eq(Track.name)
-      expect(order_items.last.product_snapshot["title"]).to eq("Track 1")
+      expect(order_items.last.product_snapshot["title"]).to eq("Track with files")
       expect(order_items.last.license_snapshot["title"]).to eq("L2")
     end
 
@@ -70,7 +70,7 @@ RSpec.describe CheckoutsController, type: :request do
         expect(item[:quantity]).to eq(1)
         expect(item[:price_data][:unit_amount]).to eq(1000)
         expect(item[:price_data][:currency]).to eq("USD")
-        expect(item[:price_data][:product_data][:name]).to eq("Track 1")
+        expect(item[:price_data][:product_data][:name]).to eq("Track with files")
         expect(item[:price_data][:product_data][:description]).to eq("L1")
       end
     end

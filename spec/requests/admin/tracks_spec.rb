@@ -180,7 +180,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
       }
 
       it "updates the requested track" do
-        track = Track.create(:track_with_files)
+        track = create(:track_with_files)
         put admin_track_url(track), params: { track: new_attributes }
         track.reload
         expect(track.title).to eq("New Title")
