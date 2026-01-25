@@ -37,6 +37,7 @@
     </label>
     <%= form.file_field field, direct_upload: true, id: generate_id(file_for), class: "hidden",
       data: { action: "change->track-upload#upload", track_upload_target: "file" } %>
+    <%= form.hidden_field remove_field_param, value: "0", data: { track_upload_target: "removeField" } %>
   </div>
 
   <div class="full-error-color-scheme rounded-full p-2 cursor-pointer" data-action="click->track-upload#remove">

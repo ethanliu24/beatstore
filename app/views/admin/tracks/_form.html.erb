@@ -64,15 +64,15 @@
 
     <section class="flex flex-col justify-between items-stretch w-full gap-4">
       <%= render "track_upload", form: form, attachment: @track.tagged_mp3, field: :tagged_mp3, file_for: t("label.tagged_mp3"), playable: true,
-        accepted_file_types: ["audio/mpeg"] %>
+        accepted_file_types: ["audio/mpeg"], remove_field_param: :remove_tagged_mp3 %>
       <%= render "track_upload", form: form, attachment: @track.untagged_mp3, field: :untagged_mp3, file_for: t("label.untagged_mp3"), playable: true,
-        accepted_file_types: ["audio/mpeg"] %>
+        accepted_file_types: ["audio/mpeg"], remove_field_param: :remove_untagged_mp3 %>
       <%= render "track_upload", form: form, attachment: @track.untagged_wav, field: :untagged_wav, file_for: t("label.untagged_wav"), playable: true,
-        accepted_file_types: ["audio/x-wav", "audio/wav", "audio/vnd.wave"] %>
+        accepted_file_types: ["audio/x-wav", "audio/wav", "audio/vnd.wave"], remove_field_param: :remove_untagged_wav %>
       <%= render "track_upload", form: form, attachment: @track.track_stems, field: :track_stems, file_for: t("label.track_stems"), playable: false,
-        accepted_file_types: ["application/zip"] %>
+        accepted_file_types: ["application/zip"], remove_field_param: :remove_track_stems %>
       <%= render "track_upload", form: form, attachment: @track.project, field: :project, file_for: t("label.project"), playable: false,
-        accepted_file_types: ["application/zip"] %>
+        accepted_file_types: ["application/zip"], remove_field_param: :remove_project %>
     </section>
 
     <section class="flex flex-col justify-center items-stretch w-full gap-2">
