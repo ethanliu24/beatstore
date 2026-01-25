@@ -38,12 +38,16 @@ module Admin
     def update
       begin
         if @track.update(sanitize_track_params)
+          purge_files(purge_params)
           redirect_to admin_tracks_path, notice: t("admin.track.update.success")
         else
           render :new, status: :unprocessable_content
         end
       rescue ArgumentError => _e
         @track.errors.add(:role, "is invalid")
+        render :new, status: :unprocessable_content
+      rescue ActiveRecord::RecordInvalid
+        @track.errors.add(:base, "is invalid")
         render :new, status: :unprocessable_content
       end
     end
@@ -70,6 +74,14 @@ module Admin
         end
     end
 
+    def purge_files(purge_options)
+      @track.tagged_mp3.purge if purge_options[:remove_tagged_mp3] == "1"
+      @track.untagged_mp3.purge if purge_options[:remove_untagged_mp3] == "1"
+      @track.untagged_wav.purge if purge_options[:remove_untagged_wav] == "1"
+      @track.track_stems.purge if purge_options[:remove_track_stems] == "1"
+      @track.project.purge if purge_options[:remove_project] == "1"
+    end
+
     def sanitize_track_params
       params.require(:track).permit(
         :title,
@@ -88,6 +100,16 @@ module Admin
         collaborators_attributes: [ :id, :name, :role, :profit_share, :publishing_share, :notes, :_destroy ],
         samples_attributes: [ :id, :name, :artist, :link, :_destroy ],
         license_ids: []
+      )
+    end
+
+    def purge_params
+      params.require(:track).permit(
+        :remove_tagged_mp3,
+        :remove_untagged_mp3,
+        :remove_untagged_wav,
+        :remove_track_stems,
+        :remove_project,
       )
     end
   end
