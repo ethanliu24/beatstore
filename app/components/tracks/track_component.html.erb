@@ -43,13 +43,10 @@
       <span class="max-sm:hidden"><%= t("label.free").downcase %></span>
     <% end %>
 
-    <%# TODO %>
     <%= link_to track_purchase_modal_path(@track), data: { turbo_stream: true, prevent_play: true },
-      class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-1 sm:min-w-18" do %>
+      class: "button text-xs px-1 py-1.5 flex justify-center items-center gap-0.5 sm:min-w-18" do %>
       <%= icon "shopping-bag", class: "w-4 h-4" %>
-      <% unless track.profitable_licenses.count == 0 %>
-        <span class="max-sm:hidden"><%= track.cheapest_price %></span>
-      <% end %>
+      <span class="max-sm:hidden"><%= track.cheapest_price %></span>
     <% end %>
 
     <%# Track more dropdown %>

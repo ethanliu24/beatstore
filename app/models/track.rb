@@ -12,8 +12,9 @@ class Track < ApplicationRecord
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
   MAX_DESCRIPTION_LENGTH = 200
   GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
-  SLUG_SEPERATOR = "-"
+  SLUG_SEPERATOR = "-".freeze
   SLUG_SUFFIX_LENGTH = 6
+  NO_PRICE_FORMAT = "N/A".freeze
   FILE_DELIVERY_RULES = {
     preview: ->(track) { track.preview.attached? },
     mp3: ->(track) { track.preview.attached? && track.untagged_mp3.attached? },
@@ -138,7 +139,7 @@ class Track < ApplicationRecord
   end
 
   def cheapest_price
-    profitable_licenses.first&.price&.format.presence
+    profitable_licenses.first&.price&.format.presence || NO_PRICE_FORMAT
   end
 
   def available?
