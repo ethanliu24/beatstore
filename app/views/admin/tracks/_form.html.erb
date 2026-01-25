@@ -47,7 +47,7 @@
       <div class="flex flex-col justify-start gap-4 flex-1 ml-8">
         <div class="field content-input-container">
           <%= form.label :title %>
-          <%= form.text_field :title, autofocus: false, class: "content-input" %>
+          <%= form.text_field :title, autofocus: false, autocomplete: false, class: "content-input" %>
         </div>
         <div class="field content-input-container flex-1" data-controller="char-count">
           <div class="flex justify-between items-center w-full">
