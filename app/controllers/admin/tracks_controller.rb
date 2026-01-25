@@ -1,6 +1,7 @@
 module Admin
   class TracksController < Admin::BaseController
     before_action :set_track, except: [ :index, :new, :create ]
+    before_action :load_licenses, only: [ :new, :edit, :create, :update ]
 
     def index
       base_scope = Track.kept.order(created_at: :desc)
@@ -15,13 +16,9 @@ module Admin
 
     def new
       @track = Track.new
-      @licenses = License.kept.order(Arel.sql("default_for_new DESC, created_at DESC"))
     end
 
-    def edit
-      # Fine for now as there won't be a lot of licenses, if want to be optimize use raw sql
-      @licenses = (@track.undiscarded_licenses + License.kept.all).uniq
-    end
+    def edit; end
 
     def create
       @track = Track.new(sanitize_track_params)
@@ -61,6 +58,16 @@ module Admin
 
     def set_track
       @track = Track.kept.find(params[:id])
+    end
+
+    def load_licenses
+      @licenses =
+        if @track&.persisted?
+          # Fine for now as there won't be a lot of licenses, if want to be optimize use raw sql
+          (@track.undiscarded_licenses + License.kept).uniq
+        else
+          License.kept.order(Arel.sql("default_for_new DESC, created_at DESC"))
+        end
     end
 
     def sanitize_track_params
