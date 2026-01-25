@@ -164,7 +164,7 @@ class Track < ApplicationRecord
       contract = license.contract
 
       required << :preview if license.contract_type == License.contract_types[:free]
-      required << :mp3 if contract[:delivers_mp3]
+      required << :mp3 if contract[:delivers_mp3] && license.contract_type != License.contract_types[:free]
       required << :wav if contract[:delivers_wav]
       required << :stems if contract[:delivers_stems]
     end
