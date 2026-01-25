@@ -15,8 +15,8 @@ class Track < ApplicationRecord
   SLUG_SEPERATOR = "-"
   SLUG_SUFFIX_LENGTH = 6
   FILE_DELIVERY_RULES = {
-    preview: ->(track) { track.tagged_mp3.attached? },
-    mp3: ->(track) { track.tagged_mp3.attached? && track.untagged_mp3.attached? },
+    preview: ->(track) { track.preview.attached? },
+    mp3: ->(track) { track.preview.attached? && track.untagged_mp3.attached? },
     wav: ->(track) { track.untagged_wav.attached? },
     stems: ->(track) { track.track_stems.attached? }
   }.freeze
@@ -106,6 +106,10 @@ class Track < ApplicationRecord
     "#{slug}#{SLUG_SEPERATOR}#{id}"
   end
 
+  def preview
+    tagged_mp3
+  end
+
   def is_public?
     is_public
   end
@@ -138,7 +142,7 @@ class Track < ApplicationRecord
   end
 
   def available?
-    is_public && kept?
+    is_public && kept? && preview.attached?
   end
 
   def undiscarded_comments

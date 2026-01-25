@@ -3,13 +3,13 @@ class DownloadsController < ApplicationController
     @free_download = FreeDownload.find(params[:id])
     @track = @free_download.track
 
-    unless file_exists?(@track.tagged_mp3)
+    unless file_exists?(@track.preview)
       head :not_found
       return
     end
 
-    send_data @track.tagged_mp3.download,
-      filename: set_file_name(@track.tagged_mp3),
+    send_data @track.preview.download,
+      filename: set_file_name(@track.preview),
       type: "audio/mpeg",
       disposition: "attachment"
   end
@@ -23,7 +23,7 @@ class DownloadsController < ApplicationController
       **params.require(:free_download).permit(:email, :customer_name),
     )
 
-    if file_exists?(@track.tagged_mp3)
+    if file_exists?(@track.preview)
       if free_download.save
         FreeDownloadMailer.with(free_download:).download.deliver_later
         render json: { download_url: get_free_download_path(free_download) }
