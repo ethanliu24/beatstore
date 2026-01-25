@@ -358,7 +358,7 @@ RSpec.describe Track, type: :model do
     end
 
     it "should return no price indicator if there are no available licenses" do
-      expect(track.cheapest_price).to eq(Track.NO_PRICE_FORMAT)
+      expect(track.cheapest_price).to eq(Track::NO_PRICE_FORMAT)
     end
   end
 
