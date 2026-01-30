@@ -1,5 +1,15 @@
 <div>
-  <div class="w-screen h-screen">
-    <%= image_tag hero_banner_path, class: "w-full h-full object-cover object-center" %>
+  <%# Image %>
+  <div class="w-screen h-screen absolute inset-0 bg-cover bg-fixed bg-center bg-no-repeat filter grayscale"
+    style="background-image:url('<%= asset_path(hero_banner) %>');"></div>
+
+  <%# Darken overlay %>
+  <div class="absolute inset-0 bg-black/25"></div>
+
+  <%# Gradient overlay %>
+  <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+
+  <%# Content %>
+  <div class="relative z-10">
   </div>
 </div>

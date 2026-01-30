@@ -11,7 +11,7 @@ module PageHelper
     end
   end
 
-  def hero_banner_path
+  def hero_banner
     "stars.avif"
   end
 end
