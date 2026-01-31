@@ -66,16 +66,11 @@
 
         <%= render Ui::DropdownComponent.new(
           id: "volume-slider",
+          position: "top",
+          trigger_action: "hover",
           classes: "z-10 hidden p-2 w-32 bg-secondary-bg border-1 border-background rounded"
         ) do |dropdown| %>
-          <%= dropdown.with_trigger_button(
-            id: "volume-slider",
-            classes: "w-fit h-fit max-sm:hidden",
-            data: {
-              dropdown_trigger: "hover",
-              dropdown_placement: "top"
-            }
-          ) do %>
+          <%= dropdown.with_trigger_button(id: "volume-slider", classes: "w-fit h-fit max-sm:hidden") do %>
             <%= icon "volume", class: "w-4 h-4", data: { audio_player_target: "volumeOnBtn" } %>
             <%= icon "volume-off", class: "w-4 h-4 hidden", data: { audio_player_target: "volumeOffBtn" } %>
           <% end %>
@@ -101,13 +96,8 @@
           data: { audio_player_target: "queueBtn", action: "click->audio-player#toggleQueue" } %>
 
         <%# More dropdown %>
-        <%= render Ui::DropdownComponent.new(
-          id: "audio-player-more",
-        ) do |dropdown| %>
-          <%= dropdown.with_trigger_button(
-            id: "audio-player-more",
-            data: { dropdown_placement: "top" },
-          ) do %>
+        <%= render Ui::DropdownComponent.new(id: "audio-player-more", position: "top") do |dropdown| %>
+          <%= dropdown.with_trigger_button(id: "audio-player-more") do %>
             <%= icon "dots", class: "w-4 h-4 cursor-pointer" %>
           <% end %>
 

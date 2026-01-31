@@ -21,12 +21,12 @@
     <li class="nav-responsive">
       <%= render Ui::DropdownComponent.new(
         id: "nav-cart-dropdown",
+        position: "bottom-end",
         classes: "absolute top-full rounded-lg shadow-sm hidden w-auto select-none text-primary-txt bg-background divide-y"
       ) do |dropdown| %>
         <%= dropdown.with_trigger_button(
           id: "nav-cart-dropdown",
-          classes: "nav-dropdown",
-          data: { dropdown_placement: "bottom-end" }
+          classes: "nav-dropdown"
         ) do %>
           <%= icon "shopping-bag", id: "nav_cart_icon", class: "nav-cart-icon" %>
           <p id="nav_cart_total_price"><%= cart_items_total_price(current_or_guest_user.cart) %></p>
@@ -45,12 +45,12 @@
         <%# User dropdown %>
         <%= render Ui::DropdownComponent.new(
           id: "navbar-user-dropdown",
+          position: "bottom-end",
           classes: "w-44 whitespace-nowrap"
         ) do |dropdown| %>
           <%= dropdown.with_trigger_button(
             id: "navbar-user-dropdown",
-            classes: "nav-dropdown",
-            data: { dropdown_placement: "bottom-end" }
+            classes: "nav-dropdown"
           ) do %>
             <%= render AvatarComponent.new(user: current_user, size: 6) %>
             <%= icon "chevron-down", class: "w-3 h-3 min-w-3 min-h-3 aspect-square text-secondary-txt" %>
@@ -132,12 +132,12 @@
       <%# Menu dropdown %>
       <%= render Ui::DropdownComponent.new(
         id: "navbar-menu-dropdown",
+        position: "bottom-end",
         classes: "sm:hidden w-36"
       ) do |dropdown| %>
         <%= dropdown.with_trigger_button(
           id: "navbar-menu-dropdown",
-          classes: "cursor-pointer hover:bg-hover rounded-full p-1",
-          data: { dropdown_placement: "bottom-end" }
+          classes: "cursor-pointer hover:bg-hover rounded-full p-1"
         ) do %>
           <%= icon "menu-deep", class: "w-5 h-5 aspect-square" %>
         <% end %>

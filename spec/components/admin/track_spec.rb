@@ -20,7 +20,7 @@ RSpec.describe Admin::TrackComponent, type: :component do
   it "renders a dropdown" do
     expect(rendered).to have_css("#admin_track_more_track_#{track.id}-dropdown-toggle")
     expect(rendered).to have_css("#admin_track_more_track_#{track.id}")
-    expect(rendered).to have_css("button[data-dropdown-toggle='admin_track_more_track_#{track.id}']", count: 1)
+    expect(rendered).to have_css("[data-controller='dropdown-manager']", count: 1)
     expect(rendered).to have_css("div.dropdown", count: 1)
     expect(rendered).to have_css("li.dropdown-item", count: 4)
   end

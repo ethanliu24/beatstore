@@ -115,12 +115,12 @@
 
       <%= render Ui::DropdownComponent.new(
         id: filter_dropdown_id(data[:label]),
+        position: "bottom",
         classes: data[:classes],
       ) do |dropdown| %>
         <% dropdown.with_trigger_button(
           id: filter_dropdown_id(data[:label]),
-          classes: "flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none",
-          data: { dropdown_placement: "bottom" },
+          classes: "flex justify-center items-center gap-1 bg-none cursor-pointer focus:ring-0 focus:border-none"
         ) do %>
           <%= data[:title] %>
           <%= icon "chevron-down", class: "w-3 aspect-square" %>

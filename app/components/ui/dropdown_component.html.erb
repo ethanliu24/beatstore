@@ -1,7 +1,11 @@
-<%= trigger_button %>
+<div data-controller="dropdown-manager" class="relative inline-block"
+  data-dropdown-manager-position-value=<%= position %>
+  data-dropdown-manager-trigger-action-value=<%= trigger_action %>>
+  <%= trigger_button %>
 
-<%= content_tag :div, id:, data:, class: "dropdown hidden transparent-scrollbar-background #{classes}" do %>
-  <% sections.each do |section| %>
-    <%= section %>
+  <%= content_tag :div, id:, data:, class: "dropdown hidden absolute transparent-scrollbar-background #{classes}" do %>
+    <% sections.each do |section| %>
+      <%= section %>
+    <% end %>
   <% end %>
-<% end %>
+</div>

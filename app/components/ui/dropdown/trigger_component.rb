@@ -3,13 +3,12 @@
 module Ui
   module Dropdown
     class TriggerComponent < ApplicationComponent
+      # Possible trigger actions: click, hover
       def initialize(id:, classes: "", data: {}, type: "button")
         @id = "#{id}-dropdown-toggle"
         @classes = classes
         @type = type
-        @data = { dropdown_placement: "bottom-end" }
-          .merge(data)
-          .merge({ dropdown_toggle: id })
+        @data = data.merge({ dropdown_manager_target: "trigger" })
       end
 
       private

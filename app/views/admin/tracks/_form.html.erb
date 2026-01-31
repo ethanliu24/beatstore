@@ -106,10 +106,8 @@
     </section>
 
     <section class="w-full flex flex-col justify-center items-start gap-4">
-      <%= render Ui::DropdownComponent.new(id: "add-collaboration") do |dropdown| %>
-        <% dropdown.with_trigger_button(
-          id: "add-collaboration", classes: "cursor-pointer", data: { dropdown_placement: "right" }
-        ) do %>
+      <%= render Ui::DropdownComponent.new(id: "add-collaboration", position: "right") do |dropdown| %>
+        <% dropdown.with_trigger_button(id: "add-collaboration", classes: "cursor-pointer") do %>
           <div class="full-accent-color-scheme rounded-full py-1 px-2 flex justify-center items-center gap-1 text-xs">
             <%= icon "plus", class: "w-4 h-4 aspect-square" %>
             <p><%= t("admin.track.add_new_collaboration") %></p>
