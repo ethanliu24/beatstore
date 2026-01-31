@@ -10,7 +10,6 @@
     <li class="nav-responsive">
       <a href="<%= tracks_path %>"><%= t("label.tracks") %></a>
     </li>
-    <%# TODO add path to these patges when available %>
     <li class="nav-responsive">
       <a href="<%= contact_path %>"><%= t("label.contact") %></a>
     </li>
@@ -19,12 +18,6 @@
         <a href="<%= admin_path %>"><%= icon "lock", class: "w-4 h-4" %></a>
       </li>
     <% end %>
-    <li data-controller="dark-mode">
-      <span
-        data-dark-mode-target="icon" data-action="click->dark-mode#toggle"
-        class="w-full h-full rounded-full cursor-pointer">
-      </span>
-    </li>
     <li class="nav-responsive">
       <%= render Ui::DropdownComponent.new(
         id: "nav-cart-dropdown",
