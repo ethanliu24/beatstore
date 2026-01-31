@@ -19,16 +19,32 @@ export default class extends Controller {
 
     switch (this.triggerActionValue) {
       case "hover":
-        this.triggerTarget.addEventListener("mouseenter", this.boundOpen);
-        this.triggerTarget.addEventListener("mouseleave", this.boundClose);
-        this.menuTarget.addEventListener("mouseenter", this.boundOpen);
-        this.menuTarget.addEventListener("mouseleave", this.boundClose);
+        [this.triggerTarget, this.menuTarget].forEach((el) => {
+          el.addEventListener("mouseenter", this.boundOpen);
+          el.addEventListener("mouseleave", this.boundClose);
+        });
         break;
       case "click":
       default:
         this.triggerTarget.addEventListener("click", this.boundToggle);
         break;
     }
+  }
+
+  disconnect() {
+    switch (this.triggerActionValue) {
+      case "hover":
+        [this.triggerTarget, this.menuTarget].forEach((el) => {
+          el.removeEventListener("mouseenter", this.boundOpen);
+          el.removeEventListener("mouseleave", this.boundClose);
+        });
+        break;
+      case "click":
+      default:
+        this.triggerTarget.removeEventListener("click", this.boundToggle);
+    }
+
+    document.removeEventListener("click", this.boundClickOutside);
   }
 
   toggle() {
