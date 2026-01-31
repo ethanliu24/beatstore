@@ -16,16 +16,19 @@ class DownloadsController < ApplicationController
 
   def create_free_download
     @track = Track.kept.find(params[:id])
+    free_download_params = params.require(:free_download).permit(:email, :customer_name)
 
     free_download = FreeDownload.new(
       user: current_user,
       track: @track,
-      **params.require(:free_download).permit(:email, :customer_name),
+      **free_download_params,
     )
 
     if file_exists?(@track.preview)
       if free_download.save
         FreeDownloadMailer.with(free_download:).download.deliver_later
+        session[:free_download_info] ||= free_download_params
+
         render json: { download_url: get_free_download_path(free_download) }
       else
         head :unprocessable_content
