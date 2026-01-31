@@ -7,11 +7,10 @@
     data: { track_upload_target: "uploaded" } %>
 
   <% if playable %>
-    <%= render Ui::DropdownComponent.new(id: "track-#{field}-player") do |dropdown| %>
+    <%= render Ui::DropdownComponent.new(id: "track-#{field}-player", position: "right") do |dropdown| %>
       <%= dropdown.with_trigger_button(
         id: "track-#{field}-player",
-        classes: "full-accent-color-scheme rounded-full p-2 cursor-pointer",
-        data: { dropdown_trigger: "hover", dropdown_placement: "right" },
+        classes: "full-accent-color-scheme rounded-full p-2 cursor-pointer"
       ) do %>
         <%= icon "player-play", variant: "filled", class: "w-4 h-4" %>
       <% end %>

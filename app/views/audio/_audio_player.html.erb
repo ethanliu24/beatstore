@@ -101,13 +101,8 @@
           data: { audio_player_target: "queueBtn", action: "click->audio-player#toggleQueue" } %>
 
         <%# More dropdown %>
-        <%= render Ui::DropdownComponent.new(
-          id: "audio-player-more",
-        ) do |dropdown| %>
-          <%= dropdown.with_trigger_button(
-            id: "audio-player-more",
-            data: { dropdown_placement: "top" },
-          ) do %>
+        <%= render Ui::DropdownComponent.new(id: "audio-player-more", position: "top") do |dropdown| %>
+          <%= dropdown.with_trigger_button(id: "audio-player-more") do %>
             <%= icon "dots", class: "w-4 h-4 cursor-pointer" %>
           <% end %>
 
