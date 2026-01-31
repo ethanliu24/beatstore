@@ -2,13 +2,29 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="dropdown-manager"
 export default class extends Controller {
-  static targets = ["menu", "trigger"];
-  static values = { position: String };
+  static targets = [ "menu", "trigger" ];
+  static values = { position: String, triggerAction: String };
 
   connect() {
-    this.boundClose = this.close.bind(this);
     this.xOffset = 12;
     this.yOffset = 12;
+
+    this.boundToggle = this.toggle.bind(this);
+    this.boundOpen = this.open.bind(this);
+    this.boundClose = this.close.bind(this);
+
+    switch (this.triggerActionValue) {
+      case "hover":
+        this.triggerTarget.addEventListener("mouseenter", this.boundOpen);
+        this.triggerTarget.addEventListener("mouseleave", this.boundClose);
+        this.menuTarget.addEventListener("mouseenter", this.boundOpen);
+        this.menuTarget.addEventListener("mouseleave", this.boundClose);
+        break;
+      case "click":
+      default:
+        this.triggerTarget.addEventListener("click", this.boundToggle);
+        break;
+    }
   }
 
   toggle() {
@@ -18,8 +34,6 @@ export default class extends Controller {
   open() {
     this.menuTarget.classList.remove("hidden");
     this.position();
-    document.addEventListener("click", this.boundClose);
-    document.addEventListener("keydown", this.boundClose);
   }
 
   close(event) {

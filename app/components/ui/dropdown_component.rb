@@ -10,15 +10,16 @@ module Ui
     #   - top-start, top-end, top
     #   - left-start, left-end, left
     #   - right-start, right-end, right
-    def initialize(id:, position: "bottom-end", classes: "", data: {})
+    def initialize(id:, position: "bottom-end", trigger_action: "click", classes: "", data: {})
       @id = id
       @position = position
+      @trigger_action = trigger_action
       @classes = classes
       @data = data.merge({ dropdown_manager_target: "menu" })
     end
 
     private
 
-    attr_reader :id, :position, :classes, :data
+    attr_reader :id, :trigger_action, :position, :classes, :data
   end
 end
