@@ -104,6 +104,34 @@ RSpec.describe DownloadsController, type: :request do
         expect(response).to have_http_status(:ok)
         expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Download - #{track.title}")
       end
+
+      it "should store the free download data in session" do
+        expect {
+          post create_free_download_path(track, params:)
+        }.to change(FreeDownload, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+        expect(session[:free_download_info][:email]).to eq(user.email)
+        expect(session[:free_download_info][:customer_name]).to eq("ABC")
+      end
+
+      it "should override the free download data in session with latest data" do
+        expect {
+          post create_free_download_path(track, params:)
+        }.to change(FreeDownload, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+        expect(session[:free_download_info][:email]).to eq(user.email)
+        expect(session[:free_download_info][:customer_name]).to eq("ABC")
+
+        expect {
+          post create_free_download_path(track, params: { free_download: { email: "a@a", customer_name: "a" } })
+        }.to change(FreeDownload, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+        expect(session[:free_download_info][:email]).to eq("a@a")
+        expect(session[:free_download_info][:customer_name]).to eq("a")
+      end
     end
 
     describe "doesn't create download record when files are not attached" do
