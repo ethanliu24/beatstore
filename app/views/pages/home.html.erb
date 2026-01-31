@@ -18,19 +18,28 @@
         <% end %>
         <%= content_tag :h2, t("pages.home.hero.subtitle"), class: "font-thin text-center text-lg max-sm:text-sm px-2" %>
 
-        <%= form_with url: tracks_path, method: :get, local: true, class: "mt-4" do |f| %>
-          <span class="relative flex-1 w-full">
-            <%= icon "search", class: "absolute w-4 aspect-square top-1/2 left-0 -translate-y-1/2 ml-3 text-black pt-[5px]" %>
-            <%= f.text_field "q[#{:title_or_description_or_tags_name_i_cont}]", autocomplete: "off", autofocus: false, placeholder: t("pages.home.hero.search.placeholder"),
-              class: "px-9 py-3 text-xs rounded-full bg-white text-black overflow-hidden whitespace-nowrap
-                min-w-40 w-[45vw] max-md:w-[60vw] max-sm:w-[80vw]
-                focus:outline-none focus:ring-1 focus:ring-accent rounded",
-              style: "text-overflow: ellipsis;" %>
-            <button type="submit" class="absolute top-1/2 right-0 -translate-y-1/2 mr-3 mt-[3px] aspect-square cursor-pointer bg-white rounded-full">
-              <%= icon "square-rounded-arrow-right", variant: "filled", class: "w-6 h-6 text-black" %>
-            </button>
-          </span>
-        <% end %>
+        <div class="mt-4 flex justify-between items-stretch gap-6 max-md:flex-col">
+          <%= form_with url: tracks_path, method: :get, local: true do |f| %>
+            <span class="relative flex-1 w-full">
+              <%= icon "search", class: "absolute w-4 aspect-square top-1/2 left-0 -translate-y-1/2 ml-3 text-black pt-[5px]" %>
+              <%= f.text_field "q[#{:title_or_description_or_tags_name_i_cont}]", autocomplete: "off", autofocus: false, placeholder: t("pages.home.hero.search.placeholder"),
+                class: "px-9 py-3 text-xs rounded-full bg-white text-black overflow-hidden whitespace-nowrap
+                  min-w-40 w-[45vw] max-md:w-[60vw] max-sm:w-[80vw]
+                  focus:outline-none focus:ring-1 focus:ring-accent rounded",
+                style: "text-overflow: ellipsis;" %>
+              <button type="submit" class="absolute top-1/2 right-0 -translate-y-1/2 mr-3 mt-[2px] aspect-square cursor-pointer bg-white rounded-full">
+                <%= icon "square-rounded-arrow-right", variant: "filled", class: "w-7 h-7 text-black" %>
+              </button>
+            </span>
+          <% end %>
+
+          <%= link_to tracks_path,
+            class: "mr-auto flex justify-center items-center gap-2 bg-black border-2 border-accent/60 rounded-full
+              cursor-pointer text-white hover:text-accent text-xs max-md:text-[0.6rem] font-bold px-3 py-2 text-nowrap" do %>
+            <%= icon "cloud-search", class: "text-accent max-md:w-4" %>
+            <%= t("pages.home.hero.explore") %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
