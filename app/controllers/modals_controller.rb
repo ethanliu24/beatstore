@@ -90,7 +90,7 @@ class ModalsController < ApplicationController
   def free_download
     track = Track.kept.find(params[:id])
     free_download = FreeDownload.new
-    download_info = session[:free_download_info] || {}
+    download_info = (session[:free_download_info] || {}).deep_symbolize_keys
     render_modal(partial: "modals/free_download", locals: { track:, free_download:, download_info: })
   end
 
