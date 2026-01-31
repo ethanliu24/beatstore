@@ -13,6 +13,10 @@ export default class extends Controller {
     this.boundOpen = this.open.bind(this);
     this.boundClose = this.close.bind(this);
 
+    if (this.triggerActionValue !== "hover" && this.triggerActionValue !== "click") {
+      this.triggerAction = "click";
+    }
+
     switch (this.triggerActionValue) {
       case "hover":
         this.triggerTarget.addEventListener("mouseenter", this.boundOpen);
@@ -34,6 +38,11 @@ export default class extends Controller {
   open() {
     this.menuTarget.classList.remove("hidden");
     this.position();
+
+    if (this.triggerActionValue === "click") {
+      document.addEventListener("click", this.boundClose);
+      document.addEventListener("keydown", this.boundClose);
+    }
   }
 
   close(event) {
@@ -43,8 +52,11 @@ export default class extends Controller {
     if (event?.type === "keydown" && event.key !== "Escape") return;
 
     this.menuTarget.classList.add("hidden");
-    document.removeEventListener("click", this.boundClose);
-    document.removeEventListener("keydown", this.boundClose);
+
+    if (this.triggerActionValue === "click") {
+      document.removeEventListener("click", this.boundClose);
+      document.removeEventListener("keydown", this.boundClose);
+    }
   }
 
   isOpen() {
