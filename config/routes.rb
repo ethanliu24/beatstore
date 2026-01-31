@@ -41,7 +41,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :cart, only: [ :show ]
+  resource :cart, only: [ :show ] do
+    delete :clear
+  end
   resources :cart_items, only: [ :create, :destroy ]
   resources :orders, only: [ :index ]
   resource :checkout, only: [ :create ] do
