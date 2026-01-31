@@ -23,12 +23,12 @@ export default class extends Controller {
       .then(data => {
         if (data.download_url) {
           window.location.href = data.download_url;
+          dispatchTurboSubmitEndEvent();
         }
       })
       .catch(err => {
         console.error("Download error:", err);
+        alert("Download error:", err);
       })
-
-    dispatchTurboSubmitEndEvent()
   }
 }
