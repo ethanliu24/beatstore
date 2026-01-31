@@ -3,9 +3,12 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="dropdown-manager"
 export default class extends Controller {
   static targets = ["menu", "trigger"];
+  static values = { position: String };
 
   connect() {
     this.boundClose = this.close.bind(this);
+    this.xOffset = 16;
+    this.yOffset = 16;
   }
 
   toggle() {
@@ -14,6 +17,7 @@ export default class extends Controller {
 
   open() {
     this.menuTarget.classList.remove("hidden");
+    this.position();
     document.addEventListener("click", this.boundClose);
     document.addEventListener("keydown", this.boundClose);
   }
@@ -38,5 +42,54 @@ export default class extends Controller {
       e.preventDefault();
       this.toggle();
     }
+  }
+
+  position() {
+    const wrapperRect = this.element.getBoundingClientRect(); // need relative pos of wrapper
+    const tRect = this.triggerTarget.getBoundingClientRect();
+    const mRect = this.menuTarget.getBoundingClientRect();
+
+    let top = 0;
+    let left = 0;
+
+    const [primary, align] = this.positionValue.split("-");
+
+    // Primary axis placement
+    switch (primary) {
+      case "right":
+        left = tRect.right - wrapperRect.left;
+        break;
+      case "left":
+        left = tRect.left - wrapperRect.left - mRect.width;
+        break;
+      case "top":
+        top = tRect.top - wrapperRect.top - mRect.height - this.yOffset;
+        break;
+      case "bottom":
+      default:
+        top = tRect.bottom - wrapperRect.top + this.yOffset;
+        break;
+    }
+
+    // Secondary axis alignment
+    switch (primary) {
+      case "left":
+      case "right":
+        if (align === "start") top = tRect.top - wrapperRect.top;
+        else if (align === "end") top = tRect.bottom - wrapperRect.top - mRect.height;
+        else top = tRect.top - wrapperRect.top + (tRect.height / 2) - (mRect.height / 2);
+        break;
+
+      case "bottom":
+      case "top":
+      default:
+        if (align === "start") left = tRect.left - wrapperRect.left;
+        else if (align === "end") left = tRect.right - wrapperRect.left - mRect.width;
+        else left = tRect.left - wrapperRect.left + (tRect.width / 2) - (mRect.width / 2);
+        break;
+    }
+
+    this.menuTarget.style.left = `${left}px`;
+    this.menuTarget.style.top = `${top}px`;
   }
 }

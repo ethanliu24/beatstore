@@ -7,9 +7,11 @@ module Ui
         @id = "#{id}-dropdown-toggle"
         @classes = classes
         @type = type
-        @data = { dropdown_placement: "bottom-end" }
-          .merge(data)
-          .merge({ dropdown_manager_target: "trigger", action: "click->dropdown-manager#toggle" })
+        @data = data
+          .merge({
+            dropdown_manager_target: "trigger",
+            action: "click->dropdown-manager#toggle"
+          })
       end
 
       private
