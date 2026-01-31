@@ -1,15 +1,24 @@
 <div>
-  <%# Image %>
-  <div class="w-screen h-screen absolute inset-0 bg-cover bg-fixed bg-center bg-no-repeat filter grayscale"
-    style="background-image:url('<%= asset_path(hero_banner) %>');"></div>
+  <div class="w-screen h-screen">
+    <%# Image %>
+    <div class="absolute inset-0 bg-cover bg-fixed bg-center bg-no-repeat filter grayscale"
+      style="background-image:url('<%= asset_path(hero_banner) %>');"></div>
 
-  <%# Darken overlay %>
-  <div class="absolute inset-0 bg-black/25"></div>
+    <%# Darken overlay %>
+    <div class="absolute inset-0 bg-black/25"></div>
 
-  <%# Gradient overlay %>
-  <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+    <%# Gradient overlay %>
+    <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
 
-  <%# Content %>
-  <div class="relative z-10">
+    <%# Content %>
+    <div class="relative z-10 w-full h-full flex justify-center items-center">
+      <div class="flex flex-col justify-center items-center">
+        <%= content_tag :h1, class: "font-black text-5xl" do %>
+          <%= t("pages.home.hero.title").html_safe %>
+        <% end %>
+        <%= content_tag :h2, t("pages.home.hero.subtitle"), class: "font-thin text-lg" %>
+        
+      </div>
+    </div>
   </div>
 </div>

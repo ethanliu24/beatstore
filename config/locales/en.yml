@@ -72,6 +72,12 @@ en:
     just_now: "Just now"
     times_ago: "ago"
 
+  pages:
+    home:
+      hero:
+        title: "<span class='text-accent'>GOOD</span> MUSIC <span class='text-accent'>BAD</span> INTENTIONS"
+        subtitle: "MAKE YOUR HITS HERE & START A CHAOS"
+
   authentication:
     or_continue_with: "Or continue with"
     agree_tos: "By signing up, you agree with the "
