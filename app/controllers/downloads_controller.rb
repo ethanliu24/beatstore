@@ -27,7 +27,7 @@ class DownloadsController < ApplicationController
     if file_exists?(@track.preview)
       if free_download.save
         FreeDownloadMailer.with(free_download:).download.deliver_later
-        session[:free_download_info] ||= free_download_params
+        session[:free_download_info] = free_download_params
 
         render json: { download_url: get_free_download_path(free_download) }
       else
