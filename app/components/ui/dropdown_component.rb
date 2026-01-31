@@ -6,14 +6,10 @@ module Ui
     renders_many :sections
 
     # Possible popsitions:
-    #   - bottom-start
-    #   - bottom-end
-    #   - top-start
-    #   - top-end
-    #   - left-start
-    #   - left-end
-    #   - right-start
-    #   - right-end
+    #   - bottom-start, bottom-end, bottom
+    #   - top-start, top-end, top
+    #   - left-start, left-end, left
+    #   - right-start, right-end, right
     def initialize(id:, position: "bottom-end", classes: "", data: {})
       @id = id
       @position = position

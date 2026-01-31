@@ -7,8 +7,8 @@ export default class extends Controller {
 
   connect() {
     this.boundClose = this.close.bind(this);
-    this.xOffset = 16;
-    this.yOffset = 16;
+    this.xOffset = 12;
+    this.yOffset = 12;
   }
 
   toggle() {
@@ -51,16 +51,15 @@ export default class extends Controller {
 
     let top = 0;
     let left = 0;
-
     const [primary, align] = this.positionValue.split("-");
 
     // Primary axis placement
     switch (primary) {
       case "right":
-        left = tRect.right - wrapperRect.left;
+        left = tRect.right - wrapperRect.left + this.xOffset;
         break;
       case "left":
-        left = tRect.left - wrapperRect.left - mRect.width;
+        left = tRect.left - wrapperRect.left - mRect.width - this.xOffset;
         break;
       case "top":
         top = tRect.top - wrapperRect.top - mRect.height - this.yOffset;
