@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { dispatchTurboSubmitEndEvent } from "../helpers/turbo";
 
 // Connects to data-controller="free-download"
 export default class extends Controller {
@@ -22,10 +23,12 @@ export default class extends Controller {
       .then(data => {
         if (data.download_url) {
           window.location.href = data.download_url;
+          dispatchTurboSubmitEndEvent();
         }
       })
       .catch(err => {
         console.error("Download error:", err);
+        alert("Download error:", err);
       })
   }
 }
