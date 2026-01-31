@@ -8,7 +8,7 @@ module Ui
     def initialize(id:, classes: "", data: {})
       @id = id
       @classes = classes
-      @data = data
+      @data = data.merge({ dropdown_manager_target: "menu" })
     end
 
     private

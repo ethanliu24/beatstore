@@ -3,7 +3,6 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="dropdown-manager"
 export default class extends Controller {
   static targets = ["menu", "trigger"];
-  static values = { id: String };
 
   connect() {
     this.boundClose = this.close.bind(this);
@@ -14,7 +13,7 @@ export default class extends Controller {
   }
 
   open() {
-    this.menuTarget.classList.remove("hidden")
+    this.menuTarget.classList.remove("hidden");
     document.addEventListener("click", this.boundClose);
     document.addEventListener("keydown", this.boundClose);
   }
