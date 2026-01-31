@@ -79,7 +79,7 @@ gem "cocoon"
 gem "countries", "~> 8.0"
 gem "redcarpet"
 
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "omniauth"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth-google-oauth2"
