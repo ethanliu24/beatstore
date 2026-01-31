@@ -77,6 +77,8 @@ en:
       hero:
         title: "<span class='text-accent'>GOOD</span> MUSIC <span class='text-accent'>BAD</span> INTENTIONS"
         subtitle: "MAKE YOUR HITS HERE & START A CHAOS"
+        search:
+          placeholder: "Enter track names, description or tags"
 
   authentication:
     or_continue_with: "Or continue with"
