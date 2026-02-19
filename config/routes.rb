@@ -41,7 +41,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :cart, only: [ :show ]
+  resource :cart, only: [ :show ] do
+    delete :clear
+  end
   resources :cart_items, only: [ :create, :destroy ]
   resources :orders, only: [ :index ]
   resource :checkout, only: [ :create ] do
@@ -100,6 +102,7 @@ Rails.application.routes.draw do
     get :user_pfp_upload, action: "user_pfp_upload", as: "user_pfp_upload_modal"
     get :delete_account, action: "delete_account", as: "delete_account_modal"
     get :preview_contract, action: "preview_contract", as: "preview_contract_modal"
+    get :clear_cart, action: "clear_cart", as: "clear_cart_modal"
     get "delete_comment/:id", action: "delete_comment", as: "delete_comment_modal"
     get "track_more_info/:id", action: "track_more_info", as: "track_more_info_modal"
     get "track_purchase/:id", action: "track_purchase", as: "track_purchase_modal"

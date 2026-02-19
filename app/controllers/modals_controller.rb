@@ -81,6 +81,10 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/preview_contract", locals: { content:, order_item_id: params[:order_item_id] })
   end
 
+  def clear_cart
+    render_modal(partial: "modals/clear_cart")
+  end
+
   def track_purchase
     track = Track.kept.find(params[:id])
     initial_license_id = params[:initial_id].presence || track.profitable_licenses.first&.id

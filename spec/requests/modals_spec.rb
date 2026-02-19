@@ -47,6 +47,11 @@ RSpec.describe ModalsController, type: :request do
       get free_download_modal_url(track)
       expect(response).to redirect_to(root_path)
     end
+
+    it "does not allow visits to #delete_account" do
+      get clear_cart_modal_url
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "where request are from turbo frame" do
@@ -205,5 +210,11 @@ RSpec.describe ModalsController, type: :request do
         expect(response).to render_template(partial: "modals/_free_download")
       end
     end
+  end
+
+  it "fetches modal from #delete_account" do
+    get clear_cart_modal_url(format: :turbo_stream), headers: @headers
+    expect(response).to have_http_status(:ok)
+    expect(response).to render_template(partial: "modals/_clear_cart")
   end
 end
