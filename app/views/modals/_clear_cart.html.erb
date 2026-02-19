@@ -1,0 +1,17 @@
+<%= render Ui::ModalComponent.new(size: :md) do |modal| %>
+  <%= modal.with_header(title: t("modal.clear_cart.title"), size: :md) %>
+
+  <%= modal.with_body do %>
+    <div class="py-6 px-4 text-[0.8rem] font-light">
+      <p><%= "#{t("modal.clear_cart.confirmation")}" %></p>
+    </div>
+  <% end %>
+
+  <%= modal.with_footer(size: :sm) do |footer| %>
+    <%= footer.with_primary_action do %>
+      <%= button_to clear_cart_path, method: :delete, class: "button-critical px-2 py-1" do %>
+        <p><%= t("modal.clear_cart.action") %></p>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

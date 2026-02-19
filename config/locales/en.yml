@@ -369,6 +369,10 @@ en:
       download_error: "There's some error downloading the track. A free download may not be available at the moment."
       policy: "Free download policy"
       aggrement_html: "By continuing, you agree to the %{tos_link}, %{privacy_link} and %{free_license_link}."
+    clear_cart:
+      title: "Clear Cart"
+      confirmation: "Are you sure you want to clear your cart?"
+      action: "Clear"
 
   sidebar:
     admin:
