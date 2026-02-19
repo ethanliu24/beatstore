@@ -302,6 +302,7 @@ en:
       item:
         quantity: "Quantity: %{quantity}"
         view_contract: "Contract"
+        clear: "Clear cart"
         track:
           files: "Files: %{files}"
       summary:
