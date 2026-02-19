@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     document.body.classList.add("overflow-hidden");
-    this.element.addEventListener("turbo:submit-end", () => {
+    this.element.addEventListener("modal:close", () => {
       this.close();
     });
   }
