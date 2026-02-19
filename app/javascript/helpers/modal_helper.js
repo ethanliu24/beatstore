@@ -6,5 +6,4 @@ export function dispatchCloseModalEvent(detail = {}, bubbles = true, cancelable 
   });
 
   document.dispatchEvent(event);
-  console.log(event);
 }
