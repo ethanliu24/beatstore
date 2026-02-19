@@ -1,3 +1,9 @@
 <div>
-  <h2 class="bold"><%= rec %></h2>
+  <h2 class="font-bold tracking-wider text-lg mb-2"><%= rec %></h2>
+
+  <div>
+    <% tracks.each do |track| %>
+      <%= render partial: "home/track_card", locals: { track: } %>
+    <% end %>
+  </div>
 </div>
