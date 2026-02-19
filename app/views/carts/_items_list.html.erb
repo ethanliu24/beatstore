@@ -1,8 +1,10 @@
 <% unless current_or_guest_user.cart.empty? %>
   <div class="grid grid-cols-[1fr_auto] items-start max-lg:grid-cols-1 gap-12 w-full mt-6 max-lg:mt-4">
     <div class="max-lg:order-2 flex-1 w-full">
-      <div class="text-[0.8rem] text-error hover:text-error/80 cursor-pointer mb-1 text-right w-full">
-        <%= t("cart.show.item.clear") %>
+      <div class="text-right">
+        <%= link_to t("cart.show.item.clear"), clear_cart_modal_path,
+          class: "text-[0.8rem] text-error hover:text-error/80 cursor-pointer mb-1 w-full",
+          data: { turbo_stream: true } %>
       </div>
 
       <div class="flex flex-col justify-start items-start gap-6">
