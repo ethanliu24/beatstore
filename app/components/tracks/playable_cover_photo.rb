@@ -2,15 +2,16 @@
 
 module Tracks
   class PlayableCoverPhoto < ApplicationComponent
-    def initialize(track:, size:, unit: "rem")
+    def initialize(track:, queue_scope:, size:, unit: "rem")
       @track = track
+      @queue_scope = queue_scope
       @size = size.to_f
       @unit = unit
     end
 
     private
 
-    attr_reader :track
+    attr_reader :track, :queue_scope
 
     def image_size
       size = ("%g" % @size) + @unit
