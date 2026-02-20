@@ -3,22 +3,22 @@
 <% c_size = size + (p * 2) %>
 
 <%= content_tag :div, class: "
-  flex flex-col justify-start items-stretch gap-2 bg-secondary-bg hover:bg-hover p-#{p} rounded
-  w-#{c_size} h-#{c_size} max-w-#{c_size} max-h-#{c_size} aspect-square
+  flex flex-col justify-start items-stretch gap-2 bg-secondary-bg/90 hover:bg-hover p-#{p} rounded
+  w-#{c_size} max-w-#{c_size} aspect-square
 " do %>
   <div class=<%= "w-#{size} h-#{size} max-w-#{size} max-h-#{size} aspect-square"%> >
     <%= render Tracks::PlayableCoverPhoto.new(track:, size:) %>
   </div>
 
   <div class="w-full">
-    <%= link_to track.title, track_path(id: track.slug_param), class: "text-md hover:underline truncate block" %>
+    <%= link_to track.title, track_path(id: track.slug_param), class: "text-sm hover:underline truncate block" %>
     <%= content_tag :p, "#{track.bpm} BPM • #{track.key}", class: "text-[0.6rem] text-secondary-txt truncate block" %>
   </div>
 
   <div class="flex justify-between items-stretch gap-2">
     <%= link_to track_purchase_modal_path(track), data: { turbo_stream: true },
       class: "flex-1 border-1 p-1.5 border-accent hover:bg-accent/20 rounded" do %>
-      <div class="flex justify-center items-center gap-1.5 text-[0.7rem] w-full font-bold">
+      <div class="flex justify-center items-center gap-1.5 text-[0.6rem] w-full font-bold">
         <%= icon "basket", variant: "filled", class: "w-4 h-4 aspect-square" %>
         <p><%= track.cheapest_price %></p>
       </div>

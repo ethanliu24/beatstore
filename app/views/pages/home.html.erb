@@ -44,14 +44,14 @@
     </div>
   </div>
 
-  <div class="px-16">
+  <div class="px-16 mt-4 flex flex-col justify-start items-start gap-8 w-full">
     <% [
-      { rec: t("pages.home.recs.new"), tracks: @test_tracks },
-      { rec: t("pages.home.recs.popular"), tracks: [] },
-      { rec: t("pages.home.recs.chinese"), tracks: [] },
-      { rec: t("pages.home.recs.dark"), tracks: [] },
-      { rec: t("pages.home.recs.underground"), tracks: [] },
-      { rec: t("pages.home.recs.gunna"), tracks: [] }
+      { rec: t("pages.home.recs.new"), tracks: @recs[:new] },
+      { rec: t("pages.home.recs.popular"), tracks: @recs[:popular] },
+      { rec: t("pages.home.recs.chinese"), tracks: @recs[:chinese] },
+      { rec: t("pages.home.recs.gunna"), tracks: @recs[:gunna] },
+      # { rec: t("pages.home.recs.underground"), tracks: @recs[:underground] },
+      # { rec: t("pages.home.recs.rnb"), tracks: @recs[:rnb] },
     ].each do |d| %>
       <% unless d[:tracks].empty? %>
         <%= render partial: "home/recommendation", locals: { rec: d[:rec], tracks: d[:tracks] } %>
