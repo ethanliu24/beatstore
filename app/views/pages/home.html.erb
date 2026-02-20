@@ -54,7 +54,7 @@
       # { rec: t("pages.home.recs.rnb"), tracks: @recs[:rnb] },
     ].each do |d| %>
       <% unless d[:tracks].empty? %>
-        <%= render partial: "home/recommendation", locals: { rec: d[:rec], tracks: d[:tracks] } %>
+        <%= render partial: "tracks/recommendation", locals: { rec: d[:rec], tracks: d[:tracks] } %>
       <% end %>
     <% end %>
   </div>
