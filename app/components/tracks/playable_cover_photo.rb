@@ -5,7 +5,7 @@ module Tracks
     # size: num of rem
     def initialize(track:, size:)
       @track = track
-      @size = size
+      @size = size.to_i
     end
 
     private
@@ -13,7 +13,8 @@ module Tracks
     attr_reader :track
 
     def image_size
-      "w-[#{@size}rem] h-[#{@size}rem] min-w-[#{@size}rem] min-h-[#{@size}rem] max-w-[#{@size}rem] max-h-[#{@size}rem]"
+      "width: #{@size}rem; height: #{@size}rem; min-width: #{@size}rem; min-height:
+        #{@size}rem; max-width: #{@size}rem; max-height: #{@size}rem;"
     end
   end
 end
