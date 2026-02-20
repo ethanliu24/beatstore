@@ -3,13 +3,25 @@
   data-playable-cover-photo-audio-outlet="#audio-controller"
   data-playable-cover-photo-audio-player-outlet="#audio-player-controller"
   data-playable-cover-photo-track-id-value="<%= track.id %>">
-  <% if track.cover_photo.attached? %>
-    <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
-  <% else %>
-    <div class="<%= "flex justify-center items-center bg-secondary-bg rounded #{image_size}" %>">
-      <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
-    </div>
+
+  <% cover_photo = capture do %>
+    <% if track.cover_photo.attached? %>
+      <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
+    <% else %>
+      <div class="<%= "flex justify-center items-center bg-secondary-bg rounded #{image_size}" %>">
+        <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
+      </div>
+    <% end %>
   <% end %>
+
+  <% if controller.controller_name == "tracks" && controller.action_name == "show" %>
+    <%= cover_photo %>
+  <% else %>
+    <%= link_to track_path(id: track.slug_param) do %>
+      <%= cover_photo %>
+    <% end %>
+  <% end %>
+
   <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none"
     data-action="click->playable-cover-photo#togglePlay">
     <%= icon "player-play", variant: "filled", class: "w-5 h-5", data: {

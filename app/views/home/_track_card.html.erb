@@ -1,3 +1,27 @@
-<div>
-  asldjhf
-</div>
+<%= content_tag :div, class: "flex flex-col justify-start items-stretch gap-2 bg-secondary-bg hover:bg-hover p-2 rounded" do %>
+  <% size = 40 %>
+  <div class=<%= "w-#{size} h-#{size} max-w-#{size} max-h-#{size} aspect-square"%> >
+    <%= render Tracks::PlayableCoverPhoto.new(track:, size:) %>
+  </div>
+
+  <div>
+    <%= link_to track.title, track_path(id: track.slug_param), class: "text-md hover:underline" %>
+    <%= content_tag :p, "#{track.bpm} BPM • #{track.key}", class: "text-[0.6rem] text-secondary-txt" %>
+  </div>
+
+  <div class="flex justify-between items-stretch gap-2">
+    <%= link_to track_purchase_modal_path(track), data: { turbo_stream: true },
+      class: "flex-1 border-1 p-1.5 border-accent hover:bg-accent/20 rounded" do %>
+      <div class="flex justify-center items-center gap-1.5 text-[0.7rem] w-full font-bold">
+        <%= icon "basket", variant: "filled", class: "w-4 h-4 aspect-square" %>
+        <p><%= track.cheapest_price %></p>
+      </div>
+    <% end %>
+
+    <%= link_to free_download_modal_path(track),
+      class: "border-1 flex justify-center items-center p-2 rounded border-secondary-txt hover:bg-secondary-bg",
+      data: { turbo_stream: true } do %>
+      <%= icon "download", class: "w-3 h-3" %>
+    <% end %>
+  </div>
+<% end %>
