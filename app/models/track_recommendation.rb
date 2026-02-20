@@ -7,6 +7,7 @@ class TrackRecommendation < ApplicationRecord
 
   validates :group, presence: true, uniqueness: true, length: { maximum: MAX_GROUP_LENGTH }
   validates :display_image, content_type: [ "image/png" ], if: -> { display_image.attached? }
+  validates :tag_names, presence: true
   validate :tag_names_is_array
 
   has_one_attached :display_image
