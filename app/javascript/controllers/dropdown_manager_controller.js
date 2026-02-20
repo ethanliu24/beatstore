@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="dropdown-manager"
 export default class extends Controller {
-  static targets = [ "menu", "trigger" ];
+  static targets = [ "content", "trigger" ];
   static values = { position: String, triggerAction: String };
 
   connect() {
@@ -22,7 +22,7 @@ export default class extends Controller {
 
     switch (this.triggerActionValue) {
       case "hover":
-        [this.triggerTarget, this.menuTarget].forEach((el) => {
+        [this.triggerTarget, this.contentTarget].forEach((el) => {
           el.addEventListener("mouseenter", this.boundOpenHover);
           el.addEventListener("mouseleave", this.boundCloseHover);
         });
@@ -37,7 +37,7 @@ export default class extends Controller {
   disconnect() {
     switch (this.triggerActionValue) {
       case "hover":
-        [this.triggerTarget, this.menuTarget].forEach((el) => {
+        [this.triggerTarget, this.contentTarget].forEach((el) => {
           el.removeEventListener("mouseenter", this.boundOpenHover);
           el.removeEventListener("mouseleave", this.boundCloseHover);
         });
@@ -55,7 +55,7 @@ export default class extends Controller {
   }
 
   open() {
-    this.menuTarget.classList.remove("hidden");
+    this.contentTarget.classList.remove("hidden");
     this.position();
 
     if (this.triggerActionValue === "click") {
@@ -70,7 +70,7 @@ export default class extends Controller {
     }
     if (event?.type === "keydown" && event.key !== "Escape") return;
 
-    this.menuTarget.classList.add("hidden");
+    this.contentTarget.classList.add("hidden");
 
     if (this.triggerActionValue === "click") {
       document.removeEventListener("click", this.boundClose);
@@ -95,7 +95,7 @@ export default class extends Controller {
   }
 
   isOpen() {
-    return !this.menuTarget.classList.contains("hidden");
+    return !this.contentTarget.classList.contains("hidden");
   }
 
   handleKey(e) {
@@ -108,7 +108,7 @@ export default class extends Controller {
   position() {
     const wrapperRect = this.element.getBoundingClientRect(); // need relative pos of wrapper
     const tRect = this.triggerTarget.getBoundingClientRect();
-    const mRect = this.menuTarget.getBoundingClientRect();
+    const mRect = this.contentTarget.getBoundingClientRect();
 
     let top = 0;
     let left = 0;
@@ -149,7 +149,7 @@ export default class extends Controller {
         break;
     }
 
-    this.menuTarget.style.left = `${left}px`;
-    this.menuTarget.style.top = `${top}px`;
+    this.contentTarget.style.left = `${left}px`;
+    this.contentTarget.style.top = `${top}px`;
   }
 }
