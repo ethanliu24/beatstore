@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { trackId: Number };
   static targets = ["container", "play", "pause"];
-  static outlets = ["audio", "audio-player"];
+  static outlets = ["audio", "audio-player", "audio-queue"];
 
   connect() {
     document.addEventListener("playable-cover-photo:icon-toggle", (e) => {
@@ -17,13 +17,16 @@ export default class extends Controller {
     })
   }
 
-  togglePlay() {
-    this.audioPlayerOutlet.isPlaying() ? this.pause() : this.play();
+  togglePlay(e) {
+    this.audioPlayerOutlet.isPlaying() ? this.pause() : this.play(e);
   }
 
-  play() {
+  play(e) {
     this.audioOutlet.playAudio(this.trackIdValue);
     this.setIcon(true);
+
+    const queueScope = e.currentTarget.dataset.queueScope;
+    this.audioQueueOutlet.updateQueue(queueScope);
   }
 
   pause() {

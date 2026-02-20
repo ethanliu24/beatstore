@@ -1,16 +1,13 @@
-<div class="relative"
+<div
+  class="relative"
   style="<%= "#{image_size}" %>"
-  data-controller="playable-cover-photo" data-playable-cover-photo-target="container"
+  data-controller="playable-cover-photo"
+  data-playable-cover-photo-target="container"
   data-playable-cover-photo-audio-outlet="#audio-controller"
   data-playable-cover-photo-audio-player-outlet="#audio-player-controller"
+  data-playable-cover-photo-audio-queue-outlet="#audio-queue-controller"
   data-playable-cover-photo-track-id-value="<%= track.id %>"
-  data-track-id="<%= track.id %>"
-  data-track-title="<%= track.title %>"
-  data-track-image-url="<%= track.cover_photo.attached? ? track.cover_photo.url : "" %>"
-  data-track-metadata="<%= "#{track.bpm} • #{track.key} • #{track.genre}" %>"
-  data-queue-scope="<%= queue_scope %>"
 >
-
   <% cover_photo = capture do %>
     <% if track.cover_photo.attached? %>
       <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded w-full h-full" %>
@@ -29,8 +26,15 @@
     <% end %>
   <% end %>
 
-  <div class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none"
-    data-action="click->playable-cover-photo#togglePlay">
+  <div
+    class="absolute bottom-2 right-2 bg-background rounded-full p-2 hover:bg-hover cursor-pointer select-none"
+    data-action="click->playable-cover-photo#togglePlay"
+    data-track-id="<%= track.id %>"
+    data-track-title="<%= track.title %>"
+    data-track-image-url="<%= track.cover_photo.attached? ? track.cover_photo.url : "" %>"
+    data-track-metadata="<%= "#{track.bpm} • #{track.key} • #{track.genre}" %>"
+    data-queue-scope="<%= queue_scope %>"
+  >
     <%= icon "player-play", variant: "filled", class: "w-5 h-5", data: {
       playable_cover_photo_target: "play",
       action: "click->playable-cover-photo#pause"
