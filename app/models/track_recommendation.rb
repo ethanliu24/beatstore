@@ -7,19 +7,24 @@ class TrackRecommendation < ApplicationRecord
 
   validates :group, presence: true, uniqueness: true, length: { maximum: MAX_GROUP_LENGTH }
   validates :display_image, content_type: [ "image/png" ], if: -> { display_image.attached? }
-  validate :tag_name_is_array
+  validate :tag_names_is_array
 
   has_one_attached :display_image
 
   private
 
-  def tag_name_is_array
-    unless tag_name.kind_of?(Array)
+  def tag_names_is_array
+    if tag_names.nil?
+      errors.add(:tag_name, "is required")
+      return
+    end
+
+    unless tag_names.kind_of?(Array)
       errors.add(:tag_name, "must be an array")
       return
     end
 
-    unless tag_name.all? { |name| name.is_a?(String) }
+    unless tag_names.all? { |name| name.is_a?(String) }
       errors.add(:tag_name, "must contain an array of strings")
     end
   end
