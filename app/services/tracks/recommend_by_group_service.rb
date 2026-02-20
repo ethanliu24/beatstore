@@ -7,11 +7,11 @@ module Tracks
     end
 
     def latest
-      Track.publicly_available.order(created_at: :desc)
+      Track.publicly_available.order(created_at: :desc).limit(@limit)
     end
 
     def popular(like_weight: 2)
-      tracks = Track.find_by_sql([
+      tracks = Track.kept.find_by_sql([
         <<~SQL,
           SELECT
             tracks.*,
@@ -30,27 +30,26 @@ module Tracks
             GROUP BY track_id
           ) l ON l.track_id = tracks.id
           ORDER BY popularity_score DESC
-          LIMIT ?
         SQL
-          like_weight,
-          @limit
+          like_weight
       ])
 
-      tracks.select(&:available?)
+      ids = tracks.select(&:available?)
+      Track.find(id: ids).limit(@limit)
     end
 
-    def group_by_tag(tags:, match: :any)
+    def group_by_tags(tags, match: :any)
       tag_names = Array(tags)
-      scope = Track.publicly_available.left_joins(:tags)
+      scope = Track.publicly_available.left_joins(:tags).where(tags: { name: tag_names })
 
       case match
       when :any
-        scope.where(tags: { name: tag_names })
+        scope.distinct.limit(@limit)
       when :all
         scope
-          .where(tags: { name: tag_names })
           .group("tracks.id")
           .having("COUNT(DISTINCT tags.id) = ?", tag_names.size)
+          .limit(@limit)
       else
         raise ArgumentError, "<match> must be :any or :all"
       end
