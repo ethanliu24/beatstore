@@ -2,9 +2,10 @@
 
 module Tracks
   class PlayableCoverPhoto < ApplicationComponent
-    def initialize(track:, size:)
+    def initialize(track:, size:, unit: "rem")
       @track = track
-      @size = size
+      @size = size.to_f
+      @unit = unit
     end
 
     private
@@ -12,7 +13,9 @@ module Tracks
     attr_reader :track
 
     def image_size
-      "w-#{@size} h-#{@size} min-w-#{@size} min-h-#{@size} max-w-#{@size} max-h-#{@size}"
+      size = ("%g" % @size) + @unit
+      "width: #{size}; height: #{size}; min-width: #{size};
+      min-height: #{size}; max-width: #{size}; max-height: #{size};"
     end
   end
 end

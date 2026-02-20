@@ -3,8 +3,8 @@
 <div class="flex flex-col justify-center items-center gap-12 w-full" data-controller="license-selection"
   data-license-selection-track-preview-modal-url-value="<%= track_purchase_modal_url(@track) %>">
   <section class="w-full grid grid-cols-[auto_1fr] gap-x-8 max-sm:grid-cols-1 max-sm:grid-rows-[auto_auto_auto] max-sm:justify-items-center max-sm:gap-y-8">
-    <div class="row-span-2 max-sm:row-span-1 max-sm:order-2 min-w-50 min-h-50 w-50 h-50">
-      <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 50) %>
+    <div class="row-span-2 max-sm:row-span-1 max-sm:order-2">
+      <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 12.5) %>
     </div>
 
     <div class="flex-1 self-start max-sm:order-1 max-sm:self-auto max-sm:h-auto max-sm:text-center">

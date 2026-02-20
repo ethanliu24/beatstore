@@ -1,4 +1,5 @@
-<div class=<%= "relative w-full h-full #{image_size}" %>
+<div class="relative"
+  style="<%= "#{image_size}" %>"
   data-controller="playable-cover-photo" data-playable-cover-photo-target="container"
   data-playable-cover-photo-audio-outlet="#audio-controller"
   data-playable-cover-photo-audio-player-outlet="#audio-player-controller"
@@ -6,18 +7,18 @@
 
   <% cover_photo = capture do %>
     <% if track.cover_photo.attached? %>
-      <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded #{image_size}" %>
+      <%= image_tag url_for(track.cover_photo), class: "cover-photo object-cover rounded w-full h-full" %>
     <% else %>
-      <div class="<%= "flex justify-center items-center bg-secondary-bg rounded #{image_size}" %>">
+      <%= content_tag :div, class: "flex justify-center items-center bg-secondary-bg rounded w-full h-full" do %>
         <%= icon "photo-scan", class: "cover-photo w-1/4 h-1/4" %>
-      </div>
+      <% end %>
     <% end %>
   <% end %>
 
   <% if controller.controller_name == "tracks" && controller.action_name == "show" %>
     <%= cover_photo %>
   <% else %>
-    <%= link_to track_path(id: track.slug_param) do %>
+    <%= link_to track_path(id: track.slug_param), class: "w-fit h-fit" do %>
       <%= cover_photo %>
     <% end %>
   <% end %>
