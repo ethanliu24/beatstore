@@ -3,19 +3,27 @@
 require "rails_helper"
 
 RSpec.describe Tracks::FindSimilarTracksService, type: :service do
+  let(:license) { create(:non_exclusive_license) }
+
   context "#call" do
     it "should recommend tracks other than the current track that's public and same genre/matching tags/within a bpm range" do
-      track = Track.create!(title: "T", genre: Track::GENRES[0], bpm: 100, is_public: true)
+      track = create(:track_with_files, title: "T", genre: Track::GENRES[0], bpm: 100, is_public: true)
+      track.licenses << license
       Track::Tag.create!(name: "a", track_id: track.id)
 
-      recommended_track = Track.create!(title: "T", genre: Track::GENRES[0], bpm: 100, is_public: true)
+      recommended_track = create(:track_with_files, title: "T", genre: Track::GENRES[0], bpm: 100, is_public: true)
+      recommended_track.licenses << license
       Track::Tag.create!(name: "a", track_id: recommended_track.id)
 
-      unmatching_track = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: 1, is_public: true)
+      unmatching_track = create(:track_with_files, title: "T", genre: Track::GENRES[-1], bpm: 1, is_public: true)
+      unmatching_track.licenses << license
       Track::Tag.create!(name: "c", track_id: unmatching_track.id)
 
-      _private_track = Track.create!(title: "T", genre: Track::GENRES[0], bpm: 100, is_public: false)
-      _not_recommended_track = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: 1, is_public: true)
+      private_track = create(:track_with_files, title: "T", genre: Track::GENRES[0], bpm: 100, is_public: false)
+      private_track.licenses << license
+
+      not_recommended_track = create(:track_with_files, title: "T", genre: Track::GENRES[-1], bpm: 1, is_public: true)
+      not_recommended_track.licenses << license
 
       similar_tracks = find_similar_tracks(track:)
 
@@ -26,11 +34,18 @@ RSpec.describe Tracks::FindSimilarTracksService, type: :service do
     it "should recommend tracks within a bpm range" do
       bpm = 100
       range = Tracks::FindSimilarTracksService::SIMILAR_TRACKS_BPM_RANGE
-      track = Track.create!(title: "T", genre: Track::GENRES[0], bpm:, is_public: true)
-      t1 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm - range, is_public: true)
-      t2 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm + range, is_public: true)
-      _t3 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm - range - 1, is_public: true)
-      _t4 = Track.create!(title: "T", genre: Track::GENRES[-1], bpm: bpm + range + 1, is_public: true)
+      track = create(:track_with_files, title: "T", genre: Track::GENRES[0], bpm:, is_public: true)
+      track.licenses << license
+
+      t1 = create(:track_with_files, title: "T", genre: Track::GENRES[-1], bpm: bpm - range, is_public: true)
+      t2 = create(:track_with_files, title: "T", genre: Track::GENRES[-1], bpm: bpm + range, is_public: true)
+      t3 = create(:track_with_files, title: "T", genre: Track::GENRES[-1], bpm: bpm - range - 1, is_public: true)
+      t4 = create(:track_with_files, title: "T", genre: Track::GENRES[-1], bpm: bpm + range + 1, is_public: true)
+
+      t1.licenses << license
+      t2.licenses << license
+      t3.licenses << license
+      t4.licenses << license
 
       similar_tracks = find_similar_tracks(track:)
       expect(similar_tracks.size).to eq(2)
@@ -40,9 +55,13 @@ RSpec.describe Tracks::FindSimilarTracksService, type: :service do
     end
 
     it "should order tracks based on the most tags matched" do
-      track = create(:track)
-      rec_1 = create(:track)
-      rec_2 = create(:track)
+      track = create(:track_with_files)
+      rec_1 = create(:track_with_files)
+      rec_2 = create(:track_with_files)
+
+      track.licenses << license
+      rec_1.licenses << license
+      rec_2.licenses << license
 
       [ "a", "b", "c" ].each do |name|
         Track::Tag.create!(name:, track_id: track.id)
@@ -58,9 +77,13 @@ RSpec.describe Tracks::FindSimilarTracksService, type: :service do
     end
 
     it "should order tracks by the same genres first after matching tags" do
-      track = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
-      rec_1 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[-1], is_public: true)
-      rec_2 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+      track = create(:track_with_files, title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+      rec_1 = create(:track_with_files, title: "T", bpm: 111, genre: Track::GENRES[-1], is_public: true)
+      rec_2 = create(:track_with_files, title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+
+      track.licenses << license
+      rec_1.licenses << license
+      rec_2.licenses << license
 
       [ "a", "b" ].each do |name|
         Track::Tag.create!(name:, track_id: track.id)
@@ -76,9 +99,13 @@ RSpec.describe Tracks::FindSimilarTracksService, type: :service do
     end
 
     it "should order tracks by created date after matching tags and genres" do
-      track = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
-      rec_1 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
-      rec_2 = Track.create!(title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true, created_at: Time.current - 1.days)
+      track = create(:track_with_files, title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+      rec_1 = create(:track_with_files, title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true)
+      rec_2 = create(:track_with_files, title: "T", bpm: 111, genre: Track::GENRES[0], is_public: true, created_at: Time.current - 1.days)
+
+      track.licenses << license
+      rec_1.licenses << license
+      rec_2.licenses << license
 
       similar_tracks = find_similar_tracks(track:)
       expect(similar_tracks.size).to eq(2)
