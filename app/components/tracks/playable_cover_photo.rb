@@ -5,7 +5,7 @@ module Tracks
     # size: num of rem
     def initialize(track:, size:)
       @track = track
-      @size = size.to_i
+      @size = size.to_f
     end
 
     private
