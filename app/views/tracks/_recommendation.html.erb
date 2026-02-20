@@ -14,7 +14,7 @@
 
   <div class="flex justify-start items-stretch gap-4 overflow-x-auto hide-scrollbar" data-button-scroll-target="container">
     <% tracks.each do |track| %>
-      <%= render partial: "tracks/rec_card", locals: { track:, queue_scope: "pages:home:rec_#{rec}", p: 2, c_size: 34 } %>
+      <%= render partial: "tracks/rec_card", locals: { track:, queue_scope: "pages:home:rec_#{rec}", p: 2, c_size: 34, hover_bg: "secondary-bg" } %>
     <% end %>
   </div>
 </div>

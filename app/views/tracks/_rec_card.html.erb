@@ -1,6 +1,6 @@
 <% image_size = c_size - p %>
 
-<%= content_tag :div, class: "flex flex-col justify-start items-stretch gap-2 bg-secondary-bg/90 hover:bg-hover p-#{p} rounded w-#{c_size} max-w-#{c_size}" do %>
+<%= content_tag :div, class: "flex flex-col justify-start items-stretch gap-2 rounded hover:bg-#{hover_bg} p-#{p} w-#{c_size} max-w-#{c_size}" do %>
   <div class=<%= "w-#{image_size} h-#{image_size} max-w-#{image_size} max-h-#{image_size} aspect-square" %> >
     <%= render Tracks::PlayableCoverPhoto.new(track:, queue_scope:, size: image_size / 4) %>
   </div>
