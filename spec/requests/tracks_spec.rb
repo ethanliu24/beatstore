@@ -64,8 +64,7 @@ RSpec.describe TracksController, type: :request do
 
     it "caps the number of similar tracks recommended" do
       (TracksController::SIMILAR_TRACKS_RECOMMENDATION_LIMIT + 1).times do |i|
-        valid_attributes[:title] = "RECOMMENDED_TRACK"
-        t = Track.create! valid_attributes
+        t = create(:track_with_files, title: "RECOMMENDED_TRACK")
         t.licenses << create(:non_exclusive_license, title: "LICENSE_#{i}")
       end
 
