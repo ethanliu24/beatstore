@@ -12,7 +12,7 @@ module Tracks
     attr_reader :track
 
     def image_size
-      "w-#{@size} h-#{@size}"
+      "w-#{@size} h-#{@size} min-w-#{@size} min-h-#{@size} max-w-#{@size} max-h-#{@size}"
     end
   end
 end

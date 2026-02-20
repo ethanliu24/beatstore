@@ -1,5 +1,5 @@
-<div>
-  <div class="w-screen h-screen">
+<div class="w-full h-full">
+  <div class="relative w-screen h-screen">
     <%# Image %>
     <div class="absolute inset-0 bg-cover bg-fixed bg-center bg-no-repeat filter grayscale"
       style="background-image:url('<%= asset_path(hero_banner) %>');"></div>
@@ -42,5 +42,20 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="px-16 mt-4 flex flex-col justify-start items-start gap-8 w-full">
+    <% [
+      { rec: t("pages.home.recs.new"), tracks: @recs[:new] },
+      { rec: t("pages.home.recs.popular"), tracks: @recs[:popular] },
+      { rec: t("pages.home.recs.chinese"), tracks: @recs[:chinese] },
+      { rec: t("pages.home.recs.gunna"), tracks: @recs[:gunna] },
+      # { rec: t("pages.home.recs.underground"), tracks: @recs[:underground] },
+      # { rec: t("pages.home.recs.rnb"), tracks: @recs[:rnb] },
+    ].each do |d| %>
+      <% unless d[:tracks].empty? %>
+        <%= render partial: "tracks/recommendation", locals: { rec: d[:rec], tracks: d[:tracks] } %>
+      <% end %>
+    <% end %>
   </div>
 </div>

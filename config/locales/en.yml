@@ -80,6 +80,14 @@ en:
         search:
           placeholder: "What kind of tracks are you looking for?"
         explore: "BROWSE ALL TRACKS"
+      recs:
+        new: "NEW"
+        popular: "POPULAR"
+        chinese: "CHINESE"
+        dark: "DARK"
+        underground: "UNDERGROUND"
+        rnb: "RNB"
+        gunna: "GUNNA"
 
   authentication:
     or_continue_with: "Or continue with"
