@@ -66,9 +66,6 @@ class Track < ApplicationRecord
   has_many :cart_items, as: :product, dependent: :nullify
   has_many :free_downloads, dependent: :nullify
 
-  # === Scopes ===
-  scope :publicly_available, -> { kept.where(is_public: true) }
-
   class << self
     def ransackable_attributes(auth_object = nil)
       base = [
@@ -88,6 +85,11 @@ class Track < ApplicationRecord
 
     def ransackable_associations(auth_object = nil)
       [ "tags" ]
+    end
+
+    def publicly_available
+      ids = kept.select(&:available?).map(&:id)
+      where(id: ids)
     end
   end
 
