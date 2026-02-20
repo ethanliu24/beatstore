@@ -2,7 +2,7 @@
 
 module Tracks
   class PlayableCoverPhoto < ApplicationComponent
-    def initialize(track:, queue_scope: "playable-cover-photo", size:, unit: "rem")
+    def initialize(track:, queue_scope:, size:, unit: "rem")
       @track = track
       @queue_scope = queue_scope
       @size = size.to_f
