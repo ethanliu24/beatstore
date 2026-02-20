@@ -81,7 +81,7 @@ en:
           placeholder: "What kind of tracks are you looking for?"
         explore: "BROWSE ALL TRACKS"
       recs:
-        new: "NEW"
+        latest: "LATEST"
         popular: "POPULAR"
         chinese: "CHINESE"
         dark: "DARK"

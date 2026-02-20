@@ -5,13 +5,12 @@ class PagesController < ApplicationController
 
   def home
     @q = Track.ransack
+
+    service = Tracks::RecommendByGroupService.new(limit: RECS_LIMIT)
     @recs = {
-      new: Track.publicly_available.order(created_at: :desc).limit(RECS_LIMIT),
-      popular: popular_tracks(limit: RECS_LIMIT, like_weight: 2),
-      chinese: Track.publicly_available.left_joins(:tags).where(tags: { name: "chinese" }),
-      gunna: Track.publicly_available.left_joins(:tags).where(tags: { name: "gunna" }),
-      underground: Track.publicly_available.left_joins(:tags).where(tags: { name: "underground" }),
-      rnb: Track.publicly_available.left_joins(:tags).where(tags: { name: "rnb" })
+      latest: service.latest,
+      popular: service.popular(like_weight: 2),
+      chinese: service.group_by_tags("chinese")
     }
   end
 
