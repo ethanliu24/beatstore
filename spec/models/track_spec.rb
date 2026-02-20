@@ -365,6 +365,8 @@ RSpec.describe Track, type: :model do
   describe "#available?" do
     it "should indicate that the track is available" do
       track = create(:track_with_files)
+      license = create(:non_exclusive_license)
+      track.licenses << license
 
       expect(track.available?).to be(true)
     end

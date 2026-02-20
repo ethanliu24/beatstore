@@ -12,13 +12,16 @@ RSpec.describe CheckoutsController, type: :request do
   describe "#create" do
     let(:user) { create(:user) }
     let(:cart) { create(:cart, user:) }
-    let(:product) { create(:track_with_files) }
-    let(:l1) { create(:license, title: "L1") }
-    let(:l2) { create(:license, title: "L2") }
-    let!(:cart_item1) { create(:cart_item, cart:, product:, license: l1) }
-    let!(:cart_item2) { create(:cart_item, cart:, product:, license: l2) }
+    let(:track) { create(:track_with_files) }
+    let(:l1) { create(:non_exclusive_license, title: "L1") }
+    let(:l2) { create(:non_exclusive_license, title: "L2") }
+    let!(:cart_item1) { create(:cart_item, cart:, product: track, license: l1) }
+    let!(:cart_item2) { create(:cart_item, cart:, product: track, license: l2) }
 
     before do
+      track.licenses << l1
+      track.licenses << l2
+
       sign_in user, scope: :user
     end
 

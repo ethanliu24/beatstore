@@ -35,9 +35,20 @@ RSpec.describe CartItem, type: :model do
     end
   end
 
+  describe "#valid_product_types" do
+    it "returns Track as a valid type" do
+      expect(CartItem.valid_product_types).to include("Track")
+    end
+  end
+
   describe "#available?" do
+    let(:cart) { create(:cart) }
+
     it "should be true if license and product are both defined" do
-      cart_item = create(:cart_item, product: create(:track_with_files))
+      track = create(:track_with_files)
+      license = create(:non_exclusive_license)
+      track.licenses << license
+      cart_item = create(:cart_item, product: track)
 
       expect(cart_item.available?).to be(true)
     end
@@ -60,19 +71,12 @@ RSpec.describe CartItem, type: :model do
 
       expect(cart_item.available?).to eq(false)
     end
-  end
-
-  describe "#valid_product_types" do
-    it "returns Track as a valid type" do
-      expect(CartItem.valid_product_types).to include("Track")
-    end
-  end
-
-  describe "#available?" do
-    let(:cart) { create(:cart) }
 
     it "should return true if nothing makes the item unavailable" do
-      item = create(:cart_item, cart:, product: create(:track_with_files))
+      track = create(:track_with_files)
+      license = create(:non_exclusive_license)
+      track.licenses << license
+      item = create(:cart_item, cart:, product: track)
 
       expect(item.available?).to be(true)
     end

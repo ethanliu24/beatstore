@@ -40,9 +40,11 @@ RSpec.describe Cart, type: :model do
   describe "#total_cents" do
     it "should return the correct total" do
       cart = create(:cart)
-      license1 = create(:license, price_cents: 1000)
-      license2 = create(:license, title: "L2", price_cents: 1234)
+      license1 = create(:non_exclusive_license, price_cents: 1000)
+      license2 = create(:non_exclusive_license, title: "L2", price_cents: 1234)
       track = create(:track_with_files)
+      track.licenses << license1
+      track.licenses << license2
       create(:cart_item, cart:, product: track, license: license1)
       create(:cart_item, cart:, product: track, license: license2)
 
@@ -51,9 +53,11 @@ RSpec.describe Cart, type: :model do
 
     it "should not have floating point errors" do
       cart = create(:cart)
-      license1 = create(:license, price_cents: 0001)
-      license2 = create(:license, title: "L2", price_cents: 0002)
+      license1 = create(:non_exclusive_license, price_cents: 0001)
+      license2 = create(:non_exclusive_license, title: "L2", price_cents: 0002)
       track = create(:track_with_files)
+      track.licenses << license1
+      track.licenses << license2
       create(:cart_item, cart:, product: track, license: license1)
       create(:cart_item, cart:, product: track, license: license2)
 
@@ -66,7 +70,9 @@ RSpec.describe Cart, type: :model do
       cart = create(:cart)
       t1 = create(:track_with_files, is_public: false)
       t2 = create(:track_with_files)
-      license = create(:license)
+      license = create(:non_exclusive_license)
+      t1.licenses << license
+      t2.licenses << license
 
       item1 = create(:cart_item, cart:, product: t2, license:)
       _item2 = create(:cart_item, cart:, product: t1, license:)
@@ -82,7 +88,9 @@ RSpec.describe Cart, type: :model do
       cart = create(:cart)
       t1 = create(:track_with_files, is_public: false)
       t2 = create(:track_with_files)
-      license = create(:license)
+      license = create(:non_exclusive_license)
+      t1.licenses << license
+      t2.licenses << license
 
       create(:cart_item, cart:, product: t2, license:)
       create(:cart_item, cart:, product: t1, license:)
