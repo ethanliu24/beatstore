@@ -15,7 +15,7 @@ module Ui
       @position = position
       @trigger_action = trigger_action
       @classes = classes
-      @data = data.merge({ dropdown_manager_target: "menu" })
+      @data = data.merge({ dropdown_manager_target: "content" })
     end
 
     private

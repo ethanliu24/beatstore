@@ -2,16 +2,19 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="dropdown-manager"
 export default class extends Controller {
-  static targets = [ "menu", "trigger" ];
+  static targets = [ "content", "trigger" ];
   static values = { position: String, triggerAction: String };
 
   connect() {
     this.xOffset = 12;
     this.yOffset = 12;
+    this.hoverTimeout = null;
 
     this.boundToggle = this.toggle.bind(this);
     this.boundOpen = this.open.bind(this);
     this.boundClose = this.close.bind(this);
+    this.boundOpenHover = this.openHover.bind(this);
+    this.boundCloseHover = this.closeHover.bind(this);
 
     if (this.triggerActionValue !== "hover" && this.triggerActionValue !== "click") {
       this.triggerAction = "click";
@@ -19,9 +22,9 @@ export default class extends Controller {
 
     switch (this.triggerActionValue) {
       case "hover":
-        [this.triggerTarget, this.menuTarget].forEach((el) => {
-          el.addEventListener("mouseenter", this.boundOpen);
-          el.addEventListener("mouseleave", this.boundClose);
+        [this.triggerTarget, this.contentTarget].forEach((el) => {
+          el.addEventListener("mouseenter", this.boundOpenHover);
+          el.addEventListener("mouseleave", this.boundCloseHover);
         });
         break;
       case "click":
@@ -34,9 +37,9 @@ export default class extends Controller {
   disconnect() {
     switch (this.triggerActionValue) {
       case "hover":
-        [this.triggerTarget, this.menuTarget].forEach((el) => {
-          el.removeEventListener("mouseenter", this.boundOpen);
-          el.removeEventListener("mouseleave", this.boundClose);
+        [this.triggerTarget, this.contentTarget].forEach((el) => {
+          el.removeEventListener("mouseenter", this.boundOpenHover);
+          el.removeEventListener("mouseleave", this.boundCloseHover);
         });
         break;
       case "click":
@@ -52,7 +55,7 @@ export default class extends Controller {
   }
 
   open() {
-    this.menuTarget.classList.remove("hidden");
+    this.contentTarget.classList.remove("hidden");
     this.position();
 
     if (this.triggerActionValue === "click") {
@@ -67,7 +70,7 @@ export default class extends Controller {
     }
     if (event?.type === "keydown" && event.key !== "Escape") return;
 
-    this.menuTarget.classList.add("hidden");
+    this.contentTarget.classList.add("hidden");
 
     if (this.triggerActionValue === "click") {
       document.removeEventListener("click", this.boundClose);
@@ -75,8 +78,24 @@ export default class extends Controller {
     }
   }
 
+  openHover() {
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+
+    this.open();
+  }
+
+  closeHover() {
+    this.hoverTimeout = setTimeout(() => {
+      this.close();
+      this.hoverTimeout = null;
+    }, 150);
+  }
+
   isOpen() {
-    return !this.menuTarget.classList.contains("hidden");
+    return !this.contentTarget.classList.contains("hidden");
   }
 
   handleKey(e) {
@@ -89,7 +108,7 @@ export default class extends Controller {
   position() {
     const wrapperRect = this.element.getBoundingClientRect(); // need relative pos of wrapper
     const tRect = this.triggerTarget.getBoundingClientRect();
-    const mRect = this.menuTarget.getBoundingClientRect();
+    const mRect = this.contentTarget.getBoundingClientRect();
 
     let top = 0;
     let left = 0;
@@ -130,7 +149,7 @@ export default class extends Controller {
         break;
     }
 
-    this.menuTarget.style.left = `${left}px`;
-    this.menuTarget.style.top = `${top}px`;
+    this.contentTarget.style.left = `${left}px`;
+    this.contentTarget.style.top = `${top}px`;
   }
 }
