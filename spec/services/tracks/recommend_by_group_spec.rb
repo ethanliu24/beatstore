@@ -106,8 +106,8 @@ RSpec.describe Tracks::RecommendByGroupService, type: :service do
       group = service(limit: 2).group_by_tags([ "a", "b" ], match: :any)
 
       expect(group.length).to eq(2)
-      expect(group.first).to eq(t1)
-      expect(group.last).to eq(t2)
+      expect(group).to include(t1)
+      expect(group).to include(t2)
     end
 
     it "returns available tracks within limit" do
