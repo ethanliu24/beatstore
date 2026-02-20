@@ -44,12 +44,12 @@
     </div>
   </div>
 
-  <div class="px-16 mt-4 flex flex-col justify-start items-start gap-8 w-full">
+  <div class="px-16 mt-4 flex flex-col justify-start items-start gap-10 w-full">
     <% [
       { rec: t("pages.home.recs.new"), tracks: @recs[:new] },
       { rec: t("pages.home.recs.popular"), tracks: @recs[:popular] },
       { rec: t("pages.home.recs.chinese"), tracks: @recs[:chinese] },
-      { rec: t("pages.home.recs.gunna"), tracks: @recs[:gunna] },
+      # { rec: t("pages.home.recs.gunna"), tracks: @recs[:gunna] },
       # { rec: t("pages.home.recs.underground"), tracks: @recs[:underground] },
       # { rec: t("pages.home.recs.rnb"), tracks: @recs[:rnb] },
     ].each do |d| %>
