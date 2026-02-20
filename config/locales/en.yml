@@ -240,6 +240,11 @@ en:
           unit_price: "Unit Price: "
           see_contract: "See contract"
           files: "Files: "
+    recommendations:
+      index:
+        title: "Track Recommendations"
+        subtitle: "Manage track recommendations here"
+        add_new: "Add New"
 
   profile:
     manage_your_profile_here: "Manage your profile here"
@@ -388,6 +393,7 @@ en:
       tracks: "Tracks"
       licenses: "Licenses"
       transactions: "Transactions"
+      recommendations: "Recommendations"
 
   checkout:
     common:

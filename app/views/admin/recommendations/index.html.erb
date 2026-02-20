@@ -1,0 +1,13 @@
+<% title("Recommendations") %>
+
+<div class="w-full">
+  <%= render PageTitleComponent.new(
+    title: t("admin.recommendations.index.title"),
+    subtitle: t("admin.recommendations.index.subtitle")
+  ) %>
+
+  <%= link_to new_admin_recommendation_path, class: "button w-fit px-2 py-1 mb-4" do %>
+    <%= icon "plus", class: "w-4 h-4" %>
+    <p class="ml-2"><%= t("admin.recommendations.index.add_new") %></p>
+  <% end %>
+</div>
