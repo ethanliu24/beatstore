@@ -1,6 +1,6 @@
 <div id="<%= dom_id track %>" class="flex flex-col justify-start items-stretch bg-secondary-bg/40 dark:bg-secondary-bg/70 w-42 h-fit rounded p-1">
   <%# the width of the image in rem is (taiwind_size - 2) / 4 %>
-  <%= render Tracks::PlayableCoverPhoto.new(track:, size: 10) %>
+  <%= render Tracks::PlayableCoverPhoto.new(track:, queue_scope: "admin:tracks:index", size: 10) %>
 
   <div class="flex flex-col justify-start items-start gap-0.5 px-3 text-[0.6rem] mt-2 w-full">
     <div class="flex justify-start items-stretch text-xs overflow-x-auto whitespace-nowrap w-full max-w-full">

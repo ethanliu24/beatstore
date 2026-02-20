@@ -1,10 +1,11 @@
 <% content_for :title, @track.title %>
 
+<% queue_scope = "tracks:show" %>
 <div class="flex flex-col justify-center items-center gap-12 w-full" data-controller="license-selection"
   data-license-selection-track-preview-modal-url-value="<%= track_purchase_modal_url(@track) %>">
   <section class="w-full grid grid-cols-[auto_1fr] gap-x-8 max-sm:grid-cols-1 max-sm:grid-rows-[auto_auto_auto] max-sm:justify-items-center max-sm:gap-y-8">
     <div class="row-span-2 max-sm:row-span-1 max-sm:order-2">
-      <%= render Tracks::PlayableCoverPhoto.new(track: @track, size: 12.5) %>
+      <%= render Tracks::PlayableCoverPhoto.new(track: @track, queue_scope:, size: 12.5) %>
     </div>
 
     <div class="flex-1 self-start max-sm:order-1 max-sm:self-auto max-sm:h-auto max-sm:text-center">
@@ -81,7 +82,7 @@
     <%= render Tracks::ListComponent.new(
       tracks: @similar_tracks,
       current_user:,
-      queue_scope: "tracks:show",
+      queue_scope:,
       options: { render_message_if_empty: false }
     ) %>
   </section>
