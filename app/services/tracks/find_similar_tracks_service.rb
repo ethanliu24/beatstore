@@ -9,7 +9,7 @@ module Tracks
     end
 
     def call
-      Track.kept.find_by_sql([
+      tracks = Track.kept.find_by_sql([
         <<~SQL,
           SELECT
             tracks.*,
@@ -35,6 +35,8 @@ module Tracks
           @track.bpm + SIMILAR_TRACKS_BPM_RANGE,
           Array(@track.tags.pluck(:name))
       ])
+
+      tracks.select(&:available?)
     end
   end
 end
