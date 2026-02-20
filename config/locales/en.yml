@@ -86,6 +86,7 @@ en:
         chinese: "CHINESE"
         dark: "DARK"
         underground: "UNDERGROUND"
+        rnb: "RNB"
         gunna: "GUNNA"
 
   authentication:
