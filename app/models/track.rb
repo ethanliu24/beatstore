@@ -142,8 +142,12 @@ class Track < ApplicationRecord
     profitable_licenses.first&.price&.format.presence || NO_PRICE_FORMAT
   end
 
+  def purchaseable?
+    profitable_licenses.count > 0
+  end
+
   def available?
-    is_public && kept? && preview.attached?
+    is_public && kept? && preview.attached? && purchaseable?
   end
 
   def undiscarded_comments
