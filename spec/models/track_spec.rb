@@ -365,6 +365,8 @@ RSpec.describe Track, type: :model do
   describe "#available?" do
     it "should indicate that the track is available" do
       track = create(:track_with_files)
+      license = create(:non_exclusive_license)
+      track.licenses << license
 
       expect(track.available?).to be(true)
     end
@@ -387,6 +389,22 @@ RSpec.describe Track, type: :model do
       track.discard!
 
       expect(track.available?).to be(false)
+    end
+
+    it "should be unavailable if track has no purchasable items" do
+      track = create(:track)
+
+      expect(track.profitable_licenses).to be_empty
+      expect(track.purchaseable?).to be(false)
+    end
+
+    it "should be available if track has purchasable items" do
+      track = create(:track_with_files)
+      license = create(:non_exclusive_license)
+      track.licenses << license
+
+      expect(track.profitable_licenses).not_to be_empty
+      expect(track.purchaseable?).to be(true)
     end
   end
 

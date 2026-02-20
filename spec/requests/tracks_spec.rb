@@ -25,8 +25,9 @@ RSpec.describe TracksController, type: :request do
     end
 
     it "renders public tracks only" do
-      Track.create! valid_attributes.merge({ title: "Public Track", is_public: true })
       Track.create! valid_attributes.merge({ title: "Private Track", is_public: false })
+      track = create(:track_with_files, title: "Public Track")
+      track.licenses << create(:non_exclusive_license)
 
       get tracks_url
       expect(response).to be_successful
@@ -48,20 +49,24 @@ RSpec.describe TracksController, type: :request do
   end
 
   describe "GET /show" do
+    let(:track) { create(:track_with_files) }
+    let(:license) { create(:non_exclusive_license) }
     let(:private_track) { create(:track, is_public: false) }
 
+    before do
+      track.licenses << license
+    end
+
     it "renders a successful response" do
-      track = Track.create! valid_attributes
       get track_url(id: track.slug_param)
       expect(response).to be_successful
     end
 
     it "caps the number of similar tracks recommended" do
-      track = Track.create! valid_attributes
-
       (TracksController::SIMILAR_TRACKS_RECOMMENDATION_LIMIT + 1).times do |i|
         valid_attributes[:title] = "RECOMMENDED_TRACK"
-        Track.create! valid_attributes
+        t = Track.create! valid_attributes
+        t.licenses << create(:non_exclusive_license, title: "LICENSE_#{i}")
       end
 
       get track_url(id: track.slug_param)
@@ -88,7 +93,6 @@ RSpec.describe TracksController, type: :request do
     end
 
     it "doesn't fetch discarded tracks" do
-      track = create(:track)
       get track_url(id: track.slug_param)
 
       expect(response).to be_successful
@@ -101,13 +105,11 @@ RSpec.describe TracksController, type: :request do
     end
 
     it "fetches tracks with the slugified param" do
-      track = create(:track)
       get track_url(id: track.slug_param)
       expect(response).to be_successful
     end
 
     it "redirects to the newest slugified url" do
-      track = create(:track)
       slug_param = track.slug_param
       url = track_url(id: slug_param)
       track.update!(title: "New")
@@ -121,7 +123,6 @@ RSpec.describe TracksController, type: :request do
     end
 
     it "redirects to the slugified url if param id is the original bigint id" do
-      track = create(:track)
       get track_path(track)
 
       expect(response).to have_http_status(:moved_permanently)
