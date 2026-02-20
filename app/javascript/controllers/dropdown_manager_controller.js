@@ -8,10 +8,13 @@ export default class extends Controller {
   connect() {
     this.xOffset = 12;
     this.yOffset = 12;
+    this.hoverTimeout = null;
 
     this.boundToggle = this.toggle.bind(this);
     this.boundOpen = this.open.bind(this);
     this.boundClose = this.close.bind(this);
+    this.boundOpenHover = this.openHover.bind(this);
+    this.boundCloseHover = this.closeHover.bind(this);
 
     if (this.triggerActionValue !== "hover" && this.triggerActionValue !== "click") {
       this.triggerAction = "click";
@@ -20,8 +23,8 @@ export default class extends Controller {
     switch (this.triggerActionValue) {
       case "hover":
         [this.triggerTarget, this.menuTarget].forEach((el) => {
-          el.addEventListener("mouseenter", this.boundOpen);
-          el.addEventListener("mouseleave", this.boundClose);
+          el.addEventListener("mouseenter", this.boundOpenHover);
+          el.addEventListener("mouseleave", this.boundCloseHover);
         });
         break;
       case "click":
@@ -35,8 +38,8 @@ export default class extends Controller {
     switch (this.triggerActionValue) {
       case "hover":
         [this.triggerTarget, this.menuTarget].forEach((el) => {
-          el.removeEventListener("mouseenter", this.boundOpen);
-          el.removeEventListener("mouseleave", this.boundClose);
+          el.removeEventListener("mouseenter", this.boundOpenHover);
+          el.removeEventListener("mouseleave", this.boundCloseHover);
         });
         break;
       case "click":
@@ -73,6 +76,22 @@ export default class extends Controller {
       document.removeEventListener("click", this.boundClose);
       document.removeEventListener("keydown", this.boundClose);
     }
+  }
+
+  openHover() {
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+
+    this.open();
+  }
+
+  closeHover() {
+    this.hoverTimeout = setTimeout(() => {
+      this.close();
+      this.hoverTimeout = null;
+    }, 150);
   }
 
   isOpen() {
