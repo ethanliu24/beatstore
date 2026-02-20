@@ -35,7 +35,7 @@ module Tracks
       ])
 
       ids = tracks.select(&:available?)
-      Track.find(id: ids).limit(@limit)
+      Track.where(id: ids).limit(@limit)
     end
 
     def group_by_tags(tags, match: :any)
