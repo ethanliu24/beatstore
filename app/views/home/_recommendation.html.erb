@@ -1,7 +1,18 @@
-<div>
-  <h2 class="font-bold tracking-wider text-lg mb-2"><%= rec %></h2>
+<div data-controller="button-scroll">
+  <div class="flex justify-between items-center">
+    <h2 class="font-bold tracking-wider text-lg mb-3"><%= rec %></h2>
 
-  <div class="flex justify-start items-stretch gap-4 overflow-x-auto">
+    <div class="flex gap-1">
+      <button data-action="click->button-scroll#scrollLeft" class="hover:bg-hover cursor-pointer rounded-full p-1">
+        <%= icon "chevron-left", class: "w-5 h-5 aspect-square" %>
+      </button>
+      <button data-action="click->button-scroll#scrollRight" class="hover:bg-hover cursor-pointer rounded-full p-1">
+        <%= icon "chevron-right", class: "w-5 h-5 aspect-square" %>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex justify-start items-stretch gap-4 overflow-x-auto hide-scrollbar" data-button-scroll-target="container">
     <% tracks.each do |track| %>
       <%= render partial: "home/track_card", locals: { track: } %>
     <% end %>
