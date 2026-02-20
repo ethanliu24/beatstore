@@ -1,7 +1,7 @@
 <div>
   <h2 class="font-bold tracking-wider text-lg mb-2"><%= rec %></h2>
 
-  <div class="flex justify-start items-stretch gap-4">
+  <div class="flex justify-start items-stretch gap-4 overflow-x-auto">
     <% tracks.each do |track| %>
       <%= render partial: "home/track_card", locals: { track: } %>
     <% end %>

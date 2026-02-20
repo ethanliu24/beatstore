@@ -2,6 +2,6 @@ class PagesController < ApplicationController
   def home
     @q = Track.ransack
 
-    @test_tracks = Track.all.limit(4)
+    @test_tracks = Track.all
   end
 end
