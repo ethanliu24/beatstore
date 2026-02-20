@@ -201,7 +201,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_20_181437) do
 
   create_table "track_recommendations", force: :cascade do |t|
     t.string "group", null: false
-    t.string "tag_names", default: [], array: true
+    t.string "tag_names", array: true
     t.boolean "disabled", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
