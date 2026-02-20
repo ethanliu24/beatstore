@@ -34,8 +34,7 @@ module Tracks
           like_weight
       ])
 
-      ids = tracks.select(&:available?)
-      Track.where(id: ids).limit(@limit)
+      tracks.select(&:available?).take(@limit)
     end
 
     def group_by_tags(tags, match: :any)
