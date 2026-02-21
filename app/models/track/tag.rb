@@ -9,5 +9,9 @@ class Track::Tag < ApplicationRecord
     def ransackable_attributes(auth_object = nil)
       [ "name" ]
     end
+
+    def names
+      distinct.pluck(:name).sort
+    end
   end
 end

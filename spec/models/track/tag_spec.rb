@@ -47,4 +47,29 @@ RSpec.describe Track::Tag, type: :model do
   describe "associations" do
     it { should belong_to(:track) }
   end
+
+  describe "names" do
+    it "should return distinct tags" do
+      t1 = create(:track)
+      t2 = create(:track)
+
+      create(:track_tag, name: "a", track: t1)
+      create(:track_tag, name: "b", track: t1)
+      create(:track_tag, name: "a", track: t2)
+
+      names = described_class.names
+      expect(names).to eq([ "a", "b" ])
+    end
+
+    it "should return tags in sorted lexicographically" do
+      track = create(:track)
+
+      create(:track_tag, name: "b", track:)
+      create(:track_tag, name: "c", track:)
+      create(:track_tag, name: "a", track:)
+
+      names = described_class.names
+      expect(names).to eq([ "a", "b", "c" ])
+    end
+  end
 end
