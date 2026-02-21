@@ -67,6 +67,23 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "#edit" do
+    let(:recommendation) { create(:track_recommendation, tag_names: [ tag1.name ]) }
+
+    it "assigns the track recommendations with all tags sorted" do
+      get edit_admin_recommendation_url(recommendation)
+
+      expected_tags = [
+        { name: "1", selected: true },
+        { name: "2", selected: false },
+        { name: "3", selected: false }
+      ]
+
+      expect(assigns(:recommendation)).to eq(recommendation)
+      expect(assigns(:tags)).to eq(expected_tags)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_recommendations_url
