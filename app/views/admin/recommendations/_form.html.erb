@@ -37,12 +37,19 @@
               class="object-cover w-full h-full rounded-2xl <%= recommendation.display_image.attached? ? "" : "hidden" %>" />
           </div>
           <div class="flex justify-center items-center w-full">
-            <%= link_to track_image_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
-              data: { turbo_stream: true } do %>
+            <%= link_to(
+              image_upload_modal_path(
+                model_field: "track_recommendation[display_image]",
+                img_destination_id: "recommendation-display-image-preview",
+                file_upload_input_container_id: "recommendation-display-image-upload-container"
+              ),
+              class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+              data: { turbo_stream: true }
+            ) do %>
               <%= icon "plus", class: "w-4 h-4" %>
               <%= t("label.upload") %>
             <% end %>
-            <div id="cover-photo-upload-container" class="hidden"></div>
+            <div id="recommendation-display-image-upload-container" class="hidden"></div>
           </div>
         </div>
       </div>
@@ -57,6 +64,10 @@
           <%= form.label :tag_names %>
         </div>
       </div>
+    </section>
+
+    <section class="flex justify-end items-stretch w-full">
+      <%= form.submit t("admin.recommendations.form.#{recommendation.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
     </section>
   <% end %>
 </div>
