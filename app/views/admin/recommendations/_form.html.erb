@@ -60,14 +60,19 @@
           <%= form.text_field :group, autofocus: false, autocomplete: false, class: "content-input" %>
         </div>
 
-        <div class="field content-input-container">
-          <%= form.label :tag_names %>
+        <div class="field content-input-container" data-controller="recs-tag-select">
+          <%= form.label :tags %>
+          <%= form.hidden_field :tag_names, value: recommendation.tag_names.to_json, data: { recs_tag_select_target: "input" } %>
+
           <div class="flex justify-start items-start flex-wrap gap-2">
             <% tags.each do |tag| %>
-              <div class="flex justify-center items-center gap-1 cursor-pointer
-                rounded-full text-[0.6rem] whitespace-nowrap border-1 px-2 py-0.5 select-none
-                <%= tag[:selected] ? "recs-tag-selected" : "recs-tag-unselected" %>
-              ">
+              <div
+                class="flex justify-center items-center gap-1 cursor-pointer
+                  rounded-full text-[0.6rem] whitespace-nowrap border-1 px-2 py-0.5 select-none
+                  <%= tag[:selected] ? "recs-tag-selected" : "recs-tag-unselected" %>"
+                data-action="click->recs-tag-select#toggle"
+                data-tag-name="<%= tag[:name] %>"
+              >
                 <%= tag[:name] %>
                 <%= icon "plus", class: "w-2 h-2" %>
               </div>

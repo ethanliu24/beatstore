@@ -279,7 +279,7 @@
   }
 
   .recs-tag-selected {
-    @apply bg-accent/90 text-primary-txt border-secondary-bg hover:text-secondary-txt;
+    @apply bg-accent/90 text-primary-txt border-secondary-bg hover:text-primary-txt;
   }
 }
 
