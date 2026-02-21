@@ -5,6 +5,17 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/auth_prompt")
   end
 
+  def image_upload
+    model_field = params[:model_field]
+    img_destination_id = params[:img_destination_id]
+    file_upload_input_container_id = params[:file_upload_input_container_id]
+
+    render_modal(
+      partial: "modals/image_upload",
+      locals: { model_field:, img_destination_id:, file_upload_input_container_id: }
+    )
+  end
+
   def track_image_upload
     render_modal(partial: "modals/image_upload", locals: {
       **image_upload_data(

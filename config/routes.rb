@@ -100,6 +100,7 @@ Rails.application.routes.draw do
     get :auth_prompt, action: "auth_prompt", as: "auth_prompt_modal"
     get :track_image_upload, action: "track_image_upload", as: "track_image_upload_modal"
     get :user_pfp_upload, action: "user_pfp_upload", as: "user_pfp_upload_modal"
+    get :image_upload, action: "image_upload", as: "image_upload_modal"
     get :delete_account, action: "delete_account", as: "delete_account_modal"
     get :preview_contract, action: "preview_contract", as: "preview_contract_modal"
     get :clear_cart, action: "clear_cart", as: "clear_cart_modal"
