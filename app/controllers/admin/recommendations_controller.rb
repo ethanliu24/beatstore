@@ -25,9 +25,20 @@ module Admin
     end
 
     def edit
+      @recommendation = TrackRecommendation.find(params[:id])
+      @tags = get_tags(recommendation: @recommendation)
     end
 
     def update
+      @recommendation = TrackRecommendation.find(params[:id])
+
+      unless @recommendation.update(sanitize_recommendation_params)
+        @tags = get_tags(recommendation: @recommendation)
+        render :new, status: :unprocessable_content
+        return
+      end
+
+      redirect_to admin_recommendations_path, notice: t("admin.recommendations.create.success")
     end
 
     def destroy
