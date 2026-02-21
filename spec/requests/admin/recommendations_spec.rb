@@ -23,6 +23,50 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "#create" do
+    let(:params) {
+      {
+        track_recommendation: {
+          group: "Test",
+          tag_names: [ tag1.name, tag2.name, tag3.name ].to_json
+        }
+      }
+    }
+
+    it "creates a track recommendation" do
+      expect {
+        post admin_recommendations_url, params: params
+      }.to change(TrackRecommendation, :count).by(1)
+
+      rec = TrackRecommendation.last
+
+      expect(response).to redirect_to(admin_recommendations_path)
+      expect(rec.group).to eq("Test")
+      expect(rec.tag_names.length).to eq(3)
+      expect(rec.tag_names).to include(tag1.name)
+      expect(rec.tag_names).to include(tag2.name)
+      expect(rec.tag_names).to include(tag3.name)
+    end
+
+    it "does not create a recommendation if group is not provided" do
+      expect {
+        params[:track_recommendation][:group] = nil
+        post admin_recommendations_url, params: params
+      }.to change(TrackRecommendation, :count).by(0)
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "does not create a recommendation if tag name is empty" do
+      expect {
+        params[:track_recommendation][:tag_names] = []
+        post admin_recommendations_url, params: params
+      }.to change(TrackRecommendation, :count).by(0)
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_recommendations_url
