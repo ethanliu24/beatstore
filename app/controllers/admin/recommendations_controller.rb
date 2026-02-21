@@ -6,6 +6,7 @@ module Admin
     end
 
     def new
+      @recommendation = TrackRecommendation.new
     end
 
     def create

@@ -245,6 +245,10 @@ en:
         title: "Track Recommendations"
         subtitle: "Manage track recommendations here"
         add_new: "Add New"
+      form:
+        create: "Create"
+        update: "Update"
+        back: "Back to recommendations"
 
   profile:
     manage_your_profile_here: "Manage your profile here"
