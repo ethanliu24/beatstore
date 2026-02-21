@@ -15,13 +15,13 @@ module Admin
     def create
       @recommendation = TrackRecommendation.new(sanitize_recommendation_params)
 
-      if @recommendation.save
-        redirect_to admin_recommendations_path, notice: t("admin.recommendations.create.success")
+      unless @recommendation.save
+        @tags = get_tags(recommendation: @recommendation)
+        render :new, status: :unprocessable_content
         return
       end
 
-      @tags = get_tags(recommendation: @recommendation)
-      render :new, status: :unprocessable_content
+      redirect_to admin_recommendations_path, notice: t("admin.recommendations.create.success")
     end
 
     def edit
