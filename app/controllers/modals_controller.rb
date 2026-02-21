@@ -5,24 +5,15 @@ class ModalsController < ApplicationController
     render_modal(partial: "modals/auth_prompt")
   end
 
-  def track_image_upload
-    render_modal(partial: "modals/image_upload", locals: {
-      **image_upload_data(
-        model_field: "track[cover_photo]",
-        img_destination_id: "track-cover-photo-preview",
-        file_upload_input_container_id: "cover-photo-upload-container"
-      )
-    })
-  end
+  def image_upload
+    model_field = params[:model_field]
+    img_destination_id = params[:img_destination_id]
+    file_upload_input_container_id = params[:file_upload_input_container_id]
 
-  def user_pfp_upload
-    render_modal(partial: "modals/image_upload", locals: {
-      **image_upload_data(
-        model_field: "user[profile_picture]",
-        img_destination_id: "user-pfp-preview",
-        file_upload_input_container_id: "pfp-upload-container"
-      )
-    })
+    render_modal(
+      partial: "modals/image_upload",
+      locals: { model_field:, img_destination_id:, file_upload_input_container_id: }
+    )
   end
 
   def delete_account
@@ -111,13 +102,5 @@ class ModalsController < ApplicationController
     unless turbo_or_xhr_request?
       redirect_back(fallback_location: root_path)
     end
-  end
-
-  def image_upload_data(model_field:, img_destination_id:, file_upload_input_container_id:)
-    {
-      model_field:,
-      img_destination_id:,
-      file_upload_input_container_id:
-    }
   end
 end

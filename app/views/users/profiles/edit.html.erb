@@ -23,7 +23,15 @@
           class="object-cover w-full h-full rounded-full <%= current_user.profile_picture.attached? ? "" : "hidden" %>" />
       </div>
       <div class="flex justify-center items-center w-full">
-        <%= link_to user_pfp_upload_modal_path, class: "flex justify-center items-center gap-1 file-upload-chip w-fit", data: { turbo_stream: true } do %>
+        <%= link_to(
+          image_upload_modal_path(
+            model_field: "user[profile_picture]",
+            img_destination_id: "user-pfp-preview",
+            file_upload_input_container_id: "pfp-upload-container"
+          ),
+          class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+          data: { turbo_stream: true }
+        ) do %>
           <%= icon "plus", class: "w-4 h-4" %>
           <%= t("label.upload") %>
         <% end %>
