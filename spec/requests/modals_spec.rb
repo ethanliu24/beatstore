@@ -7,16 +7,6 @@ RSpec.describe ModalsController, type: :request do
       expect(response).to redirect_to(root_path)
     end
 
-    it "does not allow visits to #track_image_upload" do
-      get track_image_upload_modal_url
-      expect(response).to redirect_to(root_path)
-    end
-
-    it "does not allow visits to #user_pfp_upload" do
-      get user_pfp_upload_modal_url
-      expect(response).to redirect_to(root_path)
-    end
-
     it "does not allow visits to #auth_promp" do
       get auth_prompt_modal_url
       expect(response).to redirect_to(root_path)
@@ -68,18 +58,6 @@ RSpec.describe ModalsController, type: :request do
         file_upload_input_container_id: "456"
       ), headers: @headers
 
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template(partial: "modals/_image_upload")
-    end
-
-    it "fetches modal from #track_image_upload" do
-      get track_image_upload_modal_url(format: :turbo_stream), headers: @headers
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template(partial: "modals/_image_upload")
-    end
-
-    it "fetches modal from #track_image_upload" do
-      get user_pfp_upload_modal_url(format: :turbo_stream), headers: @headers
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(partial: "modals/_image_upload")
     end
