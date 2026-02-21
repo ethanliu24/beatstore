@@ -15,11 +15,6 @@ class TrackRecommendation < ApplicationRecord
   private
 
   def tag_names_is_array
-    if tag_names.nil?
-      errors.add(:tag_name, "is required")
-      return
-    end
-
     unless tag_names.kind_of?(Array)
       errors.add(:tag_name, "must be an array")
       return

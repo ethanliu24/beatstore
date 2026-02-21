@@ -245,6 +245,8 @@ en:
         title: "Track Recommendations"
         subtitle: "Manage track recommendations here"
         add_new: "Add New"
+      create:
+        success: "Recommendation configuration created successfully"
       form:
         create: "Create"
         update: "Update"

@@ -15,7 +15,7 @@
     class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/15 w-full"
   ) do |form| %>
     <% if recommendation.errors.any? %>
-      <div id="error_explanation" class="flash flash-error">
+      <div class="flash flash-error">
         <h2><%= pluralize(recommendation.errors.count, "error") %> prohibited this recommendation from being saved:</h2>
 
         <ul class="list-disc ml-6">
@@ -57,7 +57,7 @@
       <div class="w-full flex-1">
         <div class="field content-input-container mb-4">
           <%= form.label :group %>
-          <%= form.text_field :group, autofocus: false, autocomplete: false, class: "content-input" %>
+          <%= form.text_field :group, autofocus: false, autocomplete: "off", class: "content-input" %>
         </div>
 
         <div class="field content-input-container" data-controller="recs-tag-select">
