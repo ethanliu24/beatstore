@@ -247,6 +247,8 @@ en:
         add_new: "Add New"
       create:
         success: "Recommendation configuration created successfully"
+      update:
+        success: "Recommendation configuration updated successfully"
       form:
         create: "Create"
         update: "Update"

@@ -38,7 +38,7 @@ module Admin
         return
       end
 
-      redirect_to admin_recommendations_path, notice: t("admin.recommendations.create.success")
+      redirect_to admin_recommendations_path, notice: t("admin.recommendations.update.success")
     end
 
     def destroy
