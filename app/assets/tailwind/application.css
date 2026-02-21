@@ -272,6 +272,15 @@
   .license-form .form-grid-container {
     @apply grid grid-cols-2 gap-x-8 gap-y-4 w-full items-stretch;
   }
+
+  /* Track Recommendation */
+  .recs-tag-unselected {
+    @apply bg-background border-accent/90 hover:text-accent-text;
+  }
+
+  .recs-tag-selected {
+    @apply bg-accent/90 text-primary-txt border-secondary-bg hover:text-secondary-txt;
+  }
 }
 
 /* Admin tracks page layout */

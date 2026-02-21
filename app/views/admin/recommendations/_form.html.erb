@@ -62,6 +62,17 @@
 
         <div class="field content-input-container">
           <%= form.label :tag_names %>
+          <div class="flex justify-start items-start flex-wrap gap-2">
+            <% tags.each do |tag| %>
+              <div class="flex justify-center items-center gap-1 cursor-pointer
+                rounded-full text-[0.6rem] whitespace-nowrap border-1 px-2 py-0.5 select-none
+                <%= tag[:selected] ? "recs-tag-selected" : "recs-tag-unselected" %>
+              ">
+                <%= tag[:name] %>
+                <%= icon "plus", class: "w-2 h-2" %>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
     </section>
