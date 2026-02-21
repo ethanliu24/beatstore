@@ -28,7 +28,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       {
         track_recommendation: {
           group: "Test",
-          tag_names: [ tag1.name, tag2.name, tag3.name ].to_json
+          tag_names: [ tag1.name, tag2.name, tag3.name ].to_json,
+          display_image: fixture_file_upload("recommendations/display_image.png", "image/png")
         }
       }
     }
@@ -46,6 +47,8 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       expect(rec.tag_names).to include(tag1.name)
       expect(rec.tag_names).to include(tag2.name)
       expect(rec.tag_names).to include(tag3.name)
+      expect(rec.display_image.attached?).to eq(true)
+      expect(rec.disabled).to eq(false)
     end
 
     it "does not create a recommendation if group is not provided" do
