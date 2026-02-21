@@ -84,6 +84,41 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "#update" do
+    let(:recommendation) { create(:track_recommendation) }
+
+    it "updates the recommendation correctly" do
+      put admin_recommendation_url(recommendation), params: {
+        track_recommendation: {
+          group: "Updated",
+          tag_names: [ tag1.name ].to_json
+        }
+      }
+
+      recommendation = TrackRecommendation.last
+
+      expect(response).to redirect_to(admin_recommendations_url)
+      expect(recommendation.group).to eq("Updated")
+      expect(recommendation.tag_names).to eq([ tag1.name ])
+    end
+
+    it "does not update the recommendation if group is missing" do
+      put admin_recommendation_url(recommendation), params: {
+        track_recommendation: { group: nil }
+      }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "does not update the recommendation if tag names is empty" do
+      put admin_recommendation_url(recommendation), params: {
+        track_recommendation: { tag_names: [].to_json }
+      }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_recommendations_url
