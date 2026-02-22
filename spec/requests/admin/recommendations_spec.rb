@@ -149,7 +149,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
-  describe "#reorder" do
+  describe "#reorder_all" do
     let(:r1) { create(:track_recommendation, group: "A") }
     let(:r2) { create(:track_recommendation, group: "B") }
     let(:r3) { create(:track_recommendation, group: "C") }
@@ -185,6 +185,22 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       expected = [ r1, r2, r3 ]
 
       expect(response).to have_http_status(:bad_request)
+      expect(actual).to eq(expected)
+    end
+  end
+
+  describe "#reorder_one" do
+    let(:r1) { create(:track_recommendation, group: "A") }
+    let(:r2) { create(:track_recommendation, group: "B") }
+    let(:r3) { create(:track_recommendation, group: "C") }
+
+    it "should reorder recommendation to the correct index" do
+      put reorder_admin_recommendation_url(r3, position: 0)
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r3, r1, r2 ]
+
+      expect(response).to have_http_status(:no_content)
       expect(actual).to eq(expected)
     end
   end

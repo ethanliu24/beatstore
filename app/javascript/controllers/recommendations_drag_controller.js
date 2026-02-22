@@ -12,18 +12,17 @@ export default class extends DragAndSortController {
       animation: 500,
       easing: "cubic-beizer(0.42, 0, 1, 1)",
       dataIdAttr: "data-recommendation-id",
-      onUpdate: () => {
-        fetch(this.reorderApiUrlValue, {
+      onUpdate: (e) => {
+        const id = parseInt(e.item.dataset.recommendationId);
+        const position = parseInt(e.newIndex);
+        const url = this.reorderApiUrlValue.replace(":id", id).replace(":position", position);
+
+        fetch(url, {
           method: "PUT",
           headers: {
             "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            track_recommendation: {
-              ordering: this.sortable.toArray().map((id) => parseInt(id))
-            }
-          }),
         })
         .then((res) => {
           if (!res.ok) {
