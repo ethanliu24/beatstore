@@ -57,8 +57,8 @@ module Admin
         :display_image,
       )
 
-      if permitted[:tag_names].present?
-        permitted[:tag_names] = JSON.parse(permitted[:tag_names].to_json)
+      if permitted[:tag_names].present? && permitted[:tag_names].is_a?(String)
+        permitted[:tag_names] = JSON.parse(permitted[:tag_names])
       end
 
       permitted
