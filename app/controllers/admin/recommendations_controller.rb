@@ -42,6 +42,8 @@ module Admin
     end
 
     def destroy
+      @recommendation = TrackRecommendation.find(params[:id])
+      @recommendation.destroy!
     end
 
     private
