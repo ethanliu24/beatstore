@@ -5,7 +5,7 @@ require "json"
 module Admin
   class RecommendationsController < Admin::BaseController
     def index
-      @recommendations = TrackRecommendation.all
+      @recommendations = TrackRecommendation.rank(:display_order).all
     end
 
     def new
