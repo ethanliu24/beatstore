@@ -52,7 +52,8 @@ module Admin
     end
 
     def reorder
-      ordering = params.require(:track_recommendation).permit(:ordering).presence || []
+      ordering = params.require(:track_recommendation).permit(ordering: [])[:ordering].presence || []
+      ordering = ordering.reject(&:blank?)
 
       # Can bulk update, but not neccessary for now
       # cases = ordering.map.with_index { |id, idx| "WHEN #{id.to_i} THEN #{idx}" }.join(" ")

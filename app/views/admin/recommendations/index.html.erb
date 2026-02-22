@@ -20,6 +20,7 @@
       class="flex flex-col justify-start items-stretch gap-2"
       data-controller="recommendations-drag"
       data-recommendations-drag-target="list"
+      data-recommendations-drag-reorder-api-url-value="<%= reorder_admin_recommendations_url %>"
     >
       <% @recommendations.each do |recommendation| %>
         <%= render Admin::RecommendationComponent.new(recommendation:) %>
