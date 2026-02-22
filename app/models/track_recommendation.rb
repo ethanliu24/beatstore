@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TrackRecommendation < ApplicationRecord
+  include RankedModel
+
   before_validation { self.disabled = false if disabled.nil? }
 
   MAX_GROUP_LENGTH = 25
@@ -11,6 +13,8 @@ class TrackRecommendation < ApplicationRecord
   validate :tag_names_is_array
 
   has_one_attached :display_image
+
+  ranks :display_order
 
   private
 

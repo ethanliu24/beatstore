@@ -13,3 +13,4 @@ pin "cropperjs", to: "cropper.esm.js"
 pin "@nathanvda/cocoon", to: "@nathanvda--cocoon.js" # @1.2.14
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
+pin "sortablejs", to: "sortablejs.js" # @1.15.7

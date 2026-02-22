@@ -55,15 +55,23 @@ Rails.application.routes.draw do
     resource :dashboard, only: [ :show ] do
       get :quick_stats
     end
+
     resources :tracks, except: [ :show ]
+
     resources :licenses, except: [ :show ] do
       member do
         post :apply_to_all
         delete :remove_from_all
       end
     end
+
     resources :transactions, only: [ :index, :show ]
-    resources :recommendations, except: [ :show ]
+
+    resources :recommendations, except: [ :show ] do
+      collection do
+        put :reorder
+      end
+    end
   end
 
   get "contact", to: "contacts#new", as: :contact

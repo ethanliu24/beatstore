@@ -51,6 +51,21 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       expect(rec.disabled).to eq(false)
     end
 
+    it "should have the smallest rank when inserted" do
+      expect {
+        params[:track_recommendation][:group] = "G1"
+        post admin_recommendations_url, params: params
+
+        params[:track_recommendation][:group] = "G2"
+        post admin_recommendations_url, params: params
+      }.to change(TrackRecommendation, :count).by(2)
+
+      r1 = TrackRecommendation.first
+      r2 = TrackRecommendation.last
+
+      expect(r2.display_order_rank < r1.display_order_rank).to be(true)
+    end
+
     it "does not create a recommendation if group is not provided" do
       expect {
         params[:track_recommendation][:group] = nil
@@ -131,6 +146,46 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       }.to change(TrackRecommendation, :count).by(-1)
 
       expect(response).to have_http_status(:see_other)
+    end
+  end
+
+  describe "#reorder" do
+    let(:r1) { create(:track_recommendation, group: "A") }
+    let(:r2) { create(:track_recommendation, group: "B") }
+    let(:r3) { create(:track_recommendation, group: "C") }
+
+    it "should reorder recommendations based on the ordering provided" do
+      put reorder_admin_recommendations_url, params: {
+        track_recommendation: { ordering: [ r3.id, r1.id, r2.id ] }
+      }
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r3, r1, r2 ]
+
+      expect(response).to have_http_status(:no_content)
+      expect(actual).to eq(expected)
+    end
+
+    it "should return if ordering is empty and not change the order" do
+      put reorder_admin_recommendations_url, params: {
+        track_recommendation: { ordering: [] }
+      }
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r1, r2, r3 ]
+
+      expect(response).to have_http_status(:no_content)
+      expect(actual).to eq(expected)
+    end
+
+    it "should return bad request if ordering is not provided and not change the order" do
+      put reorder_admin_recommendations_url
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r1, r2, r3 ]
+
+      expect(response).to have_http_status(:bad_request)
+      expect(actual).to eq(expected)
     end
   end
 

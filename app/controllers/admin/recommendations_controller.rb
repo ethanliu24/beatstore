@@ -5,7 +5,7 @@ require "json"
 module Admin
   class RecommendationsController < Admin::BaseController
     def index
-      @recommendations = TrackRecommendation.all
+      @recommendations = TrackRecommendation.rank(:display_order).all
     end
 
     def new
@@ -14,7 +14,9 @@ module Admin
     end
 
     def create
-      @recommendation = TrackRecommendation.new(sanitize_recommendation_params)
+      @recommendation = TrackRecommendation.new(
+        sanitize_recommendation_params.merge(display_order_position: :first)
+      )
 
       unless @recommendation.save
         @tags = get_tags(recommendation: @recommendation)
@@ -49,6 +51,26 @@ module Admin
       redirect_to admin_recommendations_path, status: :see_other, notice: t("admin.recommendations.destroy.success")
     end
 
+    def reorder
+      ordering = params.require(:track_recommendation).permit(ordering: [])[:ordering].presence || []
+      ordering = ordering.reject(&:blank?)
+
+      # Can bulk update, but not neccessary for now
+      # cases = ordering.map.with_index { |id, idx| "WHEN #{id.to_i} THEN #{idx}" }.join(" ")
+      #
+      # sql = <<~SQL
+      # UPDATE track_recommendations
+      # SET display_order_position = CASE id
+      #   #{cases}
+      # END
+      # WHERE id IN (#{ordering.join(",")});
+      # SQL
+
+      ordering.each_with_index do |id, index|
+        TrackRecommendation.find(id).update(display_order_position: index)
+      end
+    end
+
     private
 
     def sanitize_recommendation_params
@@ -58,8 +80,8 @@ module Admin
         :display_image,
       )
 
-      if permitted[:tag_names].present? && permitted[:tag_names].is_a?(String)
-        permitted[:tag_names] = JSON.parse(permitted[:tag_names])
+      if permitted[:tag_names].present? && !permitted[:tag_names].is_a?(Array)
+        permitted[:tag_names] = JSON.parse(permitted[:tag_names].to_s)
       end
 
       permitted
