@@ -149,6 +149,46 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "#reorder" do
+    let(:r1) { create(:track_recommendation, group: "A") }
+    let(:r2) { create(:track_recommendation, group: "B") }
+    let(:r3) { create(:track_recommendation, group: "C") }
+
+    it "should reorder recommendations based on the ordering provided" do
+      put reorder_admin_recommendations_url, params: {
+        track_recommendation: { ordering: [ r3.id, r1.id, r2.id ] }
+      }
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r3, r1, r2 ]
+
+      expect(response).to have_http_status(:no_content)
+      expect(actual).to eq(expected)
+    end
+
+    it "should return if ordering is empty and not change the order" do
+      put reorder_admin_recommendations_url, params: {
+        track_recommendation: { ordering: [] }
+      }
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r1, r2, r3 ]
+
+      expect(response).to have_http_status(:no_content)
+      expect(actual).to eq(expected)
+    end
+
+    it "should return bad request if ordering is not provided and not change the order" do
+      put reorder_admin_recommendations_url
+
+      actual = TrackRecommendation.rank(:display_order)
+      expected = [ r1, r2, r3 ]
+
+      expect(response).to have_http_status(:bad_request)
+      expect(actual).to eq(expected)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_recommendations_url
