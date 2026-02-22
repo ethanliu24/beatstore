@@ -12,11 +12,11 @@
       <div class="flex justify-start items-center gap-2">
         <%= content_tag :p, recommendation.group, class: "text-sm tracking-wider font-bold" %>
         <%= render Ui::DropdownComponent.new(
-          id: dom_id(recommendation),
+          id: dom_id(recommendation, :tags),
           position: "right",
           trigger_action: "hover"
         ) do |dropdown| %>
-          <%= dropdown.with_trigger_button(id: dom_id(recommendation)) do %>
+          <%= dropdown.with_trigger_button(id: dom_id(recommendation, :tags)) do %>
             <%= icon "tag", variant: "filled", class: "w-3 h-3 cursor-pointer text-accent hover:-translate-y-1 transition duration-300 ease-in-out" %>
           <% end %>
 
