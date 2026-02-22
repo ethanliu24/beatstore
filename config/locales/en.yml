@@ -245,6 +245,7 @@ en:
         title: "Track Recommendations"
         subtitle: "Manage track recommendations here"
         add_new: "Add New"
+        empty: "There are no recommendation configurations yet"
       create:
         success: "Recommendation configuration created successfully"
       update:

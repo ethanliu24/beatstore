@@ -10,6 +10,8 @@ module Ui
     #   - top-start, top-end, top
     #   - left-start, left-end, left
     #   - right-start, right-end, right
+    #
+    # Possible trigger actions: click, hover
     def initialize(id:, position: "bottom-end", trigger_action: "click", classes: "", data: {})
       @id = id
       @position = position

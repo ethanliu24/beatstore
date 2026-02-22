@@ -25,7 +25,7 @@ RSpec.describe Ui::DropdownComponent, type: :component do
     expect(rendered).to have_selector("button", text: "Tracks Dropdown")
     expect(rendered).to have_selector("div[data-controller='dropdown-manager']")
     expect(rendered).to have_selector(
-      "div[id='tracks'][class='dropdown hidden absolute transparent-scrollbar-background track'][data-tracks='tracks']"
+      "div[id='tracks'][class='dropdown hidden absolute w-max transparent-scrollbar-background track'][data-tracks='tracks']"
     )
     expect(rendered).to have_selector(
       "div.content",
