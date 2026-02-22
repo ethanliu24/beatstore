@@ -72,10 +72,10 @@ module Admin
     end
 
     def reorder_one
-      id = params[:id]
-      index = params[:new_idex]
+      id = params[:id].to_i
+      position = params[:position].to_i
 
-      TrackRecommendation.find(id).update(display_order_position: index)
+      TrackRecommendation.find(id).update(display_order_position: position)
     end
 
     private

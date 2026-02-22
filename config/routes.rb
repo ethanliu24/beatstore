@@ -73,7 +73,7 @@ Rails.application.routes.draw do
       end
 
       member do
-        put "reorder/:new_index", to: "reorder_one", as: "reorder"
+        put "reorder/:position", to: "reorder_one", as: "reorder"
       end
     end
   end

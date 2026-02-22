@@ -195,7 +195,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     let(:r3) { create(:track_recommendation, group: "C") }
 
     it "should reorder recommendation to the correct index" do
-      put reorder_admin_recommendation_url(r3, new_index: 0)
+      put reorder_admin_recommendation_url(r3, position: 0)
 
       actual = TrackRecommendation.rank(:display_order)
       expected = [ r3, r1, r2 ]
