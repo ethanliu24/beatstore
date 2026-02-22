@@ -16,7 +16,12 @@
       <%= t("admin.recommendations.index.empty") %>
     </p>
   <% else %>
-    <div class="flex flex-col justify-start items-stretch gap-2">
+    <div
+      class="flex flex-col justify-start items-stretch gap-2"
+      data-controller="drag-and-sort"
+      data-drag-and-sort-target="list"
+      data--handle-value=""
+    >
       <% @recommendations.each do |recommendation| %>
         <%= render Admin::RecommendationComponent.new(recommendation:) %>
       <% end %>
