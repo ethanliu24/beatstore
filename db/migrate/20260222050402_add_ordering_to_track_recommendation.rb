@@ -1,7 +1,5 @@
 class AddOrderingToTrackRecommendation < ActiveRecord::Migration[8.0]
   def change
-    add_column :track_recommendations, :position, :integer, null: true
-
-    add_index :track_recommendations, :position, unique: true
+    add_column :track_recommendations, :display_order, :integer, null: true
   end
 end
