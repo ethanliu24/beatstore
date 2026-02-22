@@ -122,6 +122,18 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
     end
   end
 
+  describe "destroy" do
+    let!(:recommendation) { create(:track_recommendation) }
+
+    it "should delete the recommendation" do
+      expect {
+        delete admin_recommendation_url(recommendation)
+      }.to change(TrackRecommendation, :count).by(-1)
+
+      expect(response).to have_http_status(:see_other)
+    end
+  end
+
   describe "admin paths", authorization_test: true do
     it "only allows admin at GET /index" do
       get admin_recommendations_url
