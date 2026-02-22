@@ -44,6 +44,8 @@ module Admin
     def destroy
       @recommendation = TrackRecommendation.find(params[:id])
       @recommendation.destroy!
+
+      redirect_to admin_recommendations_path, status: :see_other, notice: t("admin.recommendations.destroy.success")
     end
 
     private

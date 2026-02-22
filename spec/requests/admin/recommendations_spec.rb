@@ -130,7 +130,7 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
         delete admin_recommendation_url(recommendation)
       }.to change(TrackRecommendation, :count).by(-1)
 
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:see_other)
     end
   end
 

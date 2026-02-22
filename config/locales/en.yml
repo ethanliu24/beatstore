@@ -249,6 +249,8 @@ en:
         success: "Recommendation configuration created successfully"
       update:
         success: "Recommendation configuration updated successfully"
+      destroy:
+        success: "Recommendation configuration deleted successfully"
       form:
         create: "Create"
         update: "Update"
