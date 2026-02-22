@@ -51,6 +51,21 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       expect(rec.disabled).to eq(false)
     end
 
+    it "should have the smallest rank when inserted" do
+      expect {
+        params[:track_recommendation][:group] = "G1"
+        post admin_recommendations_url, params: params
+
+        params[:track_recommendation][:group] = "G2"
+        post admin_recommendations_url, params: params
+      }.to change(TrackRecommendation, :count).by(2)
+
+      r1 = TrackRecommendation.first
+      r2 = TrackRecommendation.last
+
+      expect(r2.display_order_rank < r1.display_order_rank).to be(true)
+    end
+
     it "does not create a recommendation if group is not provided" do
       expect {
         params[:track_recommendation][:group] = nil

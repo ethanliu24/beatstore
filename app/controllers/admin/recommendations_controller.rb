@@ -14,7 +14,9 @@ module Admin
     end
 
     def create
-      @recommendation = TrackRecommendation.new(sanitize_recommendation_params)
+      @recommendation = TrackRecommendation.new(
+        sanitize_recommendation_params.merge(display_order_position: :first)
+      )
 
       unless @recommendation.save
         @tags = get_tags(recommendation: @recommendation)

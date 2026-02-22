@@ -14,7 +14,7 @@ class TrackRecommendation < ApplicationRecord
 
   has_one_attached :display_image
 
-  ranks :position
+  ranks :display_order
 
   private
 
