@@ -58,7 +58,7 @@ module Admin
       )
 
       if permitted[:tag_names].present?
-        permitted[:tag_names] = JSON.parse(permitted[:tag_names])
+        permitted[:tag_names] = JSON.parse(permitted[:tag_names].to_json)
       end
 
       permitted
