@@ -5,6 +5,7 @@ require "json"
 module Admin
   class RecommendationsController < Admin::BaseController
     def index
+      @recommendations = TrackRecommendation.all
     end
 
     def new
