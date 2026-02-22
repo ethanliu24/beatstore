@@ -12,6 +12,8 @@ class TrackRecommendation < ApplicationRecord
 
   has_one_attached :display_image
 
+  before_validation -> { self.order }
+
   private
 
   def tag_names_is_array

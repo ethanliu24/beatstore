@@ -205,9 +205,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_22_050402) do
     t.boolean "disabled", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "order"
+    t.integer "position"
     t.index ["group"], name: "index_track_recommendations_on_group", unique: true
-    t.index ["order"], name: "index_track_recommendations_on_order", unique: true
+    t.index ["position"], name: "index_track_recommendations_on_position", unique: true
   end
 
   create_table "track_tags", force: :cascade do |t|
