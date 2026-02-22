@@ -51,7 +51,7 @@ module Admin
       redirect_to admin_recommendations_path, status: :see_other, notice: t("admin.recommendations.destroy.success")
     end
 
-    def reorder
+    def reorder_all
       ordering = params.require(:track_recommendation).permit(ordering: [])[:ordering].presence || []
       ordering = ordering.reject(&:blank?)
 
@@ -69,6 +69,13 @@ module Admin
       ordering.each_with_index do |id, index|
         TrackRecommendation.find(id).update(display_order_position: index)
       end
+    end
+
+    def reorder_one
+      id = params[:id]
+      index = params[:new_idex]
+
+      TrackRecommendation.find(id).update(display_order_position: index)
     end
 
     private

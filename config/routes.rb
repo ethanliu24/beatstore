@@ -69,7 +69,11 @@ Rails.application.routes.draw do
 
     resources :recommendations, except: [ :show ] do
       collection do
-        put :reorder
+        put :reorder, to: "reorder_all", as: "reorder"
+      end
+
+      member do
+        put "reorder/:new_index", to: "reorder_one", as: "reorder"
       end
     end
   end
