@@ -6,6 +6,7 @@
       { url: admin_tracks_path, text: t("sidebar.admin.tracks"), icon: "music" },
       { url: admin_licenses_path, text: t("sidebar.admin.licenses"), icon: "file" },
       { url: admin_transactions_path, text: t("sidebar.admin.transactions"), icon: "currency-dollar" },
+      { url: admin_recommendations_path, text: t("sidebar.admin.recommendations"), icon: "star" },
     ].each do |data| %>
       <li class="admin-sidebar-item">
         <%= render Ui::Dropdown::LinkComponent.new(

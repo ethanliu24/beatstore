@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       end
     end
     resources :transactions, only: [ :index, :show ]
+    resources :recommendations, except: [ :show ]
   end
 
   get "contact", to: "contacts#new", as: :contact

@@ -1,0 +1,90 @@
+<div class="w-full">
+  <h1 class="page-title mb-5 text-accent">
+    <%= t("admin.recommendations.form.#{recommendation.persisted? ? "update" : "create"}") %>
+  </h1>
+
+  <%= link_to admin_recommendations_path, class: "text-xs font-light flex justify-center items-center gap-1 hover:bg-secondary-bg p-2 rounded-full w-fit whitespace-nowrap mb-4" do %>
+    <%= icon "arrow-left", class: "w-4 h-4" %>
+    <%= t("admin.recommendations.form.back") %>
+  <% end %>
+
+  <%= form_with(
+    model: recommendation,
+    url: recommendation.persisted? ? admin_recommendation_path(recommendation) : admin_recommendations_path,
+    method: recommendation.persisted? ? :patch : :post,
+    class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/15 w-full",
+    html: { multipart: true }
+  ) do |form| %>
+    <% if recommendation.errors.any? %>
+      <div class="flash flash-error">
+        <h2><%= pluralize(recommendation.errors.count, "error") %> prohibited this recommendation from being saved:</h2>
+
+        <ul class="list-disc ml-6">
+          <% recommendation.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <section class="w-full flex flex-row justify-start items-between gap-8 max-sm:flex-col max-sm:items-center">
+      <div class="w-fit">
+        <div class="flex flex-col justify-start items-center gap-3">
+          <div class="w-45 h-45 bg-secondary-bg rounded-2xl flex justify-center items-center">
+            <%= icon "photo-scan", class: "w-1/4 h-1/4 #{recommendation.display_image.attached? ? "hidden" : ""}" %>
+            <img id="recommendation-display-image-preview"
+              src="<%= recommendation.display_image.attached? && recommendation.persisted? ? url_for(recommendation.display_image) : "" %>"
+              alt="Display preview"
+              class="object-cover w-full h-full rounded-2xl <%= recommendation.display_image.attached? ? "" : "hidden" %>" />
+          </div>
+          <div class="flex justify-center items-center w-full">
+            <%= link_to(
+              image_upload_modal_path(
+                model_field: "track_recommendation[display_image]",
+                img_destination_id: "recommendation-display-image-preview",
+                file_upload_input_container_id: "recommendation-display-image-upload-container"
+              ),
+              class: "flex justify-center items-center gap-1 file-upload-chip w-fit",
+              data: { turbo_stream: true }
+            ) do %>
+              <%= icon "plus", class: "w-4 h-4" %>
+              <%= t("label.upload") %>
+            <% end %>
+            <div id="recommendation-display-image-upload-container" class="hidden"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full flex-1">
+        <div class="field content-input-container mb-4">
+          <%= form.label :group %>
+          <%= form.text_field :group, autofocus: false, autocomplete: "off", class: "content-input" %>
+        </div>
+
+        <div class="field content-input-container" data-controller="recs-tag-select">
+          <%= form.label :tags %>
+          <%= form.hidden_field :tag_names, value: recommendation.tag_names.to_json, data: { recs_tag_select_target: "input" } %>
+
+          <div class="flex justify-start items-start flex-wrap gap-2">
+            <% tags.each do |tag| %>
+              <div
+                class="flex justify-center items-center gap-1 cursor-pointer
+                  rounded-full text-[0.6rem] whitespace-nowrap border-1 px-2 py-0.5 select-none
+                  <%= tag[:selected] ? "recs-tag-selected" : "recs-tag-unselected" %>"
+                data-action="click->recs-tag-select#toggle"
+                data-tag-name="<%= tag[:name] %>"
+              >
+                <%= tag[:name] %>
+                <%= icon "plus", class: "w-2 h-2" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex justify-end items-stretch w-full">
+      <%= form.submit t("admin.recommendations.form.#{recommendation.persisted? ? "update" : "create"}"), class: "button px-4 py-2" %>
+    </section>
+  <% end %>
+</div>

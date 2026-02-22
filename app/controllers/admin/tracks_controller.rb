@@ -30,7 +30,7 @@ module Admin
           render :new, status: :unprocessable_content
         end
       rescue ArgumentError => e
-        @track.errors.add(:base, "Update Failed: #{e}")
+        @track.errors.add(:base, "Create Failed: #{e}")
         render :new, status: :unprocessable_content
       end
     end
