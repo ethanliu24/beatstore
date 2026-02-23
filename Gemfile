@@ -71,7 +71,7 @@ group :test do
   gem "pdf-reader"
 end
 
-gem "tailwindcss-ruby", "~> 4.1"
+gem "tailwindcss-ruby", "~> 4.2"
 gem "tailwindcss-rails", "~> 4.4"
 gem "rails_icons", "~> 1.5"
 gem "view_component", "~> 4.2"
