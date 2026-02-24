@@ -46,12 +46,16 @@
 
   <div class="px-16 mt-4 flex flex-col justify-start items-start gap-10 w-full">
     <% [
-      { rec: t("pages.home.recs.latest"), tracks: @recs[:latest] },
-      { rec: t("pages.home.recs.popular"), tracks: @recs[:popular] },
+      { rec: t("pages.home.recs.latest"), tracks: @recs[:latest], see_more_link: nil },
+      { rec: t("pages.home.recs.popular"), tracks: @recs[:popular], see_more_link: nil },
       { rec: t("pages.home.recs.chinese"), tracks: @recs[:chinese] },
     ].each do |d| %>
       <% unless d[:tracks].empty? %>
-        <%= render partial: "tracks/recommendation", locals: { rec: d[:rec], tracks: d[:tracks] } %>
+        <%= render partial: "tracks/recommendation", locals: {
+          rec: d[:rec],
+          tracks: d[:tracks],
+          see_more_link: d.has_key?(:see_more_link) ? d[:see_more_link] : explore_tracks_path(anchor: "recs-#{d[:rec]}")
+        } %>
       <% end %>
     <% end %>
   </div>

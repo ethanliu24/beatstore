@@ -154,6 +154,8 @@ en:
     explore:
       title: "Tracks"
       subtitle: "Explore tracks by category here"
+    recommendation:
+      see_more: "See more"
 
   admin:
     dashboards:
