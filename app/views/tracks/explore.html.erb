@@ -6,6 +6,10 @@
     subtitle: t("track.explore.subtitle")
   ) %>
 
+  <%= link_to tracks_path, class: "text-xs font-light w-fit whitespace-nowrap" do %>
+    <%= content_tag :span, t("track.explore.see_all"), class: "text-accent hover:underline" %>
+  <% end %>
+
   <div class="w-full mt-8 flex flex-col justify-start items-stretch gap-12">
     <% @recommendations.each do |r| %>
       <%= render partial: "tracks/recommendation", locals: {

@@ -154,6 +154,7 @@ en:
     explore:
       title: "Tracks"
       subtitle: "Explore tracks by category here"
+      see_all: "See all tracks"
     recommendation:
       see_more: "See more"
 
