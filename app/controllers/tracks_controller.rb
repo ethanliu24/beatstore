@@ -2,6 +2,7 @@ class TracksController < ApplicationController
   include ExtractSlugToTrackId
 
   SIMILAR_TRACKS_RECOMMENDATION_LIMIT = 10
+  RECOMMENDATIONS_LIMIT = 16
 
   def index
     base_scope = Track.publicly_available
@@ -29,6 +30,17 @@ class TracksController < ApplicationController
       page_comments.partition { |c| c.user_id == current_user.id }.flatten
     else
       page_comments
+    end
+  end
+
+  def explore
+    track_recommendations = TrackRecommendation.rank(:display_order).enabled()
+    recs_service = Tracks::RecommendByGroupService.new(limit: RECOMMENDATIONS_LIMIT)
+
+    @recommendations = track_recommendations.map do |recommendation|
+      tracks = recs_service.group_by_tags(recommendation.tag_names)
+
+      { recommendation:, tracks: }
     end
   end
 

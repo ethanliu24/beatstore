@@ -1,14 +1,17 @@
-<div data-controller="button-scroll" class="w-full">
+<div id="<%= "recs-#{rec}" %>" data-controller="button-scroll" class="w-full">
   <div class="flex justify-between items-center">
     <h2 class="tracking-wider text-sm mb-2"><%= rec %></h2>
 
-    <div class="flex gap-1">
+    <div class="flex justify-end items-center gap-1">
       <button data-action="click->button-scroll#scrollLeft" class="hover:bg-hover cursor-pointer rounded-full p-1">
         <%= icon "chevron-left", class: "w-4 h-4 aspect-square" %>
       </button>
       <button data-action="click->button-scroll#scrollRight" class="hover:bg-hover cursor-pointer rounded-full p-1">
         <%= icon "chevron-right", class: "w-4 h-4 aspect-square" %>
       </button>
+      <% if see_more_link %>
+        <%= link_to t("track.recommendation.see_more"), see_more_link, class: "text-[0.6rem] hover:underline ml-2" %>
+      <% end %>
     </div>
   </div>
 

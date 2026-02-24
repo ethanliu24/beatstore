@@ -36,4 +36,18 @@ RSpec.describe TrackRecommendation, type: :model do
     expect(subject).not_to be_valid
     expect(subject.errors[:display_image]).to include(match(/has an invalid content type/))
   end
+
+  context "scope" do
+    describe "#enabled" do
+      it "should return all recommendations that are not disabled" do
+        create(:track_recommendation, group: "R1", disabled: false)
+        create(:track_recommendation, group: "R2", disabled: true)
+
+        enabled = TrackRecommendation.enabled()
+
+        expect(enabled.length).to eq(1)
+        expect(enabled.first.group).to eq("R1")
+      end
+    end
+  end
 end

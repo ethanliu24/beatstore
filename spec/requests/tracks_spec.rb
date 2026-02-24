@@ -128,4 +128,11 @@ RSpec.describe TracksController, type: :request do
       expect(response).to redirect_to(track_url(id: track.slug_param))
     end
   end
+
+  describe "GET /explore" do
+    it "renders a successful response" do
+      get explore_tracks_url
+      expect(response).to be_successful
+    end
+  end
 end

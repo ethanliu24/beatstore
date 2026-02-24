@@ -81,6 +81,8 @@ en:
           placeholder: "What kind of tracks are you looking for?"
         explore: "BROWSE ALL TRACKS"
       recs:
+        browse_all: "Browse all tracks"
+        browse_by_group: "Explore tracks by category"
         latest: "LATEST"
         popular: "POPULAR"
         chinese: "CHINESE"
@@ -151,6 +153,12 @@ en:
       download_tooltip: "Download"
       more_info_tooltip: "More Track Info"
       edit_tooltip: "Edit"
+    explore:
+      title: "Tracks"
+      subtitle: "Explore tracks by category here"
+      see_all: "See all tracks"
+    recommendation:
+      see_more: "See more"
 
   admin:
     dashboards:
