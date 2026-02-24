@@ -32,6 +32,10 @@ class TracksController < ApplicationController
     end
   end
 
+  def explore
+    
+  end
+
   private
 
   def find_similar_tracks(base_track)

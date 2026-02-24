@@ -30,6 +30,10 @@ Rails.application.routes.draw do
   resources :tracks, only: [ :index, :show ] do
     resource :heart, only: [ :create, :destroy ], module: :tracks
     resource :play, only: [ :create ], module: :tracks, as: "increment_plays"
+
+    collection do
+      get :explore
+    end
   end
 
   resources :comments, only: [ :create, :update, :destroy ] do
@@ -44,8 +48,11 @@ Rails.application.routes.draw do
   resource :cart, only: [ :show ] do
     delete :clear
   end
+
   resources :cart_items, only: [ :create, :destroy ]
+
   resources :orders, only: [ :index ]
+  
   resource :checkout, only: [ :create ] do
     get :success
     get :cancel
