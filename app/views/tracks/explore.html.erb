@@ -1,3 +1,14 @@
-<% @recommendations.each do |recommendation| %>
-  <%= recommendation %>
-<% end %>
+<% content_for :title, "Tracks by category" %>
+
+<div class="w-full">
+  <%= render PageTitleComponent.new(
+    title: t("track.explore.title"),
+    subtitle: t("track.explore.subtitle")
+  ) %>
+
+  <div class="w-full mt-8">
+    <% @recommendations.each do |r| %>
+      <%= render partial: "tracks/recommendation", locals: { rec: r[:recommendation].group, tracks: r[:tracks] } %>
+    <% end %>
+  </div>
+</div>

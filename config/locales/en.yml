@@ -151,6 +151,9 @@ en:
       download_tooltip: "Download"
       more_info_tooltip: "More Track Info"
       edit_tooltip: "Edit"
+    explore:
+      title: "Tracks"
+      subtitle: "Explore tracks by category here"
 
   admin:
     dashboards:
