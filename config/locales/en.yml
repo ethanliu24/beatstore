@@ -81,6 +81,8 @@ en:
           placeholder: "What kind of tracks are you looking for?"
         explore: "BROWSE ALL TRACKS"
       recs:
+        browse_all: "Browse all tracks"
+        browse_by_group: "Explore tracks by category"
         latest: "LATEST"
         popular: "POPULAR"
         chinese: "CHINESE"

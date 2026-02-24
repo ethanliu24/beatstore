@@ -44,19 +44,36 @@
     </div>
   </div>
 
-  <div class="px-16 mt-4 flex flex-col justify-start items-start gap-10 w-full">
-    <% [
-      { rec: t("pages.home.recs.latest"), tracks: @recs[:latest], see_more_link: nil },
-      { rec: t("pages.home.recs.popular"), tracks: @recs[:popular], see_more_link: nil },
-      { rec: t("pages.home.recs.chinese"), tracks: @recs[:chinese] },
-    ].each do |d| %>
-      <% unless d[:tracks].empty? %>
-        <%= render partial: "tracks/recommendation", locals: {
-          rec: d[:rec],
-          tracks: d[:tracks],
-          see_more_link: d.has_key?(:see_more_link) ? d[:see_more_link] : explore_tracks_path(anchor: "recs-#{d[:rec]}")
-        } %>
+  <section>
+    <div class="px-16 mt-4 flex flex-col justify-start items-start gap-10 w-full">
+      <% [
+        { rec: t("pages.home.recs.latest"), tracks: @recs[:latest], see_more_link: nil },
+        { rec: t("pages.home.recs.popular"), tracks: @recs[:popular], see_more_link: nil },
+        { rec: t("pages.home.recs.chinese"), tracks: @recs[:chinese] },
+      ].each do |d| %>
+        <% unless d[:tracks].empty? %>
+          <%= render partial: "tracks/recommendation", locals: {
+            rec: d[:rec],
+            tracks: d[:tracks],
+            see_more_link: d.has_key?(:see_more_link) ? d[:see_more_link] : explore_tracks_path(anchor: "recs-#{d[:rec]}")
+          } %>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+
+    <div class="py-16 w-full flex justify-center items-center gap-4">
+      <%= link_to tracks_path,
+        class: "flex justify-center items-center gap-2 bg-black border-2 border-accent/60 rounded-full
+          cursor-pointer text-white hover:text-accent text-xs max-md:text-[0.6rem] font-bold px-3 py-1.5 text-nowrap" do %>
+        <%= icon "cloud-search", class: "text-accent max-md:w-4" %>
+        <%= t("pages.home.recs.browse_all") %>
+      <% end %>
+      <%= link_to tracks_path,
+        class: "flex justify-center items-center gap-2 bg-black border-2 border-primary-txt/90 rounded-full
+          cursor-pointer text-primary-txt hover:text-accent text-xs max-md:text-[0.6rem] font-bold px-3 py-1.5 text-nowrap" do %>
+        <%= icon "star", variant: "filled", class: "text-primary-txt/90 max-md:w-4" %>
+        <%= t("pages.home.recs.browse_by_group") %>
+      <% end %>
+    </div>
+  </section>
 </div>
