@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   resources :cart_items, only: [ :create, :destroy ]
 
   resources :orders, only: [ :index ]
-  
+
   resource :checkout, only: [ :create ] do
     get :success
     get :cancel
