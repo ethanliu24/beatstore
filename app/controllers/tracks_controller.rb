@@ -33,7 +33,7 @@ class TracksController < ApplicationController
   end
 
   def explore
-    
+    @recommendations = TrackRecommendation.rank(:display_order).enabled()
   end
 
   private

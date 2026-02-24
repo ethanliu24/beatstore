@@ -16,6 +16,8 @@ class TrackRecommendation < ApplicationRecord
 
   ranks :display_order
 
+  scope :enabled, -> { where(disabled: false) }
+
   private
 
   def tag_names_is_array
