@@ -314,6 +314,7 @@ en:
       deliver_mp3: "Deliver MP3"
       deliver_wav: "Deliver WAV"
       deliver_stems: "Deliver Track Stems"
+      show_in_licensing_page: "Show in licensing page"
 
   cart:
     tab_title: "Shopping Cart"

@@ -79,7 +79,8 @@
             { field: :delivers_mp3, label: t("contracts.form.deliver_mp3"), checked: @license.contract[:delivers_mp3], render: render_deliver, form: c },
             { field: :delivers_wav, label: t("contracts.form.deliver_wav"), checked: @license.contract[:delivers_wav], render: render_deliver, form: c },
             { field: :delivers_stems, label: t("contracts.form.deliver_stems"), checked: @license.contract[:delivers_stems], render: render_deliver, form: c },
-            { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new, render: true, form: }
+            { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new, render: true, form: },
+            { field: :show_in_licensing_page, label: t("contracts.form.show_in_licensing_page"), checked: @license.show_in_licensing_page, render: true, form: }
           ].each do |checkbox| %>
             <% if checkbox[:render] %>
               <label class="inline-flex items-center cursor-pointer py-1">

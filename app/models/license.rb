@@ -31,6 +31,10 @@ class License < ApplicationRecord
     def track_contract_templates
       Rails.configuration.templates[:contracts]
     end
+
+    def licensing_page_displays
+      where(show_in_licensing_page: true)
+    end
   end
 
   def contract

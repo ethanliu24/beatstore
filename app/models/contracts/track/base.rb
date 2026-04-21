@@ -3,6 +3,7 @@
 module Contracts
   module Track
     class Base < Contracts::Base
+      attribute :show_in_licensing_page, :boolean
       attribute :terms_of_years, :integer
       attribute :delivers_mp3, :boolean
       attribute :delivers_wav, :boolean
