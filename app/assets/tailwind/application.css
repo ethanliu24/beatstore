@@ -205,6 +205,10 @@
     @apply text-center w-full text-xs font-extrabold rounded-xs py-1.5 px-4 bg-primary-txt text-background;
   }
 
+  .home-section {
+    @apply w-full flex flex-col justify-center items-center gap-4 mb-16;
+  }
+
   .home-section-title {
     @apply text-xl font-extrabold;
   }
