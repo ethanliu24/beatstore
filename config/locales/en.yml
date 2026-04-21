@@ -92,6 +92,7 @@ en:
         gunna: "GUNNA"
     licensing:
       read_license_btn: "READ LICENSE"
+      contact_btn: "CONTACT"
 
   authentication:
     or_continue_with: "Or continue with"

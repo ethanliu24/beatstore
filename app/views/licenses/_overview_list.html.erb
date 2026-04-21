@@ -2,4 +2,13 @@
   <% License.licensing_page_displays.each do |license| %>
     <%= render "licenses/overview", license:, overview: get_license_overview(license) %>
   <% end %>
+
+  <%# Temp exclusive license %>
+  <%= render "licenses/overview",
+    license: License.new(title: "Exclusive Rights", contract_type: License.contract_types[:exclusive]),
+    overview: [
+      "1 MP3 File (Untagged)", "1 WAV File (Untagged)", "Trackouts / Stems",
+      "Unlimited Steams Cap", "Unlimited Units Cap", "Unlimited MVs Cap", "Unlimited Radio Stations Cap",
+      "Exclusive Rights", "Must Credit On Any Social Media Publication Of The Track"
+    ] %>
 </div>

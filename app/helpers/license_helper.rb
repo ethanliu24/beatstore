@@ -42,7 +42,7 @@ module LicenseHelper
     end
 
     if contract[:delivers_stems]
-      overview << "Trackout/Stems"
+      overview << "Trackout / Stems"
     end
 
     if contract.key?(:streams_allowed)
@@ -58,14 +58,6 @@ module LicenseHelper
         overview << "Unlimited Units Cap"
       elsif contract[:distribution_copies] > 0
         overview << "#{contract[:distribution_copies]} Units Cap"
-      end
-    end
-
-    if contract.key?(:streams_allowed)
-      if contract[:streams_allowed].nil?
-        overview << "Unlimited Monetized MVs Cap"
-      elsif contract[:streams_allowed] > 0
-        overview << "#{contract[:streams_allowed]} Monetized MVs Cap"
       end
     end
 

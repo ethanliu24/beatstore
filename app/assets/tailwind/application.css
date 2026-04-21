@@ -201,6 +201,10 @@
     @apply cursor-pointer rounded accent-accent;
   }
 
+  .license_overview_btn {
+    @apply text-center w-full text-xs font-extrabold rounded-xs py-1.5 px-4 bg-primary-txt text-background;
+  }
+
   /* Authentication */
   .auth-form {
     @apply
