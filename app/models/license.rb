@@ -33,7 +33,7 @@ class License < ApplicationRecord
     end
 
     def licensing_page_displays
-      where(show_in_licensing_page: true)
+      where(show_in_licensing_page: true).order(price_cents: :asc)
     end
   end
 

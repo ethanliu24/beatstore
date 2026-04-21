@@ -27,4 +27,7 @@ module LicenseHelper
       end
     end
   end
+
+  def get_license_overview(license)
+  end
 end
