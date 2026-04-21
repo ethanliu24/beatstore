@@ -44,8 +44,8 @@
     </div>
   </div>
 
-  <section>
-    <div class="px-16 mt-4 flex flex-col justify-start items-start gap-10 w-full">
+  <section class="home-section">
+    <div class="px-16 flex flex-col justify-start items-start gap-10 w-full">
       <% [
         { rec: t("pages.home.recs.latest"), tracks: @recs[:latest], see_more_link: nil },
         { rec: t("pages.home.recs.popular"), tracks: @recs[:popular], see_more_link: nil },
@@ -61,7 +61,7 @@
       <% end %>
     </div>
 
-    <div class="py-16 w-full flex justify-center items-center gap-4 -mt-2">
+    <div class="w-full flex justify-center items-center gap-4 py-4">
       <%= link_to tracks_path,
         class: "flex justify-center items-center gap-2 bg-black border-2 border-accent/60 rounded-full
           cursor-pointer text-white hover:text-accent text-xs max-md:text-[0.6rem] font-bold px-3 py-1.5 text-nowrap" do %>
@@ -77,10 +77,13 @@
     </div>
   </section>
 
-  <section>
-    <div class="flex flex-col justify-center items-center gap-4">
-      <%= content_tag :h2, t("pages.home.section.licensing"), class: "home-section-title" %>
-      <%= render "licenses/overview_list" %>
-    </div>
+  <section class="home-section">
+    <%= content_tag :h2, t("pages.home.section.licensing"), class: "home-section-title" %>
+    <%= render "licenses/overview_list" %>
+  </section>
+
+  <section class="home-section">
+    <%= content_tag :h2, t("pages.home.section.contact"), class: "home-section-title" %>
+    <%= render "contacts/form" %>
   </section>
 </div>
