@@ -90,6 +90,8 @@ en:
         underground: "UNDERGROUND"
         rnb: "RNB"
         gunna: "GUNNA"
+      section:
+        licensing: "Licensing Info"
     licensing:
       tab_title: "Licensing Info"
       title: "Licensing Info"

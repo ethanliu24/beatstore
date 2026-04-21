@@ -17,12 +17,12 @@
     <% if license.contract_type == License.contract_types[:exclusive] %>
       <p class="text-[0.5rem] font-light mb-1 italic"><%= "Email #{::Credentials::Email.producer_email} or" %></p>
       <%= link_to t("pages.licensing.contact_btn"), contact_path, target: "_blank", rel: "noopener",
-        class: "license_overview_btn" %>
+        class: "license-overview-btn" %>
     <% else %>
       <%= link_to t("pages.licensing.read_license_btn"),
         preview_contract_modal_path(license_id: license.id),
         data: { turbo_stream: true },
-        class: "license_overview_btn" %>
+        class: "license-overview-btn" %>
     <% end %>
   </div>
 </div>
