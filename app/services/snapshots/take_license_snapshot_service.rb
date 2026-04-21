@@ -7,7 +7,12 @@ module Snapshots
     end
 
     def call
-      @license.attributes
+      snapshot = @license.attributes
+
+      snapshot.delete("default_for_new")
+      snapshot.delete("show_in_licensing_page")
+
+      snapshot
     end
   end
 end
