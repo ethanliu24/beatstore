@@ -45,4 +45,15 @@ RSpec.describe Credentials::Stripe do
       Credentials::Stripe.payments_webhook_secret
     end
   end
+
+  describe "when credentials are missing" do
+    it "raises an error with the correct stripe namespace" do
+      allow(Rails.application.credentials).to receive(:dig).and_return(nil)
+      allow(ENV).to receive(:[]).and_return(nil)
+
+      expect {
+        Credentials::Stripe.secret_key
+      }.to raise_error(RuntimeError, /Missing stripe credential/)
+    end
+  end
 end
