@@ -91,6 +91,8 @@ en:
         rnb: "RNB"
         gunna: "GUNNA"
     licensing:
+      tab_title: "Licensing Info"
+      title: "Licensing Info"
       read_license_btn: "READ LICENSE"
       contact_btn: "CONTACT"
 
