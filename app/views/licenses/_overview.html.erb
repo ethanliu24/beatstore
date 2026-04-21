@@ -1,13 +1,15 @@
-<div class="flex flex-col justify-start items-center gap-2 bg-secondary-bg p-4 min-w-50 text-[0.6rem]">
+<div class="flex flex-col justify-start items-center gap-2 bg-secondary-bg p-4 max-w-50 text-[0.6rem]">
   <%= content_tag :p, license.title, class: "font-bold" %>
   <%= content_tag :p, license.price.format, class: "text-2xl font-bold" %>
-  <div>
+  <ul class="list-disc pl-4 text-wrap mb-2">
     <% overview.each do |line| %>
-      <%= content_tag :p, line, class: "" %>
+      <li><%= line %></li>
     <% end %>
+  </ul>
+  <div class="flex-1 flex justify-center items-end w-full">
+    <%= link_to t("pages.licensing.read_license_btn"),
+      preview_contract_modal_path(license_id: license.id),
+      data: { turbo_stream: true },
+      class: "text-center w-full text-xs font-extrabold rounded-xs py-1.5 px-4 bg-primary-txt text-background" %>
   </div>
-  <%= link_to t("pages.licensing.read_license_btn"),
-    preview_contract_modal_path(license_id: license.id),
-    data: { turbo_stream: true },
-    class: "text-center w-full text-xs font-extrabold rounded-xs py-1.5 px-4 bg-primary-txt text-background" %>
 </div>

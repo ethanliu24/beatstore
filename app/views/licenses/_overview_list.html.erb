@@ -1,4 +1,4 @@
-<div class="flex justify-center items-center gap-2">
+<div class="flex justify-center items-stretch gap-2 flex-wrap">
   <% License.licensing_page_displays.each do |license| %>
     <%= render "licenses/overview", license:, overview: get_license_overview(license) %>
   <% end %>
