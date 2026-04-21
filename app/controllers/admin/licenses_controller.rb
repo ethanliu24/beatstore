@@ -136,6 +136,7 @@ module Admin
         :country,
         :province,
         :default_for_new,
+        :show_in_licensing_page,
         contract_details: @contract_class.attribute_types.keys,
       )
 

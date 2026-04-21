@@ -79,7 +79,8 @@
             { field: :delivers_mp3, label: t("contracts.form.deliver_mp3"), checked: @license.contract[:delivers_mp3], render: render_deliver, form: c },
             { field: :delivers_wav, label: t("contracts.form.deliver_wav"), checked: @license.contract[:delivers_wav], render: render_deliver, form: c },
             { field: :delivers_stems, label: t("contracts.form.deliver_stems"), checked: @license.contract[:delivers_stems], render: render_deliver, form: c },
-            { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new, render: true, form: }
+            { field: :default_for_new, label: t("contracts.form.active_by_default"), checked: @license.default_for_new, render: true, form: },
+            { field: :show_in_licensing_page, label: t("contracts.form.show_in_licensing_page"), checked: @license.show_in_licensing_page, render: true, form: }
           ].each do |checkbox| %>
             <% if checkbox[:render] %>
               <label class="inline-flex items-center cursor-pointer py-1">
@@ -124,17 +125,17 @@
         <div class="form-grid-container">
           <div class="field content-input-container grid-content">
             <%= c.label t("contracts.form.label.terms_of_years") %>
-            <%= c.number_field :terms_of_years, class: "content-input", min: 1, step: 1 %>
+            <%= c.number_field :terms_of_years, class: "content-input", min: 0, step: 1 %>
           </div>
 
           <% if contract_type == License.contract_types[:non_exclusive] %>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.distribution_copies") %>
-              <%= c.number_field :distribution_copies, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :distribution_copies, class: "content-input", min: 0, step: 1 %>
             </div>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.streams_allowed") %>
-              <%= c.number_field :streams_allowed, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :streams_allowed, class: "content-input", min: 0, step: 1 %>
             </div>
           <% end %>
         </div>
@@ -150,19 +151,19 @@
           <div class="form-grid-container">
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.monetized_videos") %>
-              <%= c.number_field :monetized_videos, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :monetized_videos, class: "content-input", min: 0, step: 1 %>
             </div>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.non_monetized_videos") %>
-              <%= c.number_field :non_monetized_videos, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :non_monetized_videos, class: "content-input", min: 0, step: 1 %>
             </div>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.monetized_video_streams") %>
-              <%= c.number_field :monetized_video_streams, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :monetized_video_streams, class: "content-input", min: 0, step: 1 %>
             </div>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.non_monetized_video_streams") %>
-              <%= c.number_field :non_monetized_video_streams, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :non_monetized_video_streams, class: "content-input", min: 0, step: 1 %>
             </div>
           </div>
         </section>
@@ -181,7 +182,7 @@
             </div>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.radio_stations_allowed") %>
-              <%= c.number_field :radio_stations_allowed, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :radio_stations_allowed, class: "content-input", min: 0, step: 1 %>
             </div>
           </div>
         </section>
@@ -200,7 +201,7 @@
             </div>
             <div class="field content-input-container">
               <%= c.label t("contracts.form.label.non_profitable_performances") %>
-              <%= c.number_field :non_profitable_performances, class: "content-input", min: 1, step: 1 %>
+              <%= c.number_field :non_profitable_performances, class: "content-input", min: 0, step: 1 %>
             </div>
           </div>
         </section>

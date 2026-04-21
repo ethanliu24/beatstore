@@ -90,6 +90,13 @@ en:
         underground: "UNDERGROUND"
         rnb: "RNB"
         gunna: "GUNNA"
+      section:
+        licensing: "Licensing Info"
+    licensing:
+      tab_title: "Licensing Info"
+      title: "Licensing Info"
+      read_license_btn: "READ LICENSE"
+      contact_btn: "CONTACT"
 
   authentication:
     or_continue_with: "Or continue with"
@@ -314,6 +321,7 @@ en:
       deliver_mp3: "Deliver MP3"
       deliver_wav: "Deliver WAV"
       deliver_stems: "Deliver Track Stems"
+      show_in_licensing_page: "Show in licensing page"
 
   cart:
     tab_title: "Shopping Cart"

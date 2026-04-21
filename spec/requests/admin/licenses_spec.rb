@@ -170,6 +170,20 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
 
         expect(response).to redirect_to(admin_licenses_path)
       end
+
+      it "sets show_in_licensing_page to true if indicated" do
+        expect {
+          post admin_licenses_url, params: {
+            license: params.merge(
+              contract_type: License.contract_types[:non_exclusive],
+              contract_details: non_exclusive_unlimited_contract,
+              show_in_licensing_page: true
+            )
+          }
+        }.to change(License, :count).by(1)
+
+        expect(License.last.show_in_licensing_page).to eq(true)
+      end
     end
 
     context "with invalid contract" do

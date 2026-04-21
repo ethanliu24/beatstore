@@ -14,6 +14,9 @@ class PagesController < ApplicationController
     }
   end
 
+  def licensing
+  end
+
   private
 
   def popular_tracks(limit:, like_weight:)

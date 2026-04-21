@@ -23,6 +23,11 @@ RSpec.describe License, type: :model do
       license = License.new
       expect(license.default_for_new).to eq(false)
     end
+
+    it "sets show_in_licensing_page to false by default" do
+      license = License.new
+      expect(license.show_in_licensing_page).to eq(false)
+    end
   end
 
   describe "contract type" do
