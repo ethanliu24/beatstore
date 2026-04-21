@@ -32,18 +32,20 @@
   >
     <%= render "nav/navbar" %>
 
-    <main id="main" class="flex-1 overflow-y-scroll transparent-scrollbar-background">
-      <%= render current_page %>
+    <main id="main" class="flex-1 overflow-y-scroll transparent-scrollbar-background flex flex-col">
+      <div class="flex-1">
+        <%= render current_page %>
+      </div>
+
+      <% unless [ "layouts/auth_main", "layouts/admin_main" ].include?(current_page) %>
+        <%= render "shared/copyright_footer" %>
+      <% end %>
     </main>
 
     <%= turbo_frame_tag "modal" %>
 
     <%= turbo_frame_tag "toasts" do %>
       <%= render "shared/toasts", flash: flash %>
-    <% end %>
-
-    <% unless current_page == "layouts/auth_main" %>
-      <%= render "audio/audio_player" %>
     <% end %>
   </body>
 </html>
