@@ -47,5 +47,9 @@
     <%= turbo_frame_tag "toasts" do %>
       <%= render "shared/toasts", flash: flash %>
     <% end %>
+
+    <% unless current_page == "layouts/auth_main" %>
+      <%= render "audio/audio_player" %>
+    <% end %>
   </body>
 </html>
