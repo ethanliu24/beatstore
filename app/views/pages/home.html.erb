@@ -18,7 +18,7 @@
         <% end %>
         <%= content_tag :h2, t("pages.home.hero.subtitle"), class: "font-thin text-center text-lg max-sm:text-sm px-2" %>
 
-        <div class="mt-4 flex justify-between items-stretch gap-6 max-md:flex-col">
+        <div class="mt-4 flex justify-between items-stretch gap-6 max-md:gap-4 max-md:flex-col">
           <%= form_with url: tracks_path, method: :get, local: true do |f| %>
             <span class="relative flex-1 w-full">
               <%= icon "search", class: "absolute w-4 aspect-square top-1/2 left-0 -translate-y-1/2 ml-3 text-black pt-[5px]" %>
@@ -61,7 +61,7 @@
       <% end %>
     </div>
 
-    <div class="w-full flex justify-center items-center gap-4 py-4">
+    <div class="w-full flex justify-center items-center flex-wrap gap-4 max-sm:gap-2 py-4">
       <%= link_to tracks_path,
         class: "flex justify-center items-center gap-2 bg-black border-2 border-accent/60 rounded-full
           cursor-pointer text-white hover:text-accent text-xs max-md:text-[0.6rem] font-bold px-3 py-1.5 text-nowrap" do %>
