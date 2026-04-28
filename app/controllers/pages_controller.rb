@@ -14,7 +14,10 @@ class PagesController < ApplicationController
     }
   end
 
-  def licensing
+  def licensing; end
+
+  def terms_of_service
+    @content = Rails.configuration.templates[:terms_of_service]
   end
 
   private

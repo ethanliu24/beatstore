@@ -98,6 +98,8 @@ en:
       title: "Licensing Info"
       read_license_btn: "READ LICENSE"
       contact_btn: "CONTACT"
+    terms_of_service:
+      tab_title: "Terms of Service"
 
   authentication:
     or_continue_with: "Or continue with"
