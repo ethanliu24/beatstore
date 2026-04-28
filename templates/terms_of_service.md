@@ -2,7 +2,7 @@
 
 **Last Updated:** April 22, 2026
 
-By accessing, browsing, or using the website located at **[URL]** (the "Site") and any services or digital products provided therein, you (**"User"**, **"you"**, or **"your"**) agree to be legally bound by these Terms of Service. These Terms constitute a binding legal agreement between you and **[LEGAL NAME]** operating as **[PRODUCER NAME]** (**"Company"**, **"we"**, **"us"**, or **"our"**).
+By accessing, browsing, or using the website located at **[URL]** (the "Site") and any services or digital products provided therein, you (**"User"**, **"you"**, or **"your"**) agree to be legally bound by these Terms of Service. These Terms constitute a binding legal agreement between you and **Yichen Liu** operating as **prodethan** (**"Company"**, **"we"**, **"us"**, or **"our"**).
 
 If you do not agree with any part of these Terms, you are strictly prohibited from using the Site and must discontinue use immediately.
 

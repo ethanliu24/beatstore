@@ -12,6 +12,10 @@ class Templates
       }.with_indifferent_access
     end
 
+    def read_tos
+      read_template("templates/terms_of_service.md")
+    end
+
     private
 
     def read_template(file_name)
@@ -23,4 +27,5 @@ end
 Rails.application.config.to_prepare do
   Rails.configuration.templates = {}
   Rails.configuration.templates[:contracts] = Templates.read_contract_templates
+  Rails.configuration.templates[:terms_of_service] = Templates.read_tos
 end
