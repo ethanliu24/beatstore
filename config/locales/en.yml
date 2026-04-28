@@ -353,7 +353,7 @@ en:
         items_total_label: "Items total"
         checkout_button: "Proceed to checkout"
         continue_as_guest_prompt_html: "Continue as guest, %{login_link} or %{signup_link}"
-        site_aggrement_prompt_html: "By clicking on the checkout button, you agree to our %{refund_policy_link}, %{tos_link} and %{privacy_link}"
+        site_aggrement_prompt_html: "By clicking on the checkout button, you agree to our %{tos_link} and %{privacy_link}. All sales are final since files are delivered instantly after purchase."
 
   cart_item:
     create:
