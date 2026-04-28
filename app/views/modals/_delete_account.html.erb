@@ -3,9 +3,16 @@
 
   <%= modal.with_body do %>
     <div class="py-8 px-4">
-      <p class="text-xl font-bold"><%= t("profile.delete_account_confirmation_title") %></p>
-      <p class="font-light mt-2"><%= t("profile.delete_account_confirmation_explaination") %></p>
-      <%# TODO link to TOS and privacy page %>
+      <p class="text-lg font-bold"><%= t("profile.delete_account_confirmation_title") %></p>
+      <p class="text-xs font-light mt-2">
+        <%= t("profile.delete_account_confirmation_explaination_html",
+          tos_link: link_to(t("label.terms_of_service"), terms_of_service_path,
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          privacy_link: link_to(t("label.privacy_policy"), root_path,
+            target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+        ) %>
+      </p>
+      <%# TODO link to privacy page %>
     </div>
   <% end %>
 

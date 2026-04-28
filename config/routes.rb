@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
   get "licensing", to: "pages#licensing"
+  get "terms-of-service", to: "pages#terms_of_service"
 
   get "admin", to: "admin/dashboards#show", as: "admin"
 
