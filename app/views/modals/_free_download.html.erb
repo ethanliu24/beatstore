@@ -25,11 +25,11 @@
             </div>
           </div>
 
-        <%# TODO link tos and privacy %>
+        <%# TODO link privacy %>
         <% free_license = track.licenses.kept.find { |l| l.price_cents == 0 } %>
         <p class="text-[0.6rem] italic font-light text-secondary-txt"><%= t(
           "modal.free_download.aggrement_html",
-          tos_link: link_to(t("label.terms_of_service"), root_path,
+          tos_link: link_to(t("label.terms_of_service"), terms_of_service_path,
             target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
           privacy_link: link_to(t("label.privacy_policy"), root_path,
             target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,

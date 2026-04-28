@@ -103,7 +103,7 @@ en:
 
   authentication:
     or_continue_with: "Or continue with"
-    agree_tos: "By signing up, you agree with the "
+    agree_tos_and_privacy_html: "By signing up, you agree with the %{tos_link} and %{privacy_link}"
     already_signed_up: "Already signed up?"
     already_signed_in: "Already signed in?"
     no_confirmation_instructions: "Didn't recieve confirmation instructions?"
@@ -279,7 +279,7 @@ en:
     manage_your_profile_here: "Manage your profile here"
     display_name: "Display name"
     delete_account_confirmation_title: "Are you sure?"
-    delete_account_confirmation_explaination: "Deleting this account will erase your data here. However, transaction history will be saved. See the terms of service and privacy page for more details."
+    delete_account_confirmation_explaination_html: "Deleting this account will archive all your data here, including transaction history. See the %{tos_link} and %{privacy_link} for more details."
     see_tracks_you_liked_here: "See tracks you liked here"
     no_tracks_liked: "You haven't liked any tracks yet."
     update_success: "Profile updated successfully."
@@ -353,7 +353,7 @@ en:
         items_total_label: "Items total"
         checkout_button: "Proceed to checkout"
         continue_as_guest_prompt_html: "Continue as guest, %{login_link} or %{signup_link}"
-        site_aggrement_prompt_html: "By clicking on the checkout button, you agree to our %{tos_link} and %{privacy_link}. All sales are final since files are delivered instantly after purchase."
+        site_aggrement_prompt_html: "By clicking on the checkout button, you agree to the license contract(s), %{tos_link} and %{privacy_link}. All sales are final since files are delivered instantly after purchase."
 
   cart_item:
     create:
