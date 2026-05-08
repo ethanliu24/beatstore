@@ -20,6 +20,10 @@ class PagesController < ApplicationController
     @content = Rails.configuration.templates[:terms_of_service]
   end
 
+  def privacy
+    @content = Rails.configuration.templates[:privacy_policy] + "hi"
+  end
+
   private
 
   def popular_tracks(limit:, like_weight:)

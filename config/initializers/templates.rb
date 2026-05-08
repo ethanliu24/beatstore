@@ -32,5 +32,5 @@ Rails.application.config.to_prepare do
   Rails.configuration.templates = {}
   Rails.configuration.templates[:contracts] = Templates.read_contract_templates
   Rails.configuration.templates[:terms_of_service] = Templates.read_tos
-  Rails.configuration.templates[:privacy_policy] = Templates.privacy_policy
+  Rails.configuration.templates[:privacy_policy] = Templates.read_privacy
 end

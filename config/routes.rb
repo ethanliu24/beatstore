@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   root "pages#home"
   get "licensing", to: "pages#licensing"
   get "terms-of-service", to: "pages#terms_of_service"
+  get "privacy", to: "pages#privacy"
 
   get "admin", to: "admin/dashboards#show", as: "admin"
 
