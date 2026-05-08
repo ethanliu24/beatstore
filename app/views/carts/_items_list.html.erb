@@ -76,7 +76,7 @@
         <%= t(
           "cart.show.summary.site_aggrement_prompt_html",
           tos_link: link_to(t("label.terms_of_service"), terms_of_service_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
-          privacy_link: link_to(t("label.privacy_policy"), root_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
+          privacy_link: link_to(t("label.privacy_policy"), privacy_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe,
         ) %>
       </p>
       <%= button_to t("cart.show.summary.checkout_button"), checkout_path, method: :post,
