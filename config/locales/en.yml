@@ -102,6 +102,8 @@ en:
       tab_title: "Terms of Service"
     privacy:
       tab_title: "Privacy Policy"
+    cookies:
+      tab_title: "Cookies Policy"
 
   authentication:
     or_continue_with: "Or continue with"
