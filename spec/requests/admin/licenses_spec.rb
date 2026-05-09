@@ -71,10 +71,10 @@ RSpec.describe Admin::LicensesController, type: :request, admin: true do
       expect(assigns(:contract_type)).to eq(contract_type)
     end
 
-    it "sets contract_type to nil if invalid" do
-      get new_admin_license_url, params: { contract_type: "invalid" }
-
-      expect(assigns(:contract_type)).to be_nil
+    it "raises error if contract_type is invalid" do
+      expect {
+        get new_admin_license_url, params: { contract_type: "invalid" }
+      }.to raise_error(ArgumentError)
     end
   end
 
