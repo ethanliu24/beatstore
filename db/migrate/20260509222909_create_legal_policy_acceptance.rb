@@ -1,6 +1,6 @@
 class CreateLegalPolicyAcceptance < ActiveRecord::Migration[8.0]
   def change
-    create_table :legal_policy_acceptances do |t|
+    create_table :legal_policies_acceptances do |t|
       t.string :tos_version, default: ""
       t.datetime :tos_accepted_at
       t.string :privacy_version, default: ""
