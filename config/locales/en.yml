@@ -100,6 +100,8 @@ en:
       contact_btn: "CONTACT"
     terms_of_service:
       tab_title: "Terms of Service"
+    privacy:
+      tab_title: "Privacy Policy"
 
   authentication:
     or_continue_with: "Or continue with"

@@ -16,6 +16,10 @@ class Templates
       read_template("templates/terms_of_service.md")
     end
 
+    def read_privacy
+      read_template("templates/privacy_policy.md")
+    end
+
     private
 
     def read_template(file_name)
@@ -28,4 +32,5 @@ Rails.application.config.to_prepare do
   Rails.configuration.templates = {}
   Rails.configuration.templates[:contracts] = Templates.read_contract_templates
   Rails.configuration.templates[:terms_of_service] = Templates.read_tos
+  Rails.configuration.templates[:privacy_policy] = Templates.read_privacy
 end
