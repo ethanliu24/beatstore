@@ -21,7 +21,11 @@ class PagesController < ApplicationController
   end
 
   def privacy
-    @content = Rails.configuration.templates[:privacy_policy] + "hi"
+    @content = Rails.configuration.templates[:privacy_policy]
+  end
+
+  def cookies
+    @content = Rails.configuration.templates[:cookies_policy]
   end
 
   private
