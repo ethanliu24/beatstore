@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Users
-  class LegalPoliciesacceptance
+  class LegalPoliciesAcceptance < ApplicationRecord
     self.table_name = "legal_policies_acceptances"
 
     belongs_to :user, optional: false
