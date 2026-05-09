@@ -8,6 +8,8 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:display_name) }
     it { should validate_presence_of(:username) }
     it { should validate_uniqueness_of(:username).case_insensitive }
+    it { should have_one(:cart) }
+    it { should have_one(:legal_policies_acceptance) }
     it { should have_many(:hearts) }
     it { should have_many(:track_plays) }
     it { should have_many(:comments) }
@@ -162,6 +164,21 @@ RSpec.describe User, type: :model do
       user.destroy!
 
       expect(Cart.find_by(id: cart.id)).to be_nil
+    end
+  end
+
+  describe "cart association" do
+    let(:user) { create(:user) }
+
+    it "should create a cart for user after create" do
+      expect(user.legal_policies_acceptance).not_to be_nil
+    end
+
+    it "should delete the user's cart after delete" do
+      acceptance = user.legal_policies_acceptance
+      user.destroy!
+
+      expect(Users::LegalPoliciesAcceptance.find_by(id: acceptance.id)).to be_nil
     end
   end
 
