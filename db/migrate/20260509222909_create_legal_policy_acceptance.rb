@@ -11,5 +11,7 @@ class CreateLegalPolicyAcceptance < ActiveRecord::Migration[8.0]
       t.references :user, null: false, foreign_key: true
       t.timestamps
     end
+
+    add_index :legal_policies_acceptances, :user_id, unique: true
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_09_222909) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_21_011656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -117,19 +117,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_222909) do
     t.text "message", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "legal_policies_acceptances", force: :cascade do |t|
-    t.string "tos_version", default: ""
-    t.datetime "tos_accepted_at"
-    t.string "privacy_version", default: ""
-    t.datetime "privacy_accepted_at"
-    t.string "cookies_version", default: ""
-    t.datetime "cookies_accepted_at"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_legal_policies_acceptances_on_user_id"
   end
 
   create_table "licenses", force: :cascade do |t|
@@ -297,7 +284,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_222909) do
   add_foreign_key "comments", "users"
   add_foreign_key "free_downloads", "tracks", on_delete: :nullify
   add_foreign_key "free_downloads", "users", on_delete: :nullify
-  add_foreign_key "legal_policies_acceptances", "users"
   add_foreign_key "licenses_tracks", "licenses"
   add_foreign_key "licenses_tracks", "tracks"
   add_foreign_key "order_items", "orders"
