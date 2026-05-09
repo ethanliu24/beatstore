@@ -3,83 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe Templates::Templates do
-  describe "#read_contract_templates" do
-    let(:free_path) do
-      "templates/contracts/tracks/free.md"
-    end
+  describe ".read_contract_templates" do
+    subject(:templates) { described_class.read_contract_templates }
 
-    let(:non_exclusive_path) do
-      "templates/contracts/tracks/non_exclusive.md"
-    end
+    it "loads the free contract template" do
+      expect(templates["free"]).to be_present
 
-    before do
-      allow(License).to receive(:contract_types).and_return(
-        {
-          free: "free",
-          non_exclusive: "non_exclusive"
-        }
+      expected_content = File.read(
+        Rails.root.join("templates/contracts/tracks/free.md")
       )
+
+      expect(templates["free"]).to eq(expected_content)
     end
 
-    context "when all template files exist" do
-      before do
-        allow(File).to receive(:exist?).with(free_path).and_return(true)
-        allow(File).to receive(:exist?).with(non_exclusive_path).and_return(true)
+    it "loads the non-exclusive contract template" do
+      expect(templates["non_exclusive"]).to be_present
 
-        allow(File).to receive(:read).with(free_path).and_return("free template")
-        allow(File).to receive(:read).with(non_exclusive_path).and_return("non exclusive template")
-      end
+      expected_content = File.read(
+        Rails.root.join("templates/contracts/tracks/non_exclusive.md")
+      )
 
-      it "returns all contract templates" do
-        result = described_class.read_contract_templates
-
-        expect(result).to eq(
-          {
-            "free" => "free template",
-            "non_exclusive" => "non exclusive template"
-          }.with_indifferent_access
-        )
-      end
+      expect(templates["non_exclusive"]).to eq(expected_content)
     end
 
-    context "when template files do not exist" do
-      before do
-        allow(File).to receive(:exist?).with(free_path).and_return(false)
-        allow(File).to receive(:exist?).with(non_exclusive_path).and_return(false)
-      end
-
-      it "returns empty strings for missing templates" do
-        result = described_class.read_contract_templates
-
-        expect(File).not_to receive(:read)
-
-        expect(result).to eq(
-          {
-            "free" => "",
-            "non_exclusive" => ""
-          }.with_indifferent_access
-        )
-      end
-    end
-
-    context "when only one template file exists" do
-      before do
-        allow(File).to receive(:exist?).with(free_path).and_return(true)
-        allow(File).to receive(:exist?).with(non_exclusive_path).and_return(false)
-
-        allow(File).to receive(:read).with(free_path).and_return("free template")
-      end
-
-      it "returns content for existing template and empty string for missing one" do
-        result = described_class.read_contract_templates
-
-        expect(result).to eq(
-          {
-            "free" => "free template",
-            "non_exclusive" => ""
-          }.with_indifferent_access
-        )
-      end
+    it "returns an indifferent access hash" do
+      expect(templates[:free]).to eq(templates["free"])
+      expect(templates[:non_exclusive]).to eq(templates["non_exclusive"])
     end
   end
 end

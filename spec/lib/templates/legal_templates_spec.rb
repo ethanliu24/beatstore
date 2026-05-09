@@ -4,50 +4,57 @@ require 'rails_helper'
 
 RSpec.describe Templates::LegalTemplates do
   describe "::VERSIONS" do
+    it "matches the expected versions" do
+      expect(described_class::VERSIONS).to eq(
+        {
+          tos: "2026.05.09.v1.0.0",
+          privacy: "2026.04.28.v1.0.0",
+          cookies: "2026.05.09.v1.0.0"
+        }
+      )
+    end
+
     it "is frozen" do
       expect(described_class::VERSIONS).to be_frozen
     end
   end
 
   describe ".read_tos" do
-    let(:path) { "templates/legal/terms_of_service.md" }
+    subject(:content) { described_class.read_tos }
 
-    it "reads the terms of service template" do
-      allow(described_class).to receive(:read_template)
-        .with(path)
-        .and_return("tos content")
+    it "loads the terms of service template" do
+      expected_content = File.read(
+        Rails.root.join("templates/legal/terms_of_service.md")
+      )
 
-      result = described_class.read_tos
-
-      expect(result).to eq("tos content")
+      expect(content).to eq(expected_content)
+      expect(content).to be_present
     end
   end
 
   describe ".read_privacy" do
-    let(:path) { "templates/legal/privacy_policy.md" }
+    subject(:content) { described_class.read_privacy }
 
-    it "reads the privacy policy template" do
-      allow(described_class).to receive(:read_template)
-        .with(path)
-        .and_return("privacy content")
+    it "loads the privacy policy template" do
+      expected_content = File.read(
+        Rails.root.join("templates/legal/privacy_policy.md")
+      )
 
-      result = described_class.read_privacy
-
-      expect(result).to eq("privacy content")
+      expect(content).to eq(expected_content)
+      expect(content).to be_present
     end
   end
 
   describe ".read_cookies" do
-    let(:path) { "templates/legal/cookies_policy.md" }
+    subject(:content) { described_class.read_cookies }
 
-    it "reads the cookies policy template" do
-      allow(described_class).to receive(:read_template)
-        .with(path)
-        .and_return("cookies content")
+    it "loads the cookies policy template" do
+      expected_content = File.read(
+        Rails.root.join("templates/legal/cookies_policy.md")
+      )
 
-      result = described_class.read_cookies
-
-      expect(result).to eq("cookies content")
+      expect(content).to eq(expected_content)
+      expect(content).to be_present
     end
   end
 end
