@@ -17,15 +17,15 @@ class PagesController < ApplicationController
   def licensing; end
 
   def terms_of_service
-    @content = Rails.configuration.templates[:terms_of_service]
+    @content = Rails.configuration.legal[:terms_of_service]
   end
 
   def privacy
-    @content = Rails.configuration.templates[:privacy_policy]
+    @content = Rails.configuration.legal[:privacy_policy]
   end
 
   def cookies
-    @content = Rails.configuration.templates[:cookies_policy]
+    @content = Rails.configuration.legal[:cookies_policy]
   end
 
   private
