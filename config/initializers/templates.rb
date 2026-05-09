@@ -13,15 +13,15 @@ class Templates
     end
 
     def read_tos
-      read_template("templates/terms_of_service.md")
+      read_template("templates/legal/terms_of_service.md")
     end
 
     def read_privacy
-      read_template("templates/privacy_policy.md")
+      read_template("templates/legal/privacy_policy.md")
     end
 
     def read_cookies
-      read_template("templates/cookies_policy.md")
+      read_template("templates/legal/cookies_policy.md")
     end
 
     private
