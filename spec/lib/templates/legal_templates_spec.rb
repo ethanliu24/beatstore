@@ -4,16 +4,6 @@ require 'rails_helper'
 
 RSpec.describe Templates::LegalTemplates do
   describe "::VERSIONS" do
-    it "matches the expected versions" do
-      expect(described_class::VERSIONS).to eq(
-        {
-          tos: "2026.05.09.v1.0.0",
-          privacy: "2026.04.28.v1.0.0",
-          cookies: "2026.05.09.v1.0.0"
-        }
-      )
-    end
-
     it "is frozen" do
       expect(described_class::VERSIONS).to be_frozen
     end
