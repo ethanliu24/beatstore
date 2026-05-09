@@ -3,32 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe Templates::Templates do
-  describe ".read_contract_templates" do
-    subject(:templates) { described_class.read_contract_templates }
+  describe ".read_template (via send)" do
+    subject(:call) { described_class.send(:read_template, file_path) }
 
-    it "loads the free contract template" do
-      expect(templates["free"]).to be_present
+    let(:file_path) { Rails.root.join("tmp/test_template.md").to_s }
 
-      expected_content = File.read(
-        Rails.root.join("templates/contracts/tracks/free.md")
-      )
-
-      expect(templates["free"]).to eq(expected_content)
+    before do
+      File.write(file_path, "hello template")
     end
 
-    it "loads the non-exclusive contract template" do
-      expect(templates["non_exclusive"]).to be_present
-
-      expected_content = File.read(
-        Rails.root.join("templates/contracts/tracks/non_exclusive.md")
-      )
-
-      expect(templates["non_exclusive"]).to eq(expected_content)
+    after do
+      File.delete(file_path) if File.exist?(file_path)
     end
 
-    it "returns an indifferent access hash" do
-      expect(templates[:free]).to eq(templates["free"])
-      expect(templates[:non_exclusive]).to eq(templates["non_exclusive"])
+    it "reads the file content" do
+      expect(call).to eq("hello template")
+    end
+  end
+
+  describe ".read_template when file is missing" do
+    subject(:call) { described_class.send(:read_template, "missing_file.md") }
+
+    it "raises an error from File.read" do
+      expect { call }.to raise_error(Errno::ENOENT)
     end
   end
 end

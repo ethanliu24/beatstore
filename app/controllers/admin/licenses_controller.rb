@@ -13,7 +13,7 @@ module Admin
       @contract_type = params[:contract_type]
 
       unless License.contract_types.key?(@contract_type.to_s)
-        @contract_type = nil
+        raise ArgumentError.new("@contract_type is not valid: #{@contract_type}")
       end
     end
 
