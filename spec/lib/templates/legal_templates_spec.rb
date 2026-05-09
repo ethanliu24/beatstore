@@ -47,4 +47,49 @@ RSpec.describe Templates::LegalTemplates do
       expect(content).to be_present
     end
   end
+
+  describe described_class::Versioning do
+    let(:versioning) do
+      described_class.new(
+        tos: "1.0",
+        privacy: "2.0",
+        cookies: "3.0"
+      )
+    end
+
+    describe "#initialize" do
+      it "sets attributes correctly" do
+        expect(versioning.tos).to eq("1.0")
+        expect(versioning.privacy).to eq("2.0")
+        expect(versioning.cookies).to eq("3.0")
+      end
+    end
+
+    describe "#serialize" do
+      it "serializes versioning to JSON" do
+        json = versioning.serialize(versioning)
+
+        expect(JSON.parse(json)).to eq(
+          {
+            "tos" => "1.0",
+            "privacy" => "2.0",
+            "cookies" => "3.0"
+          }
+        )
+      end
+    end
+
+    describe "#deserialize" do
+      it "rebuilds a Versioning object from JSON hash" do
+        json = versioning.serialize(versioning)
+        parsed = JSON.parse(json).symbolize_keys
+
+        result = described_class.deserialize(parsed)
+
+        expect(result.tos).to eq("1.0")
+        expect(result.privacy).to eq("2.0")
+        expect(result.cookies).to eq("3.0")
+      end
+    end
+  end
 end

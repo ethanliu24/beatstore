@@ -5,10 +5,24 @@ module Templates
     class Versioning
       attr_accessor :tos, :privacy, :cookies
 
-      def initialize(tos:, pivacy:, cookies:)
+      class << self
+        def deserialize(json)
+          self.new(**json)
+        end
+      end
+
+      def initialize(tos:, privacy:, cookies:)
         @tos = tos
         @privacy = privacy
         @cookies = cookies
+      end
+
+      def serialize(versioning)
+        {
+          tos: versioning.tos,
+          privacy: versioning.privacy,
+          cookies: versioning.cookies
+        }.to_json
       end
     end
 
@@ -20,7 +34,7 @@ module Templates
 
     class << self
       def current_versions
-        ::Versioning.new(
+        Templates::LegalTemplates::Versioning.new(
           tos: VERSIONS[:tos],
           privacy: VERSIONS[:privacy],
           cookies: VERSIONS[:cookies],
