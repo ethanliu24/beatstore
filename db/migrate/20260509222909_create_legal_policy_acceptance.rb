@@ -8,10 +8,8 @@ class CreateLegalPolicyAcceptance < ActiveRecord::Migration[8.0]
       t.string :cookies_version, default: ""
       t.datetime :cookies_accepted_at
 
-      t.references :user, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true, index: { unique: true }
       t.timestamps
     end
-
-    add_index :legal_policies_acceptances, :user_id, unique: true
   end
 end
