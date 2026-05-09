@@ -44,6 +44,7 @@ class User < ApplicationRecord
   has_one_attached :profile_picture, dependent: :destroy
 
   has_one :cart, dependent: :destroy
+  has_one :legal_policies_acceptance, class_name: "Users::LegalPoliciesacceptance"
   has_many :hearts, class_name: "Track::Heart"
   has_many :hearted_tracks, through: :hearts, source: :track
   has_many :track_plays, class_name: "Track::Play"
