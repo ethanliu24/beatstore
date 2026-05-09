@@ -107,7 +107,7 @@ en:
 
   authentication:
     or_continue_with: "Or continue with"
-    agree_tos_and_privacy_html: "By signing up, you agree with the %{tos_link} and %{privacy_link}"
+    agree_legal_policy_html: "By signing up, you agree with the %{tos_link}, %{privacy_link} and %{cookies_link}."
     already_signed_up: "Already signed up?"
     already_signed_in: "Already signed in?"
     no_confirmation_instructions: "Didn't recieve confirmation instructions?"
