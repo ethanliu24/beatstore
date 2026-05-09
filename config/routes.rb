@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "licensing", to: "pages#licensing"
   get "terms-of-service", to: "pages#terms_of_service"
   get "privacy", to: "pages#privacy"
+  get "cookies", to: "pages#cookies"
 
   get "admin", to: "admin/dashboards#show", as: "admin"
 
