@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
 module Templates
-  class LegalTemplates < Templates
+  class LegalTemplates
+    extend Templates::Reader
+
     class Versioning
       attr_accessor :tos, :privacy, :cookies
-
-      class << self
-        def deserialize(json)
-          self.new(**json)
-        end
-      end
 
       def initialize(tos:, privacy:, cookies:)
         @tos = tos
@@ -17,12 +13,16 @@ module Templates
         @cookies = cookies
       end
 
-      def serialize(versioning)
+      def serialize
         {
-          tos: versioning.tos,
-          privacy: versioning.privacy,
-          cookies: versioning.cookies
+          tos: @tos,
+          privacy: @privacy,
+          cookies: @cookies
         }.to_json
+      end
+
+      def self.deserialize(h)
+        self.new(**h)
       end
     end
 
