@@ -119,7 +119,7 @@ $ rspec <directory-or-file>  # run all tests in the given directory or file
 
 ## Clearing tmp
 The project size can get extremely large in development because running tests creates a lot of fixtures in local active storage.
-You can clean up the `tmp/` directory every once in a while. Refer to
+You can clean up the `tmp/` directory every once in a while. Refer to [the official docs](https://guides.rubyonrails.org/v4.1.0/command_line.html#tmp) for more details.
 
 ```
 $ rails tmp:clear # clear all files in tmp/
