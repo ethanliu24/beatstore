@@ -3,9 +3,9 @@
 module Templates
   class LegalTemplates < Templates
     VERSIONS = {
-      tos: "2026.05.09.v1.0.0",
-      privacy: "2026.04.28.v1.0.0",
-      cookies: "2026.05.09.v1.0.0"
+      tos: "2026.05.09.v1",
+      privacy: "2026.04.28.v1",
+      cookies: "2026.05.09.v1"
     }.freeze
 
     class << self
