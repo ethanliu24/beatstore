@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :legal_policiesacceptance, class: "Users::LegalPoliciesAcceptance" do
+  factory :legal_policies_acceptance, class: "Users::LegalPoliciesAcceptance" do
     association :user
     tos_version { "V1" }
     tos_accepted_at { Time.now }
