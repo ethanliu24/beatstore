@@ -116,3 +116,13 @@ $ rspec <directory-or-file>  # run all tests in the given directory or file
 
 # or alternatively, use "bundle exec rspec" instead of rspec
 ```
+
+## Clearing tmp
+The project size can get extremely large in development because running tests creates a lot of fixtures in local active storage.
+You can clean up the `tmp/` directory every once in a while. Refer to
+
+```
+$ rails tmp:clear # clear all files in tmp/
+
+$ rails tmp:storage:clear # likely what you want to run the most
+```
