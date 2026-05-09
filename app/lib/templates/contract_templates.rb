@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Templates
-  class ContractTemplates < Templates
+  class ContractTemplates
+    extend Templates::Reader
+
     class << self
       def read_contract_templates
         track_free = License.contract_types[:free]
