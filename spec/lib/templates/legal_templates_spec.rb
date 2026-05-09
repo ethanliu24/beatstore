@@ -67,7 +67,7 @@ RSpec.describe Templates::LegalTemplates do
 
     describe "#serialize" do
       it "serializes versioning to JSON" do
-        json = versioning.serialize(versioning)
+        json = versioning.serialize
 
         expect(JSON.parse(json)).to eq(
           {
@@ -81,7 +81,7 @@ RSpec.describe Templates::LegalTemplates do
 
     describe "#deserialize" do
       it "rebuilds a Versioning object from JSON hash" do
-        json = versioning.serialize(versioning)
+        json = versioning.serialize
         parsed = JSON.parse(json).symbolize_keys
 
         result = described_class.deserialize(parsed)

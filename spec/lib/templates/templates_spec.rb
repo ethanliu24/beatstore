@@ -2,10 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Templates::Templates do
+RSpec.describe Templates::Reader do
   describe ".read_template (via send)" do
-    subject(:call) { described_class.send(:read_template, file_path) }
-
     let(:file_path) { Rails.root.join("tmp/test_template.md").to_s }
 
     before do
@@ -17,15 +15,15 @@ RSpec.describe Templates::Templates do
     end
 
     it "reads the file content" do
-      expect(call).to eq("hello template")
+      expect(described_class.read_template(file_path)).to eq("hello template")
     end
   end
 
   describe ".read_template when file is missing" do
-    subject(:call) { described_class.send(:read_template, "missing_file.md") }
+    subject(:file_path) { "missing" }
 
     it "raises an error from File.read" do
-      expect { call }.to raise_error(Errno::ENOENT)
+      expect { described_class.read_template(file_path) }.to raise_error(Errno::ENOENT)
     end
   end
 end
