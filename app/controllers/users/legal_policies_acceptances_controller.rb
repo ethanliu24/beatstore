@@ -2,16 +2,16 @@ class Users::LegalPoliciesAcceptancesController < ApplicationController
   def accept_all
     Users::UpdateAcceptedLegalPoliciesService.new(
       user: current_or_guest_user,
-      **sanitize_acceptance_params
-    )
+      **sanitize_acceptance_params.to_h.symbolize_keys
+    ).call
   end
 
   # everything is neccessary for site to work at the moment, nothing is configurable yet.
-  def accept_neccessary
+  def accept_necessary
     Users::UpdateAcceptedLegalPoliciesService.new(
       user: current_or_guest_user,
-      **sanitize_acceptance_params
-    )
+      **sanitize_acceptance_params.to_h.symbolize_keys
+    ).call
   end
 
   private
