@@ -1,5 +1,5 @@
 module Users
-  class UpdateAcceptedLegalPolicies
+  class UpdateAcceptedLegalPoliciesService
     def initialize(
       user:,
       accepted_tos_version: nil,
@@ -32,7 +32,9 @@ module Users
         args[:cookies_accepted_at] = accepted_time
       end
 
-      @legal_policies_acceptance.update!(**args)
+      unless args.empty?
+        @legal_policies_acceptance.update!(**args)
+      end
     end
   end
 end
