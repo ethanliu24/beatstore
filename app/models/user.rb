@@ -111,6 +111,9 @@ class User < ApplicationRecord
     self.role ||= User.roles[:customer]
   end
 
+  # rule is that users accepts necessary policies for browsing and using the site,
+  # so when an account is created, automatically accept the latest policies, whether
+  # user is guest or has signed up.
   def fill_in_legal_policies_acceptance
     versions = Templates::LegalTemplates.current_versions
 
