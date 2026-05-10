@@ -167,14 +167,20 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "cart association" do
+  describe "legal acceptance association" do
     let(:user) { create(:user) }
 
-    it "should create a cart for user after create" do
-      expect(user.legal_policies_acceptance).not_to be_nil
+    it "should create a legal policies acceptance record and fill in current versions after create" do
+      versions = Templates::LegalTemplates.current_versions
+      acceptance = user.legal_policies_acceptance
+
+      expect(acceptance).not_to be_nil
+      expect(acceptance.tos_version).to eq(versions.tos)
+      expect(acceptance.privacy_version).to eq(versions.privacy)
+      expect(acceptance.cookies_version).to eq(versions.cookies)
     end
 
-    it "should delete the user's cart after delete" do
+    it "should delete the user's legal policies acceptance record after delete" do
       acceptance = user.legal_policies_acceptance
       user.destroy!
 
