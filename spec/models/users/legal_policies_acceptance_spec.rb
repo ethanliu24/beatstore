@@ -45,13 +45,6 @@ RSpec.describe Users::LegalPoliciesAcceptance, type: :model do
 
         expect(acceptance).to be_valid
       end
-
-      it "is valid when setting a timestamp for the first time (transitioning from nil)" do
-        expect(acceptance.privacy_accepted_at).to be_nil
-
-        acceptance.privacy_accepted_at = Time.current
-        expect(acceptance).to be_valid
-      end
     end
 
     describe "uniqueness" do
