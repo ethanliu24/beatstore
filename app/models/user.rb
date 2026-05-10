@@ -16,6 +16,7 @@ class User < ApplicationRecord
   after_initialize :set_default_columns, if: :new_record?
   after_create :create_cart
   after_create :create_legal_policies_acceptance
+  after_commit :fill_in_legal_policies_acceptance, on: :create
 
   # === Constants ===
   DISPLAY_NAME_LENGTH = 30
@@ -108,5 +109,21 @@ class User < ApplicationRecord
 
   def set_default_columns
     self.role ||= User.roles[:customer]
+  end
+
+  # rule is that users accepts necessary policies for browsing and using the site,
+  # so when an account is created, automatically accept the latest policies, whether
+  # user is guest or has signed up.
+  def fill_in_legal_policies_acceptance
+    versions = Templates::LegalTemplates.current_versions
+
+    args = {
+      accepted_tos_version: versions.tos,
+      accepted_privacy_version: versions.privacy,
+      accepted_cookies_version: versions.cookies
+    }
+
+    # TODO try rescue and log for monitoring
+    Users::UpdateAcceptedLegalPoliciesService.new(user: self, **args).call
   end
 end

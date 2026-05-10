@@ -30,6 +30,11 @@ Rails.application.routes.draw do
     resource :profile, only: [ :edit, :update ]
     resources :hearts, only: [ :index ]
     resources :purchases, only: [ :index ]
+
+    resource :legal_policies_acceptance do
+      put :accept_all
+      put :accept_necessary
+    end
   end
 
   resources :tracks, only: [ :index, :show ] do
