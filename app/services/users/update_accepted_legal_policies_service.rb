@@ -7,6 +7,7 @@ module Users
       accepted_cookies_version: nil
     )
       @user = user
+      @legal_policies_acceptance = user.legal_policies_acceptance
       @accepted_tos_version = accepted_tos_version
       @accepted_privacy_version = accepted_privacy_version
       @accepted_cookies_version = accepted_cookies_version
@@ -16,7 +17,7 @@ module Users
       accepted_time = Time.current
       args = {}
 
-      unless @accpeted_tos_version.blank?
+      unless @accepted_tos_version.blank?
         args[:tos_version] = @accepted_tos_version
         args[:tos_accepted_at] = accepted_time
       end
@@ -31,7 +32,7 @@ module Users
         args[:cookies_accepted_at] = accepted_time
       end
 
-      user.update!(**args)
+      @legal_policies_acceptance.update!(**args)
     end
   end
 end
