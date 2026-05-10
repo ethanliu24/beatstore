@@ -49,6 +49,10 @@
     <% end %>
 
     <% unless current_page == "layouts/auth_main" %>
+      <%= render "shared/legal_policies_acceptance" %>
+    <% end %>
+
+    <% unless current_page == "layouts/auth_main" %>
       <%= render "audio/audio_player" %>
     <% end %>
   </body>

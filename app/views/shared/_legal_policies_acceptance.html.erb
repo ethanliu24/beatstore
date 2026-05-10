@@ -1,0 +1,44 @@
+<% new_versions = new_policies_for_user %>
+<% new_versions = {
+    terms_of_service: "v1",
+    privacy: "v2",
+    cookies: "v3"
+} %>
+
+<% if new_versions.any? %>
+  <section id="legal-notice-popup" role="alert">
+    <div>
+      <header><p><%= t("legal_policies_acceptance.header") %></p></header>
+
+      <p><%= t("legal_policies_acceptance.intro") %></p>
+      <ul>
+        <% new_versions.each do |policy, version| %>
+          <li>
+            <span><%= t("legal_policies_acceptance.policy_names.#{policy}") %></span>
+            <%= link_to t("legal_policies_acceptance.version_label", version: version),
+              send("#{policy}_path"),
+              target: "_blank" %>
+          </li>
+        <% end %>
+      </ul>
+
+      <p>
+				<%= t("legal_policies_acceptance.disclosure",
+					tos: t("legal_policies_acceptance.policy_names.tos"),
+					privacy: t("legal_policies_acceptance.policy_names.privacy")).html_safe %>
+      </p>
+
+      <footer>
+        <%= button_to t("legal_policies_acceptance.buttons.all"),
+          accept_all_users_legal_policies_acceptance_path,
+          method: :post,
+          remote: true %>
+
+        <%= button_to t("legal_policies_acceptance.buttons.necessary"),
+          accept_necessary_users_legal_policies_acceptance_path,
+          method: :post,
+          remote: true %>
+      </footer>
+    </div>
+  </section>
+<% end %>

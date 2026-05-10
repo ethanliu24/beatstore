@@ -46,9 +46,9 @@ class ApplicationController < ActionController::Base
     new_cookies_version = versions.cookies == current_accepted[:cookies_version]
 
     updated_versions = {}
-    updated_versions[:tos] = version.tos if new_tos_version
-    updated_versions[:privacy] = version.privacy if new_privacy_version
-    updated_versions[:cookies] = version.cookies if new_cookies_version
+    updated_versions[:terms_of_service] = versions.tos if new_tos_version
+    updated_versions[:privacy] = versions.privacy if new_privacy_version
+    updated_versions[:cookies] = versions.cookies if new_cookies_version
 
     updated_versions
   end
