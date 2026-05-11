@@ -1,9 +1,4 @@
 <% new_versions = new_policies_for_user %>
-<% new_versions = {
-    terms_of_service: "v1",
-    privacy: "v2",
-    cookies: "v3"
-} %>
 
 <% if new_versions.any? %>
   <section id="legal-notice-popup" role="alert"
@@ -37,12 +32,24 @@
 			<footer class="flex flex-row-reverse justify-start items-center gap-4 text-xs mt-1">
 				<%= button_to t("legal_policies_acceptance.buttons.all"),
 					accept_all_users_legal_policies_acceptance_path,
-					method: :put, remote: true,
+					method: :put, remote: true, params: {
+						legal_policies_acceptance: {
+							accepted_tos_version: new_versions[:terms_of_service],
+							accepted_privacy_version: new_versions[:privacy],
+							accepted_cookies_version: new_versions[:cookies]
+						}
+    			},
 					class: "border-2 border-text-primary hover:cursor-pointer hover:text-accent hover:border-accent px-2 py-1" %>
 
 				<%= button_to t("legal_policies_acceptance.buttons.necessary"),
 					accept_necessary_users_legal_policies_acceptance_path,
-					method: :put, remote: true,
+					method: :put, remote: true, params: {
+						legal_policies_acceptance: {
+							accepted_tos_version: new_versions[:terms_of_service],
+							accepted_privacy_version: new_versions[:privacy],
+							accepted_cookies_version: new_versions[:cookies]
+						}
+    			},
 					class: "border-2 border-text-primary hover:cursor-pointer hover:text-accent hover:border-accent px-2 py-1" %>
 			</footer>
 		</div>
