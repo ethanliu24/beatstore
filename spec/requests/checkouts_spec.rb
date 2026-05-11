@@ -77,5 +77,22 @@ RSpec.describe CheckoutsController, type: :request do
         expect(item[:price_data][:product_data][:description]).to eq("L1")
       end
     end
+
+    it "should accept to the latest legal policies" do
+      user.legal_policies_acceptance.update(
+        tos_version: "test-1.0", privacy_version: "test-1.0", cookies_version: "test-1.0"
+      )
+
+      allow(Templates::LegalTemplates).to receive(:current_versions).and_return(
+        Struct.new(:tos, :privacy, :cookies).new("test-2.0", "test-2.0", "test-2.0")
+      )
+
+      post checkout_url
+
+      acceptance = user.legal_policies_acceptance.reload
+      expect(acceptance.tos_version).to eq("test-2.0")
+      expect(acceptance.privacy_version).to eq("test-2.0")
+      expect(acceptance.cookies_version).to eq("test-2.0")
+    end
   end
 end

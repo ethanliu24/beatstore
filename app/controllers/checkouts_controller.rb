@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CheckoutsController < ApplicationController
+  before_action :accept_latest_policies!, only: [ :create ]
+
   # Creates a checkout session
   def create
     create_order_and_order_items
