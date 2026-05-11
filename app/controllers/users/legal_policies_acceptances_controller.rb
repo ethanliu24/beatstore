@@ -4,6 +4,10 @@ class Users::LegalPoliciesAcceptancesController < ApplicationController
       user: current_or_guest_user,
       **sanitize_acceptance_params.to_h.symbolize_keys
     ).call
+
+    respond_to do |format|
+      format.turbo_stream { render "legal_policies_acceptance/remove_popup" }
+    end
   end
 
   # everything is neccessary for site to work at the moment, nothing is configurable yet.
@@ -12,6 +16,10 @@ class Users::LegalPoliciesAcceptancesController < ApplicationController
       user: current_or_guest_user,
       **sanitize_acceptance_params.to_h.symbolize_keys
     ).call
+
+    respond_to do |format|
+      format.turbo_stream { render "legal_policies_acceptance/remove_popup" }
+    end
   end
 
   private

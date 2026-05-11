@@ -16,10 +16,11 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
   shared_examples "legal policies acceptance updates" do
     describe "PUT /accept_all" do
       it "creates/updates acceptance with all versions" do
-        put accept_all_users_legal_policies_acceptance_url, params: base_params
+        put accept_all_users_legal_policies_acceptance_url(format: :turbo_stream), params: base_params
 
         acceptance = user.reload.legal_policies_acceptance
 
+        expect(response).to have_http_status(200)
         expect(acceptance.user).to eq(user)
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq("1.0")
@@ -36,10 +37,11 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
 
         cookies_before = user.legal_policies_acceptance.cookies_version
 
-        put accept_all_users_legal_policies_acceptance_url, params: partial_params
+        put accept_all_users_legal_policies_acceptance_url(format: :turbo_stream), params: partial_params
 
         acceptance = user.reload.legal_policies_acceptance
 
+        expect(response).to have_http_status(200)
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq("1.0")
         expect(acceptance.cookies_version).to eq(cookies_before)
@@ -48,10 +50,11 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
 
     describe "PUT /accept_necessary" do
       it "accepts necessary configs only" do
-        put accept_necessary_users_legal_policies_acceptance_url, params: base_params
+        put accept_necessary_users_legal_policies_acceptance_url(format: :turbo_stream), params: base_params
 
         acceptance = user.reload.legal_policies_acceptance
 
+        expect(response).to have_http_status(200)
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq("1.0")
         expect(acceptance.cookies_version).to eq("1.0")
@@ -67,10 +70,11 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
         privacy_before = user.legal_policies_acceptance.privacy_version
         cookies_before = user.legal_policies_acceptance.cookies_version
 
-        put accept_necessary_users_legal_policies_acceptance_url, params: partial_params
+        put accept_necessary_users_legal_policies_acceptance_url(format: :turbo_stream), params: partial_params
 
         acceptance = user.reload.legal_policies_acceptance
 
+        expect(response).to have_http_status(200)
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq(privacy_before)
         expect(acceptance.cookies_version).to eq(cookies_before)

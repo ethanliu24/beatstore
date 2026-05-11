@@ -1,7 +1,7 @@
 <% new_versions = new_policies_for_user %>
 
 <% if new_versions.any? %>
-  <section id="legal-notice-popup" role="alert"
+  <section id="legal-policies-acceptance-popup" role="alert"
 		class="fixed right-0 bottom-0 p-4">
 		<div class="
 			p-3 flex flex-col flex-start items-stretch gap-1 bg-secondary-bg w-100 rounded-lg drop-shadow-xl
@@ -32,7 +32,7 @@
 			<footer class="flex flex-row-reverse justify-start items-center gap-4 text-xs mt-1">
 				<%= button_to t("legal_policies_acceptance.buttons.all"),
 					accept_all_users_legal_policies_acceptance_path,
-					method: :put, remote: true, params: {
+					method: :put, remote: true, data: { turbo_stream: true }, params: {
 						legal_policies_acceptance: {
 							accepted_tos_version: new_versions[:terms_of_service],
 							accepted_privacy_version: new_versions[:privacy],
@@ -43,7 +43,7 @@
 
 				<%= button_to t("legal_policies_acceptance.buttons.necessary"),
 					accept_necessary_users_legal_policies_acceptance_path,
-					method: :put, remote: true, params: {
+					method: :put, remote: true, data: { turbo_stream: true }, params: {
 						legal_policies_acceptance: {
 							accepted_tos_version: new_versions[:terms_of_service],
 							accepted_privacy_version: new_versions[:privacy],
