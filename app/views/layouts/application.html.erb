@@ -48,7 +48,7 @@
       <%= render "shared/toasts", flash: flash %>
     <% end %>
 
-    <% unless current_page == "layouts/auth_main" %>
+    <% if render_legal_policies_acceptance_popup? %>
       <%= render "shared/legal_policies_acceptance" %>
     <% end %>
 
