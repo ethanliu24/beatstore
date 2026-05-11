@@ -46,6 +46,19 @@ class ApplicationController < ActionController::Base
     updated_versions
   end
 
+  def accept_latest_policies!
+    pending_policies = new_policies_for_user
+    return unless pending_policies.any?
+
+    current_versions = Templates::LegalTemplates.current_versions
+    Users::UpdateAcceptedLegalPoliciesService.new(
+      user: current_or_guest_user,
+      accepted_tos_version: current_versions.tos,
+      accepted_privacy_version: current_versions.privacy,
+      accepted_cookies_version: current_versions.cookies
+    ).call
+  end
+
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || root_path
   end
