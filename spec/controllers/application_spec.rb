@@ -152,4 +152,35 @@ RSpec.describe ApplicationController, type: :controller do
       expect(controller.new_policies_for_user).to include(terms_of_service: "test-2.0")
     end
   end
+
+  describe "#accept_latest_policies!" do
+    let(:version_struct) { Struct.new(:tos, :privacy, :cookies) }
+
+    before do
+      allow(controller).to receive(:current_or_guest_user).and_return(user)
+    end
+
+    it "executes the service and updates the database when policies are pending" do
+      user.legal_policies_acceptance.update(
+        tos_version: "test-1.0", privacy_version: "test-1.0", cookies_version: "test-1.0"
+      )
+
+      acceptance = user.reload.legal_policies_acceptance.reload
+      current_versions = version_struct.new("test-2.0", "test-1.1", "test-1.5")
+
+      allow(Templates::LegalTemplates).to receive(:current_versions).and_return(current_versions)
+
+      controller.accept_latest_policies!
+
+      expect(acceptance.tos_version).to eq("test-2.0")
+      expect(acceptance.privacy_version).to eq("test-1.1")
+      expect(acceptance.cookies_version).to eq("test-1.5")
+    end
+
+    it "does not trigger a service execution or update when already up to date" do
+      expect(Users::UpdateAcceptedLegalPoliciesService).not_to receive(:new)
+
+      controller.accept_latest_policies!
+    end
+  end
 end
