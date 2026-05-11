@@ -6,39 +6,45 @@
 } %>
 
 <% if new_versions.any? %>
-  <section id="legal-notice-popup" role="alert">
-    <div>
-      <header><p><%= t("legal_policies_acceptance.header") %></p></header>
+  <section id="legal-notice-popup" role="alert"
+		class="fixed right-0 bottom-0 p-4">
+		<div class="
+			p-3 flex flex-col flex-start items-stretch gap-1 bg-secondary-bg w-100 rounded-lg drop-shadow-xl
+			shadow-md shadow-secondary-bg border-2 border-hover
+		">
+			<header><p class="text-lg font-bold"><%= t("legal_policies_acceptance.header") %></p></header>
 
-      <p><%= t("legal_policies_acceptance.intro") %></p>
-      <ul>
-        <% new_versions.each do |policy, version| %>
-          <li>
-            <span><%= t("legal_policies_acceptance.policy_names.#{policy}") %></span>
-            <%= link_to t("legal_policies_acceptance.version_label", version: version),
-              send("#{policy}_path"),
-              target: "_blank" %>
-          </li>
-        <% end %>
-      </ul>
+			<div class="text-[0.6rem] flex flex-col justify-start items-start gap-2">
+				<p><%= t("legal_policies_acceptance.intro") %></p>
+				<ul class="list-disc pl-4">
+					<% new_versions.each do |policy, version| %>
+						<li>
+							<span><%= t("legal_policies_acceptance.policy_names.#{policy}") + ": " %></span>
+							<%= link_to t("legal_policies_acceptance.version_label", version: version),
+								send("#{policy}_path"), target: "_blank",
+								class: "text-accent underline" %>
+						</li>
+					<% end %>
+				</ul>
 
-      <p>
-				<%= t("legal_policies_acceptance.disclosure",
-					tos: t("legal_policies_acceptance.policy_names.tos"),
-					privacy: t("legal_policies_acceptance.policy_names.privacy")).html_safe %>
-      </p>
+				<p>
+					<%= t("legal_policies_acceptance.disclosure",
+						tos: t("legal_policies_acceptance.policy_names.tos"),
+						privacy: t("legal_policies_acceptance.policy_names.privacy")).html_safe %>
+				</p>
+			</div>
 
-      <footer>
-        <%= button_to t("legal_policies_acceptance.buttons.all"),
-          accept_all_users_legal_policies_acceptance_path,
-          method: :post,
-          remote: true %>
+			<footer class="flex flex-row-reverse justify-start items-center gap-4 text-xs mt-1">
+				<%= button_to t("legal_policies_acceptance.buttons.all"),
+					accept_all_users_legal_policies_acceptance_path,
+					method: :put, remote: true,
+					class: "border-2 border-text-primary hover:cursor-pointer hover:text-accent hover:border-accent px-2 py-1" %>
 
-        <%= button_to t("legal_policies_acceptance.buttons.necessary"),
-          accept_necessary_users_legal_policies_acceptance_path,
-          method: :post,
-          remote: true %>
-      </footer>
-    </div>
+				<%= button_to t("legal_policies_acceptance.buttons.necessary"),
+					accept_necessary_users_legal_policies_acceptance_path,
+					method: :put, remote: true,
+					class: "border-2 border-text-primary hover:cursor-pointer hover:text-accent hover:border-accent px-2 py-1" %>
+			</footer>
+		</div>
   </section>
 <% end %>
