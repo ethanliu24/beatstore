@@ -1,4 +1,6 @@
 class Users::LegalPoliciesAcceptancesController < ApplicationController
+  after_action :update_session_acceptance_state
+
   def accept_all
     Users::UpdateAcceptedLegalPoliciesService.new(
       user: current_or_guest_user,
@@ -15,6 +17,15 @@ class Users::LegalPoliciesAcceptancesController < ApplicationController
   end
 
   private
+
+  def update_session_acceptance_state
+    acceptance = current_or_guest_user.legal_policies_acceptance
+    session[:legal_policies_acceptance] = {
+      tos_version: acceptance.tos_version,
+      privacy_version: acceptance.privacy_version,
+      cookies_version: acceptance.cookies_version
+    }
+  end
 
   def sanitize_acceptance_params
     params.require(:legal_policies_acceptance).permit(
