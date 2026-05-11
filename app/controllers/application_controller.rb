@@ -31,19 +31,12 @@ class ApplicationController < ActionController::Base
   end
 
   def new_policies_for_user
-    user_acceptances = current_or_guest_user.legal_policies_acceptance
-    session[:legal_policies_acceptance] ||= {
-      tos_version: user_acceptances.tos_version,
-      privacy_version: user_acceptances.privacy_version,
-      cookies_version: user_acceptances.cookies_version
-    }
-
     versions = Templates::LegalTemplates.current_versions
-    current_accepted = session[:legal_policies_acceptance]
+    current_accepted = current_or_guest_user.legal_policies_acceptance
 
-    new_tos_version = versions.tos == current_accepted[:tos_version]
-    new_privacy_version = versions.privacy == current_accepted[:privacy_version]
-    new_cookies_version = versions.cookies == current_accepted[:cookies_version]
+    new_tos_version = versions.tos != current_accepted.tos_version
+    new_privacy_version = versions.privacy != current_accepted.privacy_version
+    new_cookies_version = versions.cookies != current_accepted.cookies_version
 
     updated_versions = {}
     updated_versions[:terms_of_service] = versions.tos if new_tos_version

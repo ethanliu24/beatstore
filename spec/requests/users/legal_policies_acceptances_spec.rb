@@ -24,12 +24,6 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq("1.0")
         expect(acceptance.cookies_version).to eq("1.0")
-
-        expect(request.session[:legal_policies_acceptance]).to eq({
-          tos_version: "1.0",
-          privacy_version: "1.0",
-          cookies_version: "1.0"
-        })
       end
 
       it "handles partially filled params" do
@@ -49,12 +43,6 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq("1.0")
         expect(acceptance.cookies_version).to eq(cookies_before)
-
-        expect(request.session[:legal_policies_acceptance]).to eq({
-          tos_version: "1.0",
-          privacy_version: "1.0",
-          cookies_version: cookies_before
-        })
       end
     end
 
@@ -67,12 +55,6 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq("1.0")
         expect(acceptance.cookies_version).to eq("1.0")
-
-        expect(request.session[:legal_policies_acceptance]).to eq({
-          tos_version: "1.0",
-          privacy_version: "1.0",
-          cookies_version: "1.0"
-        })
       end
 
       it "handles partially filled params for necessary configs only" do
@@ -92,12 +74,6 @@ RSpec.describe Users::LegalPoliciesAcceptancesController, type: :request do
         expect(acceptance.tos_version).to eq("1.0")
         expect(acceptance.privacy_version).to eq(privacy_before)
         expect(acceptance.cookies_version).to eq(cookies_before)
-
-        expect(request.session[:legal_policies_acceptance]).to eq({
-          tos_version: "1.0",
-          privacy_version: privacy_before,
-          cookies_version: cookies_before
-        })
       end
     end
   end
