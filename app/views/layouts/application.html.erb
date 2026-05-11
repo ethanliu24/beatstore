@@ -48,6 +48,10 @@
       <%= render "shared/toasts", flash: flash %>
     <% end %>
 
+    <% if render_legal_policies_acceptance_popup? %>
+      <%= render "shared/legal_policies_acceptance" %>
+    <% end %>
+
     <% unless current_page == "layouts/auth_main" %>
       <%= render "audio/audio_player" %>
     <% end %>
