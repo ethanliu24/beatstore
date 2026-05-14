@@ -129,7 +129,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_14_032842) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "cookie_level"
+    t.string "cookies_level"
     t.index ["user_id"], name: "index_legal_policies_acceptances_on_user_id", unique: true
   end
 

@@ -4,7 +4,14 @@ module Users
   class LegalPoliciesAcceptance < ApplicationRecord
     self.table_name = "legal_policies_acceptances"
 
+    enum :cookies_level, {
+      neccessary: "neccessary",
+      accept_all: "all"
+    }
+
     belongs_to :user, optional: false
+
+    before_validation { self.cookies_level = Users::LegalPoliciesAcceptance.cookies_levels[:neccessary] if cookies_level.nil? }
 
     validates :user_id, uniqueness: true
     validate :timestamps_cannot_be_in_the_past, on: :update
