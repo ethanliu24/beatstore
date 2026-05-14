@@ -6,7 +6,7 @@ module Users
 
     enum :cookies_level, {
       neccessary: "neccessary",
-      accept_all: "all"
+      accept_all: "accept_all"
     }
 
     belongs_to :user, optional: false
