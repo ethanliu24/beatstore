@@ -224,7 +224,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
       acceptance = user.reload.legal_policies_acceptance.reload
       expect(acceptance.tos_version).to eq("test-2.0")
       expect(acceptance.privacy_version).to eq("test-2.0")
-      expect(acceptance.cookies_version).to eq("test-2.0")
+      expect(acceptance.cookies_version).to eq("test-1.0")
     end
   end
 end
