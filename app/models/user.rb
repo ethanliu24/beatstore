@@ -105,6 +105,11 @@ class User < ApplicationRecord
     )
   end
 
+  def accepted_all_cookies?
+    legal_policies_acceptance.cookies_level == \
+      Users::LegalPoliciesAcceptance.cookies_levels[:accept_all]
+  end
+
   private
 
   def set_default_columns

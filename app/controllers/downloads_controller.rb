@@ -22,9 +22,10 @@ class DownloadsController < ApplicationController
   def create_free_download
     @track = Track.kept.find(params[:id])
     free_download_params = params.require(:free_download).permit(:email, :customer_name)
+    user = current_or_guest_user
 
     free_download = FreeDownload.new(
-      user: current_user,
+      user:,
       track: @track,
       **free_download_params,
     )
@@ -32,7 +33,7 @@ class DownloadsController < ApplicationController
     if file_exists?(@track.preview)
       if free_download.save
         FreeDownloadMailer.with(free_download:).download.deliver_later
-        session[:free_download_info] = free_download_params.to_h
+        session[:free_download_info] = free_download_params.to_h if user.accepted_all_cookies?
 
         render json: { download_url: get_free_download_path(free_download) }
       else
