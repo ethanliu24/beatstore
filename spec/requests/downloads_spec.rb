@@ -179,7 +179,7 @@ RSpec.describe DownloadsController, type: :request do
         )
 
         sign_in user, scope: :user
-        
+
         expect {
           post create_free_download_path(track, params:)
         }.to change(FreeDownload, :count).by(1)
