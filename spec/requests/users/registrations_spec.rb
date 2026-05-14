@@ -209,5 +209,22 @@ RSpec.describe Users::RegistrationsController, type: :request do
       expect(user.discarded?).to be(true)
       expect(user.discarded_at).not_to be_nil
     end
+
+    it "should accept latest versions of legal policies before action" do
+      user.legal_policies_acceptance.update(
+        tos_version: "test-1.0", privacy_version: "test-1.0", cookies_version: "test-1.0"
+      )
+
+      allow(Templates::LegalTemplates).to receive(:current_versions).and_return(
+        Struct.new(:tos, :privacy, :cookies).new("test-2.0", "test-2.0", "test-2.0")
+      )
+
+      delete user_registration_url
+
+      acceptance = user.reload.legal_policies_acceptance.reload
+      expect(acceptance.tos_version).to eq("test-2.0")
+      expect(acceptance.privacy_version).to eq("test-2.0")
+      expect(acceptance.cookies_version).to eq("test-1.0")
+    end
   end
 end

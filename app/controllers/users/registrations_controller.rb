@@ -3,6 +3,10 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
+  before_action \
+    :accept_latest_tos_policy!,
+    :accept_latest_privacy_policy!,
+    only: [ :destroy ]
 
   def create
     super

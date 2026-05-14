@@ -148,7 +148,7 @@ RSpec.describe Tracks::RecommendByGroupService, type: :service do
     it "should throw an error if match is invalid" do
       expect {
         service(limit: 1).group_by_tags("abc", match: :invalid)
-      }.to raise_error
+      }.to raise_error(ArgumentError)
     end
   end
 

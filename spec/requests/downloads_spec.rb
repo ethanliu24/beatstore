@@ -168,6 +168,27 @@ RSpec.describe DownloadsController, type: :request do
 
         expect(response).to have_http_status(:unprocessable_content)
       end
+
+      it "accepts latest legal policies when creating a download" do
+        user.legal_policies_acceptance.update(
+          tos_version: "test-1.0", privacy_version: "test-1.0", cookies_version: "test-1.0"
+        )
+
+        allow(Templates::LegalTemplates).to receive(:current_versions).and_return(
+          Struct.new(:tos, :privacy, :cookies).new("test-2.0", "test-2.0", "test-2.0")
+        )
+
+        sign_in user, scope: :user
+
+        expect {
+          post create_free_download_path(track, params:)
+        }.to change(FreeDownload, :count).by(1)
+
+        acceptance = user.legal_policies_acceptance.reload
+        expect(acceptance.tos_version).to eq("test-2.0")
+        expect(acceptance.privacy_version).to eq("test-2.0")
+        expect(acceptance.cookies_version).to eq("test-1.0")
+      end
     end
   end
 

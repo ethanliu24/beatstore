@@ -1,4 +1,9 @@
 class DownloadsController < ApplicationController
+  before_action \
+    :accept_latest_tos_policy!,
+    :accept_latest_privacy_policy!,
+    only: [ :create_free_download ]
+
   def get_free_download
     @free_download = FreeDownload.find(params[:id])
     @track = @free_download.track
