@@ -55,5 +55,23 @@ RSpec.describe Users::LegalPoliciesAcceptance, type: :model do
         expect(duplicate.errors[:user_id]).to include("has already been taken")
       end
     end
+
+    describe "cookies level" do
+      it "accepts valid cookies levels" do
+        Users::LegalPoliciesAcceptance.cookies_levels.each do |key, level|
+          expect(acceptance.update(cookies_level: level)).to eq(true)
+        end
+      end
+
+      it "does not accept invalid cookie level" do
+        expect {
+          expect(acceptance.update(cookies_level: :invalid)).to eq(false)
+        }.to raise_error(ArgumentError)
+      end
+
+      it "defaults cookie level to neccessary if not set" do
+        expect(acceptance.cookies_level).to eq(Users::LegalPoliciesAcceptance.cookies_levels[:neccessary])
+      end
+    end
   end
 end

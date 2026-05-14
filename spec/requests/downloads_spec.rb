@@ -105,32 +105,53 @@ RSpec.describe DownloadsController, type: :request do
         expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Download - #{track.title}")
       end
 
-      it "should store the free download data in session" do
-        expect {
-          post create_free_download_path(track, params:)
-        }.to change(FreeDownload, :count).by(1)
+      context "user accepted all cookies" do
+        before do
+          user.legal_policies_acceptance.update!(
+            cookies_level: Users::LegalPoliciesAcceptance.cookies_levels[:accept_all]
+          )
+        end
 
-        expect(response).to have_http_status(:ok)
-        expect(session[:free_download_info][:email]).to eq(user.email)
-        expect(session[:free_download_info][:customer_name]).to eq("ABC")
+        it "should store the free download data in session" do
+          expect {
+            post create_free_download_path(track, params:)
+          }.to change(FreeDownload, :count).by(1)
+
+          expect(response).to have_http_status(:ok)
+          expect(session[:free_download_info][:email]).to eq(user.email)
+          expect(session[:free_download_info][:customer_name]).to eq("ABC")
+        end
+
+        it "should override the free download data in session with latest data" do
+          expect {
+            post create_free_download_path(track, params:)
+          }.to change(FreeDownload, :count).by(1)
+
+          expect(response).to have_http_status(:ok)
+          expect(session[:free_download_info][:email]).to eq(user.email)
+          expect(session[:free_download_info][:customer_name]).to eq("ABC")
+
+          expect {
+            post create_free_download_path(track, params: { free_download: { email: "a@a", customer_name: "a" } })
+          }.to change(FreeDownload, :count).by(1)
+
+          expect(response).to have_http_status(:ok)
+          expect(session[:free_download_info][:email]).to eq("a@a")
+          expect(session[:free_download_info][:customer_name]).to eq("a")
+        end
       end
 
-      it "should override the free download data in session with latest data" do
+      it "should not save free download info if user didnt accept all cookies" do
+        user.legal_policies_acceptance.update!(
+          cookies_level: Users::LegalPoliciesAcceptance.cookies_levels[:neccessary]
+        )
+
         expect {
           post create_free_download_path(track, params:)
         }.to change(FreeDownload, :count).by(1)
 
         expect(response).to have_http_status(:ok)
-        expect(session[:free_download_info][:email]).to eq(user.email)
-        expect(session[:free_download_info][:customer_name]).to eq("ABC")
-
-        expect {
-          post create_free_download_path(track, params: { free_download: { email: "a@a", customer_name: "a" } })
-        }.to change(FreeDownload, :count).by(1)
-
-        expect(response).to have_http_status(:ok)
-        expect(session[:free_download_info][:email]).to eq("a@a")
-        expect(session[:free_download_info][:customer_name]).to eq("a")
+        expect(session[:free_download_info]).to be_nil
       end
     end
 

@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def guest_user(with_retry = true)
-    session[:guest_user_id] ||= create_guest_user.id
+    session[:guest_user_id] ||= create_guest_user.id  # neccessary cookie
     @cached_guest_user ||= User.find(session[:guest_user_id])
   rescue ActiveRecord::RecordNotFound
      session[:guest_user_id] = nil

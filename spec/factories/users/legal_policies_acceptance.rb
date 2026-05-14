@@ -7,5 +7,6 @@ FactoryBot.define do
     privacy_accepted_at { Time.now }
     cookies_version { "V1" }
     cookies_accepted_at { Time.now }
+    cookies_level { Time.now }
   end
 end
