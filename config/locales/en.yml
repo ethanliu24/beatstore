@@ -110,6 +110,10 @@ en:
       section: "INFO"
       contact: "Contact"
       licensing: "Licensing"
+    site:
+      section: "SITE"
+      tracks: "Browse all tracks"
+      track_groups: "Explore tracks by category"
     legal:
       section: "LEGAL"
       tos: "Terms of Service"

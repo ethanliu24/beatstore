@@ -1,10 +1,18 @@
-<div class="w-full border-t-2 rounded-2xl border-hover py-4 px-20 text-[0.6rem]">
+<div class="w-full border-t-2 rounded-2xl border-hover pt-8 pb-20 px-24 text-[0.6rem]">
   <div class="flex flex-row justify-between items-center">
     <%= render FooterLinkSectionComponent.new(
       section: t("footer.info.section"),
       links: [
         [ terms_of_service_path, t("footer.info.licensing") ],
         [ privacy_path, t("footer.info.contact") ]
+      ]
+    ) %>
+
+    <%= render FooterLinkSectionComponent.new(
+      section: t("footer.site.section"),
+      links: [
+        [ terms_of_service_path, t("footer.site.tracks") ],
+        [ privacy_path, t("footer.site.track_groups") ]
       ]
     ) %>
 
