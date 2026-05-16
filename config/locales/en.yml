@@ -105,6 +105,13 @@ en:
     cookies:
       tab_title: "Cookies Policy"
 
+  footer:
+    legal:
+      section: "Legal"
+      tos: "Terms of Service"
+      privacy: "Privacy Policy"
+      cookies: "Cookies Policy"
+
   legal_policies_acceptance:
     header: "We've updated our policies"
     intro: "By continuing on the website and using our service, you acknowledge and agree to the following updates:"
