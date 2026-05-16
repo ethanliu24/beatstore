@@ -3,7 +3,7 @@
   <ul class="flex flex-col">
     <% links.each do |link| %>
       <% path, name = link %>
-      <li><%= link_to name, path, class: "hover:underline" %></li>
+      <li class="text-secondary-txt"><%= link_to name, path, class: "hover:underline" %></li>
     <% end %>
   </ul>
 </div>
