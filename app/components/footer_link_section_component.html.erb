@@ -1,0 +1,9 @@
+<div class="flex flex-col justify-start items-start gap-2">
+  <p class="text-sm font-bold"><%= section %></p>
+  <ul class="flex flex-col">
+    <% links.each do |link| %>
+      <% path, name = link %>
+      <li><%= link_to name, path, class: "hover:underline" %></li>
+    <% end %>
+  </ul>
+</div>

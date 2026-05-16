@@ -1,10 +1,10 @@
 <div class="w-full border-t-2 rounded-2xl border-hover py-4 px-20 text-[0.6rem]">
-  <div class="flex flex-col justify-start items-start gap-2">
-    <p class="text-sm font-bold"><%= t("footer.legal.section") %></p>
-    <ul class="flex flex-col">
-      <li><%= link_to t("footer.legal.tos"), terms_of_service_path %></li>
-      <li><%= link_to t("footer.legal.privacy"), privacy_path %></li>
-      <li><%= link_to t("footer.legal.cookies"), cookies_path %></li>
-    </ul>
-  </div>
+  <%= render FooterLinkSectionComponent.new(
+    section: t("footer.legal.section"),
+    links: [
+      [ terms_of_service_path, t("footer.legal.tos") ],
+      [ privacy_path, t("footer.legal.privacy") ],
+      [ cookies_path, t("footer.legal.cookies") ]
+    ]
+  ) %>
 </div>
