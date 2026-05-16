@@ -105,6 +105,21 @@ en:
     cookies:
       tab_title: "Cookies Policy"
 
+  footer:
+    info:
+      section: "INFO"
+      contact: "Contact"
+      licensing: "Licensing"
+    site:
+      section: "SITE"
+      tracks: "Browse all tracks"
+      track_groups: "Explore tracks by category"
+    legal:
+      section: "LEGAL"
+      tos: "Terms of Service"
+      privacy: "Privacy Policy"
+      cookies: "Cookies Policy"
+
   legal_policies_acceptance:
     header: "We've updated our policies"
     intro: "By continuing on the website and using our service, you acknowledge and agree to the following updates:"

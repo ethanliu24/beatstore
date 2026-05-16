@@ -38,6 +38,7 @@
       </div>
 
       <% unless [ "layouts/auth_main", "layouts/admin_main" ].include?(current_page) %>
+        <%= render "shared/footer" %>
         <%= render "shared/copyright_footer" %>
       <% end %>
     </main>
