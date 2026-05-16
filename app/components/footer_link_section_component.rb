@@ -3,7 +3,7 @@
 class FooterLinkSectionComponent < ApplicationComponent
   def initialize(section:, links:)
     @section = section  # string
-    @links = links  # { link: name }, safe to assume in order
+    @links = links  # [ [link, name] ]
   end
 
   private
