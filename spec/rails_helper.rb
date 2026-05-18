@@ -12,7 +12,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 require 'devise'
-require 'rack/attack'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 Shoulda::Matchers.configure do |config|
@@ -46,9 +45,6 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
-
-Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
-
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
@@ -73,11 +69,6 @@ RSpec.configure do |config|
       allow_any_instance_of(ViewComponent::Base)
         .to receive(:url_for)
         .and_return("")
-    end
-
-    config.before(:each, type: :request) do
-      Rack::Attack.reset!
-      Rack::Attack.cache.store.clear
     end
   end
 

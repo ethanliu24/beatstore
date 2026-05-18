@@ -328,8 +328,6 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.2.6)
-    rack-attack (6.8.0)
-      rack (>= 1.0, < 4)
     rack-protection (4.1.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -586,7 +584,6 @@ DEPENDENCIES
   prawn-html
   propshaft
   puma (>= 5.0)
-  rack-attack (~> 6.8)
   rails (~> 8.0.3)
   rails-controller-testing
   rails_icons (~> 1.8)
