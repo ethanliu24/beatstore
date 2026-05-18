@@ -98,21 +98,39 @@ RSpec.describe Rack::Attack, type: :request do
   end
 
   describe "paid download IP throttling" do
+    let(:product) { create(:track_with_files) }
+    let(:license) { create(:license) }
+    let(:user) { create(:guest) }
+    let(:order) { create(:order, user:) }
+    let(:order_item) { create(:order_item, order:) }
+
+    let(:id) { order.id }
+    let(:item_id) { order_item.id }
+
     before do
-      allow_any_instance_of(DownloadsController).to receive(:product_item).and_return(nil)
+      order_item.files.attach(
+        io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
+        filename: "tagged_mp3.mp3",
+        content_type: "audio/mpeg"
+      )
+      order.update!(status: Order.statuses[:completed])
+    end
+
+    def file_id
+      order_item.files.first.id
     end
 
     it "throttles after 15 requests per 10 seconds" do
-      15.times { app.call(env_for(path: download_product_item_path(id: 1, item_id: 1, file_id: 1), method: :get)) }
-      status, = app.call(env_for(path: download_product_item_path(id: 1, item_id: 1, file_id: 1), method: :get))
+      15.times { app.call(env_for(path: download_product_item_path(id:, item_id:, file_id:), method: :get)) }
+      status, = app.call(env_for(path: download_product_item_path(id:, item_id:, file_id:), method: :get))
 
       expect(status).to eq(429)
     end
 
     it "throttles after 100 requests per 10 minutes" do
       # this case is not tested bc it thorttles on prev cond, not gonna figure out how to test this rn lol
-      100.times { app.call(env_for(path: download_product_item_path(id: 1, item_id: 1, file_id: 1), method: :get)) }
-      status, = app.call(env_for(path: download_product_item_path(id: 1, item_id: 1, file_id: 1), method: :get))
+      100.times { app.call(env_for(path: download_product_item_path(id:, item_id:, file_id:), method: :get)) }
+      status, = app.call(env_for(path: download_product_item_path(id:, item_id:, file_id:), method: :get))
 
       expect(status).to eq(429)
     end
