@@ -40,11 +40,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:auth/ip:#{req.ip}"
   throttle("auth/ip", limit: 5, period: 20.seconds) do |req|
-    if [
-      req.path == user_registration_path && req.post?,
-      req.path == user_session_path && req.post?,
-      req.path == destroy_user_session && req.delete?
-    ].any?
+    if auth_req?
       req.ip
     end
   end
@@ -57,11 +53,11 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  throttle("logins/email", limit: 5, period: 20.seconds) do |req|
-    if req.path == "/login" && req.post?
+  throttle("auth/email", limit: 5, period: 20.seconds) do |req|
+    if auth_req?
       # Normalize the email, using the same logic as your authentication process, to
       # protect against rate limit bypasses. Return the normalized email if present, nil otherwise.
-      req.params["email"].to_s.downcase.gsub(/\s+/, "").presence
+      req.params["user"]["email"].to_s.downcase.gsub(/\s+/, "").presence
     end
   end
 
@@ -78,4 +74,13 @@ class Rack::Attack
   #    {},   # headers
   #    ['']] # body
   # end
+
+  private
+
+  def auth_req?
+    [
+      req.path == user_registration_path && req.post?,
+      req.path == user_session_path && req.post?
+    ].any?
+  end
 end
