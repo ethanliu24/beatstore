@@ -98,6 +98,7 @@ RSpec.describe Rack::Attack, type: :request do
   end
 
   describe "paid download IP throttling" do
+    let(:user) { create(:user) }
     let(:product) { create(:track_with_files) }
     let(:license) { create(:license) }
     let(:user) { create(:guest) }
