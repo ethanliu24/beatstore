@@ -130,6 +130,6 @@ class Rack::Attack
   end
 
   def self.paid_download_req?(req)
-    req.get? && req.path.match?(%r{\A/download/order_item/[^/]+/contract(?:\.\w+)?\z})
+    req.get? && req.path.match?(%r{\A/download/order/\d+/item/\d+/files/\d+\z})
   end
 end
