@@ -118,18 +118,18 @@ class Rack::Attack
 
   private
 
-  def auth_req?(req)
+  def self.auth_req?(req)
     [
-      req.path.match?(user_registration_path) && req.post?,
-      req.path.match?(user_session_path) && req.post?
+      req.path == "/" && req.post?,
+      req.path == "/sign_in" && req.post?
     ].any?
   end
 
-  def free_download_req?(req)
-    req.get? && req.path.match?(get_free_download_path)
+  def self.free_download_req?(req)
+    req.get? && req.path.match?(%r{\A/download/free_download/\d+(?:\.\w+)?\z})
   end
 
-  def paid_download_req?(req)
-    req.get? && req.path.match?(download_order_item_contract_path)
+  def self.paid_download_req?(req)
+    req.get? && req.path.match?(%r{\A/download/order_item/[^/]+/contract(?:\.\w+)?\z})
   end
 end
