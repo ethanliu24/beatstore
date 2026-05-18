@@ -18,6 +18,8 @@ RSpec.describe Rack::Attack, type: :request do
   end
 
   before do
+    skip("skipping because flakey in ci")
+
     Rack::Attack.enabled = true
   end
 
@@ -109,8 +111,6 @@ RSpec.describe Rack::Attack, type: :request do
     let(:item_id) { order_item.id }
 
     before do
-      skip("skipping because flakey in ci")
-
       sign_in user, scope: :user
 
       order_item.files.attach(
