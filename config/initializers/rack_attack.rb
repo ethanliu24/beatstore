@@ -66,14 +66,14 @@ class Rack::Attack
     limit: 10,
     period: 10.seconds
   ) do |req|
-    req.ip if free_download_request?(req)
+    req.ip if free_download_req?(req)
   end
 
   throttle("downloads/free/ip/hourly",
     limit: 500,
     period: 1.hour
   ) do |req|
-    req.ip if free_download_request?(req)
+    req.ip if free_download_req?(req)
   end
 
   blocklist("fail2ban abusive free downloaders") do |req|
@@ -85,6 +85,21 @@ class Rack::Attack
     ) do
       req.env["rack.attack.matched"] == "downloads/free/ip/burst"
     end
+  end
+
+  # Throttle paid downloads
+  throttle("downloads/paid/ip/burst",
+    limit: 15,
+    period: 10.seconds
+  ) do |req|
+    req.ip if paid_download_req?(req)
+  end
+
+  throttle("downloads/paid/ip/hourly",
+    limit: 100,
+    period: 10.minutes
+  ) do |req|
+    req.ip if paid_download_req?(req)
   end
 
   ### Custom Throttle Response ###
@@ -112,5 +127,9 @@ class Rack::Attack
 
   def free_download_req?(req)
     req.get? && req.path.match?(get_free_download_path)
+  end
+
+  def paid_download_req?(req)
+    req.get? && req.path.match?(download_order_item_contract_path)
   end
 end
