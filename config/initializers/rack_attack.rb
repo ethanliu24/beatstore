@@ -40,7 +40,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:auth/ip:#{req.ip}"
   throttle("auth/ip", limit: 5, period: 20.seconds) do |req|
-    if auth_req?
+    if auth_req?(req)
       req.ip
     end
   end
@@ -54,10 +54,36 @@ class Rack::Attack
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
   throttle("auth/email", limit: 5, period: 20.seconds) do |req|
-    if auth_req?
+    if auth_req?(req)
       # Normalize the email, using the same logic as your authentication process, to
       # protect against rate limit bypasses. Return the normalized email if present, nil otherwise.
       req.params["user"]["email"].to_s.downcase.gsub(/\s+/, "").presence
+    end
+  end
+
+  # Throttle free downloads
+  throttle("downloads/free/ip/burst",
+    limit: 10,
+    period: 10.seconds
+  ) do |req|
+    req.ip if free_download_request?(req)
+  end
+
+  throttle("downloads/free/ip/hourly",
+    limit: 500,
+    period: 1.hour
+  ) do |req|
+    req.ip if free_download_request?(req)
+  end
+
+  blocklist("fail2ban abusive free downloaders") do |req|
+    Rack::Attack::Fail2Ban.filter(
+      "download-abuse-#{req.ip}",
+      maxretry: 30,
+      findtime: 10.minutes,
+      bantime: 2.hours
+    ) do
+      req.env["rack.attack.matched"] == "downloads/free/ip/burst"
     end
   end
 
@@ -77,10 +103,14 @@ class Rack::Attack
 
   private
 
-  def auth_req?
+  def auth_req?(req)
     [
-      req.path == user_registration_path && req.post?,
-      req.path == user_session_path && req.post?
+      req.path.match?(user_registration_path) && req.post?,
+      req.path.match?(user_session_path) && req.post?
     ].any?
+  end
+
+  def free_download_req?(req)
+    req.get? && req.path.match?(get_free_download_path)
   end
 end
