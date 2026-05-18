@@ -109,6 +109,8 @@ RSpec.describe Rack::Attack, type: :request do
     let(:item_id) { order_item.id }
 
     before do
+      sign_in user, scope: :user
+
       order_item.files.attach(
         io: File.open(Rails.root.join("spec", "fixtures", "files", "tracks", "tagged_mp3.mp3")),
         filename: "tagged_mp3.mp3",
