@@ -1,1 +1,5 @@
 <%= turbo_stream.remove dom_id(@comment) %>
+
+<%= turbo_stream.update "track-show-comment-title" do %>
+  <%= "#{t("label.comments")} (#{@entity.num_comments})" %>
+<% end %>

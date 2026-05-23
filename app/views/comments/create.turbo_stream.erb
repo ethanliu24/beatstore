@@ -1,3 +1,7 @@
 <%= turbo_stream.prepend "track-comments" do %>
   <%= render Comments::CommentComponent.new(comment: @comment, current_user:) %>
 <% end %>
+
+<%= turbo_stream.update "track-show-comment-title" do %>
+  <%= "#{t("label.comments")} (#{@entity.num_comments})" %>
+<% end %>
