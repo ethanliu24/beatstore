@@ -92,6 +92,10 @@ class User < ApplicationRecord
     hearted_tracks.exists?(track.id)
   end
 
+  def available_hearted_tracks
+    hearted_tracks.filter { |t| t.available? }
+  end
+
   def attach_remote_pfp(url)
     response = Faraday.get(url)
     return unless response.success?
