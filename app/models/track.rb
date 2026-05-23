@@ -5,13 +5,14 @@ class Track < ApplicationRecord
 
   # before_validation :adjust_visibility
   before_validation { self.is_public = false if is_public.nil? }
+  before_validation { self.purchased_exclusively = false if purchased_exclusively.nil? }
   before_validation :generate_slug, on: :create
   before_validation :update_slug, if: :will_save_change_to_title?
 
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
   MAX_DESCRIPTION_LENGTH = 200
-  GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
+  GENRES = [ "Hip Hop", "Trap", "R&B", "Soul", "Jazz" ].freeze
   SLUG_SEPERATOR = "-".freeze
   SLUG_SUFFIX_LENGTH = 6
   NO_PRICE_FORMAT = "N/A".freeze
@@ -117,6 +118,10 @@ class Track < ApplicationRecord
     is_public
   end
 
+  def purchased_exclusively?
+    purchased_exclusively
+  end
+
   def num_plays
     plays.count
   end
@@ -149,7 +154,7 @@ class Track < ApplicationRecord
   end
 
   def available?
-    is_public && kept? && preview.attached? && purchaseable?
+    is_public? && kept? && preview.attached? && purchaseable? && !purchased_exclusively?
   end
 
   def undiscarded_comments

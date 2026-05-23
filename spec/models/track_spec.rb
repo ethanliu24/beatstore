@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Track, type: :model do
@@ -42,6 +44,26 @@ RSpec.describe Track, type: :model do
 
         track.is_public = false
         expect(track.is_public).to be(false)
+      end
+    end
+
+    context "purchased_exclusively validation" do
+      it "coerces non-boolean values to boolean" do
+        track = Track.new(purchased_exclusively: true)
+        expect(track.purchased_exclusively).to be(true)
+
+        track.purchased_exclusively = nil
+        track.save
+        expect(track.purchased_exclusively).to be(false)
+
+        track.purchased_exclusively = "string"
+        expect(track.purchased_exclusively).to be(true)
+
+        track.purchased_exclusively = 1
+        expect(track.purchased_exclusively).to be(true)
+
+        track.purchased_exclusively = false
+        expect(track.purchased_exclusively).to be(false)
       end
     end
 
@@ -396,6 +418,7 @@ RSpec.describe Track, type: :model do
 
       expect(track.profitable_licenses).to be_empty
       expect(track.purchaseable?).to be(false)
+      expect(track.available?).to be(false)
     end
 
     it "should be available if track has purchasable items" do
@@ -405,6 +428,15 @@ RSpec.describe Track, type: :model do
 
       expect(track.profitable_licenses).not_to be_empty
       expect(track.purchaseable?).to be(true)
+      expect(track.available?).to be(true)
+    end
+
+    it "should be unavailable if track is purchased exclusively" do
+      track = create(:track_with_files, purchased_exclusively: true)
+      license = create(:non_exclusive_license)
+      track.licenses << license
+
+      expect(track.available?).to be(false)
     end
   end
 

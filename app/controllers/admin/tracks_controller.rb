@@ -142,6 +142,7 @@ module Admin
         :description,
         :bpm,
         :is_public,
+        :purchased_exclusively,
         :genre,
         :tagged_mp3,
         :untagged_mp3,
