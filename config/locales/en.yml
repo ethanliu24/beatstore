@@ -180,6 +180,7 @@ en:
     no_collaborators: "There are no collaborators on this track"
     no_samples: "There are no samples on this track"
     licensing: "Licensing"
+    exclusive_purchase_instruction_html: "To purchase this track exclusively, please email %{producer_email} directly or fill out the %{contact_link} form."
     show:
       licensing:
         allow_music_recording: "USED FOR MUSIC RECORDING"
