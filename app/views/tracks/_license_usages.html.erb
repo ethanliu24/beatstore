@@ -1,3 +1,13 @@
+<div class="my-4">
+  <p class="font-light text-xs italic">
+    <%= t(
+      "track.exclusive_purchase_instruction_html",
+      producer_email: "<span class='font-bold'>#{Credentials::Email.producer_email}</span>".html_safe,
+      contact_link: link_to(t("label.contact"), contact_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe
+    ) %>
+  </p>
+</div>
+
 <% if licenses.any? %>
   <div>
     <ul class="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 items-stretch
