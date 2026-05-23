@@ -418,6 +418,7 @@ RSpec.describe Track, type: :model do
 
       expect(track.profitable_licenses).to be_empty
       expect(track.purchaseable?).to be(false)
+      expect(track.available?).to be(false)
     end
 
     it "should be available if track has purchasable items" do
@@ -427,6 +428,15 @@ RSpec.describe Track, type: :model do
 
       expect(track.profitable_licenses).not_to be_empty
       expect(track.purchaseable?).to be(true)
+      expect(track.available?).to be(true)
+    end
+
+    it "should be unavailable if track is purchased exclusively" do
+      track = create(:track_with_files, purchased_exclusively: true)
+      license = create(:non_exclusive_license)
+      track.licenses << license
+
+      expect(track.available?).to be(false)
     end
   end
 
