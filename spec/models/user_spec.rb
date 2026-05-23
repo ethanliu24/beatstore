@@ -188,6 +188,26 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#available_hearted_tracks" do
+    let(:user) { create(:user) }
+    let(:available) { create(:track) }
+    let(:unavailable) { create(:track) }
+
+    before do
+      create(:track_heart, user:, track: available)
+      create(:track_heart, user:, track: unavailable)
+
+      allow_any_instance_of(Track).to receive(:available?) { |t| t.id == available.id }
+    end
+
+    it "should reutnr avaiable tracks only" do
+      hearted = user.reload.available_hearted_tracks
+
+      expect(hearted.count).to eq(1)
+      expect(hearted.first.id).to eq(available.id)
+    end
+  end
+
   describe "omniauth" do
     before do
       allow(Faraday).to receive(:get).and_return(
