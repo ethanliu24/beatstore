@@ -255,17 +255,6 @@ RSpec.describe Track, type: :model do
       expect(play.user_id).to eq(user.id)
     end
 
-    it "should delete all comments associated with it" do
-      create(:comment, entity: track, user: user)
-      create(:comment, entity: track, user: user)
-
-      expect(track.comments.size).to eq(2)
-
-      track.destroy!
-
-      expect(track.comments.size).to eq(0)
-    end
-
     it "should delete all collaborators associated with it" do
       create(:collaborator, entity: track)
 
@@ -292,7 +281,6 @@ RSpec.describe Track, type: :model do
     it { should have_many(:hearts) }
     it { should have_many(:hearted_by_users).through(:hearts).source(:user) }
     it { should have_many(:plays) }
-    it { should have_many(:comments) }
 
     it { should have_one_attached(:tagged_mp3) }
     it { should have_one_attached(:untagged_mp3) }
@@ -440,19 +428,6 @@ RSpec.describe Track, type: :model do
     end
   end
 
-  describe "#undiscarded_comments" do
-    it "should not return discarded comments" do
-      track = create(:track)
-      comment = create(:comment, entity: track)
-
-      comment.discard!
-      comment.reload
-      track.reload
-
-      expect(track.undiscarded_comments.count).to eq(0)
-    end
-  end
-
   describe "#profitable_licenses" do
     it "should return all licenses that are profitable, i.e. not free" do
       track = create(:track_with_files)
@@ -511,5 +486,10 @@ RSpec.describe Track, type: :model do
       expect(track.slug).not_to eq(old_slug)
       expect(track.slug).to match(/^new-[a-zA-Z0-9]{6}$/)
     end
+  end
+
+  context "commentable" do
+    let(:entity) { create(:track) }
+    it_behaves_like Commentable
   end
 end
