@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProductHelper
   def product_name(order_item)
     case order_item.product_type

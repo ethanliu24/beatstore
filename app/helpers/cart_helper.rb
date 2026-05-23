@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CartHelper
   def cart_items_total_price(cart)
     price_cents = cart.nil? ? 0 : cart.total_items_price_cents

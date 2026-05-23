@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PurchaseMailer < ApplicationMailer
   def purchase_complete
     @user = params[:user]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OrderHelper
   def product_status_color(status)
     case status
