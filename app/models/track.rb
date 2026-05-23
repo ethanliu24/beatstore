@@ -2,6 +2,7 @@
 
 class Track < ApplicationRecord
   include Discard::Model
+  include Commentable
 
   # before_validation :adjust_visibility
   before_validation { self.is_public = false if is_public.nil? }
@@ -57,7 +58,6 @@ class Track < ApplicationRecord
   has_many :plays, class_name: "Track::Play"
   has_many :tags, class_name: "Track::Tag", dependent: :destroy
   accepts_nested_attributes_for :tags, allow_destroy: true
-  has_many :comments, as: :entity, dependent: :destroy
   has_many :collaborators, class_name: "Collaboration::Collaborator", as: :entity, dependent: :destroy
   accepts_nested_attributes_for :collaborators, allow_destroy: true, reject_if: :all_blank
   has_many :samples, class_name: "Collaboration::Sample", dependent: :destroy
@@ -155,10 +155,6 @@ class Track < ApplicationRecord
 
   def available?
     is_public? && kept? && preview.attached? && purchaseable? && !purchased_exclusively?
-  end
-
-  def undiscarded_comments
-    comments.kept
   end
 
   def undiscarded_licenses
