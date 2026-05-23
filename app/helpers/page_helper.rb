@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PageHelper
   def current_page
     if devise_controller?

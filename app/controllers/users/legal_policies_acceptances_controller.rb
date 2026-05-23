@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Users::LegalPoliciesAcceptancesController < ApplicationController
   def accept_all
     Users::UpdateAcceptedLegalPoliciesService.new(

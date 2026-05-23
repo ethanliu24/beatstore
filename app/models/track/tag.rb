@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Track::Tag < ApplicationRecord
   self.table_name = "track_tags"
 

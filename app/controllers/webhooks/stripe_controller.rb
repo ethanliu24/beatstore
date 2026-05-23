@@ -6,7 +6,6 @@ module Webhooks
     before_action :parse_event
 
     def payments
-      # TODO update transaction with status for each
       case @event.type
       when "charge.succeeded", "charge.updated"
         payment_intent = @event.data.object.payment_intent

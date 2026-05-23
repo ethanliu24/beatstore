@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThemeHelper
   def get_theme
     cookies[:beatstore_theme] ||= "dark"

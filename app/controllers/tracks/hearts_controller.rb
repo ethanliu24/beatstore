@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tracks::HeartsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_track

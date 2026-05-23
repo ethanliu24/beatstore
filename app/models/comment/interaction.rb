@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Comment::Interaction < ApplicationRecord
   self.table_name = "comment_interactions"
 

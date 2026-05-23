@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ModalsController < ApplicationController
   before_action :ensure_turbo_request
 

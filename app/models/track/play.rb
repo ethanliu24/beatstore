@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Track::Play < ApplicationRecord
   self.table_name = "track_plays"
 

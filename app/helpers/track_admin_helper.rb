@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TrackAdminHelper
   def generate_id(file_for)
     file_for.downcase.split(" ").join("-") + "-upload"

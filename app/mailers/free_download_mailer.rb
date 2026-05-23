@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FreeDownloadMailer < ApplicationMailer
   def download
     @free_download = params[:free_download]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Users::HeartsController < ApplicationController
   before_action :authenticate_user!
 

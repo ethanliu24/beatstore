@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class TracksController < Admin::BaseController
     before_action :set_track, except: [ :index, :new, :create ]

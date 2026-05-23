@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tracks::PlaysController < ApplicationController
   def create
     track = Track.find(params[:track_id])
