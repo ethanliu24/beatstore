@@ -157,10 +157,6 @@ class Track < ApplicationRecord
     is_public? && kept? && preview.attached? && purchaseable? && !purchased_exclusively?
   end
 
-  def undiscarded_comments
-    comments.kept
-  end
-
   def undiscarded_licenses
     licenses.kept
   end

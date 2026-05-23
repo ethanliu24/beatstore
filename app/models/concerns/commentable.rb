@@ -7,7 +7,11 @@ module Commentable
     has_many :comments, as: :entity, dependent: :destroy
   end
 
+  def undiscarded_comments
+    comments.kept
+  end
+
   def num_comments
-    comments.kept.count
+    undiscarded_comments.count
   end
 end
