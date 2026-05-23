@@ -35,6 +35,13 @@ module TrackAdminHelper
     ]
   end
 
+  def purchased_exclusively_options
+    [
+      [ "No", false ],
+      [ "Yes", true ]
+    ]
+  end
+
   def genre_options
     Track::GENRES
   end

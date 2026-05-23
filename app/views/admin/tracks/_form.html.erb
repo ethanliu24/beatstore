@@ -101,6 +101,10 @@
           <%= form.label :visibility %>
           <%= form.select :is_public, options_for_select(is_public_options, track.is_public), {}, class: "content-input" %>
         </div>
+        <div class="field content-input-container">
+          <%= form.label :purchased_exclusively %>
+          <%= form.select :purchased_exclusively, options_for_select(purchased_exclusively_options, track.purchased_exclusively?), {}, class: "content-input" %>
+        </div>
       </div>
       <div class="w-full" data-controller="chip-selector" data-chip-selector-cur-tags-value="<%= serialize_tags(@track) %>">
         <div class="field content-input-container">

@@ -12,7 +12,7 @@ class Track < ApplicationRecord
   # === Constants ===
   VALID_KEYS = %w[C C# D D# Db E Eb F F# G G# Gb A A# Ab B Bb].freeze
   MAX_DESCRIPTION_LENGTH = 200
-  GENRES = [ "Hip Hop", "Trap", "R&B", "Boom Bap", "New Jazz", "Plugnb" ].freeze
+  GENRES = [ "Hip Hop", "Trap", "R&B", "Soul", "Jazz" ].freeze
   SLUG_SEPERATOR = "-".freeze
   SLUG_SUFFIX_LENGTH = 6
   NO_PRICE_FORMAT = "N/A".freeze
