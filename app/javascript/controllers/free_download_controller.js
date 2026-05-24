@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { dispatchCloseModalEvent } from "helpers/modal_helper";
+import { dispatchCloseModalEvent } from "helpers/modal_helper"
 
 // Connects to data-controller="free-download"
 export default class extends Controller {
