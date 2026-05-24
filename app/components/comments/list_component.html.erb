@@ -1,5 +1,11 @@
 <div class="flex flex-col justify-start items-center gap-6 w-full py-3">
-  <% comments.each do |comment| %>
-    <%= render Comments::CommentComponent.new(comment:, current_user:) %>
+  <% if comments.any? do %>
+    <% comments.each do |comment| %>
+      <%= render Comments::CommentComponent.new(comment:, current_user:) %>
+    <% end %>
+  <% else %>
+    <p class="w-full flex justify-center items-center text-secondary-txt italic font-light py-2 text-xs">
+      <%= t("comments.no_comments") %>
+    </p>
   <% end %>
 </div>
