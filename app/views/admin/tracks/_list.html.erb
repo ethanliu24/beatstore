@@ -1,8 +1,9 @@
 <% if tracks.any? %>
   <div class="flex justify-center items-center">
     <div class="admin-track-list-container">
-      <% @tracks.each do |track| %>
-        <%= render Admin::TrackComponent.new(track:) %>
+      <% @tracks.each_with_index do |track, i| %>
+        <% dropdown_position = (@tracks.count + 1) % (i + 1) == 0 ? "top-end" : "right-end" %>
+        <%= render Admin::TrackComponent.new(track:, options: { dropdown_position: }) %>
       <% end %>
     </div>
   </div>
