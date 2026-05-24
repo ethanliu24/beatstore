@@ -5,3 +5,7 @@
 <%= turbo_stream.update "track-show-comment-title" do %>
   <%= "#{t("label.comments")} (#{@entity.num_comments})" %>
 <% end %>
+
+<%= turbo_stream.update "toasts" do %>
+  <%= render "shared/toasts" %>
+<% end %>

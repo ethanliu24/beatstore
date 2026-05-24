@@ -37,6 +37,8 @@ class CommentsController < ApplicationController
     @entity = @comment.entity
     @comment.discard!
 
+    flash.now[:notice] = t("comment.destroy.success")
+
     respond_to do |format|
       format.turbo_stream
     end
