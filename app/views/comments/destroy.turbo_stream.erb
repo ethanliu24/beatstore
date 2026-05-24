@@ -1,9 +1,19 @@
 <div data-controller="one-time-close-modal"></div>
 
+<% num_comments = @entity.num_comments %>
+
 <%= turbo_stream.remove dom_id(@comment) %>
 
+<% if num_comments == 0 %>
+  <%= turbo_stream.update "comments-list-container" do %>
+    <p id="comments-list-empty-msg" class="empty-collection py-2 text-xs">
+      <%= t("comment.no_comments") %>
+    </p>
+  <% end %>
+<% end %>
+
 <%= turbo_stream.update "track-show-comment-title" do %>
-  <%= "#{t("label.comments")} (#{@entity.num_comments})" %>
+  <%= "#{t("label.comments")} (#{})" %>
 <% end %>
 
 <%= turbo_stream.update "toasts" do %>
