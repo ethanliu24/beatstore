@@ -23,4 +23,8 @@ module PageHelper
     !current_page?(privacy_path) &&
     !current_page?(cookies_path)
   end
+
+  def render_footers?
+    ![ "layouts/auth_main", "layouts/admin_main" ].include?(current_page)
+  end
 end
