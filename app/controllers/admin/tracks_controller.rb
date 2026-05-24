@@ -30,8 +30,8 @@ module Admin
       begin
         if @track.save
           redirect_to track_path(id: @track.slug_param, format: :html),
-              notice: t("admin.track.create.success"),
-              status: :see_other
+            notice: t("admin.track.create.success"),
+            status: :see_other
         else
           render :new, status: :unprocessable_content
         end
