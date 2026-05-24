@@ -322,3 +322,13 @@
     }
   }
 }
+
+/* Footer */
+@layer {
+  @media screen and (max-width: 539) {
+    .footer-container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}

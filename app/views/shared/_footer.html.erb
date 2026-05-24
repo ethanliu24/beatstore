@@ -1,5 +1,6 @@
-<div class="flex justify-between items-start gap-40 w-full border-t-2 rounded-2xl border-hover pt-8 pb-16 px-24 text-[0.6rem]">
-  <div class="flex flex-col justify-start items-stretch gap-2">
+<div class="flex justify-between items-start gap-40 w-full border-t-2 rounded-2xl border-hover pt-8 pb-16 px-24 text-[0.6rem]
+  max-md:gap-14 max-md:px-10 footer-container">
+  <div class="flex flex-col justify-start items-stretch gap-2 max-md:gap-0.5">
     <% [
       { icon: "brand-youtube", name: "Youtube", link: "https://www.youtube.com/@prodethan8266", external: true },
       { icon: "brand-instagram", name: "Instagram", link: "https://www.instagram.com/prod_ethan_", external: true },
@@ -14,7 +15,7 @@
       <% end %>
     <% end %>
   </div>
-  <div class="flex-1 flex flex-row justify-between items-center">
+  <div class="flex-1 flex flex-row justify-between items-center gap-10 gap-y-4 w-full flex-wrap">
     <%= render FooterLinkSectionComponent.new(
       section: t("footer.info.section"),
       links: [
