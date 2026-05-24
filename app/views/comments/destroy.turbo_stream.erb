@@ -13,7 +13,7 @@
 <% end %>
 
 <%= turbo_stream.update "track-show-comment-title" do %>
-  <%= "#{t("label.comments")} (#{})" %>
+  <%= "#{t("label.comments")} (#{num_comments})" %>
 <% end %>
 
 <%= turbo_stream.update "toasts" do %>
