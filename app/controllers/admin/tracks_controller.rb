@@ -2,6 +2,8 @@
 
 module Admin
   class TracksController < Admin::BaseController
+    PAGINATION_LIMIT = 8
+
     before_action :set_track, except: [ :index, :new, :create ]
     before_action :load_licenses, only: [ :new, :edit, :create, :update ]
 
@@ -9,7 +11,7 @@ module Admin
       base_scope = Track.kept.order(created_at: :desc)
       @q = base_scope.ransack(params[:q], auth_object: current_user)
       queried_tracks = @q.result(distinct: true).includes(:tags)
-      @pagy, @tracks = pagy(queried_tracks, limit: 8)
+      @pagy, @tracks = pagy(queried_tracks, limit: PAGINATION_LIMIT)
 
       if turbo_or_xhr_request?
         render partial: "admin/tracks/list", locals: { tracks: @tracks }

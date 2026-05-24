@@ -44,7 +44,7 @@
 
   <%# More Dropdown %>
   <div class="flex justify-end items-center p-2 mt-1">
-    <%= render Ui::DropdownComponent.new(id: dom_id(track, :admin_track_more)) do |dropdown| %>
+    <%= render Ui::DropdownComponent.new(id: dom_id(track, :admin_track_more), position: dropdown_position) do |dropdown| %>
       <% dropdown.with_trigger_button(id: dom_id(track, :admin_track_more)) do %>
         <%= icon "dots", class: "cursor-pointer w-4 h-4" %>
       <% end %>
