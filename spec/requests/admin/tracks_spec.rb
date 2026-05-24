@@ -124,7 +124,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
           post admin_tracks_url, params: { track: valid_attributes.merge(file_params) }
         }.to change(Track, :count).by(1)
 
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_path(id: Track.last.slug_param, format: :html))
       end
 
       it "does not create a new track if files doesn't match with licenses" do
@@ -153,7 +153,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
           post admin_tracks_url, params: { track: valid_attributes.merge(file_params) }
         }.to change(Track, :count).by(1)
 
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_path(id: Track.last.slug_param, format: :html))
       end
     end
 
@@ -190,7 +190,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         track = Track.create! valid_attributes
         put admin_track_url(track), params: { track: new_attributes }
         track.reload
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_path(id: track.slug_param, format: :html))
       end
 
       it "does not purge any files if all remove params are 0" do
@@ -206,7 +206,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         track.licenses << license
 
         put admin_track_url(track), params: { track: purge_params }
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_path(id: track.slug_param, format: :html))
       end
 
       it "fails the update if deleted deliverables are makes track unmatch license" do
@@ -226,7 +226,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         track.licenses << license
 
         put admin_track_url(track), params: { track: purge_params }
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_path(id: track.slug_param, format: :html))
       end
 
       it "updates if there are deleted files but there are no selected licenses after" do
@@ -236,7 +236,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         track.licenses << license
 
         put admin_track_url(track), params: { track: track_params }
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_url(id: track.slug_param, format: :html))
       end
 
       it "updates if the new files uploaded matches with the licenses" do
@@ -248,7 +248,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         }
 
         put admin_track_url(track), params: { track: track_params }
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_url(id: track.slug_param, format: :html))
       end
 
       it "does not update if new files uploaded doesn't match with the licenses" do
@@ -271,7 +271,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         track_params = { tagged_mp3: fixture_file_upload("tracks/tagged_mp3.mp3", "audio/mpeg") }
 
         put admin_track_url(track), params: { track: track_params }
-        expect(response).to redirect_to(admin_tracks_url)
+        expect(response).to redirect_to(track_url(id: track.slug_param, format: :html))
       end
     end
   end
@@ -420,7 +420,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       collaborators = Track.last.collaborators
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
       expect(collaborators.size).to eq(1)
       expect(collaborators.first.name).to eq("Test")
       expect(collaborators.first.profit_share).to eq(0.0)
@@ -438,7 +438,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         }
       }
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
 
       collaborators = track.reload.collaborators
       names = collaborators.pluck(:name)
@@ -464,7 +464,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       track.reload
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
       expect(Track.last.collaborators.size).to eq(1)
       expect(Track.last.collaborators.first.notes).to be_empty
     end
@@ -547,7 +547,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       samples = Track.last.samples
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
       expect(samples.size).to eq(1)
       expect(samples.first.name).to eq("Song")
       expect(samples.first.artist).to eq("Test")
@@ -564,7 +564,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         }
       }
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
 
       samples = track.reload.samples
       names = samples.pluck(:name)
@@ -590,7 +590,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       track.reload
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
       expect(Track.last.samples.size).to eq(1)
       expect(Track.last.samples.first.name).to eq("S")
       expect(Track.last.samples.first.artist).to eq("")
@@ -652,7 +652,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       created_track = Track.last
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
       expect(created_track.licenses.count).to eq(1)
       expect(created_track.licenses).to include(license1)
     end
@@ -667,7 +667,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         }
       }
 
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(303)
       expect(track.licenses.count).to eq(2)
     end
 
@@ -688,7 +688,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
         post admin_tracks_url, params: { track: valid_attributes.merge(license_ids: [ license.id ]) }
       }.to change(Track, :count).by(1)
 
-      expect(response).to have_http_status(:found)
+      expect(response).to have_http_status(:see_other)
     end
 
     it "does not update the track if files delivered doesn't match license contracts" do
@@ -706,7 +706,7 @@ RSpec.describe Admin::TracksController, type: :request, admin: true do
 
       put admin_track_url(track), params: { track: { description: "ABC" } }
 
-      expect(response).to have_http_status(:found)
+      expect(response).to have_http_status(:see_other)
     end
   end
 
