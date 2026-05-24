@@ -213,6 +213,10 @@
     @apply text-xl font-extrabold;
   }
 
+  .empty-collection {
+    @apply w-full flex justify-center items-center text-secondary-txt italic font-light;
+  }
+
   /* Authentication */
   .auth-form {
     @apply

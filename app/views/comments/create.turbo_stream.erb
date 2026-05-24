@@ -5,3 +5,5 @@
 <%= turbo_stream.update "track-show-comment-title" do %>
   <%= "#{t("label.comments")} (#{@entity.num_comments})" %>
 <% end %>
+
+<%= turbo_stream.remove "comments-list-empty-msg" %>

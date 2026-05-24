@@ -3,7 +3,7 @@
     <%= render Tracks::TrackComponent.new(track:, current_user:, queue_scope:) %>
   <% end %>
 <% elsif render_message_if_empty %>
-  <p id="no-tracks-message" class="text-center my-16 text-secondary-txt font-light">
+  <p id="no-tracks-message" class="empty-collection my-16">
     <%= empty_message %>
   </p>
 <% end %>
