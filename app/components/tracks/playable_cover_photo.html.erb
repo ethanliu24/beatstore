@@ -18,7 +18,7 @@
     <% end %>
   <% end %>
 
-  <% if controller.controller_name == "tracks" && controller.action_name == "show" %>
+  <% unless go_to_track %>
     <%= cover_photo %>
   <% else %>
     <%= link_to track_path(id: track.slug_param), class: "w-fit h-fit" do %>
