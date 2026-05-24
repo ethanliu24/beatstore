@@ -18,8 +18,12 @@ export default class extends Controller {
 
     // if start with tooltip hidden the dimensions would be all 0
     this.tooltipSize = this.containerTarget.getBoundingClientRect();
-    this.arrowXSize = this.arrowXTarget.getBoundingClientRect();
-    this.arrowYSize = this.arrowYTarget.getBoundingClientRect();
+
+    if (this.#hasArrows()) {
+      this.arrowXSize = this.arrowXTarget.getBoundingClientRect();
+      this.arrowYSize = this.arrowYTarget.getBoundingClientRect();
+    }
+
     this.hideTooltip();
     this.containerTarget.classList.remove("opacity-0");
     this.offsetX = 16;
@@ -84,7 +88,9 @@ export default class extends Controller {
     tooltip.style.left = `${x}px`;
     tooltip.style.top = `${y}px`;
 
-    this.updateArrowPosition(x, y);
+    if (this.#hasArrows()) {
+      this.updateArrowPosition(x, y);
+    }
   }
 
   updateArrowPosition(tooltipX, tooltipY) {
@@ -126,5 +132,9 @@ export default class extends Controller {
         arrowY.style.top = `${tooltipY + this.tooltipSize.height - 1}px`;
         arrowY.style.rotate = `180deg`;
     }
+  }
+
+  #hasArrows() {
+    return this.hasArrowXTarget && this.hasArrowYTarget;
   }
 }
