@@ -46,7 +46,7 @@
   <div class="ml-2">
     <p class="text-xs text-nowrap"><%= file_for %></p>
     <div class="flex gap-1 text-[0.6rem] text-secondary-txt">
-      <p class="truncate" data-track-upload-target="fileName"><%= attachment.attached? ? attachment.name : "" %></p>
+      <p class="truncate" data-track-upload-target="fileName"><%= attachment.attached? ? attachment.blob.filename : "" %></p>
       <%= seperator_char_ui class: "#{attachment.attached? ? "" : "hidden"}", data: { track_upload_target: "fileInfoSeperator" } %>
       <p class="text-nowrap" data-track-upload-target="fileSize"><%= attachment.attached? ? "#{(attachment.byte_size / (1024 * 1024)).round(2)} MB" : "" %></p>
     </div>
