@@ -7,8 +7,8 @@ A marketplace for me to store, manage and license my beats.
 Stripe will handle payments with Stripe Checkout.
 
 1. In the rails project, enter rails credentials editing enviornment using this command:
-`VISUAL="cursor --wait" rails credentials:edit`
-    - _Instead of "cursor", you can use the command that opens the editor of your choice, e.g. "code"_
+`VISUAL="code --wait" rails credentials:edit`
+    - _Instead of "code", you can use the command that opens the editor of your choice, e.g. "cursor"_
     - _Locate the stripe field_
 2. Set up Stripe with the project by creating/logging in to [Stripe Dashboard](https://dashboard.stripe.com/)
 3. Copy the public and secret keys to `stripe.<env>.public_key` and `stripe.<env>.secret_key`.
