@@ -12,11 +12,11 @@ class CommentsController < ApplicationController
       return
     end
 
-    entity = entity_class.find(params[:comment][:entity_id])
+    @entity = entity_class.find(params[:comment][:entity_id])
 
     @comment = Comment.create!(
       content: params[:comment][:content],
-      entity:,
+      entity: @entity,
       user: current_user
     )
 
@@ -34,7 +34,10 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    @entity = @comment.entity
     @comment.discard!
+
+    flash.now[:notice] = t("comment.destroy.success")
 
     respond_to do |format|
       format.turbo_stream

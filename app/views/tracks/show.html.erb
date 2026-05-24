@@ -87,7 +87,7 @@
     ) %>
   </section>
   <section id="comments" class="w-full">
-    <h2 class="font-bold text-lg mb-2"><%= t("label.comments") %></h2>
+    <h2 id="track-show-comment-title" class="font-bold text-lg mb-2"><%= "#{t("label.comments")} (#{@track.num_comments})" %></h2>
     <%= render Comments::FormComponent.new(entity: @track, current_user:) %>
     <div>
       <%= turbo_frame_tag "track-comments", target: "_top", data: { turbo_temporary: false } do %>
