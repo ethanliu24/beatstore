@@ -54,12 +54,18 @@
     </div>
     <div class="max-lg:order-1 bg-secondary-bg rounded-lg px-4 py-4 min-w-70 max-w-70 max-lg:min-w-full max-lg:max-w-full">
       <%= content_tag :p, t("cart.show.summary.title"), class: "whitespace-nowrap font-light mb-4" %>
+      <% current_or_guest_user.cart.cart_items.each do |item| %>
+        <div class="flex justify-between items-center text-xs text-secondary-txt font-light mb-1">
+          <%= content_tag :p, cart_item_product_title(item) %>
+          <%= content_tag :p, item.license.price.format %>
+        </div>
+      <% end %>
       <div class="flex justify-between items-center text-xs text-secondary-txt font-light">
         <%= content_tag :p, t("cart.show.summary.items_total_label") %>
         <%= content_tag :p, cart_items_total_price(current_or_guest_user.cart) %>
       </div>
       <div class="flex justify-between items-center text-sm mt-2">
-        <%= content_tag :p, t("cart.show.summary.items_total_label") %>
+        <%= content_tag :p, t("cart.show.summary.total_label") %>
         <%= content_tag :p, cart_subtotal_price(current_or_guest_user.cart) %>
       </div>
       <% if current_user.nil? %>
