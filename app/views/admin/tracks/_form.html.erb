@@ -12,6 +12,7 @@
     model: @track,
     url: @track.persisted? ? admin_track_path(@track) : admin_tracks_path,
     method: @track.persisted? ? :patch : :post,
+    data: { turbo_frame: "_top" },
     class: "track-form flex flex-col justify-center items-center divide-y divide-secondary-txt/15 w-full",
     html: { multipart: true }
   ) do |form| %>
