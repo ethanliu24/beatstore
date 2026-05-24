@@ -6,5 +6,7 @@ class CartsController < ApplicationController
   def clear
     cart = current_or_guest_user.cart
     cart.clear
+
+    flash.now[:notice] = t("cart.clear.success")
   end
 end

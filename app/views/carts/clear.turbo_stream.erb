@@ -12,3 +12,6 @@
   <%= cart_items_total_price(current_or_guest_user.cart) %>
 <% end %>
 
+<%= turbo_stream.update "toasts" do %>
+  <%= render "shared/toasts" %>
+<% end %>
