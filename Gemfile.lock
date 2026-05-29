@@ -126,8 +126,8 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.6.2)
-    discard (1.4.0)
-      activerecord (>= 4.2, < 9.0)
+    discard (2.0.0)
+      activerecord (>= 7.0, < 9.0)
     docile (1.4.1)
     dotenv (3.2.0)
     drb (2.2.3)
@@ -568,7 +568,7 @@ DEPENDENCIES
   countries (~> 8.0)
   debug
   devise (~> 5.0)
-  discard (~> 1.4)
+  discard (~> 2.0)
   factory_bot_rails
   groupdate
   importmap-rails
