@@ -1,3 +1,5 @@
+<% title(t("pages.home.tab_title")) %>
+
 <div class="w-full h-full">
   <div class="relative w-full h-screen">
     <%# Image %>
@@ -8,7 +10,7 @@
     <div class="absolute inset-0 bg-black/25"></div>
 
     <%# Gradient overlay %>
-    <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+    <div class="absolute inset-0 bg-linear-to-t from-background/80 to-transparent"></div>
 
     <%# Content %>
     <div class="relative w-full h-full flex justify-center items-center">
@@ -27,7 +29,7 @@
                   min-w-40 w-[45vw] max-md:w-[60vw] max-sm:w-[80vw]
                   focus:outline-none focus:ring-1 focus:ring-accent rounded",
                 style: "text-overflow: ellipsis;" %>
-              <button type="submit" class="absolute top-1/2 right-0 -translate-y-1/2 mr-3 mt-[2px] aspect-square cursor-pointer bg-white rounded-full">
+              <button type="submit" class="absolute top-1/2 right-0 -translate-y-1/2 mr-3 mt-0.5 aspect-square cursor-pointer bg-white rounded-full">
                 <%= icon "square-rounded-arrow-right", variant: "filled", class: "w-7 h-7 text-black" %>
               </button>
             </span>
