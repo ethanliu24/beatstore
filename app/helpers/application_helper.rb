@@ -7,7 +7,7 @@ module ApplicationHelper
   include ActionView::Helpers::DateHelper
 
   def title(input = nil)
-    content_for(:title) { "#{input}" } if input
+    content_for(:title) { "#{input} | prodethan" } if input
   end
 
   def markdown(text)
