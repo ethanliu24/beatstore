@@ -403,7 +403,7 @@ en:
 
   orders:
     index:
-      page_title: "Orders"
+      tab_title: "Orders"
       title: "Orders"
       subtitle: "See your order history"
       no_orders: "You haven't ordered anything yet"
