@@ -182,6 +182,8 @@ en:
     no_samples: "There are no samples on this track"
     licensing: "Licensing"
     exclusive_purchase_instruction_html: "To purchase this track <strong>exclusively</strong>, please email %{producer_email} directly or use the %{contact_link} form."
+    index:
+      tab_title: "Tracks"
     show:
       licensing:
         allow_music_recording: "USED FOR MUSIC RECORDING"
@@ -198,6 +200,7 @@ en:
       more_info_tooltip: "More Track Info"
       edit_tooltip: "Edit"
     explore:
+      tab_title: "Tracks By Category"
       title: "Tracks"
       subtitle: "Explore tracks by category here"
       see_all: "See all tracks"
