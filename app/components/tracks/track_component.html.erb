@@ -18,16 +18,14 @@
     <% end %>
   </div>
 
-  <%# Metadata %>
-  <div class="flex-1 flex flex-col justify-between items-start">
-    <%= link_to track_path(id: @track.slug_param), data: { prevent_play: true } do %>
-      <div class="text-sm cursor-pointer hover:underline"><%= track.title %></div>
-      <div class="flex justify-start items-center gap-1 text-secondary-txt text-[0.6rem]">
-        <span><%= "#{track.bpm} BPM" %></span>
-        <%= seperator_char_ui %>
-        <span><%= track.key %></span>
-        <%= seperator_char_ui %>
-        <span><%= track.genre %></span>
+  <%# Data %>
+  <div class="flex-1 flex flex-col justify-between items-start max-w-full min-w-5">
+    <%= link_to track_path(id: @track.slug_param), class: "w-full block", data: { prevent_play: true } do %>
+      <div class="text-sm cursor-pointer hover:underline truncate">
+        <%= track.title %>
+      </div>
+      <div class="text-secondary-txt text-[0.6rem] truncate w-full block">
+        <%= "#{track.bpm} BPM · #{track.key} · #{track.genre}" %>
       </div>
     <% end %>
   </div>
