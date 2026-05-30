@@ -19,7 +19,7 @@
   </div>
 
   <%# Data %>
-  <div class="flex-1 flex flex-col justify-between items-start max-w-full min-w-5">
+  <div class="basis-3/5 flex flex-col justify-between items-start max-w-full min-w-5">
     <%= link_to track_path(id: @track.slug_param), class: "w-full block", data: { prevent_play: true } do %>
       <div class="text-sm cursor-pointer hover:underline truncate">
         <%= track.title %>
@@ -31,7 +31,7 @@
   </div>
 
   <%# Tags %>
-  <div class="flex justify-end items-center gap-1 text-[0.6rem] max-w-60">
+  <div class="basis-2/5 flex justify-end items-center gap-1 text-[0.6rem] overflow-x-auto">
     <div class="flex gap-1 items-center">
       <% tags.each do |tag| %>
         <span data-prevent-play>
