@@ -91,7 +91,8 @@
   ) do |dropdown| %>
     <%= dropdown.with_trigger_button(
       id: dom_id(@track, :track_more),
-      data: { prevent_play: true }
+      data: { prevent_play: true },
+      classes: "flex justify-center items-center w-full h-full"
     ) do %>
       <%= icon "dots-vertical", class: "w-4 h-4 cursor-pointer" %>
     <% end %>
