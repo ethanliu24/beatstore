@@ -31,12 +31,12 @@
   </div>
 
   <%# Tags %>
-  <div class="basis-2/5 flex justify-end items-center gap-1 text-[0.6rem]">
-    <div class="flex gap-1 items-center">
+  <div data-controller="responsive-tag-ui" class="basis-2/5 min-w-0 flex justify-between items-center text-[0.6rem]">
+    <div data-responsive-tag-ui-target="tagsContainer" class="opacity-0 flex items-center gap-1 flex-1 min-w-0 overflow-x-hidden">
       <% tags.each do |tag| %>
-        <span data-prevent-play>
+        <%= content_tag :span, data: { responsive_tag_ui_target: "tag", prevent_play: true } do %>
           <%= render TagComponent.new(name: tag.name) %>
-        </span>
+        <% end %>
       <% end %>
     </div>
 
