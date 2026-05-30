@@ -424,7 +424,7 @@ en:
 
   contact:
     new:
-      page_title: "Contact"
+      tab_title: "Contact"
       title: "Contact"
       form:
         submit: "Send message"
