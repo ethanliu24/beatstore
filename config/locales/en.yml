@@ -312,6 +312,13 @@ en:
         update: "Update"
         back: "Back to recommendations"
 
+  users:
+    passwords:
+      edit:
+        tab_title: "Change Password"
+      new:
+        tab_title: "Change Password"
+
   profile:
     manage_your_profile_here: "Manage your profile here"
     display_name: "Display name"
@@ -419,7 +426,7 @@ en:
 
   purchases:
     index:
-      page_title: "Purchases"
+      tab_title: "Purchases"
       title: "Purchases"
       subtitle: "See your purchase history and download what you bought"
       no_purchases: "You haven't purchased anything yet"
