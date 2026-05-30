@@ -59,7 +59,7 @@
         <% end %>
 
         <%= dropdown.with_section do %>
-          <div class="p-2 rounded flex flex-wrap gap-1 max-w-48 w-fit bg-background border border-accent/40">
+          <div class="p-2 rounded flex flex-wrap gap-1 max-w-48 w-fit bg-background border border-accent/40 shadow-xs shadow-accent">
             <% tags.each do |tag| %>
               <%= content_tag :span, data: { responsive_tag_ui_target: "dropdownTag", prevent_play: true } do %>
                 <%= render TagComponent.new(name: tag.name) %>
