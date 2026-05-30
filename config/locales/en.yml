@@ -74,6 +74,7 @@ en:
 
   pages:
     home:
+      tab_title: "Home"
       hero:
         title: "<span class='text-accent'>GOOD</span> MUSIC <span class='text-accent'>BAD</span> INTENTIONS"
         subtitle: "MAKE YOUR HITS HERE & START A CHAOS"
