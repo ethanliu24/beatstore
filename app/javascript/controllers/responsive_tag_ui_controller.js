@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ["tagsContainer", "tag", "dropdownTrigger", "dropdownTag"];
 
   connect() {
-    this.render();
+    requestAnimationFrame(() => this.render());
 
     this.resizeObserver = new ResizeObserver(() => this.debouncedLayout());
     this.resizeObserver.observe(this.tagsContainerTarget);
@@ -21,7 +21,7 @@ export default class extends Controller {
     clearTimeout(this.resizeTimeout);
 
     this.resizeTimeout = setTimeout(() => {
-      this.render();
+      requestAnimationFrame(() => this.render());
     }, 60);
   }
 
