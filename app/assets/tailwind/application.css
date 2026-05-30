@@ -11,10 +11,10 @@
   --color-tooltip-bg: var(--color-primary-txt);
   --color-tooltip-text: var(--color-background);
 
-  --color-accent: #9244ff;
-  --color-accent-light: #dcd6fb;
-  --color-accent-dim: #873fed;
-  --color-accent-text: #a15eff;
+  --color-accent: #5b52fa;
+  --color-accent-light: #6961ff;
+  --color-accent-dim: #4d42ff;
+  --color-accent-text: #635bff;
 
   --color-error: #f44336;
   --color-success: #6bd177;
