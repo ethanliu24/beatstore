@@ -34,10 +34,10 @@ RSpec.describe Tracks::TrackComponent, type: :component do
     expect(rendered.text).to have_content("#lebron")
   end
 
-  it "renders a dropdown" do
+  it "renders dropdowns" do
     expect(rendered).to have_css("#track_more_track_#{track.id}-dropdown-toggle")
     expect(rendered).to have_css("#track_more_track_#{track.id}")
-    expect(rendered.css("div.dropdown").count).to eq(1)
+    expect(rendered.css("div.dropdown").count).to eq(2)
     expect(rendered.css(".dropdown-item").count).to eq(6)
   end
 

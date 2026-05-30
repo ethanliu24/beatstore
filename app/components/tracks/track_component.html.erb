@@ -19,7 +19,7 @@
   </div>
 
   <%# Data %>
-  <div class="flex-1 flex flex-col justify-between items-start max-w-full min-w-5">
+  <div class="basis-3/5 flex flex-col justify-between items-start max-w-full min-w-5">
     <%= link_to track_path(id: @track.slug_param), class: "w-full block", data: { prevent_play: true } do %>
       <div class="text-sm cursor-pointer hover:underline truncate">
         <%= track.title %>
@@ -31,10 +31,44 @@
   </div>
 
   <%# Tags %>
-  <div class="flex justify-start items-center gap-1 text-[0.6rem] max-w-60 max-lg:max-w-40 overflow-x-auto hide-scrollbar max-md:hidden">
-    <% track.tags.each do |tag| %>
-      <%= render TagComponent.new(name: tag.name) %>
-    <% end %>
+  <div data-controller="responsive-tag-ui" class="basis-2/5 min-w-0 flex justify-between items-center text-[0.6rem]">
+    <div data-responsive-tag-ui-target="tagsContainer" class="opacity-0 flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
+      <% tags.each do |tag| %>
+        <%= content_tag :span, data: { responsive_tag_ui_target: "tag", prevent_play: true } do %>
+          <%= render TagComponent.new(name: tag.name) %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="pl-1 h-full items-center">
+      <%= render Ui::DropdownComponent.new(
+        id: dom_id(track, :tag_overflow_dropdown),
+        position: "top-center",
+        trigger_action: "hover"
+      ) do |dropdown| %>
+        <%= dropdown.with_trigger_button(
+          id: dom_id(track, :tag_overflow_dropdown),
+          data: {
+            responsive_tag_ui_target: "dropdownTrigger",
+            prevent_play: true
+          },
+          classes: "opacity-0 bg-secondary-bg text-secondary-txt border border-background px-0.5 py-0.5 rounded cursor-pointer font-medium flex gap-1"
+        ) do %>
+          <div class="min-w-1 bg-accent rounded-l-xs text-transparent"></div>
+          <span class="pr-1"></span>
+        <% end %>
+
+        <%= dropdown.with_section do %>
+          <div class="p-2 rounded flex flex-wrap gap-1 max-w-48 w-fit bg-background border border-accent/40 shadow-xs shadow-accent">
+            <% tags.each do |tag| %>
+              <%= content_tag :span, data: { responsive_tag_ui_target: "dropdownTag", prevent_play: true } do %>
+                <%= render TagComponent.new(name: tag.name) %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
   <%# Free download %>
@@ -58,7 +92,8 @@
   ) do |dropdown| %>
     <%= dropdown.with_trigger_button(
       id: dom_id(@track, :track_more),
-      data: { prevent_play: true }
+      data: { prevent_play: true },
+      classes: "flex justify-center items-center w-full h-full"
     ) do %>
       <%= icon "dots-vertical", class: "w-4 h-4 cursor-pointer" %>
     <% end %>
