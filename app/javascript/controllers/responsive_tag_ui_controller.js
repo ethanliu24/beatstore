@@ -6,6 +6,23 @@ export default class extends Controller {
 
   connect() {
     this.render();
+
+    this.resizeObserver = new ResizeObserver(() => this.debouncedLayout());
+    this.resizeObserver.observe(this.tagsContainerTarget);
+  }
+
+  disconnect() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  debouncedLayout() {
+    clearTimeout(this.resizeTimeout);
+
+    this.resizeTimeout = setTimeout(() => {
+      this.render();
+    }, 60);
   }
 
   render() {
