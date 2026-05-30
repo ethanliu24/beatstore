@@ -15,7 +15,8 @@
 
     <div>
       <div class="flex justify-start items-center gap-2">
-        <%= content_tag :p, recommendation.group, class: "text-sm tracking-wider font-bold" %>
+        <%= link_to recommendation.group, edit_admin_recommendation_path(recommendation),
+          class: "text-sm tracking-wider font-bold" %>
         <%= render Ui::DropdownComponent.new(
           id: dom_id(recommendation, :tags),
           position: "right",
@@ -30,7 +31,7 @@
               <p class="tracking-wider mb-2">Tags</p>
               <div class="flex gap-2 text-accent flex-wrap w-full">
                 <% recommendation.tag_names.each do |name| %>
-                  <div class="flex gap-1 justify-center items-center border-1 border-accent rounded-full px-1 text-[0.6rem] whitespace-nowrap">
+                  <div class="flex gap-1 justify-center items-center border border-accent rounded-full px-1 text-[0.6rem] whitespace-nowrap">
                     <p><%= name %></p>
                     <%= icon "plus", class: "w-2 h-2" %>
                   </div>
