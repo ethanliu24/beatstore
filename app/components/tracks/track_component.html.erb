@@ -31,7 +31,7 @@
   </div>
 
   <%# Tags %>
-  <div class="basis-2/5 flex justify-end items-center gap-1 text-[0.6rem] overflow-x-auto">
+  <div class="basis-2/5 flex justify-end items-center gap-1 text-[0.6rem]">
     <div class="flex gap-1 items-center">
       <% tags.each do |tag| %>
         <span data-prevent-play>
@@ -42,12 +42,12 @@
 
     <div class="pl-1 h-full items-center">
       <%= render Ui::DropdownComponent.new(
-        id: "tag-overflow-dropdown",
+        id: dom_id(track, :tag_overflow_dropdown),
         position: "top-center",
         trigger_action: "hover"
       ) do |dropdown| %>
         <%= dropdown.with_trigger_button(
-          id: "tag-overflow-dropdown",
+          id: dom_id(track, :tag_overflow_dropdown),
           data: {
             prevent_play: "true"
           },
