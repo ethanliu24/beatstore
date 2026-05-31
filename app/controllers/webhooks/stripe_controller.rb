@@ -18,6 +18,7 @@ module Webhooks
           # TODO send email saying order processing
           return
         end
+
         order = find_order(payment_intent:)
 
         order.order_items.each do |item|

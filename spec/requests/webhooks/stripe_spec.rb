@@ -117,7 +117,8 @@ RSpec.describe "Stripe Webhooks", type: :request do
   def build_event(
     type:,
     event_id:,
-    order_id:,
+    order_id: order.id,
+    user_id: user.id,
     obj_id: "pi_1234",
     payment_intent: "pi_1234",
     payment_status: "paid"
@@ -136,7 +137,8 @@ RSpec.describe "Stripe Webhooks", type: :request do
             name: "Customer"
           },
           metadata: {
-            order_id: order_id.to_s
+            order_id: order_id.to_s,
+            user_id: user_id.to_s
           },
           amount: 9999,
           currency: "usd"
