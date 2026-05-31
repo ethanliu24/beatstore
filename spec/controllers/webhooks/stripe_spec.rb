@@ -25,7 +25,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       is_immutable: false
     )
 
-    allow(controller).to receive(:find_order) do
+    allow(controller).to receive(:find_order_legacy) do
       controller.instance_variable_set(:@order, order)
     end
 
@@ -82,7 +82,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
       expect(order.order_items.first.preview_image.content_type).to eq("image/png")
 
       expect(order.order_items.first.is_immutable).to be(true)
-      expect(order.status).to eq(Order.statuses[:completed])
+      expect(order.reload.status).to eq(Order.statuses[:completed])
     end
 
     it "should update transaction with relavent information on charge success" do
@@ -133,7 +133,7 @@ RSpec.describe Webhooks::StripeController, type: :controller do
 
   private
 
-  def build_event(type:, obj_id: "pi_1234", payment_intent: "pi_1234")
+  def build_event(type:, obj_id: "pi_1234", payment_intent: "pi_1234", order_id: order.id)
     Stripe::Event.construct_from(
       type:,
       data: {
@@ -141,6 +141,9 @@ RSpec.describe Webhooks::StripeController, type: :controller do
           id: obj_id,
           payment_intent:,
           receipt_url: "www.receipt.com",
+          metadata: {
+            order_id:
+          },
           billing_details: {
             email: "email@example.com",
             name: "Customer"

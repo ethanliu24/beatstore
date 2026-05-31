@@ -9,25 +9,24 @@ module Webhooks
       case @event.type
       when "charge.succeeded", "charge.updated"
         payment_intent = @event.data.object.payment_intent
-        find_order(payment_intent:)
+        find_order_legacy(payment_intent:)
         update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
         PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
       when "payment_intent.succeeded"
         payment_intent = @event.data.object.id
-        find_order(payment_intent:)
+        find_order_legacy(payment_intent:)
         @order.update!(status: Order.statuses[:completed])
       when "payment_intent.payment_failed", "payment_intent.canceled"
         # TODO maybe one more status for canceled
         payment_intent = @event.data.object.id
-        find_order(payment_intent:)
+        find_order_legacy(payment_intent:)
         @order.update!(status: Order.statuses[:failed])
         @order.payment_transaction.update!(status: Transaction.statuses[:failed])
       when "checkout.session.completed"
-        payment_intent = @event.data.object.payment_intent
-        find_order(payment_intent:)
+        order = find_order(session: @event.data.object)
 
         # Maybe should duplicate on session create and purge if order failed
-        @order.order_items.each do |item|
+        order.order_items.each do |item|
           begin
             case item.product_type
             when Track.name
@@ -48,8 +47,8 @@ module Webhooks
           end
         end
 
-        @order.user.cart.clear
-        @order.update!(status: Order.statuses[:completed])
+        order.user.cart.clear
+        order.update!(status: Order.statuses[:completed])
       end
 
       head :ok
@@ -73,7 +72,17 @@ module Webhooks
       end
     end
 
-    def find_order(payment_intent:)
+    def find_order(session:)
+      begin
+        order_id = session.metadata.order_id
+      rescue => _e
+        # TODO log if any errors
+      end
+
+      Order.find(order_id)
+    end
+
+    def find_order_legacy(payment_intent:)
       session = Stripe::Checkout::Session.list(payment_intent:).first
       begin
         order_id = session.metadata["order_id"]
