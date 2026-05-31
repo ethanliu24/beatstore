@@ -8,10 +8,12 @@ module Webhooks
       event = parse_event
       return unless event
 
+      session = event.data.object
+      order = find_order(session:)
+      user = find_user(session:)
+
       case event.type
       when "checkout.session.completed"
-        session = event.data.object
-        payment_intent = session.payment_intent
         payment_status = session.payment_status
 
         if payment_status == "unpaid"
@@ -19,7 +21,7 @@ module Webhooks
           return
         end
 
-        order = find_order(payment_intent:)
+        order = find_order(session:)
 
         order.order_items.each do |item|
           begin
@@ -45,13 +47,12 @@ module Webhooks
         update_transaction(transaction: order.payment_transaction, event: event, status: Transaction.statuses[:completed])
         order.user.cart.clear
         order.update!(status: Order.statuses[:completed])
-        PurchaseMailer.with(user: current_or_guest_user, order: order).purchase_complete.deliver_later
+        PurchaseMailer.with(user:, order:).purchase_complete.deliver_later
       when "checkout.session.async_payment_succeeded"
         # TODO perform fullfillment job
-      when "checkout.session.expired", "checkout.session.async_payment_failed"
-        # TODO maybe one more status for canceled
-        payment_intent = event.data.object.id
-        order = find_order(payment_intent:)
+      when "checkout.session.expired"
+        # TODO add cancled status
+      when "checkout.session.async_payment_failed"
         order.update!(status: Order.statuses[:failed])
         order.payment_transaction.update!(status: Transaction.statuses[:failed])
       end
@@ -92,17 +93,6 @@ module Webhooks
       end
 
       User.find(user_id)
-    end
-
-    def find_order_legacy(payment_intent:)
-      session = Stripe::Checkout::Session.list(payment_intent:).first
-      begin
-        order_id = session.metadata["order_id"]
-      rescue => _e
-        # TODO log if any errors
-      end
-
-      Order.find(order_id)
     end
 
     def duplicate_file(item:, file:, attach:)
