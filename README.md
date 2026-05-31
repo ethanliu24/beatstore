@@ -62,7 +62,7 @@ rails db:setup  # set up dev and test databases for rails
 ```
 
 Useful commands:
-1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
+1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all database roles you have
 
 
 ## Running
