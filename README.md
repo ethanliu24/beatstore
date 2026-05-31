@@ -1,6 +1,9 @@
 # Beat Store
 A marketplace for me to store, manage and license my beats.
 
+## Handy Links
+1. [Cloudfare Admin](https://dash.cloudflare.com): Domain, DNS & internet services
+
 ## Installation
 
 ### Stripe
