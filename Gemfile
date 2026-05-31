@@ -78,6 +78,7 @@ gem "view_component", "~> 4.11"
 gem "cocoon"
 gem "countries", "~> 8.0"
 gem "redcarpet"
+gem "mission_control-jobs"
 
 gem "devise", "~> 5.0"
 gem "omniauth"

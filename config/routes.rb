@@ -93,6 +93,8 @@ Rails.application.routes.draw do
         put "reorder/:position", to: "reorder_one", as: "reorder"
       end
     end
+
+    mount MissionControl::Jobs::Engine, at: :jobs
   end
 
   get "contact", to: "contacts#new", as: :contact
