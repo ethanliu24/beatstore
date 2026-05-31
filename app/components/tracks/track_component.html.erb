@@ -35,7 +35,7 @@
     <%= render DynamicTagsComponent.new(
       tags:,
       resource: track,
-      rerender_on_resize: false,
+      rerender_on_resize: true,
       tag_data: { prevent_play: true },
       dropdown_tag_data: { prevent_play: true }
     ) %>
