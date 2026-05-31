@@ -84,6 +84,9 @@ en:
       recs:
         browse_all: "Browse all tracks"
         browse_by_group: "Explore tracks by category"
+        groups:
+          title: "Categories"
+          see_more: "See all"
         latest: "LATEST"
         popular: "POPULAR"
         chinese: "CHINESE"
