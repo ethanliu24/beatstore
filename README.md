@@ -2,7 +2,8 @@
 A marketplace for me to store, manage and license my beats.
 
 ## Handy Links
-1. [Cloudfare Admin](https://dash.cloudflare.com): Domain, DNS & internet services
+- [Cloudfare Admin](https://dash.cloudflare.com): Domain, DNS & internet services
+- [Coveralls](https://coveralls.io/github/ethanliu24/beatstore): Code coverage report
 
 ## Installation
 
