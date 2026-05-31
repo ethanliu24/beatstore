@@ -12,6 +12,8 @@ class PagesController < ApplicationController
       popular: service.popular(like_weight: 2),
       chinese: service.group_by_tags("chinese")
     }
+
+    @track_groups = TrackRecommendation.rank(:display_order).all
   end
 
   def licensing; end
