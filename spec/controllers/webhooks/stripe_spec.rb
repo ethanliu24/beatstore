@@ -34,15 +34,6 @@ RSpec.describe Webhooks::StripeController, type: :controller do
   end
 
   describe "#payments" do
-    it "should set order status to completed on payment intent success event" do
-      event = build_event(type: "payment_intent.succeeded")
-      stub_event(event)
-
-      post :payments
-
-      expect(order.status).to eq(Order.statuses[:completed])
-    end
-
     it "should set order status to filed if payment failed" do
       event = build_event(type: "payment_intent.payment_failed")
       stub_event(event)
@@ -69,63 +60,35 @@ RSpec.describe Webhooks::StripeController, type: :controller do
 
       expect(order.order_items.first.is_immutable).to be(false)
 
-      post :payments
+      perform_enqueued_jobs do
+        post :payments
+      end
 
+      order.reload
+      transaction = order.payment_transaction
+
+      # check order update
       expect(order.order_items.first.files.attached?).to be(true)
       expect(order.order_items.first.files.count).to eq(2)
       expect(order.order_items.first.files.first.blob.filename).to eq("untagged_mp3.mp3")
       expect(order.order_items.first.files.first.content_type).to eq("audio/mpeg")
       expect(order.order_items.first.files.last.blob.filename).to eq("track_stems.zip")
       expect(order.order_items.first.files.last.content_type).to eq("application/zip")
-
       expect(order.order_items.first.preview_image.filename.to_s).to eq("oi_preview_cover_photo.png")
       expect(order.order_items.first.preview_image.content_type).to eq("image/png")
-
       expect(order.order_items.first.is_immutable).to be(true)
       expect(order.status).to eq(Order.statuses[:completed])
-    end
 
-    it "should update transaction with relavent information on charge success" do
-      event = build_event(type: "charge.succeeded", obj_id: "ch_1234")
-      stub_event(event)
-
-      perform_enqueued_jobs do
-        post :payments
-      end
-
-      order.reload
-      transaction = order.payment_transaction
-
+      # check transaction update
       expect(transaction.status).to eq(Transaction.statuses[:completed])
-      expect(transaction.stripe_charge_id).to eq("ch_1234")
+      expect(transaction.stripe_charge_id).to eq("pi_1234")
       expect(transaction.stripe_receipt_url).to eq("www.receipt.com")
       expect(transaction.customer_email).to eq("email@example.com")
       expect(transaction.customer_name).to eq("Customer")
       expect(transaction.amount_cents).to eq(9999)
       expect(transaction.currency).to eq("usd")
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
-    end
 
-    it "should update transaction with relavent information on charge updated" do
-      event = build_event(type: "charge.succeeded", obj_id: "ch_1234")
-      stub_event(event)
-      order.payment_transaction.update!(amount_cents: 1234)
-
-      perform_enqueued_jobs do
-        post :payments
-      end
-
-      order.reload
-      transaction = order.payment_transaction
-
-      expect(transaction.status).to eq(Transaction.statuses[:completed])
-      expect(transaction.stripe_charge_id).to eq("ch_1234")
-      expect(transaction.stripe_receipt_url).to eq("www.receipt.com")
-      expect(transaction.customer_email).to eq("email@example.com")
-      expect(transaction.customer_name).to eq("Customer")
-      expect(transaction.amount_cents).to eq(9999)
-      expect(transaction.currency).to eq("usd")
+      # mail check
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
     end

@@ -9,26 +9,17 @@ module Webhooks
       return unless event
 
       case event.type
-      when "charge.succeeded", "charge.updated"
-        payment_intent = event.data.object.payment_intent
-        order = find_order(payment_intent:)
-        update_transaction(transaction: order.payment_transaction, event: event, status: Transaction.statuses[:completed])
-        PurchaseMailer.with(user: current_or_guest_user, order: order).purchase_complete.deliver_later
-      when "payment_intent.succeeded"
-        payment_intent = event.data.object.id
-        order = find_order(payment_intent:)
-        order.update!(status: Order.statuses[:completed])
-      when "payment_intent.payment_failed", "payment_intent.canceled"
-        # TODO maybe one more status for canceled
-        payment_intent = event.data.object.id
-        order = find_order(payment_intent:)
-        order.update!(status: Order.statuses[:failed])
-        order.payment_transaction.update!(status: Transaction.statuses[:failed])
       when "checkout.session.completed"
-        payment_intent = event.data.object.payment_intent
+        session = event.data.object
+        payment_intent = session.payment_intent
+        payment_status = session.payment_status
+
+        if payment_status == "unpaid"
+          # TODO send email saying order processing
+          return
+        end
         order = find_order(payment_intent:)
 
-        # Maybe should duplicate on session create and purge if order failed
         order.order_items.each do |item|
           begin
             case item.product_type
@@ -50,8 +41,18 @@ module Webhooks
           end
         end
 
+        update_transaction(transaction: order.payment_transaction, event: event, status: Transaction.statuses[:completed])
         order.user.cart.clear
         order.update!(status: Order.statuses[:completed])
+        PurchaseMailer.with(user: current_or_guest_user, order: order).purchase_complete.deliver_later
+      when "checkout.session.async_payment_succeeded"
+        # TODO perform fullfillment job
+      when "checkout.session.expired", "checkout.session.async_payment_failed"
+        # TODO maybe one more status for canceled
+        payment_intent = event.data.object.id
+        order = find_order(payment_intent:)
+        order.update!(status: Order.statuses[:failed])
+        order.payment_transaction.update!(status: Transaction.statuses[:failed])
       end
 
       head :ok
