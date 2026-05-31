@@ -5,64 +5,66 @@ module Webhooks
     skip_before_action :verify_authenticity_token
 
     def payments
-      # TODO remove stateful dependencies, i.e. all instance variables
-      event = parse_event
-      @event = event
+      ActiveRecord::Base.transaction do
+        # TODO remove stateful dependencies, i.e. all instance variables
+        event = parse_event
+        @event = event
 
-      event_id = event.id
-      duplicated = !verify_idempotency(event_id:)
-      return if duplicated
+        event_id = event.id
+        duplicated = !verify_idempotency(event_id:)
+        return if duplicated
 
-      case event.type
-      when "charge.succeeded", "charge.updated"
-        payment_intent = @event.data.object.payment_intent
-        find_order(payment_intent:)
-        update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
-        PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
-      when "payment_intent.succeeded"
-        # payment_intent = @event.data.object.id
-        # find_order(payment_intent:)
-        # @order.update!(status: Order.statuses[:completed])
-      when "payment_intent.payment_failed", "payment_intent.canceled"
-        # TODO maybe one more status for canceled
-        payment_intent = @event.data.object.id
-        find_order(payment_intent:)
-        @order.update!(status: Order.statuses[:failed])
-        @order.payment_transaction.update!(status: Transaction.statuses[:failed])
-      when "checkout.session.completed"
-        payment_intent = event.data.object.payment_intent
-        order = find_order(payment_intent:)
-        user = current_or_guest_user # TODO store user id in checkout metadata
-        StripePaymentEvent.find_by(event_id:).update(order:, user:)
+        case event.type
+        when "charge.succeeded", "charge.updated"
+          payment_intent = @event.data.object.payment_intent
+          find_order(payment_intent:)
+          update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
+          PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
+        when "payment_intent.succeeded"
+          # payment_intent = @event.data.object.id
+          # find_order(payment_intent:)
+          # @order.update!(status: Order.statuses[:completed])
+        when "payment_intent.payment_failed", "payment_intent.canceled"
+          # TODO maybe one more status for canceled
+          payment_intent = @event.data.object.id
+          find_order(payment_intent:)
+          @order.update!(status: Order.statuses[:failed])
+          @order.payment_transaction.update!(status: Transaction.statuses[:failed])
+        when "checkout.session.completed"
+          payment_intent = event.data.object.payment_intent
+          order = find_order(payment_intent:)
+          user = current_or_guest_user # TODO store user id in checkout metadata
+          StripePaymentEvent.find_by(event_id:).update(order:, user:)
 
-        # Maybe should duplicate on session create and purge if order failed
-        order.order_items.each do |item|
-          begin
-            case item.product_type
-            when Track.name
-              track = Track.find(item.product_snapshot["id"])
-              duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
-              duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
-              duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
+          # Maybe should duplicate on session create and purge if order failed
+          order.order_items.each do |item|
+            begin
+              case item.product_type
+              when Track.name
+                track = Track.find(item.product_snapshot["id"])
+                duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
+                duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
+                duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
 
-              item.preview_image.attach(
-                io: StringIO.new(track.cover_photo.download),
-                filename: "oi_preview_#{track.cover_photo.filename}",
-                content_type: track.cover_photo.blob&.content_type
-              )
+                item.preview_image.attach(
+                  io: StringIO.new(track.cover_photo.download),
+                  filename: "oi_preview_#{track.cover_photo.filename}",
+                  content_type: track.cover_photo.blob&.content_type
+                )
+              end
+
+              item.update!(is_immutable: true)
+            rescue => _e
+              # TODO log any errors
             end
-
-            item.update!(is_immutable: true)
-          rescue => _e
-            # TODO log any errors
           end
+
+          order.user.cart.clear
+          order.update!(status: Order.statuses[:completed])
         end
 
-        order.user.cart.clear
-        order.update!(status: Order.statuses[:completed])
+        head :ok
       end
-
-      head :ok
     end
 
     private
