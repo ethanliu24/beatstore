@@ -1,16 +1,18 @@
 <div id="<%= "track-recommendation-#{recommendation.group}" %>"
-  class="flex flex-col justify-between items-stretch gap-4 w-50 p-4 rounded hover:bg-hover">
+  class="flex flex-col justify-between items-stretch gap-4 w-50 p-3 rounded hover:bg-hover">
   <div class="w-full aspect-square rounded relative flex justify-center items-center bg-secondary-bg cursor-pointer">
-    <% if recommendation.display_image.attached? %>
-      <%= image_tag url_for(recommendation.display_image), class: "w-full h-full rounded" %>
-    <% else %>
-      <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
-    <% end %>
+    <div class="recommendation-group-img w-full h-full flex justify-center items-center rounded">
+      <% if recommendation.display_image.attached? %>
+        <%= image_tag url_for(recommendation.display_image), class: "w-full h-full rounded" %>
+      <% else %>
+        <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
+      <% end %>
+    </div>
 
     <%= link_to explore_tracks_path(anchor: "recs-#{recommendation.group}"),
       data: { turbo: false },
-      class: "w-full h-full flex justify-center items-center" do %>
-      <div class="recommendation-group-overlay absolute top-0 left-0 w-full h-full rounded
+      class: "absolute top-0 left-0 w-full h-full" do %>
+      <div class="recommendation-group-overlay w-full h-full rounded
         flex justify-center items-center">
         <div class="recommendation-group-overlay-title tracking-wider text-sm italic font-light">
           <%= recommendation.group %>

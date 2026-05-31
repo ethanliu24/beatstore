@@ -119,6 +119,10 @@
 }
 
 /* Home recommendations card animations */
+.recommendation-group-img {
+  background: #3a3a3a;
+}
+
 .recommendation-group-overlay {
   background: rgba(0, 0, 0, 0.7);
 }
@@ -139,5 +143,5 @@
   transform: translateY(-0.2rem);
   color: var(--color-accent);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
 }
