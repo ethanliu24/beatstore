@@ -9,7 +9,7 @@
       <% end %>
     </div>
 
-    <%= link_to explore_tracks_path(anchor: "recs-#{recommendation.group}"),
+    <%= link_to tracks_path(q: recommendation.ransack_query),
       data: { turbo: false },
       class: "absolute top-0 left-0 w-full h-full" do %>
       <div class="recommendation-group-overlay w-full h-full rounded
