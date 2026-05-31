@@ -17,7 +17,7 @@
       <%= render partial: "tracks/recommendation", locals: {
         rec: r[:recommendation].group,
         tracks: r[:tracks],
-        see_more_link: tracks_path(q: { tags_name_in: r[:recommendation].tag_names })
+        see_more_link: tracks_path(q: r[:recommendation].ransack_query)
       } %>
     <% end %>
   </div>

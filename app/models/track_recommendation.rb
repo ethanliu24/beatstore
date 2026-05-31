@@ -18,6 +18,10 @@ class TrackRecommendation < ApplicationRecord
 
   scope :enabled, -> { where(disabled: false) }
 
+  def ransack_query
+    { tags_name_in: tag_names }
+  end
+
   private
 
   def tag_names_is_array

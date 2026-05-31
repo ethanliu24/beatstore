@@ -1,0 +1,30 @@
+<div id="<%= "track-recommendation-#{recommendation.group}" %>"
+  class="flex flex-col justify-between items-stretch gap-4 w-50 p-3 rounded hover:bg-hover">
+  <div class="w-full aspect-square rounded relative flex justify-center items-center bg-secondary-bg cursor-pointer">
+    <div class="recommendation-group-img w-full h-full flex justify-center items-center rounded">
+      <% if recommendation.display_image.attached? %>
+        <%= image_tag url_for(recommendation.display_image), class: "w-full h-full rounded" %>
+      <% else %>
+        <%= icon "photo-scan", class: "w-1/4 h-1/4" %>
+      <% end %>
+    </div>
+
+    <%= link_to tracks_path(q: recommendation.ransack_query),
+      data: { turbo: false },
+      class: "absolute top-0 left-0 w-full h-full" do %>
+      <div class="recommendation-group-overlay w-full h-full rounded
+        flex justify-center items-center">
+        <div class="recommendation-group-overlay-title tracking-wider text-sm italic font-light">
+          <%= recommendation.group %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="w-full flex justify-center items-center">
+    <%= render DynamicTagsComponent.new(
+      tags: recommendation.tag_names.map{ |t| Track::Tag.new(name: t) },
+      resource: recommendation,
+      rerender_on_resize: true
+    ) %>
+  </div>
+</div>
