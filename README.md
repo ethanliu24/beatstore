@@ -62,7 +62,7 @@ rails db:setup  # set up dev and test databases for rails
 ```
 
 Useful commands:
-1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
+1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all database roles you have
 
 
 ## Running
@@ -74,7 +74,7 @@ Run this to start the server:
 $ ./bin/dev
 ```
 
-The reason we use this instead of `rails s` is so that Tailwind can watch for changes. If not working on views, either command works.
+This command executes `Procfile.dev` and runs all commands defined in there. 
 
 ### Stripe CLI
 This is for testing Stripe webhooks locally. In a seperate terminal and run the following commands:

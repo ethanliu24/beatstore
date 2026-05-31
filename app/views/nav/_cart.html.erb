@@ -15,7 +15,7 @@
             <% if cart_item_has_photo?(item) %>
               <%= image_tag cart_item_photo_url(item), class: "rounded" %>
             <% else %>
-              <div class="border-1 border-hover rounded w-full h-full flex justify-center items-center bg-hover">
+              <div class="border border-hover rounded w-full h-full flex justify-center items-center bg-hover">
                 <%= icon "photo-scan", class: "w-6 h-6 aspect-square" %>
               </div>
             <% end %>

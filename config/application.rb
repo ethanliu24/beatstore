@@ -23,5 +23,9 @@ module Beatstore
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Mission control job UI
+    config.mission_control.jobs.base_controller_class = "Admin::BaseController"
+    config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end

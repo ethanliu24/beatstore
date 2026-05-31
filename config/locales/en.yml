@@ -494,6 +494,7 @@ en:
       licenses: "Licenses"
       transactions: "Transactions"
       recommendations: "Recommendations"
+      jobs: "Jobs"
 
   checkout:
     common:
