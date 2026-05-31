@@ -2,7 +2,7 @@
 A marketplace for me to store, manage and license my beats.
 
 ## Handy Links
-1. [Cloudfare Admin](https://dash.cloudflare.com/0c8f31df7fbb483f55dfc906d1c2fa92/prodethan.com): Domain, DNS & internet services
+1. [Cloudfare Admin](https://dash.cloudflare.com): Domain, DNS & internet services
 
 ## Installation
 
