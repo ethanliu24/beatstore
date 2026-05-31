@@ -1,0 +1,39 @@
+<div data-controller="responsive-tag-ui" class="w-full flex justify-between items-center text-[0.6rem]">
+  <div data-responsive-tag-ui-target="tagsContainer" class="opacity-0 flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
+    <% tags.each do |tag| %>
+      <%= content_tag :span, data: { responsive_tag_ui_target: "tag", prevent_play: true } do %>
+        <%= render TagComponent.new(name: tag.name) %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="pl-1 h-full items-center">
+    <%= render Ui::DropdownComponent.new(
+      id: dom_id(resource, :tag_overflow_dropdown),
+      position: "top-center",
+      trigger_action: "hover"
+    ) do |dropdown| %>
+      <%= dropdown.with_trigger_button(
+        id: dom_id(resource, :tag_overflow_dropdown),
+        data: {
+          responsive_tag_ui_target: "dropdownTrigger",
+          prevent_play: true
+        },
+        classes: "opacity-0 bg-secondary-bg text-secondary-txt border border-background px-0.5 py-0.5 rounded cursor-pointer font-medium flex gap-1"
+      ) do %>
+        <div class="min-w-1 bg-accent rounded-l-xs text-transparent"></div>
+        <span class="pr-1"></span>
+      <% end %>
+
+      <%= dropdown.with_section do %>
+        <div class="p-2 rounded flex flex-wrap gap-1 max-w-48 w-fit bg-background border border-accent/40 shadow-xs shadow-accent">
+          <% tags.each do |tag| %>
+            <%= content_tag :span, data: { responsive_tag_ui_target: "dropdownTag", prevent_play: true } do %>
+              <%= render TagComponent.new(name: tag.name) %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
