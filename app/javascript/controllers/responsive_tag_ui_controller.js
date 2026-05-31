@@ -3,12 +3,17 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="responsive-tag-ui"
 export default class extends Controller {
   static targets = ["tagsContainer", "tag", "dropdownTrigger", "dropdownTag"];
+  static values = {
+    rerenderOnResize: Boolean
+  };
 
   connect() {
     requestAnimationFrame(() => this.render());
 
-    this.resizeObserver = new ResizeObserver(() => this.debouncedLayout());
-    this.resizeObserver.observe(this.tagsContainerTarget);
+    if (this.rerenderOnResizeValue) {
+      this.resizeObserver = new ResizeObserver(() => this.debouncedLayout());
+      this.resizeObserver.observe(this.tagsContainerTarget);
+    }
   }
 
   disconnect() {
