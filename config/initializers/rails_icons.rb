@@ -3,7 +3,7 @@ RailsIcons.configure do |config|
   # config.default_variant = "" # Set a default variant for all libraries
 
   # Override Tabler defaults
-  # config.libraries.tabler.default_variant = "" # Set a default variant for Tabler
+  config.libraries.tabler.default_variant = "outline" # Set a default variant for Tabler
   # config.libraries.tabler.exclude_variants = [] # Exclude specific variants
 
   # config.libraries.tabler.regular.default.css = "size-6"
