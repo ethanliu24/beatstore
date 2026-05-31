@@ -1,7 +1,7 @@
 <div data-controller="responsive-tag-ui" class="w-full flex justify-between items-center text-[0.6rem]">
   <div data-responsive-tag-ui-target="tagsContainer" class="opacity-0 flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
     <% tags.each do |tag| %>
-      <%= content_tag :span, data: { responsive_tag_ui_target: "tag", prevent_play: true } do %>
+      <%= content_tag :span, data: tag_data do %>
         <%= render TagComponent.new(name: tag.name) %>
       <% end %>
     <% end %>
@@ -28,7 +28,7 @@
       <%= dropdown.with_section do %>
         <div class="p-2 rounded flex flex-wrap gap-1 max-w-48 w-fit bg-background border border-accent/40 shadow-xs shadow-accent">
           <% tags.each do |tag| %>
-            <%= content_tag :span, data: { responsive_tag_ui_target: "dropdownTag", prevent_play: true } do %>
+            <%= content_tag :span, data: dropdown_tag_data do %>
               <%= render TagComponent.new(name: tag.name) %>
             <% end %>
           <% end %>

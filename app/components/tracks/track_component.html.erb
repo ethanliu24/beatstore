@@ -32,7 +32,12 @@
 
   <%# Tags %>
   <div class="basis-2/5 min-w-0">
-    <%= render DynamicTagsComponent.new(tags:, resource: track) %>
+    <%= render DynamicTagsComponent.new(
+      tags:,
+      resource: track,
+      tag_data: { prevent_play: true },
+      dropdown_tag_data: { prevent_play: true },
+    ) %>
   </div>
 
   <%# Free download %>
