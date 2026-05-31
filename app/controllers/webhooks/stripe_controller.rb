@@ -3,19 +3,26 @@
 module Webhooks
   class StripeController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :parse_event
 
     def payments
-      case @event.type
+      # TODO remove stateful dependencies, i.e. all instance variables
+      event = parse_event
+      @event = event
+
+      event_id = event.id
+      duplicated = !verify_idempotency(event_id:)
+      return if duplicated
+
+      case event.type
       when "charge.succeeded", "charge.updated"
         payment_intent = @event.data.object.payment_intent
         find_order(payment_intent:)
         update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
         PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
       when "payment_intent.succeeded"
-        payment_intent = @event.data.object.id
-        find_order(payment_intent:)
-        @order.update!(status: Order.statuses[:completed])
+        # payment_intent = @event.data.object.id
+        # find_order(payment_intent:)
+        # @order.update!(status: Order.statuses[:completed])
       when "payment_intent.payment_failed", "payment_intent.canceled"
         # TODO maybe one more status for canceled
         payment_intent = @event.data.object.id
@@ -23,11 +30,13 @@ module Webhooks
         @order.update!(status: Order.statuses[:failed])
         @order.payment_transaction.update!(status: Transaction.statuses[:failed])
       when "checkout.session.completed"
-        payment_intent = @event.data.object.payment_intent
-        find_order(payment_intent:)
+        payment_intent = event.data.object.payment_intent
+        order = find_order(payment_intent:)
+        user = current_or_guest_user # TODO store user id in checkout metadata
+        StripePaymentEvent.find_by(event_id:).update(order:, user:)
 
         # Maybe should duplicate on session create and purge if order failed
-        @order.order_items.each do |item|
+        order.order_items.each do |item|
           begin
             case item.product_type
             when Track.name
@@ -35,6 +44,7 @@ module Webhooks
               duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
               duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
               duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
+
               item.preview_image.attach(
                 io: StringIO.new(track.cover_photo.download),
                 filename: "oi_preview_#{track.cover_photo.filename}",
@@ -48,8 +58,8 @@ module Webhooks
           end
         end
 
-        @order.user.cart.clear
-        @order.update!(status: Order.statuses[:completed])
+        order.user.cart.clear
+        order.update!(status: Order.statuses[:completed])
       end
 
       head :ok
@@ -61,15 +71,25 @@ module Webhooks
       payload = request.body.read
       sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
       endpoint_secret = ::Credentials::Stripe.payments_webhook_secret
-      @event = nil
 
-      # TODO can log errors here
       begin
-        @event = Stripe::Webhook.construct_event(
-          payload, sig_header, endpoint_secret
-        )
+        Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
       rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
+        # TODO can log errors here
         head :bad_request and return
+      end
+    end
+
+    def verify_idempotency(event_id:)
+      begin
+        StripePaymentEvent.create!(event_id:)
+
+        true
+      rescue ActiveRecord::RecordNotUnique
+        false
+      rescue => e
+        # TODO log error
+        raise e
       end
     end
 
@@ -81,7 +101,7 @@ module Webhooks
         # TODO log if any errors
       end
 
-      @order = Order.find(order_id)
+      Order.find(order_id)
     end
 
     def duplicate_file(item:, file:, attach:)
