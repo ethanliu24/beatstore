@@ -1,4 +1,5 @@
-<div data-controller="responsive-tag-ui" class="w-full flex justify-between items-center text-[0.6rem]">
+<div data-controller="responsive-tag-ui" class="w-full flex justify-between items-center text-[0.6rem]"
+  data-responsive-tag-ui-rerender-on-resize-value=<%= rerender_on_resize %>>
   <div data-responsive-tag-ui-target="tagsContainer" class="opacity-0 flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
     <% tags.each do |tag| %>
       <%= content_tag :span, data: tag_data do %>
