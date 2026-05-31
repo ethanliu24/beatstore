@@ -63,7 +63,7 @@
       <% end %>
     </div>
 
-    <%= render TrackRecommendationComponent.new(track_recommendation: @track_recommendations.first) %>
+    <%= render TrackRecommendationComponent.new(track_recommendation: @track_recommendations.last) %>
 
     <div class="w-full flex justify-center items-center flex-wrap gap-4 max-sm:gap-2 py-4">
       <%= link_to tracks_path,
