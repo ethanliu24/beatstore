@@ -62,12 +62,6 @@ rails db:setup  # set up dev and test databases for rails
 Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all databases you have
 
-### Tabler Icons
-Icons are not committed to the repo due to the large amount of it, so newly cloned projects will need to install them. Icons are from [Tabler](https://tabler.io/icons).
-```
-$ rails generate rails_icons:install --libraries=tabler
-```
-
 
 ## Running
 
@@ -103,6 +97,16 @@ $ rspec <directory-or-file>  # run all tests in the given directory or file
 
 # or alternatively, use "bundle exec rspec" instead of rspec
 ```
+
+### Tabler Icons
+All icons are from [Tabler](https://tabler.io/icons). Add new icons by:
+1. Visit the website and find the icon wanted
+2. Download the icon in svg, at size `24`, stroke `2`
+3. In `app/assets/svg/icons/tabler/`, put the svg in `outline/` or `fill/` folder, depeding on the icon downloaded
+4. Commit to git
+5. The file name is the param passed in the `icon` helper. Currently there are `outline` (default) and `filled` variants available
+
+_Do NOT run `rails generate rails_icons:install --libraries=tabler`, it will pull all icons which will slow things down dramatically._
 
 ## Clearing tmp
 The project size can get extremely large in development because running tests creates a lot of fixtures in local active storage.
