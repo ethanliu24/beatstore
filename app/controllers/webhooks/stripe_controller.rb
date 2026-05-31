@@ -5,6 +5,7 @@ module Webhooks
     skip_before_action :verify_authenticity_token
 
     def payments
+      # TODO test this, just rewrite the tests and delete existing test in controller
       ActiveRecord::Base.transaction do
         # TODO remove stateful dependencies, i.e. all instance variables
         event = parse_event
@@ -21,9 +22,9 @@ module Webhooks
           update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
           PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
         when "payment_intent.succeeded"
-          # payment_intent = @event.data.object.id
-          # find_order(payment_intent:)
-          # @order.update!(status: Order.statuses[:completed])
+          payment_intent = @event.data.object.id
+          find_order(payment_intent:)
+          @order.update!(status: Order.statuses[:completed])
         when "payment_intent.payment_failed", "payment_intent.canceled"
           # TODO maybe one more status for canceled
           payment_intent = @event.data.object.id
