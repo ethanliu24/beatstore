@@ -16,7 +16,8 @@ class CheckoutsController < ApplicationController
       success_url: success_checkout_url,
       cancel_url: cancel_checkout_url,
       metadata: {
-        order_id: @order.id
+        order_id: @order.id,
+        user_id: current_or_guest_user.id
       }
     })
 
