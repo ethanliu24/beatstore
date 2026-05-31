@@ -13,7 +13,9 @@ class PagesController < ApplicationController
       chinese: service.group_by_tags("chinese")
     }
 
-    @track_groups = TrackRecommendation.rank(:display_order).all
+    # Different from @recs. bad naming I know, but this displays "groups" or "categories" of tracks,
+    # and @recs displays actual tracks.
+    @track_recommendations = TrackRecommendation.rank(:display_order).all
   end
 
   def licensing; end

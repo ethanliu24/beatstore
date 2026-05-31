@@ -63,6 +63,8 @@
       <% end %>
     </div>
 
+    <%= render TrackRecommendationComponent.new(track_recommendation: @track_recommendations.first) %>
+
     <div class="w-full flex justify-center items-center flex-wrap gap-4 max-sm:gap-2 py-4">
       <%= link_to tracks_path,
         class: "flex justify-center items-center gap-2 bg-black border-2 border-accent/60 rounded-full
