@@ -73,7 +73,27 @@ module Webhooks
       end
     end
 
-    def find_order(payment_intent:)
+    def find_order(session:)
+      begin
+        order_id = session.metadata.order_id
+      rescue => _e
+        # TODO log if any errors
+      end
+
+      Order.find(order_id)
+    end
+
+    def find_user(session:)
+      begin
+        user_id = session.metadata.user_id
+      rescue => _e
+        # TODO log if any errors
+      end
+
+      User.find(user_id)
+    end
+
+    def find_order_legacy(payment_intent:)
       session = Stripe::Checkout::Session.list(payment_intent:).first
       begin
         order_id = session.metadata["order_id"]
