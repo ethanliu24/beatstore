@@ -98,7 +98,7 @@ $ rspec <directory-or-file>  # run all tests in the given directory or file
 # or alternatively, use "bundle exec rspec" instead of rspec
 ```
 
-### Tabler Icons
+## Tabler Icons
 All icons are from [Tabler](https://tabler.io/icons). Add new icons by:
 1. Visit the website and find the icon wanted
 2. Download the icon in svg, at size `24`, stroke `2`
