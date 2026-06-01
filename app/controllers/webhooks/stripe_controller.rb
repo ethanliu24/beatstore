@@ -3,29 +3,38 @@
 module Webhooks
   class StripeController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :parse_event
+
+    HANDLED_EVENTS = [
+      "checkout.session.completed",
+      "checkout.session.expired",
+      "checkout.session.async_payment_succeeded",
+      "checkout.session.async_payment_failed"
+    ].freeze
 
     def payments
-      case @event.type
-      when "charge.succeeded", "charge.updated"
-        payment_intent = @event.data.object.payment_intent
-        find_order_legacy(payment_intent:)
-        update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
-        PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
-      when "payment_intent.succeeded"
-        payment_intent = @event.data.object.id
-        find_order_legacy(payment_intent:)
-        @order.update!(status: Order.statuses[:completed])
-      when "payment_intent.payment_failed", "payment_intent.canceled"
-        # TODO maybe one more status for canceled
-        payment_intent = @event.data.object.id
-        find_order_legacy(payment_intent:)
-        @order.update!(status: Order.statuses[:failed])
-        @order.payment_transaction.update!(status: Transaction.statuses[:failed])
-      when "checkout.session.completed"
-        order = find_order(session: @event.data.object)
+      event = parse_event
+      return unless event
 
-        # Maybe should duplicate on session create and purge if order failed
+      unless HANDLED_EVENTS.include?(event.type)
+        head :ok
+        return
+      end
+
+      session = event.data.object
+      order = find_order(session:)
+      user = find_user(session:)
+
+      case event.type
+      when "checkout.session.completed"
+        payment_status = session.payment_status
+
+        if payment_status == "unpaid"
+          # TODO send email saying order processing
+          return
+        end
+
+        order = find_order(session:)
+
         order.order_items.each do |item|
           begin
             case item.product_type
@@ -47,8 +56,17 @@ module Webhooks
           end
         end
 
+        update_transaction(transaction: order.payment_transaction, session:, status: Transaction.statuses[:completed])
         order.user.cart.clear
         order.update!(status: Order.statuses[:completed])
+        PurchaseMailer.with(user:, order:).purchase_complete.deliver_later
+      when "checkout.session.async_payment_succeeded"
+        # TODO perform fullfillment job
+      when "checkout.session.expired"
+        # TODO add cancled status
+      when "checkout.session.async_payment_failed"
+        order.update!(status: Order.statuses[:failed])
+        order.payment_transaction.update!(status: Transaction.statuses[:failed])
       end
 
       head :ok
@@ -60,14 +78,12 @@ module Webhooks
       payload = request.body.read
       sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
       endpoint_secret = ::Credentials::Stripe.payments_webhook_secret
-      @event = nil
 
       # TODO can log errors here
       begin
-        @event = Stripe::Webhook.construct_event(
-          payload, sig_header, endpoint_secret
-        )
+        Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
       rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
+        # TODO log exception
         head :bad_request and return
       end
     end
@@ -92,17 +108,6 @@ module Webhooks
       User.find(user_id)
     end
 
-    def find_order_legacy(payment_intent:)
-      session = Stripe::Checkout::Session.list(payment_intent:).first
-      begin
-        order_id = session.metadata["order_id"]
-      rescue => _e
-        # TODO log if any errors
-      end
-
-      @order = Order.find(order_id)
-    end
-
     def duplicate_file(item:, file:, attach:)
       # TODO file.blob is none iff file doesn't match what the license indicates to deliver
       if attach
@@ -114,15 +119,14 @@ module Webhooks
       end
     end
 
-    def update_transaction(transaction:, event:, status:)
+    def update_transaction(transaction:, session:, status:)
       transaction.update!(
         status:,
-        stripe_charge_id: event.data.object.id,
-        stripe_receipt_url: event.data.object.receipt_url,
-        customer_email: event.data.object.billing_details.email,
-        customer_name: event.data.object.billing_details.name,
-        amount_cents: event.data.object.amount,
-        currency: event.data.object.currency
+        stripe_charge_id: session.id,
+        customer_email: session.customer_details.email,
+        customer_name: session.customer_details.name,
+        amount_cents: session.amount_total,
+        currency: session.currency
       )
     end
   end
