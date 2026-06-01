@@ -20,15 +20,14 @@ module Webhooks
         return
       end
 
+      session = event.data.object
+      order = find_order(session:)
       event_id = event.id
-      unless check_idempotency(event_id:)
+
+      unless check_idempotency(event_id:, order:)
         head :ok
         return
       end
-
-      session = event.data.object
-      order = find_order(session:)
-      user = find_user(session:)
 
       case event.type
       when "checkout.session.completed"
@@ -91,11 +90,11 @@ module Webhooks
       end
     end
 
-    def check_idempotency(event_id:)
+    def check_idempotency(event_id:, order:, user:)
       # TODO log errors
       begin
         # db engine should handle data races, can assume this op is atomic
-        StripePaymentEvent.create!(event_id:)
+        StripePaymentEvent.create!(event_id:, order:, user: order.user)
 
         true
       rescue ActiveRecord::RecordNotUnique
