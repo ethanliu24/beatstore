@@ -1,6 +1,38 @@
 # frozen_string_literal: true
 
 class OrderFullfillmentService
+  class Input
+    include ActiveModel::Model
+
+    attribute_accessor \
+      :order,
+      :transaction,
+      :user,
+      :customer_email,
+      :customer_name,
+      :amount_cents,
+      :currency,
+      :stripe_charge_id
+
+    def initialize(
+      order:,
+      customer_email:,
+      customer_name:,
+      amount_cents:,
+      currency:,
+      stripe_charge_id: nil
+    )
+      @order = order
+      @transaction = order.transaction
+      @user = order.user
+      @customer_email = customer_email
+      @customer_name = customer_name
+      @amount_cents = amount_cents
+      @currency = currency
+      @stripe_charge_id = stripe_charge_id
+    end
+  end
+
   def initialize(order:, stripe_checkout_session:)
     @session = stripe_co_session
     @order = order
