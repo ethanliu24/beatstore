@@ -21,7 +21,10 @@ module Webhooks
       end
 
       event_id = event.id
-      return unless verify_idempotency(event_id:)
+      unless check_idempotency(event_id:)
+        head :ok
+        return
+      end
 
       session = event.data.object
       order = find_order(session:)
@@ -29,9 +32,7 @@ module Webhooks
 
       case event.type
       when "checkout.session.completed"
-        payment_status = session.payment_status
-
-        if payment_status == "unpaid"
+        if session.payment_status == "unpaid"
           # TODO send email saying order processing
           return
         end
@@ -90,7 +91,8 @@ module Webhooks
       end
     end
 
-    def verify_idempotency(event_id:)
+    def check_idempotency(event_id:)
+      # TODO log errors
       begin
         # db engine should handle data races, can assume this op is atomic
         StripePaymentEvent.create!(event_id:)
@@ -98,8 +100,13 @@ module Webhooks
         true
       rescue ActiveRecord::RecordNotUnique
         false
+      rescue ActiveRecord::RecordInvalid => e
+        if e.record.errors.of_kind?(:event_id, :taken)
+          false
+        else
+          raise e
+        end
       rescue => e
-        # TODO log error
         raise e
       end
     end
