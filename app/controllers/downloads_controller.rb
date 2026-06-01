@@ -52,11 +52,12 @@ class DownloadsController < ApplicationController
     else
       current_or_guest_user.orders.find(params[:id])
     end
+
     order_item = order.order_items.find(params[:item_id])
     file = order_item.files.find(params[:file_id])
 
     unless order.status == Order.statuses[:completed]
-      redirect_back fallback_location: root_path
+      head :forbidden
       return
     end
 
