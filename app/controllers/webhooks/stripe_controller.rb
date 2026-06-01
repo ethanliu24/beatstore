@@ -56,7 +56,7 @@ module Webhooks
           end
         end
 
-        update_transaction(transaction: order.payment_transaction, event: event, status: Transaction.statuses[:completed])
+        update_transaction(transaction: order.payment_transaction, session:, status: Transaction.statuses[:completed])
         order.user.cart.clear
         order.update!(status: Order.statuses[:completed])
         PurchaseMailer.with(user:, order:).purchase_complete.deliver_later
@@ -119,15 +119,14 @@ module Webhooks
       end
     end
 
-    def update_transaction(transaction:, event:, status:)
+    def update_transaction(transaction:, session:, status:)
       transaction.update!(
         status:,
-        stripe_charge_id: event.data.object.id,
-        stripe_receipt_url: event.data.object.receipt_url,
-        customer_email: event.data.object.billing_details.email,
-        customer_name: event.data.object.billing_details.name,
-        amount_cents: event.data.object.amount,
-        currency: event.data.object.currency
+        stripe_charge_id: session.id,
+        customer_email: session.billing_details.email,
+        customer_name: session.billing_details.name,
+        amount_cents: session.amount,
+        currency: session.currency
       )
     end
   end

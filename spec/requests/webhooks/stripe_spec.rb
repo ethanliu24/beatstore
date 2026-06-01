@@ -78,7 +78,6 @@ RSpec.describe "Stripe Webhooks", type: :request do
       # Verify payment engine tracking values
       expect(current_transaction.status).to eq(Transaction.statuses[:completed])
       expect(current_transaction.stripe_charge_id).to eq("pi_1234")
-      expect(current_transaction.stripe_receipt_url).to eq("www.receipt.com")
       expect(current_transaction.customer_email).to eq("email@example.com")
       expect(current_transaction.customer_name).to eq("Customer")
       expect(current_transaction.amount_cents).to eq(9999)
@@ -160,7 +159,6 @@ RSpec.describe "Stripe Webhooks", type: :request do
           id: obj_id,
           payment_intent: payment_intent,
           payment_status: payment_status,
-          receipt_url: "www.receipt.com",
           billing_details: {
             email: "email@example.com",
             name: "Customer"
