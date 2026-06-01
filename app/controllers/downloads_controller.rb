@@ -52,11 +52,12 @@ class DownloadsController < ApplicationController
     else
       current_or_guest_user.orders.find(params[:id])
     end
+
     order_item = order.order_items.find(params[:item_id])
     file = order_item.files.find(params[:file_id])
 
     unless order.status == Order.statuses[:completed]
-      redirect_back fallback_location: root_path
+      head :forbidden
       return
     end
 
@@ -68,13 +69,16 @@ class DownloadsController < ApplicationController
 
   def order_item_contract
     order_item = OrderItem.find(params[:id])
+    user = current_or_guest_user
 
-    if order_item.order.user != current_or_guest_user && !current_or_guest_user.admin?
-      head :unauthorized and return
-    end
+    unless user.admin?
+      if order_item.order.user != user
+        head :unauthorized and return
+      end
 
-    if order_item.order.status != Order.statuses[:completed] && !current_or_guest_user.admin?
-      head :unauthorized and return
+      if order_item.order.status != Order.statuses[:completed]
+        head :unauthorized and return
+      end
     end
 
     license = License.new(**order_item.license_snapshot)
