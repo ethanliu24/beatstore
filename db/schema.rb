@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_23_202001) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_31_210400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -195,6 +195,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_23_202001) do
     t.index ["track_id"], name: "index_samples_on_track_id"
   end
 
+  create_table "stripe_payment_events", force: :cascade do |t|
+    t.string "event_id", null: false
+    t.bigint "order_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_stripe_payment_events_on_event_id", unique: true
+    t.index ["order_id"], name: "index_stripe_payment_events_on_order_id"
+    t.index ["user_id"], name: "index_stripe_payment_events_on_user_id"
+  end
+
   create_table "track_hearts", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "track_id"
@@ -305,6 +316,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_23_202001) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
   add_foreign_key "samples", "tracks"
+  add_foreign_key "stripe_payment_events", "orders"
+  add_foreign_key "stripe_payment_events", "users"
   add_foreign_key "track_hearts", "tracks", on_delete: :nullify
   add_foreign_key "track_hearts", "users", on_delete: :nullify
   add_foreign_key "track_plays", "tracks", on_delete: :nullify

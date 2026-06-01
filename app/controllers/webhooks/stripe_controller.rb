@@ -3,31 +3,43 @@
 module Webhooks
   class StripeController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :parse_event
+
+    HANDLED_EVENTS = [
+      "checkout.session.completed",
+      "checkout.session.expired",
+      "checkout.session.async_payment_succeeded",
+      "checkout.session.async_payment_failed"
+    ].freeze
 
     def payments
-      case @event.type
-      when "charge.succeeded", "charge.updated"
-        payment_intent = @event.data.object.payment_intent
-        find_order(payment_intent:)
-        update_transaction(transaction: @order.payment_transaction, event: @event, status: Transaction.statuses[:completed])
-        PurchaseMailer.with(user: current_or_guest_user, order: @order).purchase_complete.deliver_later
-      when "payment_intent.succeeded"
-        payment_intent = @event.data.object.id
-        find_order(payment_intent:)
-        @order.update!(status: Order.statuses[:completed])
-      when "payment_intent.payment_failed", "payment_intent.canceled"
-        # TODO maybe one more status for canceled
-        payment_intent = @event.data.object.id
-        find_order(payment_intent:)
-        @order.update!(status: Order.statuses[:failed])
-        @order.payment_transaction.update!(status: Transaction.statuses[:failed])
-      when "checkout.session.completed"
-        payment_intent = @event.data.object.payment_intent
-        find_order(payment_intent:)
+      event = parse_event
+      return unless event
 
-        # Maybe should duplicate on session create and purge if order failed
-        @order.order_items.each do |item|
+      unless HANDLED_EVENTS.include?(event.type)
+        head :ok
+        return
+      end
+
+      session = event.data.object
+      order = find_order(session:)
+      user = order.user
+      event_id = event.id
+
+      unless check_idempotency(event_id:, order:, user:)
+        head :ok
+        return
+      end
+
+      case event.type
+      when "checkout.session.completed"
+        if session.payment_status == "unpaid"
+          # TODO send email saying order processing
+          return
+        end
+
+        order = find_order(session:)
+
+        order.order_items.each do |item|
           begin
             case item.product_type
             when Track.name
@@ -48,8 +60,17 @@ module Webhooks
           end
         end
 
-        @order.user.cart.clear
-        @order.update!(status: Order.statuses[:completed])
+        update_transaction(transaction: order.payment_transaction, session:, status: Transaction.statuses[:completed])
+        order.user.cart.clear
+        order.update!(status: Order.statuses[:completed])
+        PurchaseMailer.with(user:, order:).purchase_complete.deliver_later
+      when "checkout.session.async_payment_succeeded"
+        # TODO perform fullfillment job
+      when "checkout.session.expired"
+        # TODO add cancled status
+      when "checkout.session.async_payment_failed"
+        order.update!(status: Order.statuses[:failed])
+        order.payment_transaction.update!(status: Transaction.statuses[:failed])
       end
 
       head :ok
@@ -61,27 +82,53 @@ module Webhooks
       payload = request.body.read
       sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
       endpoint_secret = ::Credentials::Stripe.payments_webhook_secret
-      @event = nil
 
-      # TODO can log errors here
       begin
-        @event = Stripe::Webhook.construct_event(
-          payload, sig_header, endpoint_secret
-        )
+        Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
       rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
+        # TODO log exception
         head :bad_request and return
       end
     end
 
-    def find_order(payment_intent:)
-      session = Stripe::Checkout::Session.list(payment_intent:).first
+    def check_idempotency(event_id:, order:, user:)
+      # TODO log errors
       begin
-        order_id = session.metadata["order_id"]
+        # db engine should handle data races, can assume this op is atomic
+        StripePaymentEvent.create!(event_id:, order:, user:)
+
+        true
+      rescue ActiveRecord::RecordNotUnique
+        false
+      rescue ActiveRecord::RecordInvalid => e
+        if e.record.errors.of_kind?(:event_id, :taken)
+          false
+        else
+          raise e
+        end
+      rescue => e
+        raise e
+      end
+    end
+
+    def find_order(session:)
+      begin
+        order_id = session.metadata.order_id
       rescue => _e
         # TODO log if any errors
       end
 
-      @order = Order.find(order_id)
+      Order.find(order_id)
+    end
+
+    def find_user(session:)
+      begin
+        user_id = session.metadata.user_id
+      rescue => _e
+        # TODO log if any errors
+      end
+
+      User.find(user_id)
     end
 
     def duplicate_file(item:, file:, attach:)
@@ -95,15 +142,14 @@ module Webhooks
       end
     end
 
-    def update_transaction(transaction:, event:, status:)
+    def update_transaction(transaction:, session:, status:)
       transaction.update!(
         status:,
-        stripe_charge_id: event.data.object.id,
-        stripe_receipt_url: event.data.object.receipt_url,
-        customer_email: event.data.object.billing_details.email,
-        customer_name: event.data.object.billing_details.name,
-        amount_cents: event.data.object.amount,
-        currency: event.data.object.currency
+        stripe_charge_id: session.id,
+        customer_email: session.customer_details.email,
+        customer_name: session.customer_details.name,
+        amount_cents: session.amount_total,
+        currency: session.currency
       )
     end
   end
