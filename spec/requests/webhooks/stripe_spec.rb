@@ -159,7 +159,7 @@ RSpec.describe "Stripe Webhooks", type: :request do
           id: obj_id,
           payment_intent: payment_intent,
           payment_status: payment_status,
-          billing_details: {
+          customer_details: {
             email: "email@example.com",
             name: "Customer"
           },

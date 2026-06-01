@@ -123,8 +123,8 @@ module Webhooks
       transaction.update!(
         status:,
         stripe_charge_id: session.id,
-        customer_email: session.billing_details.email,
-        customer_name: session.billing_details.name,
+        customer_email: session.customer_details.email,
+        customer_name: session.customer_details.name,
         amount_cents: session.amount,
         currency: session.currency
       )
