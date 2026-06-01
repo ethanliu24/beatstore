@@ -60,6 +60,8 @@ RSpec.describe "Stripe Webhooks", type: :request do
       current_transaction = order.payment_transaction
       first_item = order.order_items.first
 
+      expect(response).to have_http_status(:ok)
+
       # Verify underlying item data state
       expect(first_item.files.attached?).to be(true)
       expect(first_item.files.count).to eq(2)
@@ -122,6 +124,20 @@ RSpec.describe "Stripe Webhooks", type: :request do
       post webhooks_stripe_payments_url, params: {}, headers: headers
 
       expect(response).to have_http_status(:bad_request)
+    end
+
+    it "skips unhandled events" do
+      event = build_event(type: "unknown.event", event_id: "123", payment_status: "paid")
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(order.payment_transaction.status).to eq(Transaction.statuses[:pending])
+      expect(order.status).to eq(Order.statuses[:pending])
+      expect(order.order_items.first.is_immutable).to be(false)
+      expect(ActionMailer::Base.deliveries.count).to eq(0)
     end
   end
 

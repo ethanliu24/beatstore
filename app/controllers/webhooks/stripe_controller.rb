@@ -4,9 +4,21 @@ module Webhooks
   class StripeController < ApplicationController
     skip_before_action :verify_authenticity_token
 
+    HANDLED_EVENTS = [
+      "checkout.session.completed",
+      "checkout.session.expired",
+      "checkout.session.async_payment_succeeded",
+      "checkout.session.async_payment_failed"
+    ].freeze
+
     def payments
       event = parse_event
       return unless event
+
+      unless HANDLED_EVENTS.include?(event.type)
+        head :ok
+        return
+      end
 
       session = event.data.object
       order = find_order(session:)
