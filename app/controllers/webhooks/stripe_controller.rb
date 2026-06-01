@@ -22,13 +22,17 @@ module Webhooks
 
       session = event.data.object
       order = find_order(session:)
-      user = find_user(session:)
+      user = order.user
+      event_id = event.id
+
+      unless check_idempotency(event_id:, order:, user:)
+        head :ok
+        return
+      end
 
       case event.type
       when "checkout.session.completed"
-        payment_status = session.payment_status
-
-        if payment_status == "unpaid"
+        if session.payment_status == "unpaid"
           # TODO send email saying order processing
           return
         end
@@ -79,12 +83,31 @@ module Webhooks
       sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
       endpoint_secret = ::Credentials::Stripe.payments_webhook_secret
 
-      # TODO can log errors here
       begin
         Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
       rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
         # TODO log exception
         head :bad_request and return
+      end
+    end
+
+    def check_idempotency(event_id:, order:, user:)
+      # TODO log errors
+      begin
+        # db engine should handle data races, can assume this op is atomic
+        StripePaymentEvent.create!(event_id:, order:, user:)
+
+        true
+      rescue ActiveRecord::RecordNotUnique
+        false
+      rescue ActiveRecord::RecordInvalid => e
+        if e.record.errors.of_kind?(:event_id, :taken)
+          false
+        else
+          raise e
+        end
+      rescue => e
+        raise e
       end
     end
 

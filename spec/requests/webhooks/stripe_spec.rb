@@ -138,6 +138,50 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(order.order_items.first.is_immutable).to be(false)
       expect(ActionMailer::Base.deliveries.count).to eq(0)
     end
+
+    context "idempotency detection" do
+      it "skips event for completed event" do
+        event = build_event(type: "checkout.session.completed", event_id: "unique_event")
+        allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+        expect {
+          post webhooks_stripe_payments_url, params: {}, headers: headers
+        }.to change(StripePaymentEvent, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.status).to eq(Order.statuses[:completed])
+        order.update_column(:status, Order.statuses[:pending])
+        order.reload
+
+        expect {
+          post webhooks_stripe_payments_url, params: {}, headers: headers
+        }.not_to change(StripePaymentEvent, :count)
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.status).to eq(Order.statuses[:pending])
+      end
+
+      it "skips event for async_payment_failed event" do
+        event = build_event(type: "checkout.session.async_payment_failed", event_id: "unique_event")
+        allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+        expect {
+          post webhooks_stripe_payments_url, params: {}, headers: headers
+        }.to change(StripePaymentEvent, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.status).to eq(Order.statuses[:failed])
+        order.update_column(:status, Order.statuses[:pending])
+        order.reload
+
+        expect {
+          post webhooks_stripe_payments_url, params: {}, headers: headers
+        }.not_to change(StripePaymentEvent, :count)
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.status).to eq(Order.statuses[:pending])
+      end
+    end
   end
 
   private
