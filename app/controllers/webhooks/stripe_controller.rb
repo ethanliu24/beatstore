@@ -125,7 +125,7 @@ module Webhooks
         stripe_charge_id: session.id,
         customer_email: session.customer_details.email,
         customer_name: session.customer_details.name,
-        amount_cents: session.amount,
+        amount_cents: session.amount_total,
         currency: session.currency
       )
     end

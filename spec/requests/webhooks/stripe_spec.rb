@@ -167,7 +167,7 @@ RSpec.describe "Stripe Webhooks", type: :request do
             order_id: order_id.to_s,
             user_id: user_id.to_s
           },
-          amount: 9999,
+          amount_total: 9999,
           currency: "usd"
         }
       }
