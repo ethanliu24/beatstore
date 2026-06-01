@@ -71,6 +71,7 @@ module Webhooks
       begin
         Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
       rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
+        # TODO log exception
         head :bad_request and return
       end
     end

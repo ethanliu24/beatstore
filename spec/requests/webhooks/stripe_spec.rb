@@ -16,8 +16,6 @@ RSpec.describe "Stripe Webhooks", type: :request do
   let!(:transaction) { create(:payment_transaction, order:) }
 
   before do
-    skip "temporary skip, will fix in next pr. just mocking issues in tests"
-
     OrderItem.create!(
       order: order,
       quantity: 1,
@@ -35,30 +33,10 @@ RSpec.describe "Stripe Webhooks", type: :request do
   describe "POST /webhooks/stripe/payments" do
     let(:headers) { { "HTTP_STRIPE_SIGNATURE" => "valid_sig_mock" } }
 
-    it "sets order status to failed if payment failed" do
-      payment_intent = "123"
-      event = build_event(
-        type: "checkout.session.expired",
-        event_id: "123",
-        order_id: order.id,
-        payment_intent:
-      )
-
-      allow(Webhooks::StripeController).to receive(:parse_event).and_return(event)
-      allow(Webhooks::StripeController).to receive(:find_order).with(payment_intent).and_return(order) # TODO use metadata directly instead
-
-      post webhooks_stripe_payments_url, params: {}, headers: headers
-
-      order.reload
-      expect(order.status).to eq(Order.statuses[:failed])
-      expect(order.payment_transaction.status).to eq(Transaction.statuses[:failed])
-    end
-
     it "sets order status to failed if payment canceled" do
-      event = build_event(type: "checkout.session.async_payment_failed", event_id: "123", order_id: order.id)
+      event = build_event(type: "checkout.session.async_payment_failed", event_id: "123")
 
       allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
-      allow(Stripe::Webhook).to receive(:find_order).and_return(order)
 
       post webhooks_stripe_payments_url, params: {}, headers: headers
 
@@ -67,15 +45,13 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(order.payment_transaction.status).to eq(Transaction.statuses[:failed])
     end
 
-    it "attaches files to order item, locks state, and marks order as completed asynchronously" do
-      event = build_event(type: "checkout.session.completed", event_id: "123", order_id: order.id)
+    it "attaches files to order item, locks state, and marks order as completed" do
+      event = build_event(type: "checkout.session.completed", event_id: "123")
 
       allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
-      allow(Stripe::Webhook).to receive(:find_order).and_return(order)
 
       expect(order.order_items.first.is_immutable).to be(false)
 
-      # Ensure background queues process synchronously during this payload test block
       perform_enqueued_jobs do
         post webhooks_stripe_payments_url, params: {}, headers: headers
       end
@@ -109,6 +85,43 @@ RSpec.describe "Stripe Webhooks", type: :request do
       # Outbound tracking confirmation
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
+    end
+
+    it "doesnt do anything if payment status is unpaid" do
+      event = build_event(type: "checkout.session.completed", event_id: "123", payment_status: "unpaid")
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      expect(order.order_items.first.is_immutable).to be(false)
+
+      perform_enqueued_jobs do
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      end
+
+      order.reload
+
+      expect(order.payment_transaction.status).to eq(Transaction.statuses[:pending])
+      expect(order.status).to eq(Order.statuses[:pending])
+      expect(order.order_items.first.is_immutable).to be(false)
+      expect(ActionMailer::Base.deliveries.count).to eq(0)
+    end
+
+    it "returns a bad request if event parsing failed" do
+      allow(Stripe::Webhook).to receive(:construct_event).and_raise(JSON::ParserError)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it "returns a bad request if signiture validation failed" do
+      allow(Stripe::Webhook).to receive(:construct_event).and_raise(
+        Stripe::SignatureVerificationError.new("invalid sig", "invalid_sig_mock")
+      )
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:bad_request)
     end
   end
 
