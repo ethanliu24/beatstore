@@ -20,50 +20,59 @@ module Webhooks
         return
       end
 
-      ActiveRecord::Base.transaction do
-        session = event.data.object
+      event_id = event.id
+      return unless verify_idempotency(event_id:)
+
+      session = event.data.object
+      order = find_order(session:)
+      user = find_user(session:)
+
+      case event.type
+      when "checkout.session.completed"
+        payment_status = session.payment_status
+
+        if payment_status == "unpaid"
+          # TODO send email saying order processing
+          return
+        end
+
         order = find_order(session:)
-        user = find_user(session:)
 
-        case event.type
-        when "checkout.session.completed"
-          payment_status = session.payment_status
-
-          if payment_status == "unpaid"
-            # TODO send email saying order processing
-            return
-          end
-
-          order = find_order(session:)
-
-          order.order_items.each do |item|
-            begin
-              case item.product_type
-              when Track.name
-                track = Track.find(item.product_snapshot["id"])
-                duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
-                duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
-                duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
-                item.preview_image.attach(
-                  io: StringIO.new(track.cover_photo.download),
-                  filename: "oi_preview_#{track.cover_photo.filename}",
-                  content_type: track.cover_photo.blob&.content_type
-                )
-              end
-
-                item.update!(is_immutable: true)
-              rescue => _e
-                # TODO log any errors
-              end
+        order.order_items.each do |item|
+          begin
+            case item.product_type
+            when Track.name
+              track = Track.find(item.product_snapshot["id"])
+              duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
+              duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
+              duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
+              item.preview_image.attach(
+                io: StringIO.new(track.cover_photo.download),
+                filename: "oi_preview_#{track.cover_photo.filename}",
+                content_type: track.cover_photo.blob&.content_type
+              )
             end
 
-        @order.user.cart.clear
-        @order.update!(status: Order.statuses[:completed])
+            item.update!(is_immutable: true)
+          rescue => _e
+            # TODO log any errors
+          end
+        end
+
+        update_transaction(transaction: order.payment_transaction, session:, status: Transaction.statuses[:completed])
+        order.user.cart.clear
+        order.update!(status: Order.statuses[:completed])
+        PurchaseMailer.with(user:, order:).purchase_complete.deliver_later
+      when "checkout.session.async_payment_succeeded"
+        # TODO perform fullfillment job
+      when "checkout.session.expired"
+        # TODO add cancled status
+      when "checkout.session.async_payment_failed"
+        order.update!(status: Order.statuses[:failed])
+        order.payment_transaction.update!(status: Transaction.statuses[:failed])
       end
 
-          head :ok
-        end
-      end
+      head :ok
     end
 
     private
@@ -83,6 +92,7 @@ module Webhooks
 
     def verify_idempotency(event_id:)
       begin
+        # db engine should handle data races, can assume this op is atomic
         StripePaymentEvent.create!(event_id:)
 
         true
