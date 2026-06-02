@@ -65,13 +65,13 @@ class FulfillOrderService
         raise ArgumentError, "FullfillOrderService.call input must be a FulfillOrderService::Input"
       end
 
-      return unless @order.pending?
+      return unless input.order.pending?
 
       begin
         ActiveRecord::Base.transaction do
-          attach_files_to_order_items
+          attach_files_to_order_items(order: input.order)
           update_transaction(
-            transaction: @transaction,
+            transaction: input.transaction,
             status: Transaction.statuses[:completed],
             customer_email: input.customer_email,
             customer_name: input.customer_name,
@@ -79,59 +79,59 @@ class FulfillOrderService
             currency: input.currency,
             stripe_charge_id: input.stripe_charge_id
           )
-          @user.cart.clear
-          @order.update!(status: Order.statuses[:completed])
-          PurchaseMailer.with(user: @user, order: @order).purchase_complete.deliver_later
+          input.user.cart.clear
+          input.order.update!(status: Order.statuses[:completed])
+          PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
         rescue => e
           # TODO log any errors
           raise OrderFulfillmentFailed, e.message
         end
       end
     end
-  end
 
-  private
+    private
 
-  def attach_files_to_order_items
-    @order.order_items.each do |item|
-      begin
-        case item.product_type
-        when Track.name
-          track = Track.find(item.product_snapshot["id"])
-          duplicate_file(item:, file: track.untagged_mp3) if item.license_snapshot["contract_details"]["delivers_mp3"]
-          duplicate_file(item:, file: track.untagged_wav) if item.license_snapshot["contract_details"]["delivers_wav"]
-          duplicate_file(item:, file: track.track_stems) if item.license_snapshot["contract_details"]["delivers_stems"]
+    def attach_files_to_order_items(order:)
+      order.order_items.each do |item|
+        begin
+          case item.product_type
+          when Track.name
+            track = Track.find(item.product_snapshot["id"])
+            duplicate_file(item:, file: track.untagged_mp3) if item.license_snapshot["contract_details"]["delivers_mp3"]
+            duplicate_file(item:, file: track.untagged_wav) if item.license_snapshot["contract_details"]["delivers_wav"]
+            duplicate_file(item:, file: track.track_stems) if item.license_snapshot["contract_details"]["delivers_stems"]
 
-          item.preview_image.attach(
-            io: StringIO.new(track.cover_photo.download),
-            filename: "oi_preview_#{track.cover_photo.filename}",
-            content_type: track.cover_photo.blob&.content_type
-          )
+            item.preview_image.attach(
+              io: StringIO.new(track.cover_photo.download),
+              filename: "oi_preview_#{track.cover_photo.filename}",
+              content_type: track.cover_photo.blob&.content_type
+            )
+          end
+
+          item.update!(is_immutable: true)
+        rescue => _e
+          # TODO log any errors
         end
-
-        item.update!(is_immutable: true)
-      rescue => _e
-        # TODO log any errors
       end
     end
-  end
 
-  def duplicate_file(item:, file:)
-    item.files.attach(
-      io: StringIO.new(file.download),
-      filename: file.blob&.filename,
-      content_type: file.blob&.content_type
-    )
-  end
+    def duplicate_file(item:, file:)
+      item.files.attach(
+        io: StringIO.new(file.download),
+        filename: file.blob&.filename,
+        content_type: file.blob&.content_type
+      )
+    end
 
-  def update_transaction(transaction:, status:, customer_email:, customer_name:, amount_cents:, currency:, stripe_charge_id:)
-    transaction.update!(
-      status:,
-      customer_email:,
-      customer_name:,
-      amount_cents:,
-      currency:,
-      stripe_charge_id:
-    )
+    def update_transaction(transaction:, status:, customer_email:, customer_name:, amount_cents:, currency:, stripe_charge_id:)
+      transaction.update!(
+        status:,
+        customer_email:,
+        customer_name:,
+        amount_cents:,
+        currency:,
+        stripe_charge_id:
+      )
+    end
   end
 end

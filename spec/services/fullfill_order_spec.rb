@@ -52,7 +52,7 @@ RSpec.describe FulfillOrderService::Input, type: :model do
       expect(input.customer_name).to eq("Customer")
       expect(input.amount_cents).to eq(9999)
       expect(input.currency).to eq("usd")
-      expect(input.stripe_charge_id).to eq("cs_test_123")
+      expect(input.stripe_charge_id).to eq("co_test_123")
     end
 
     it "is valid" do
@@ -69,24 +69,80 @@ RSpec.describe FulfillOrderService::Input, type: :model do
       amount_total: 9999,
       currency: "usd"
     )
-      Stripe::Event.construct_from(
-        id: "123",
-        type:,
-        data: {
-          object: {
-            id: obj_id,
-            customer_details: {
-              email: customer_email,
-              name: customer_name
-            },
-            amount_total:,
-            currency:
-          }
-        }
-      )
+      build(:stripe_checkout_session_completed_event)
     end
   end
 end
 
 RSpec.describe FulfillOrderService, type: :service do
+  include ActiveJob::TestHelper
+
+  let(:user) { create(:user) }
+  let(:track) { create(:track_with_files) }
+  let(:license) { create(:non_exclusive_license, contract_details: {
+    delivers_mp3: true,
+    delivers_wav: false,
+    delivers_stems: true
+  }) }
+  let!(:order) { create(:order, user:) }
+  let!(:transaction) { create(:payment_transaction, order:) }
+  let!(:order_item) { create(
+    :order_item,
+    order:,
+    quantity: 1,
+    unit_price_cents: 1000,
+    currency: "USD",
+    product_type: Track.name,
+    product_snapshot: Snapshots::TakeTrackSnapshotService.new(track: track).call,
+    license_snapshot: Snapshots::TakeLicenseSnapshotService.new(license: license).call,
+    is_immutable: false
+  ) }
+  let(:event) { build(:stripe_checkout_session_completed_event) }
+  let(:session) { event.data.object }
+
+  it "#call fulfills order by copying files to order item, locks state, and marks order as completed" do
+    expect(order.order_items.first.is_immutable).to be(false)
+
+    perform_enqueued_jobs do
+      call_service(order:, session:)
+    end
+
+    order.reload
+    current_transaction = order.payment_transaction
+    first_item = order.order_items.first
+
+    # Verify underlying item data state
+    expect(first_item.files.attached?).to be(true)
+    expect(first_item.files.count).to eq(2)
+    expect(first_item.files.first.blob.filename).to eq("untagged_mp3.mp3")
+    expect(first_item.files.first.content_type).to eq("audio/mpeg")
+    expect(first_item.files.last.blob.filename).to eq("track_stems.zip")
+    expect(first_item.files.last.content_type).to eq("application/zip")
+
+    expect(first_item.preview_image.filename.to_s).to eq("oi_preview_cover_photo.png")
+    expect(first_item.preview_image.content_type).to eq("image/png")
+    expect(first_item.is_immutable).to be(true)
+    expect(order.status).to eq(Order.statuses[:completed])
+
+    # Verify payment engine tracking values
+    expect(current_transaction.status).to eq(Transaction.statuses[:completed])
+    expect(current_transaction.stripe_charge_id).to eq("co_test_123")
+    expect(current_transaction.customer_email).to eq("email@example.com")
+    expect(current_transaction.customer_name).to eq("Customer")
+    expect(current_transaction.amount_cents).to eq(9999)
+    expect(current_transaction.currency).to eq("usd")
+
+    # Outbound tracking confirmation
+    expect(ActionMailer::Base.deliveries.count).to eq(1)
+    expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
+  end
+
+  private
+
+  def call_service(order:, session:)
+    input = FulfillOrderService::Input
+      .build_from_stripe_checkout_session(order:, session:)
+
+    described_class.call(input:)
+  end
 end
