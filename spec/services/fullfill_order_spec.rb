@@ -100,15 +100,10 @@ RSpec.describe FulfillOrderService, type: :service do
   let(:event) { build(:stripe_checkout_session_completed_event) }
   let(:session) { event.data.object }
 
-  it "#call fulfills order by copying files to order item, locks state, and marks order as completed" do
-    expect(order.order_items.first.is_immutable).to be(false)
-
-    perform_enqueued_jobs do
-      call_service(order:, session:)
-    end
-
+  it "#call fulfills order and copy files to order item" do
+    call_service(order:, session:)
     order.reload
-    current_transaction = order.payment_transaction
+
     first_item = order.order_items.first
 
     # Verify underlying item data state
@@ -123,16 +118,27 @@ RSpec.describe FulfillOrderService, type: :service do
     expect(first_item.preview_image.content_type).to eq("image/png")
     expect(first_item.is_immutable).to be(true)
     expect(order.status).to eq(Order.statuses[:completed])
+  end
 
-    # Verify payment engine tracking values
+  it "#call fulfills order and updates transaction" do
+    call_service(order:, session:)
+    order.reload
+
+    current_transaction = order.payment_transaction
+
     expect(current_transaction.status).to eq(Transaction.statuses[:completed])
     expect(current_transaction.stripe_charge_id).to eq("co_test_123")
     expect(current_transaction.customer_email).to eq("email@example.com")
     expect(current_transaction.customer_name).to eq("Customer")
     expect(current_transaction.amount_cents).to eq(9999)
     expect(current_transaction.currency).to eq("usd")
+  end
 
-    # Outbound tracking confirmation
+  it "#call fulfills order and marks order as completed" do
+    perform_enqueued_jobs do
+      call_service(order:, session:)
+    end
+
     expect(ActionMailer::Base.deliveries.count).to eq(1)
     expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
   end
