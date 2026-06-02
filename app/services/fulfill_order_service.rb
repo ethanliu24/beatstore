@@ -67,28 +67,7 @@ class FulfillOrderService
 
       begin
         ActiveRecord::Base.transaction do
-          @order.order_items.each do |item|
-            begin
-              case item.product_type
-              when Track.name
-                track = Track.find(item.product_snapshot["id"])
-                duplicate_file(item:, file: track.untagged_mp3) if item.license_snapshot["contract_details"]["delivers_mp3"]
-                duplicate_file(item:, file: track.untagged_wav) if item.license_snapshot["contract_details"]["delivers_wav"]
-                duplicate_file(item:, file: track.track_stems) if item.license_snapshot["contract_details"]["delivers_stems"]
-
-                item.preview_image.attach(
-                  io: StringIO.new(track.cover_photo.download),
-                  filename: "oi_preview_#{track.cover_photo.filename}",
-                  content_type: track.cover_photo.blob&.content_type
-                )
-              end
-
-              item.update!(is_immutable: true)
-            rescue => _e
-              # TODO log any errors
-            end
-          end
-
+          attach_files_to_order_items
           update_transaction(transaction: @transaction, session: @session, status: Transaction.statuses[:completed])
           @user.cart.clear
           @order.update!(status: Order.statuses[:completed])
@@ -101,6 +80,30 @@ class FulfillOrderService
   end
 
   private
+
+  def attach_files_to_order_items
+    @order.order_items.each do |item|
+      begin
+        case item.product_type
+        when Track.name
+          track = Track.find(item.product_snapshot["id"])
+          duplicate_file(item:, file: track.untagged_mp3) if item.license_snapshot["contract_details"]["delivers_mp3"]
+          duplicate_file(item:, file: track.untagged_wav) if item.license_snapshot["contract_details"]["delivers_wav"]
+          duplicate_file(item:, file: track.track_stems) if item.license_snapshot["contract_details"]["delivers_stems"]
+
+          item.preview_image.attach(
+            io: StringIO.new(track.cover_photo.download),
+            filename: "oi_preview_#{track.cover_photo.filename}",
+            content_type: track.cover_photo.blob&.content_type
+          )
+        end
+
+        item.update!(is_immutable: true)
+      rescue => _e
+        # TODO log any errors
+      end
+    end
+  end
 
   def duplicate_file(item:, file:)
     item.files.attach(
