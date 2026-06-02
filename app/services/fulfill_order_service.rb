@@ -72,9 +72,10 @@ class FulfillOrderService
               case item.product_type
               when Track.name
                 track = Track.find(item.product_snapshot["id"])
-                duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
-                duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
-                duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
+                duplicate_file(item:, file: track.untagged_mp3) if item.license_snapshot["contract_details"]["delivers_mp3"]
+                duplicate_file(item:, file: track.untagged_wav) if item.license_snapshot["contract_details"]["delivers_wav"]
+                duplicate_file(item:, file: track.track_stems) if item.license_snapshot["contract_details"]["delivers_stems"]
+
                 item.preview_image.attach(
                   io: StringIO.new(track.cover_photo.download),
                   filename: "oi_preview_#{track.cover_photo.filename}",
@@ -101,15 +102,12 @@ class FulfillOrderService
 
   private
 
-  def duplicate_file(item:, file:, attach:)
-    # TODO file.blob is none iff file doesn't match what the license indicates to deliver
-    if attach
-      item.files.attach(
-        io: StringIO.new(file.download),
-        filename: file.blob&.filename,
-        content_type: file.blob&.content_type
-      )
-    end
+  def duplicate_file(item:, file:)
+    item.files.attach(
+      io: StringIO.new(file.download),
+      filename: file.blob&.filename,
+      content_type: file.blob&.content_type
+    )
   end
 
   def update_transaction(transaction:, session:, status:)
