@@ -25,6 +25,19 @@ class OrderFullfillmentService
     validates :currency, presence: true, length: { is: 3 }
     validates :stripe_charge_id, allow_nil: true, presence: true
 
+    class << self
+      def build_from_stripe_checkout_session(order:, session:)
+        new(
+          order:,
+          customer_email: session.customer_details.email,
+          customer_name: session.customer_details.name,
+          amount_cents: session.amount_total,
+          currency: session.currency,
+          stripe_charge_id: session.id,
+        )
+      end
+    end
+
     def initialize(
       order:,
       customer_email:,
