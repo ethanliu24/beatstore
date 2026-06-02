@@ -14,6 +14,17 @@ class OrderFullfillmentService
       :currency,
       :stripe_charge_id
 
+    validates :order, presence: true
+    validate :order_must_be_order
+    validates :customer_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+    validates :customer_name, presence: true
+    validates :amount_cents, presence: true, numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: 0
+    }
+    validates :currency, presence: true, length: { is: 3 }
+    validates :stripe_charge_id, allow_nil: true, presence: true
+
     def initialize(
       order:,
       customer_email:,
