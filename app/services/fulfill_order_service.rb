@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class OrderFullfillmentService
+class FulfillOrderService
   class Input
     include ActiveModel::Model
 
-    attribute_accessor \
+    attr_accessor \
       :order,
       :transaction,
       :user,
@@ -15,7 +15,7 @@ class OrderFullfillmentService
       :stripe_charge_id
 
     validates :order, presence: true
-    validate :order_must_be_order
+    validate { errors.add(:order, "must be an Order") unless order.is_a?(Order) }
     validates :customer_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
     validates :customer_name, presence: true
     validates :amount_cents, presence: true, numericality: {
@@ -47,7 +47,7 @@ class OrderFullfillmentService
       stripe_charge_id: nil
     )
       @order = order
-      @transaction = order.transaction
+      @transaction = order.payment_transaction
       @user = order.user
       @customer_email = customer_email
       @customer_name = customer_name
