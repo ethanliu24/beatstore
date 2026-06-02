@@ -65,6 +65,8 @@ class OrderFullfillmentService
   end
 
   def call
+    return unless @order.pending?
+
     ActiveRecord::Base.transaction do
       @order.order_items.each do |item|
         begin
