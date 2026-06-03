@@ -16,8 +16,7 @@ module Webhooks
       return unless event
 
       unless HANDLED_EVENTS.include?(event.type)
-        head :ok
-        return
+        head :ok and return
       end
 
       session = event.data.object
@@ -26,46 +25,19 @@ module Webhooks
       event_id = event.id
 
       unless check_idempotency(event_id:, order:, user:)
-        head :ok
-        return
+        head :ok and return
       end
 
       case event.type
       when "checkout.session.completed"
         if session.payment_status == "unpaid"
           # TODO send email saying order processing
-          return
+          head :ok and return
         end
 
-        order = find_order(session:)
-
-        order.order_items.each do |item|
-          begin
-            case item.product_type
-            when Track.name
-              track = Track.find(item.product_snapshot["id"])
-              duplicate_file(item:, file: track.untagged_mp3, attach: item.license_snapshot["contract_details"]["delivers_mp3"])
-              duplicate_file(item:, file: track.untagged_wav, attach: item.license_snapshot["contract_details"]["delivers_wav"])
-              duplicate_file(item:, file: track.track_stems, attach: item.license_snapshot["contract_details"]["delivers_stems"])
-              item.preview_image.attach(
-                io: StringIO.new(track.cover_photo.download),
-                filename: "oi_preview_#{track.cover_photo.filename}",
-                content_type: track.cover_photo.blob&.content_type
-              )
-            end
-
-            item.update!(is_immutable: true)
-          rescue => _e
-            # TODO log any errors
-          end
-        end
-
-        update_transaction(transaction: order.payment_transaction, session:, status: Transaction.statuses[:completed])
-        order.user.cart.clear
-        order.update!(status: Order.statuses[:completed])
-        PurchaseMailer.with(user:, order:).purchase_complete.deliver_later
+        fulfill_order(order:, session:)
       when "checkout.session.async_payment_succeeded"
-        # TODO perform fullfillment job
+        fulfill_order(order:, session:)
       when "checkout.session.expired"
         # TODO add cancled status
       when "checkout.session.async_payment_failed"
@@ -131,26 +103,11 @@ module Webhooks
       User.find(user_id)
     end
 
-    def duplicate_file(item:, file:, attach:)
-      # TODO file.blob is none iff file doesn't match what the license indicates to deliver
-      if attach
-        item.files.attach(
-          io: StringIO.new(file.download),
-          filename: file.blob&.filename,
-          content_type: file.blob&.content_type
-        )
-      end
-    end
+    def fulfill_order(order:, session:)
+      fulfillment_input = FulfillOrderService::Input
+        .build_from_stripe_checkout_session(order:, session:)
 
-    def update_transaction(transaction:, session:, status:)
-      transaction.update!(
-        status:,
-        stripe_charge_id: session.id,
-        customer_email: session.customer_details.email,
-        customer_name: session.customer_details.name,
-        amount_cents: session.amount_total,
-        currency: session.currency
-      )
+      OrderFulfillmentJob.perform_later(fulfillment_input:)
     end
   end
 end

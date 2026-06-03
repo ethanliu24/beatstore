@@ -27,5 +27,7 @@ module Beatstore
     # Mission control job UI
     config.mission_control.jobs.base_controller_class = "Admin::BaseController"
     config.mission_control.jobs.http_basic_auth_enabled = false
+
+    config.autoload_once_paths << "#{root}/app/serializers"
   end
 end
