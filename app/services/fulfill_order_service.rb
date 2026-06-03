@@ -2,6 +2,7 @@
 
 class FulfillOrderService
   class OrderFulfillmentFailedError < StandardError; end
+  class OrderAlreadyFulfilledError < StandardError; end
 
   class Input
     include ActiveModel::Model
@@ -65,16 +66,23 @@ class FulfillOrderService
         raise ArgumentError, "FullfillOrderService.call input must be a FulfillOrderService::Input"
       end
 
-      return unless input.order.pending?
-
+      # TODO figure out how to test data race condition in unit tests
       begin
         ActiveRecord::Base.transaction do
+          input.order.lock!
+
+          unless input.order.pending?
+            raise OrderAlreadyFulfilledError, "#{{ order_id: input.order.id }}"
+          end
+
           attach_files_to_order_items(order: input.order)
           update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
           input.user.cart.clear
           input.order.update!(status: Order.statuses[:completed])
           PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
         end
+      rescue OrderAlreadyFulfilledError => e
+        raise e
       rescue => e
         # TODO log any errors
         raise OrderFulfillmentFailedError, e.message
