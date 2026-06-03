@@ -8,7 +8,7 @@ module OrderHelper
     when Order.statuses[:failed], Order.statuses[:canceled]
       "text-error"
     else
-      "text-error"
+      ""
     end
   end
 end
