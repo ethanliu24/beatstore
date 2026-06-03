@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FulfillOrderService
-  class OrderFulfillmentFailed < StandardError; end
+  class OrderFulfillmentFailedError < StandardError; end
 
   class Input
     include ActiveModel::Model
@@ -82,10 +82,10 @@ class FulfillOrderService
           input.user.cart.clear
           input.order.update!(status: Order.statuses[:completed])
           PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
-        rescue => e
-          # TODO log any errors
-          raise OrderFulfillmentFailed, e.message
         end
+      rescue => e
+        # TODO log any errors
+        raise OrderFulfillmentFailedError, e.message
       end
     end
 

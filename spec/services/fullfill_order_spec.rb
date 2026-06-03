@@ -100,47 +100,105 @@ RSpec.describe FulfillOrderService, type: :service do
   let(:event) { build(:stripe_checkout_session_completed_event) }
   let(:session) { event.data.object }
 
-  it "#call fulfills order and copy files to order item" do
-    call_service(order:, session:)
-    order.reload
-
-    first_item = order.order_items.first
-
-    # Verify underlying item data state
-    expect(first_item.files.attached?).to be(true)
-    expect(first_item.files.count).to eq(2)
-    expect(first_item.files.first.blob.filename).to eq("untagged_mp3.mp3")
-    expect(first_item.files.first.content_type).to eq("audio/mpeg")
-    expect(first_item.files.last.blob.filename).to eq("track_stems.zip")
-    expect(first_item.files.last.content_type).to eq("application/zip")
-
-    expect(first_item.preview_image.filename.to_s).to eq("oi_preview_cover_photo.png")
-    expect(first_item.preview_image.content_type).to eq("image/png")
-    expect(first_item.is_immutable).to be(true)
-    expect(order.status).to eq(Order.statuses[:completed])
-  end
-
-  it "#call fulfills order and updates transaction" do
-    call_service(order:, session:)
-    order.reload
-
-    current_transaction = order.payment_transaction
-
-    expect(current_transaction.status).to eq(Transaction.statuses[:completed])
-    expect(current_transaction.stripe_charge_id).to eq("co_test_123")
-    expect(current_transaction.customer_email).to eq("email@example.com")
-    expect(current_transaction.customer_name).to eq("Customer")
-    expect(current_transaction.amount_cents).to eq(9999)
-    expect(current_transaction.currency).to eq("usd")
-  end
-
-  it "#call fulfills order and marks order as completed" do
-    perform_enqueued_jobs do
+  describe "#call" do
+    it "copies files to order item" do
       call_service(order:, session:)
+      order.reload
+
+      first_item = order.order_items.first
+
+      # Verify underlying item data state
+      expect(first_item.files.attached?).to be(true)
+      expect(first_item.files.count).to eq(2)
+      expect(first_item.files.first.blob.filename).to eq("untagged_mp3.mp3")
+      expect(first_item.files.first.content_type).to eq("audio/mpeg")
+      expect(first_item.files.last.blob.filename).to eq("track_stems.zip")
+      expect(first_item.files.last.content_type).to eq("application/zip")
+
+      expect(first_item.preview_image.filename.to_s).to eq("oi_preview_cover_photo.png")
+      expect(first_item.preview_image.content_type).to eq("image/png")
+      expect(first_item.is_immutable).to be(true)
     end
 
-    expect(ActionMailer::Base.deliveries.count).to eq(1)
-    expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
+    it "updates transaction with customer data" do
+      call_service(order:, session:)
+      order.reload
+
+      current_transaction = order.payment_transaction
+
+      expect(current_transaction.status).to eq(Transaction.statuses[:completed])
+      expect(current_transaction.stripe_charge_id).to eq("co_test_123")
+      expect(current_transaction.customer_email).to eq("email@example.com")
+      expect(current_transaction.customer_name).to eq("Customer")
+      expect(current_transaction.amount_cents).to eq(9999)
+      expect(current_transaction.currency).to eq("usd")
+    end
+
+    it "clears user's cart" do
+      call_service(order:, session:)
+      order.reload
+
+      user = order.user
+
+      expect(user.cart.cart_items.count).to eq(0)
+    end
+
+    it "marks order as completed" do
+      call_service(order:, session:)
+
+      expect(order.status).to eq(Order.statuses[:completed])
+    end
+
+    it "sends buyer an email" do
+      perform_enqueued_jobs do
+        call_service(order:, session:)
+      end
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
+    end
+
+    it "raises ArgumentError if input is not valid" do
+      expect {
+        described_class.call(input: nil)
+      }.to raise_error(ArgumentError)
+    end
+
+    it "does not process non pending orders" do
+      Order.statuses
+        .map { |key, status| status }
+        .filter { |status| status != Order.statuses[:pending] }
+        .each { |status|
+          expect(ActiveRecord::Base).not_to receive(:transaction)
+
+          order.update!(status:)
+          call_service(order:, session:)
+        }
+    end
+
+    it "rolls back all changes if an error occurs" do
+      allow(order).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+
+      expect {
+        call_service(order:, session:)
+      }.to raise_error(FulfillOrderService::OrderFulfillmentFailedError)
+
+      aggregate_failures do
+        expect(transaction.reload.status).to eq(Transaction.statuses[:pending])
+        expect(order.reload.status).to eq(Order.statuses[:pending])
+        order.order_items.each do |item|
+          expect(item.files.count).to eq(0)
+        end
+      end
+    end
+
+    it "raises OrderFulfillmentFailedError if something goes wrong" do
+      allow(ActiveRecord::Base).to receive(:transaction).and_raise(StandardError)
+
+      expect {
+        call_service(order:, session:)
+      }.to raise_error(FulfillOrderService::OrderFulfillmentFailedError)
+    end
   end
 
   private
