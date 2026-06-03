@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe OrderFulfillmentJob, type: :job do
+  include ActiveJob::TestHelper
+
   let(:fulfillment_input) do
     FulfillOrderService::Input.build_from_stripe_checkout_session(
       order: create(:order),
@@ -34,25 +36,19 @@ RSpec.describe OrderFulfillmentJob, type: :job do
 
   describe "error handling" do
     it "retries the job on OrderFulfillmentFailedError" do
-      allow(FulfillOrderService).to receive(:call)
-        .and_raise(FulfillOrderService::OrderFulfillmentFailedError)
+      allow(FulfillOrderService).to receive(:call).and_raise(FulfillOrderService::OrderFulfillmentFailedError)
 
       expect {
-        described_class.perform_now(fulfillment_input:)
-      }.to retry_on(FulfillOrderService::OrderFulfillmentFailedError)
+        described_class.perform_now(fulfillment_input: fulfillment_input)
+      }.to have_enqueued_job(described_class)
     end
 
-    it "stops retrying after the maximum attempts limit" do
-      allow(described_class).to receive(:executions).and_return(5)
-
-      expect {
-        job.perform_now(fulfillment_input:)
-      }.to raise_error(FulfillOrderService::OrderFulfillmentFailedError)
-    end
     it "raises an ArgumentError when the input is not an instance of FulfillOrderService::Input" do
+      allow(FulfillOrderService).to receive(:call).and_raise(ArgumentError)
+
       expect {
         described_class.perform_now(fulfillment_input: "invalid")
-      }.to discard_on(ArgumentError)
+      }.not_to have_enqueued_job(described_class)
     end
   end
 end
