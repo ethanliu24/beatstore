@@ -107,7 +107,7 @@ module Webhooks
 
     def fulfill_order(order:, session:)
       fullfillment_input = FulfillOrderService::Input
-      .build_from_stripe_checkout_session(order:, session:)
+        .build_from_stripe_checkout_session(order:, session:)
 
       OrderFulfillmentJob.perform_later(fullfillment_input:)
     end
