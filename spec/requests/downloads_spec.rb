@@ -255,7 +255,7 @@ RSpec.describe DownloadsController, type: :request do
 
       get download_product_item_url(id: order.id, item_id: order_item.id, file_id: order_item.files.first.id)
 
-      expect(response).to redirect_to(root_url)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it "should not return the file if order is at failed status" do
@@ -264,7 +264,7 @@ RSpec.describe DownloadsController, type: :request do
 
       get download_product_item_url(id: order.id, item_id: order_item.id, file_id: order_item.files.first.id)
 
-      expect(response).to redirect_to(root_url)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it "should let admins download any product" do
