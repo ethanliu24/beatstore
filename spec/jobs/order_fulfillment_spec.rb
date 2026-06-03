@@ -50,5 +50,13 @@ RSpec.describe OrderFulfillmentJob, type: :job do
         described_class.perform_now(fulfillment_input: "invalid")
       }.not_to have_enqueued_job(described_class)
     end
+
+    it "raises an ArgumentError when the input is not an instance of FulfillOrderService::Input" do
+      allow(FulfillOrderService).to receive(:call).and_raise(FulfillOrderService::OrderAlreadyFulfilledError)
+
+      expect {
+        described_class.perform_now(fulfillment_input:)
+      }.not_to have_enqueued_job(described_class)
+    end
   end
 end

@@ -5,6 +5,7 @@ class OrderFulfillmentJob < ApplicationJob
 
   retry_on FulfillOrderService::OrderFulfillmentFailedError
 
+  discard_on FulfillOrderService::OrderAlreadyFulfilledError
   discard_on ArgumentError
 
   def perform(fulfillment_input:)
