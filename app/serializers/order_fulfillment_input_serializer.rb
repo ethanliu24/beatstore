@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class OrderFulfillmentInputSerializer < ActiveJob::Serializers::ObjectSerializer
+  def serialize?(input)
+    input.is_a?(FulfillOrderService::Input)
+  end
+
   def serialize(input)
     super(
       "order_id" => input.order.id,
