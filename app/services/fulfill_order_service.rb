@@ -70,15 +70,7 @@ class FulfillOrderService
       begin
         ActiveRecord::Base.transaction do
           attach_files_to_order_items(order: input.order)
-          update_transaction(
-            transaction: input.transaction,
-            status: Transaction.statuses[:completed],
-            customer_email: input.customer_email,
-            customer_name: input.customer_name,
-            amount_cents: input.amount_cents,
-            currency: input.currency,
-            stripe_charge_id: input.stripe_charge_id
-          )
+          update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
           input.user.cart.clear
           input.order.update!(status: Order.statuses[:completed])
           PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
@@ -123,14 +115,14 @@ class FulfillOrderService
       )
     end
 
-    def update_transaction(transaction:, status:, customer_email:, customer_name:, amount_cents:, currency:, stripe_charge_id:)
+    def update_transaction(transaction:, status:, input:)
       transaction.update!(
         status:,
-        customer_email:,
-        customer_name:,
-        amount_cents:,
-        currency:,
-        stripe_charge_id:
+        customer_email: input.customer_email,
+        customer_name: input.customer_name,
+        amount_cents: input.amount_cents,
+        currency: input.currency,
+        stripe_charge_id: input.stripe_charge_id
       )
     end
   end
