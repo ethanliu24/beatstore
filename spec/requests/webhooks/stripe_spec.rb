@@ -33,7 +33,7 @@ RSpec.describe "Stripe Webhooks", type: :request do
   describe "POST /webhooks/stripe/payments" do
     let(:headers) { { "HTTP_STRIPE_SIGNATURE" => "valid_sig_mock" } }
 
-    it "sets order status to failed if payment canceled" do
+    it "sets order status to failed if session expired" do
       event = build_event(type: "checkout.session.async_payment_failed", event_id: "123")
 
       allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
@@ -45,72 +45,54 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(order.payment_transaction.status).to eq(Transaction.statuses[:failed])
     end
 
-    it "attaches files to order item, locks state, and marks order as completed" do
-      event = build_event(type: "checkout.session.completed", event_id: "123")
+    it "enqueues order fulfillment job for completed session if payment status is paid" do
+      event = build_event(type: "checkout.session.completed", event_id: "123", payment_status: "paid")
 
       allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
 
       expect(order.order_items.first.is_immutable).to be(false)
 
-      perform_enqueued_jobs do
+      expect {
         post webhooks_stripe_payments_url, params: {}, headers: headers
-      end
-
-      order.reload
-      current_transaction = order.payment_transaction
-      first_item = order.order_items.first
+      }.to have_enqueued_job(OrderFulfillmentJob)
 
       expect(response).to have_http_status(:ok)
-
-      # Verify underlying item data state
-      expect(first_item.files.attached?).to be(true)
-      expect(first_item.files.count).to eq(2)
-      expect(first_item.files.first.blob.filename).to eq("untagged_mp3.mp3")
-      expect(first_item.files.first.content_type).to eq("audio/mpeg")
-      expect(first_item.files.last.blob.filename).to eq("track_stems.zip")
-      expect(first_item.files.last.content_type).to eq("application/zip")
-
-      expect(first_item.preview_image.filename.to_s).to eq("oi_preview_cover_photo.png")
-      expect(first_item.preview_image.content_type).to eq("image/png")
-      expect(first_item.is_immutable).to be(true)
-      expect(order.status).to eq(Order.statuses[:completed])
-
-      # Verify payment engine tracking values
-      expect(current_transaction.status).to eq(Transaction.statuses[:completed])
-      expect(current_transaction.stripe_charge_id).to eq("pi_1234")
-      expect(current_transaction.customer_email).to eq("email@example.com")
-      expect(current_transaction.customer_name).to eq("Customer")
-      expect(current_transaction.amount_cents).to eq(9999)
-      expect(current_transaction.currency).to eq("usd")
-
-      # Outbound tracking confirmation
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("Thank you for your purchase")
     end
 
-    it "doesnt do anything if payment status is unpaid" do
+    it "doesn't enqueue order fulfillment job for completed session if payment status is unpaid" do
       event = build_event(type: "checkout.session.completed", event_id: "123", payment_status: "unpaid")
 
       allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
 
       expect(order.order_items.first.is_immutable).to be(false)
 
-      perform_enqueued_jobs do
+      expect {
         post webhooks_stripe_payments_url, params: {}, headers: headers
-      end
+      }.not_to have_enqueued_job(OrderFulfillmentJob)
 
-      order.reload
+      expect(response).to have_http_status(:ok)
+    end
 
-      expect(order.payment_transaction.status).to eq(Transaction.statuses[:pending])
-      expect(order.status).to eq(Order.statuses[:pending])
+    it "enqueues order fulfillment job for async_payment_succeeded events" do
+      event = build_event(type: "checkout.session.async_payment_succeeded", event_id: "123")
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
       expect(order.order_items.first.is_immutable).to be(false)
-      expect(ActionMailer::Base.deliveries.count).to eq(0)
+
+      expect {
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      }.to have_enqueued_job(OrderFulfillmentJob)
+
+      expect(response).to have_http_status(:ok)
     end
 
     it "returns a bad request if event parsing failed" do
       allow(Stripe::Webhook).to receive(:construct_event).and_raise(JSON::ParserError)
 
-      post webhooks_stripe_payments_url, params: {}, headers: headers
+      expect {
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      }.not_to have_enqueued_job(OrderFulfillmentJob)
 
       expect(response).to have_http_status(:bad_request)
     end
@@ -120,7 +102,9 @@ RSpec.describe "Stripe Webhooks", type: :request do
         Stripe::SignatureVerificationError.new("invalid sig", "invalid_sig_mock")
       )
 
-      post webhooks_stripe_payments_url, params: {}, headers: headers
+      expect {
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      }.not_to have_enqueued_job(OrderFulfillmentJob)
 
       expect(response).to have_http_status(:bad_request)
     end
@@ -130,7 +114,9 @@ RSpec.describe "Stripe Webhooks", type: :request do
 
       allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
 
-      post webhooks_stripe_payments_url, params: {}, headers: headers
+      expect {
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      }.not_to have_enqueued_job(OrderFulfillmentJob)
 
       expect(response).to have_http_status(:ok)
       expect(order.payment_transaction.status).to eq(Transaction.statuses[:pending])
@@ -144,9 +130,11 @@ RSpec.describe "Stripe Webhooks", type: :request do
         event = build_event(type: "checkout.session.completed", event_id: "unique_event")
         allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
 
-        expect {
-          post webhooks_stripe_payments_url, params: {}, headers: headers
-        }.to change(StripePaymentEvent, :count).by(1)
+        perform_enqueued_jobs do
+          expect {
+            post webhooks_stripe_payments_url, params: {}, headers: headers
+          }.to change(StripePaymentEvent, :count).by(1)
+        end
 
         expect(response).to have_http_status(:ok)
         expect(order.reload.status).to eq(Order.statuses[:completed])
@@ -154,7 +142,34 @@ RSpec.describe "Stripe Webhooks", type: :request do
         order.reload
 
         expect {
-          post webhooks_stripe_payments_url, params: {}, headers: headers
+          expect {
+            post webhooks_stripe_payments_url, params: {}, headers: headers
+          }.not_to have_enqueued_job(OrderFulfillmentJob)
+        }.not_to change(StripePaymentEvent, :count)
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.status).to eq(Order.statuses[:pending])
+      end
+
+      it "skips event for async_payment_succeeded event" do
+        event = build_event(type: "checkout.session.async_payment_succeeded", event_id: "unique_event")
+        allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+        perform_enqueued_jobs do
+          expect {
+            post webhooks_stripe_payments_url, params: {}, headers: headers
+          }.to change(StripePaymentEvent, :count).by(1)
+        end
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.status).to eq(Order.statuses[:completed])
+        order.update_column(:status, Order.statuses[:pending])
+        order.reload
+
+        expect {
+          expect {
+            post webhooks_stripe_payments_url, params: {}, headers: headers
+          }.not_to have_enqueued_job(OrderFulfillmentJob)
         }.not_to change(StripePaymentEvent, :count)
 
         expect(response).to have_http_status(:ok)

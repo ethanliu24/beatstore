@@ -16,8 +16,7 @@ module Webhooks
       return unless event
 
       unless HANDLED_EVENTS.include?(event.type)
-        head :ok
-        return
+        head :ok and return
       end
 
       session = event.data.object
@@ -26,15 +25,14 @@ module Webhooks
       event_id = event.id
 
       unless check_idempotency(event_id:, order:, user:)
-        head :ok
-        return
+        head :ok and return
       end
 
       case event.type
       when "checkout.session.completed"
         if session.payment_status == "unpaid"
           # TODO send email saying order processing
-          return
+          head :ok and return
         end
 
         fulfill_order(order:, session:)
@@ -106,10 +104,10 @@ module Webhooks
     end
 
     def fulfill_order(order:, session:)
-      fullfillment_input = FulfillOrderService::Input
+      fulfillment_input = FulfillOrderService::Input
         .build_from_stripe_checkout_session(order:, session:)
 
-      OrderFulfillmentJob.perform_later(fullfillment_input:)
+      OrderFulfillmentJob.perform_later(fulfillment_input:)
     end
   end
 end
