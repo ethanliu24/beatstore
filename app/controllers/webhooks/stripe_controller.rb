@@ -37,13 +37,9 @@ module Webhooks
           return
         end
 
-        order = find_order(session:)
-        fullfillment_input = FulfillOrderService::Input
-          .build_from_stripe_checkout_session(order:, session:)
-
-        OrderFulfillmentJob.perform_later(fullfillment_input:)
+        fulfill_order(order:, session:)
       when "checkout.session.async_payment_succeeded"
-        # TODO perform fullfillment job
+        fulfill_order(order:, session:)
       when "checkout.session.expired"
         # TODO add cancled status
       when "checkout.session.async_payment_failed"
@@ -109,26 +105,11 @@ module Webhooks
       User.find(user_id)
     end
 
-    def duplicate_file(item:, file:, attach:)
-      # TODO file.blob is none iff file doesn't match what the license indicates to deliver
-      if attach
-        item.files.attach(
-          io: StringIO.new(file.download),
-          filename: file.blob&.filename,
-          content_type: file.blob&.content_type
-        )
-      end
-    end
+    def fulfill_order(order:, session:)
+      fullfillment_input = FulfillOrderService::Input
+      .build_from_stripe_checkout_session(order:, session:)
 
-    def update_transaction(transaction:, session:, status:)
-      transaction.update!(
-        status:,
-        stripe_charge_id: session.id,
-        customer_email: session.customer_details.email,
-        customer_name: session.customer_details.name,
-        amount_cents: session.amount_total,
-        currency: session.currency
-      )
+      OrderFulfillmentJob.perform_later(fullfillment_input:)
     end
   end
 end
