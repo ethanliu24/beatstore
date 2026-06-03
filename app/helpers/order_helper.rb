@@ -5,10 +5,10 @@ module OrderHelper
     case status
     when Order.statuses[:completed]
       "text-success"
-    when Order.statuses[:failed]
+    when Order.statuses[:failed], Order.statuses[:canceled]
       "text-error"
     else
-      ""
+      "text-error"
     end
   end
 end
