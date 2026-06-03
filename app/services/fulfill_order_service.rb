@@ -65,9 +65,11 @@ class FulfillOrderService
         raise ArgumentError, "FullfillOrderService.call input must be a FulfillOrderService::Input"
       end
 
-      return unless input.order.pending?
-
       begin
+        input.order.lock!  # don't need to lock other resources, it may also risk deadlocks 
+
+        return unless input.order.pending?
+
         ActiveRecord::Base.transaction do
           attach_files_to_order_items(order: input.order)
           update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
