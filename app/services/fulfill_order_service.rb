@@ -2,6 +2,7 @@
 
 class FulfillOrderService
   class OrderFulfillmentFailedError < StandardError; end
+  class OrderAlreadyFulfilledError < StandardError; end
 
   class Input
     include ActiveModel::Model
@@ -66,17 +67,21 @@ class FulfillOrderService
       end
 
       begin
-        input.order.lock!  # don't need to lock other resources, it may also risk deadlocks 
+        input.order.with_lock do  # don't need to lock other resources, it may also risk deadlocks
+          unless input.order.pending?
+            raise OrderAlreadyFulfilledError, "order_id: #{order.id}"
+          end
 
-        return unless input.order.pending?
-
-        ActiveRecord::Base.transaction do
-          attach_files_to_order_items(order: input.order)
-          update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
-          input.user.cart.clear
-          input.order.update!(status: Order.statuses[:completed])
-          PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
+          ActiveRecord::Base.transaction do
+            attach_files_to_order_items(order: input.order)
+            update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
+            input.user.cart.clear
+            input.order.update!(status: Order.statuses[:completed])
+            PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
+          end
         end
+      rescue OrderAlreadyFulfilledError => e
+        raise e
       rescue => e
         # TODO log any errors
         raise OrderFulfillmentFailedError, e.message
