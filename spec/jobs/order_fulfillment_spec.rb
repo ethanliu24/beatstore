@@ -22,12 +22,6 @@ RSpec.describe OrderFulfillmentJob, type: :job do
         input: fulfillment_input
       )
     end
-
-    it "raises an ArgumentError when the input is not an instance of FulfillOrderService::Input" do
-      expect {
-        described_class.perform_now(fulfillment_input: "invalid")
-      }.to raise_error(ArgumentError)
-    end
   end
 
   describe "#performs_later" do
@@ -35,6 +29,30 @@ RSpec.describe OrderFulfillmentJob, type: :job do
       expect {
         OrderFulfillmentJob.perform_later(fulfillment_input:)
       }.to have_enqueued_job
+    end
+  end
+
+  describe "error handling" do
+    it "retries the job on OrderFulfillmentFailedError" do
+      allow(FulfillOrderService).to receive(:call)
+        .and_raise(FulfillOrderService::OrderFulfillmentFailedError)
+
+      expect {
+        described_class.perform_now(fulfillment_input:)
+      }.to retry_on(FulfillOrderService::OrderFulfillmentFailedError)
+    end
+
+    it "stops retrying after the maximum attempts limit" do
+      allow(described_class).to receive(:executions).and_return(5)
+
+      expect {
+        job.perform_now(fulfillment_input:)
+      }.to raise_error(FulfillOrderService::OrderFulfillmentFailedError)
+    end
+    it "raises an ArgumentError when the input is not an instance of FulfillOrderService::Input" do
+      expect {
+        described_class.perform_now(fulfillment_input: "invalid")
+      }.to discard_on(ArgumentError)
     end
   end
 end

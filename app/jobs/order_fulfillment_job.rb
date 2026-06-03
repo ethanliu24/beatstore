@@ -3,7 +3,7 @@
 class OrderFulfillmentJob < ApplicationJob
   queue_as :high
 
-  retry_on FulfillOrderService::OrderFulfillmentFailedError
+  retry_on FulfillOrderService::OrderFulfillmentFailedError, attempts: 2
 
   discard_on ArgumentError
 
