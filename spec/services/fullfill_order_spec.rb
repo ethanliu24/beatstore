@@ -169,10 +169,12 @@ RSpec.describe FulfillOrderService, type: :service do
         .map { |key, status| status }
         .filter { |status| status != Order.statuses[:pending] }
         .each { |status|
-          expect(ActiveRecord::Base).not_to receive(:transaction)
-
           order.update!(status:)
-          call_service(order:, session:)
+          order.reload
+
+          expect {
+            call_service(order:, session:)
+          }.to raise_error(FulfillOrderService::OrderAlreadyFulfilledError)
         }
     end
 

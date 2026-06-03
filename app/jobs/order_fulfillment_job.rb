@@ -3,6 +3,11 @@
 class OrderFulfillmentJob < ApplicationJob
   queue_as :high
 
+  retry_on FulfillOrderService::OrderFulfillmentFailedError
+
+  discard_on FulfillOrderService::OrderAlreadyFulfilledError
+  discard_on ArgumentError
+
   def perform(fulfillment_input:)
     unless fulfillment_input.is_a?(FulfillOrderService::Input)
       raise ArgumentError, "fulfillment_input must be a FulfillOrderService::Input"
