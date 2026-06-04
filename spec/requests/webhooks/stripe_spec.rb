@@ -87,6 +87,18 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    it "sets order status to canceled and transaction to failed if session expired" do
+      event = build_event(type: "checkout.session.expired", event_id: "123")
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      order.reload
+      expect(order.status).to eq(Order.statuses[:canceled])
+      expect(order.payment_transaction.status).to eq(Transaction.statuses[:failed])
+    end
+
     it "returns a bad request if event parsing failed" do
       allow(Stripe::Webhook).to receive(:construct_event).and_raise(JSON::ParserError)
 

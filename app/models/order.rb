@@ -12,6 +12,7 @@ class Order < ApplicationRecord
   enum :status, {
     pending: "pending",
     completed: "completed",
+    canceled: "canceled",
     failed: "failed"
   }
 
