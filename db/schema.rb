@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_31_210400) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_05_000839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -262,8 +262,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_31_210400) do
 
   create_table "transactions", force: :cascade do |t|
     t.string "status", null: false
-    t.string "stripe_charge_id"
-    t.string "stripe_receipt_url"
     t.string "customer_email"
     t.string "customer_name"
     t.integer "amount_cents", null: false
@@ -271,6 +269,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_31_210400) do
     t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "payment_processor", null: false
     t.index ["order_id"], name: "index_transactions_on_order_id"
   end
 
