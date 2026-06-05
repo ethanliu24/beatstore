@@ -8,7 +8,10 @@ class CheckoutsController < ApplicationController
 
   # Creates a checkout session
   def create
-    create_order_and_order_items
+    create_order_and_order_items(
+      payment_processor: Transaction.payment_processors[:stripe],
+      currency: "USD"
+    )
 
     session = Stripe::Checkout::Session.create({
       line_items: line_items,
@@ -30,14 +33,14 @@ class CheckoutsController < ApplicationController
 
   private
 
-  def create_order_and_order_items
+  def create_order_and_order_items(payment_processor:, currency:)
     customer = current_or_guest_user
 
     @order = Order.create!(
       user: customer,
       status: Order.statuses[:pending],
       subtotal_cents: customer.cart.total_items_price_cents,
-      currency: "USD"
+      currency:
     )
 
     # The 0 is tempory, will be updated once stripe webhook comes in with total charged amount
@@ -45,7 +48,8 @@ class CheckoutsController < ApplicationController
       order: @order,
       status: Transaction.statuses[:pending],
       amount_cents: 0,
-      currency: "USD"
+      currency:,
+      payment_processor:
     )
 
     @order_items = customer.cart.available_items.map do |item|
