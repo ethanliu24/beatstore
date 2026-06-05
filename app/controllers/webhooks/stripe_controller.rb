@@ -20,6 +20,12 @@ module Webhooks
       end
 
       session = event.data.object
+
+      if one_time_payment?(session:)
+        # TODO log
+        head :ok and return
+      end
+
       order = find_order(session:)
       user = order.user
       event_id = event.id
@@ -126,6 +132,10 @@ module Webhooks
       }
 
       order.update!(metadata: metadata.merge(payments_data_metadata))
+    end
+
+    def one_time_payment?(session:)
+      session.metadata.object_id.nil?
     end
   end
 end
