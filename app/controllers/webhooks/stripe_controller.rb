@@ -28,6 +28,8 @@ module Webhooks
         head :ok and return
       end
 
+      update_order_metadata(order:, session:)
+
       case event.type
       when "checkout.session.completed"
         if session.payment_status == "unpaid"
@@ -109,6 +111,21 @@ module Webhooks
         .build_from_stripe_checkout_session(order:, session:)
 
       OrderFulfillmentJob.perform_later(fulfillment_input:)
+    end
+
+    def update_transaction_metadata(order:, session:)
+      metadata = order.metadata
+      payments_data_metadata_written = metadata.key?(Order::METADATA_PAYMENTS_DATA_KEY)
+
+      return if payments_data_metadata_written
+
+      payments_data_metadata = {
+        Order::METADATA_PAYMENTS_DATA_KEY => {
+          stripe_charge_id: session.id
+        }
+      }
+
+      order.update!(metadata: metadata.merge(payments_data_metadata))
     end
   end
 end

@@ -14,8 +14,7 @@ class FulfillOrderService
       :customer_email,
       :customer_name,
       :amount_cents,
-      :currency,
-      :stripe_charge_id
+      :currency
 
     validates :order, presence: true
     validate { errors.add(:order, "must be an Order") unless order.is_a?(Order) }
@@ -26,7 +25,6 @@ class FulfillOrderService
       greater_than_or_equal_to: 0
     }
     validates :currency, presence: true, length: { is: 3 }
-    validates :stripe_charge_id, allow_nil: true, presence: true
 
     class << self
       def build_from_stripe_checkout_session(order:, session:)
@@ -36,7 +34,6 @@ class FulfillOrderService
           customer_name: session.customer_details.name,
           amount_cents: session.amount_total,
           currency: session.currency,
-          stripe_charge_id: session.id,
         )
       end
     end
@@ -46,8 +43,7 @@ class FulfillOrderService
       customer_email:,
       customer_name:,
       amount_cents:,
-      currency:,
-      stripe_charge_id: nil
+      currency:
     )
       @order = order
       @transaction = order.payment_transaction
@@ -56,7 +52,6 @@ class FulfillOrderService
       @customer_name = customer_name
       @amount_cents = amount_cents
       @currency = currency
-      @stripe_charge_id = stripe_charge_id
     end
   end
 
@@ -130,7 +125,6 @@ class FulfillOrderService
         customer_name: input.customer_name,
         amount_cents: input.amount_cents,
         currency: input.currency,
-        stripe_charge_id: input.stripe_charge_id
       )
     end
   end

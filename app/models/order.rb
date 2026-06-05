@@ -4,6 +4,7 @@
 class Order < ApplicationRecord
   PUBLIC_ID_PREFIX = "OR"
   PUBLIC_ID_SUFFIX_LENGTH = 8
+  METADATA_PAYMENTS_DATA_KEY = "payments_data"
 
   belongs_to :user
   has_one :payment_transaction, class_name: "Transaction", dependent: :restrict_with_error
