@@ -3,6 +3,7 @@ FactoryBot.define do
     status { Transaction.statuses[:pending] }
     amount_cents { 1000 }
     currency { "USD" }
+    payment_processor { Transaction.payment_processors[:stripe] }
 
     association :order
   end

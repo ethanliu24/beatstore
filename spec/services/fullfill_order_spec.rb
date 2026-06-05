@@ -13,8 +13,7 @@ RSpec.describe FulfillOrderService::Input, type: :model do
       customer_email: "customer@example.com",
       customer_name: "John Doe",
       amount_cents: 2000,
-      currency: "USD",
-      stripe_charge_id: "cs_test_123"
+      currency: "USD"
     )
   }
 
@@ -52,7 +51,6 @@ RSpec.describe FulfillOrderService::Input, type: :model do
       expect(input.customer_name).to eq("Customer")
       expect(input.amount_cents).to eq(9999)
       expect(input.currency).to eq("usd")
-      expect(input.stripe_charge_id).to eq("co_test_123")
     end
 
     it "is valid" do
@@ -127,7 +125,6 @@ RSpec.describe FulfillOrderService, type: :service do
       current_transaction = order.payment_transaction
 
       expect(current_transaction.status).to eq(Transaction.statuses[:completed])
-      expect(current_transaction.stripe_charge_id).to eq("co_test_123")
       expect(current_transaction.customer_email).to eq("email@example.com")
       expect(current_transaction.customer_name).to eq("Customer")
       expect(current_transaction.amount_cents).to eq(9999)

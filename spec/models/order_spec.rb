@@ -135,6 +135,13 @@ RSpec.describe Order, type: :model do
         expect(order.update!(status: Order.statuses[:completed])).to be(true)
         expect(order.reload.status).to eq(Order.statuses[:completed])
       end
+
+      it "allows metadata updates" do
+        metadata = { "test" => 123 }
+
+        expect(order.update!(metadata:)).to eq(true)
+        expect(order.reload.metadata).to eq(metadata)
+      end
     end
 
     context "destroying" do

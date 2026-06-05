@@ -12,8 +12,7 @@
         t("orders.index.table.order_id"),
         t("orders.index.table.date"),
         t("orders.index.table.price"),
-        t("orders.index.table.status"),
-        ""  # this is for link to reciept, which does not have a header name
+        t("orders.index.table.status")
       ].each do |header| %>
         <th class="text-[0.6rem] font-bold text-nowrap text-secondary-txt text-left pb-2"><%= header %></th>
       <% end %>
@@ -24,12 +23,6 @@
         <td class="py-2"><%= format_date(order.updated_at) %></td>
         <td class="py-2"><%= order.completed? ? order.payment_transaction.amount.format : order.subtotal.format %></td>
         <td class="py-2 <%= product_status_color(order.status) %>"><%= order.status %></td>
-        <td class="py-2 text-accent">
-          <% if order.completed? %>
-            <%= link_to t("orders.index.receipt"), order.payment_transaction.stripe_receipt_url.to_s,
-              target: "_blank", rel: "noopener" %>
-          <% end %>
-        </td>
       </tr>
     <% end %>
   </table>

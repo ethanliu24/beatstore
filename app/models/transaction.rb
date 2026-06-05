@@ -9,6 +9,10 @@ class Transaction < ApplicationRecord
     failed: "failed"
   }
 
+  enum :payment_processor, {
+    stripe: "stripe"
+  }
+
   monetize :amount_cents
 
   validates :status, :amount_cents, :currency, presence: true
