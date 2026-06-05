@@ -251,6 +251,22 @@ RSpec.describe "Stripe Webhooks", type: :request do
         expect(order.reload.status).to eq(Order.statuses[:pending])
       end
     end
+
+    it "skips event if it's a one time payment, i.e. order_id metadata doesnt exist" do
+      event = Stripe::Event.construct_from(
+        id: "123",
+        type: "checkout.session.completed",
+        data: { object: { metadata: {} } }
+      )
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      expect {
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      }.not_to have_enqueued_job
+
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   private
