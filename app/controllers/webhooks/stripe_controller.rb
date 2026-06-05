@@ -135,7 +135,7 @@ module Webhooks
     end
 
     def one_time_payment?(session:)
-      !session.metadata.respond_to?(:object_id)
+      !session.metadata.to_h.key?("object_id")
     end
   end
 end
