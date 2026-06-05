@@ -39,7 +39,8 @@ module Webhooks
       when "checkout.session.async_payment_succeeded"
         fulfill_order(order:, session:)
       when "checkout.session.expired"
-        # TODO add cancled status
+        order.update!(status: Order.statuses[:canceled])
+        order.payment_transaction.update!(status: Transaction.statuses[:failed])
       when "checkout.session.async_payment_failed"
         order.update!(status: Order.statuses[:failed])
         order.payment_transaction.update!(status: Transaction.statuses[:failed])

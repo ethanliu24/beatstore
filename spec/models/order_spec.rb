@@ -40,7 +40,7 @@ RSpec.describe Order, type: :model do
     subject(:order) { build(:order) }
 
     it "allows the following statuses" do
-      [ "pending", "completed", "failed" ].each do |status|
+      [ "pending", "completed", "failed", "canceled" ].each do |status|
         subject.status = status
         expect(subject).to be_valid
       end
@@ -67,6 +67,12 @@ RSpec.describe Order, type: :model do
         expect {
           order.update!(status: Order.statuses[:failed])
         }.to change { order.reload.status }.from(Order.statuses[:pending]).to(Order.statuses[:failed])
+      end
+
+      it "can update status to canceld" do
+        expect {
+          order.update!(status: Order.statuses[:canceled])
+        }.to change { order.reload.status }.from(Order.statuses[:pending]).to(Order.statuses[:canceled])
       end
 
       it "does not allow any column updates other than status updates" do
@@ -99,6 +105,23 @@ RSpec.describe Order, type: :model do
 
     context "when status is failed" do
       before { order.update!(status: Order.statuses[:failed]) }
+
+      it "does not allow any updates" do
+        expect {
+          order.update!(currency: "CAD")
+        }.to raise_error(ActiveRecord::RecordNotSaved)
+        expect(order.errors[:base]).to include("Cannot modify order details other than status")
+        expect(order.reload.currency).to eq("USD")
+      end
+
+      it "allow status updates" do
+        expect(order.update!(status: Order.statuses[:completed])).to be(true)
+        expect(order.reload.status).to eq(Order.statuses[:completed])
+      end
+    end
+
+    context "when status is failed" do
+      before { order.update!(status: Order.statuses[:canceled]) }
 
       it "does not allow any updates" do
         expect {
