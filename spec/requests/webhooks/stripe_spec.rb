@@ -264,6 +264,8 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect {
         post webhooks_stripe_payments_url, params: {}, headers: headers
       }.not_to have_enqueued_job
+
+      expect(response).to have_http_status(:ok)
     end
   end
 
