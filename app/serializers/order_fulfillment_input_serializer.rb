@@ -11,8 +11,7 @@ class OrderFulfillmentInputSerializer < ActiveJob::Serializers::ObjectSerializer
       "customer_email" => input.customer_email,
       "customer_name" => input.customer_name,
       "amount_cents" => input.amount_cents,
-      "currency" => input.currency,
-      "stripe_charge_id" => input.stripe_charge_id,
+      "currency" => input.currency
     )
   end
 

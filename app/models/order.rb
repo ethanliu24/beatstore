@@ -24,7 +24,7 @@ class Order < ApplicationRecord
   validates :subtotal_cents, numericality: { greater_than_or_equal_to: 0 }, presence: true
 
   before_validation :generate_public_id, if: :new_record?
-  before_update :prevent_updates_except_status
+  before_update :prevent_updates_except_status_and_metadata
   before_destroy :prevent_destroy
 
   def transaction_completed?
@@ -43,8 +43,8 @@ class Order < ApplicationRecord
     self.public_id = "#{PUBLIC_ID_PREFIX}_#{timestamp}_#{suffix}"
   end
 
-  def prevent_updates_except_status
-    if (changed - %w[status updated_at]).any?
+  def prevent_updates_except_status_and_metadata
+    if (changed - %w[status updated_at metadata]).any?
       errors.add(:base, "Cannot modify order details other than status")
       throw(:abort)
     end

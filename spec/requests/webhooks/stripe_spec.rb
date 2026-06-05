@@ -137,6 +137,48 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(ActionMailer::Base.deliveries.count).to eq(0)
     end
 
+
+    it "updates payments data metadata once only" do
+      event = build_event(type: "checkout.session.completed", event_id: "123", obj_id: "co_123")
+      event_2 = build_event(type: "checkout.session.canceled", event_id: "123", obj_id: "co_456")
+
+      expected_payments_data_metadata = {
+        "stripe_charge_id" => "co_123"
+      }
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(order.reload.metadata[Order::METADATA_PAYMENTS_DATA_KEY]).to eq(expected_payments_data_metadata)
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event_2)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(order.reload.metadata[Order::METADATA_PAYMENTS_DATA_KEY]).to eq(expected_payments_data_metadata)
+    end
+
+    it "should not update other order metadata fields when updating payments data" do
+      order.update!(metadata: { "test" => 123 })
+      event = build_event(type: "checkout.session.completed", event_id: "123", obj_id: "co_123")
+      expected_metadata = {
+        "test" => 123,
+        Order::METADATA_PAYMENTS_DATA_KEY => {
+          "stripe_charge_id" => "co_123"
+        }
+      }
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(order.reload.metadata).to eq(expected_metadata)
+    end
+
     context "idempotency detection" do
       it "skips event for completed event" do
         event = build_event(type: "checkout.session.completed", event_id: "unique_event")

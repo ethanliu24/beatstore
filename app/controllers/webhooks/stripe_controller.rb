@@ -113,7 +113,7 @@ module Webhooks
       OrderFulfillmentJob.perform_later(fulfillment_input:)
     end
 
-    def update_transaction_metadata(order:, session:)
+    def update_order_metadata(order:, session:)
       metadata = order.metadata
       payments_data_metadata_written = metadata.key?(Order::METADATA_PAYMENTS_DATA_KEY)
 
