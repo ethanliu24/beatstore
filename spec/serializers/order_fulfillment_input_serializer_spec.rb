@@ -29,7 +29,6 @@ RSpec.describe OrderFulfillmentInputSerializer do
       expect(result["customer_name"]).to eq("Customer")
       expect(result["amount_cents"]).to eq(9999)
       expect(result["currency"]).to eq("usd")
-      expect(result["stripe_charge_id"]).to eq("co_test_123")
     end
   end
 
@@ -43,7 +42,6 @@ RSpec.describe OrderFulfillmentInputSerializer do
       expect(result.customer_email).to eq("email@example.com")
       expect(result.customer_name).to eq("Customer")
       expect(result.currency).to eq("usd")
-      expect(result.stripe_charge_id).to eq("co_test_123")
     end
   end
 

@@ -5,8 +5,12 @@ require "rails_helper"
 RSpec.describe PurchaseMailer, type: :mailer do
   let!(:user) { create(:user) }
   let!(:order) { create(:order, user:) }
-  let!(:transaction) { create(:payment_transaction, order:, customer_name: "Puff Diddy",
-    customer_email: "email@gmail.com", stripe_receipt_url: "www.stripe.com") }
+  let!(:transaction) { create(
+    :payment_transaction,
+    order:,
+    customer_name: "Puff Diddy",
+    customer_email: "email@gmail.com")
+  }
 
   describe "#purchase_complete" do
     it "sends email to both user and transaction customer when transaction has a customer email" do
