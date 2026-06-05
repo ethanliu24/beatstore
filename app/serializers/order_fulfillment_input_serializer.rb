@@ -22,8 +22,7 @@ class OrderFulfillmentInputSerializer < ActiveJob::Serializers::ObjectSerializer
       customer_email: hash["customer_email"],
       customer_name: hash["customer_name"],
       amount_cents: hash["amount_cents"],
-      currency: hash["currency"],
-      stripe_charge_id: hash["stripe_charge_id"],
+      currency: hash["currency"]
     )
   end
 
