@@ -135,7 +135,8 @@ module Webhooks
     end
 
     def one_time_payment?(session:)
-      !session.metadata.to_h.key?("object_id")
+      metadata = session.metadata.to_h.with_indifferent_access
+      !metadata.key?(:order_id)
     end
   end
 end
