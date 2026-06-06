@@ -38,14 +38,14 @@ module Webhooks
 
       case event.type
       when "checkout.session.completed"
+        clear_user_cart!(user:)
+
         if session.payment_status == "unpaid"
           # TODO send email saying order processing
-          clear_user_cart!
           head :ok and return
         end
 
         fulfill_order(order:, user:, session:)
-        clear_user_cart!
       when "checkout.session.async_payment_succeeded"
         fulfill_order(order:, user:, session:)
       when "checkout.session.expired"

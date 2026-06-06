@@ -169,23 +169,6 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(order.reload.metadata).to eq(expected_metadata)
     end
 
-    it "clears user's cart" do
-      create(:cart_item, cart: order.user.cart, product: track, license:)
-
-      expect(user.cart.cart_items.count).to eq(1)
-
-      event = build_event(type: "checkout.session.completed", event_id: "123", payment_status: "paid")
-
-      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
-
-      expect {
-        post webhooks_stripe_payments_url, params: {}, headers: headers
-      }.to have_enqueued_job(OrderFulfillmentJob)
-
-      expect(response).to have_http_status(:ok)
-      expect(order.reload.user.cart.cart_items.count).to eq(0)
-    end
-
     context "idempotency detection" do
       it "skips event for completed event" do
         event = build_event(type: "checkout.session.completed", event_id: "unique_event")
@@ -273,6 +256,53 @@ RSpec.describe "Stripe Webhooks", type: :request do
       }.not_to have_enqueued_job
 
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  context "clear cart" do
+    before do
+      create(:cart_item, cart: order.user.cart, product: track, license:)
+    end
+
+    it "clears user's cart in checkout.session.completed event when payment status is paid" do
+      expect(user.cart.cart_items.count).to eq(1)
+
+      event = build_event(type: "checkout.session.completed", event_id: "123", payment_status: "paid")
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(order.reload.user.cart.cart_items.count).to eq(0)
+    end
+
+    it "clears user's cart in checkout.session.completed event when payment status is unpaid" do
+      expect(user.cart.cart_items.count).to eq(1)
+
+      event = build_event(type: "checkout.session.completed", event_id: "123", payment_status: "unpaid")
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      post webhooks_stripe_payments_url, params: {}, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(order.reload.user.cart.cart_items.count).to eq(0)
+    end
+
+    it "does not clear user's cart in any other events other than checkout.session.completed" do
+      expect(user.cart.cart_items.count).to eq(1)
+
+      (Webhooks::StripeController::HANDLED_EVENTS - [ "checkout.session.completed" ]).each do |type|
+        event = build_event(type:, event_id: type)
+
+        allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+
+        expect(response).to have_http_status(:ok)
+        expect(order.reload.user.cart.cart_items.count).to eq(1)
+      end
     end
   end
 
