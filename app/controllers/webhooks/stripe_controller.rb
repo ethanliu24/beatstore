@@ -40,10 +40,12 @@ module Webhooks
       when "checkout.session.completed"
         if session.payment_status == "unpaid"
           # TODO send email saying order processing
+          clear_user_cart!
           head :ok and return
         end
 
         fulfill_order(order:, user:, session:)
+        clear_user_cart!
       when "checkout.session.async_payment_succeeded"
         fulfill_order(order:, user:, session:)
       when "checkout.session.expired"
@@ -117,7 +119,6 @@ module Webhooks
         .build_from_stripe_checkout_session(order:, session:)
 
       OrderFulfillmentJob.perform_later(fulfillment_input:)
-      user.cart.clear
     end
 
     def update_order_metadata(order:, session:)
@@ -138,6 +139,10 @@ module Webhooks
     def one_time_payment?(session:)
       metadata = session.metadata.to_h.with_indifferent_access
       !metadata.key?(:order_id)
+    end
+
+    def clear_user_cart!(user:)
+      user.cart.clear
     end
   end
 end
