@@ -2,7 +2,7 @@
 
 class FulfillOrderService
   class OrderFulfillmentFailedError < StandardError; end
-  class OrderAlreadyFulfilledError < StandardError; end
+  class OrderNotEligibleForFulfillment < StandardError; end
 
   class Input
     include ActiveModel::Model
@@ -64,19 +64,25 @@ class FulfillOrderService
       # TODO figure out how to test data race condition in unit tests
       begin
         ActiveRecord::Base.transaction do
-          input.order.lock!
+          order = input.order
+          order.lock!
 
-          unless input.order.pending?
-            raise OrderAlreadyFulfilledError, "#{{ order_id: input.order.id }}"
+          unless order.pending?
+            err_data = {
+              order_id: order.id,
+              order_status: order.status
+            }
+
+            raise OrderNotEligibleForFulfillment, "#{err_data}"
           end
 
-          attach_files_to_order_items(order: input.order)
+          attach_files_to_order_items(order: order)
           update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
           input.user.cart.clear
-          input.order.update!(status: Order.statuses[:completed])
-          PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
+          order.update!(status: Order.statuses[:completed])
+          PurchaseMailer.with(user: input.user, order: order).purchase_complete.deliver_later
         end
-      rescue OrderAlreadyFulfilledError => e
+      rescue OrderNotEligibleForFulfillment => e
         raise e
       rescue => e
         # TODO log any errors
