@@ -2,7 +2,7 @@
 
 **Last Updated:** April 22, 2026
 
-At **[TODO URL]** ("we," "us," or "our"), we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard the personal information of our users ("you") in accordance with the *Personal Information Protection and Electronic Documents Act* (PIPEDA) and other applicable privacy standards.
+At **prodethan.com** ("we," "us," or "our"), we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard the personal information of our users ("you") in accordance with the *Personal Information Protection and Electronic Documents Act* (PIPEDA) and other applicable privacy standards.
 
 ---
 
