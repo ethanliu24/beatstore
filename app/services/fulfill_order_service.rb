@@ -72,7 +72,6 @@ class FulfillOrderService
 
           attach_files_to_order_items(order: input.order)
           update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
-          input.user.cart.clear
           input.order.update!(status: Order.statuses[:completed])
           PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
         end
