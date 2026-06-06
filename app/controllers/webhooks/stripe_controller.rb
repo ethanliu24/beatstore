@@ -34,7 +34,7 @@ module Webhooks
         head :ok and return
       end
 
-      update_order_metadata(order:, user:, session:)
+      update_order_metadata(order:, session:)
 
       case event.type
       when "checkout.session.completed"
@@ -43,9 +43,9 @@ module Webhooks
           head :ok and return
         end
 
-        fulfill_order(order:, session:)
+        fulfill_order(order:, user:, session:)
       when "checkout.session.async_payment_succeeded"
-        fulfill_order(order:, session:)
+        fulfill_order(order:, user:, session:)
       when "checkout.session.expired"
         order.update!(status: Order.statuses[:canceled])
         order.payment_transaction.update!(status: Transaction.statuses[:failed])
