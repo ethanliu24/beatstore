@@ -162,7 +162,7 @@ RSpec.describe FulfillOrderService, type: :service do
 
           expect {
             call_service(order:, session:)
-          }.to raise_error(FulfillOrderService::OrderAlreadyFulfilledError)
+          }.to raise_error(FulfillOrderService::OrderNotEligibleForFulfillment)
         }
     end
 

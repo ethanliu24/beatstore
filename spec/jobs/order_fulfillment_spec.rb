@@ -52,7 +52,7 @@ RSpec.describe OrderFulfillmentJob, type: :job do
     end
 
     it "raises an ArgumentError when the input is not an instance of FulfillOrderService::Input" do
-      allow(FulfillOrderService).to receive(:call).and_raise(FulfillOrderService::OrderAlreadyFulfilledError)
+      allow(FulfillOrderService).to receive(:call).and_raise(FulfillOrderService::OrderNotEligibleForFulfillment)
 
       expect {
         described_class.perform_now(fulfillment_input:)
