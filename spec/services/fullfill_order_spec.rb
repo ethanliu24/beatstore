@@ -131,15 +131,6 @@ RSpec.describe FulfillOrderService, type: :service do
       expect(current_transaction.currency).to eq("usd")
     end
 
-    it "clears user's cart" do
-      call_service(order:, session:)
-      order.reload
-
-      user = order.user
-
-      expect(user.cart.cart_items.count).to eq(0)
-    end
-
     it "marks order as completed" do
       call_service(order:, session:)
 

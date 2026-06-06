@@ -38,14 +38,16 @@ module Webhooks
 
       case event.type
       when "checkout.session.completed"
+        clear_user_cart!(user:)
+
         if session.payment_status == "unpaid"
           # TODO send email saying order processing
           head :ok and return
         end
 
-        fulfill_order(order:, session:)
+        fulfill_order(order:, user:, session:)
       when "checkout.session.async_payment_succeeded"
-        fulfill_order(order:, session:)
+        fulfill_order(order:, user:, session:)
       when "checkout.session.expired"
         order.update!(status: Order.statuses[:canceled])
         order.payment_transaction.update!(status: Transaction.statuses[:failed])
@@ -112,7 +114,7 @@ module Webhooks
       User.find(user_id)
     end
 
-    def fulfill_order(order:, session:)
+    def fulfill_order(order:, user:, session:)
       fulfillment_input = FulfillOrderService::Input
         .build_from_stripe_checkout_session(order:, session:)
 
@@ -137,6 +139,10 @@ module Webhooks
     def one_time_payment?(session:)
       metadata = session.metadata.to_h.with_indifferent_access
       !metadata.key?(:order_id)
+    end
+
+    def clear_user_cart!(user:)
+      user.cart.clear
     end
   end
 end

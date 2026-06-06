@@ -78,9 +78,8 @@ class FulfillOrderService
 
           attach_files_to_order_items(order: order)
           update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
-          input.user.cart.clear
-          order.update!(status: Order.statuses[:completed])
-          PurchaseMailer.with(user: input.user, order: order).purchase_complete.deliver_later
+          input.order.update!(status: Order.statuses[:completed])
+          PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
         end
       rescue OrderNotEligibleForFulfillment => e
         raise e
