@@ -34,7 +34,7 @@ module Webhooks
         head :ok and return
       end
 
-      update_order_metadata(order:, session:)
+      update_order_metadata(order:, user:, session:)
 
       case event.type
       when "checkout.session.completed"
@@ -112,11 +112,12 @@ module Webhooks
       User.find(user_id)
     end
 
-    def fulfill_order(order:, session:)
+    def fulfill_order(order:, user:, session:)
       fulfillment_input = FulfillOrderService::Input
         .build_from_stripe_checkout_session(order:, session:)
 
       OrderFulfillmentJob.perform_later(fulfillment_input:)
+      user.cart.clear
     end
 
     def update_order_metadata(order:, session:)
