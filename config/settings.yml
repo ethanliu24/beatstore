@@ -1,4 +1,3 @@
-host: "<%= ENV.fetch("APP_HOST") %>"
 email:
   producer: "<%= ENV.fetch("PRODUCER_EMAIL") %>"
   sender: "<%= ENV.fetch("MAILER_SENDER") %>"

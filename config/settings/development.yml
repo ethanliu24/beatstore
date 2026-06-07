@@ -1,1 +1,1 @@
-host: "<%= ENV.fetch("APP_HOST") %>"
+host: "<%= ENV.fetch("APP_HOST", "localhost") %>"
