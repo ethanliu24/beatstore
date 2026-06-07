@@ -1,4 +1,4 @@
 host: "<%= ENV.fetch("APP_HOST", "localhost:3000") %>"
 email:
-  producer: "ethanmadeit24@gmail.com"
+  producer: "<%= ENV.fetch("PRODUCER_EMAIL", "ethanmadeit24@gmail.com") %>"
   sender: "<%= ENV.fetch("MAILER_SENDER", "noreply@prodethan.com") %>"
