@@ -134,6 +134,9 @@ GEM
       activerecord (>= 7.0, < 9.0)
     docile (1.4.1)
     dotenv (3.2.0)
+    dotenv-rails (3.2.0)
+      dotenv (= 3.2.0)
+      railties (>= 6.1)
     drb (2.2.3)
     ed25519 (1.4.0)
     erb (6.0.4)
@@ -586,6 +589,7 @@ DEPENDENCIES
   debug
   devise (~> 5.0)
   discard (~> 2.0)
+  dotenv-rails
   factory_bot_rails
   groupdate
   importmap-rails
