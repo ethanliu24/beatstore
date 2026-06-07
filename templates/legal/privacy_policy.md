@@ -24,7 +24,7 @@ We use your data for the following purposes:
 ### 3. DATA STORAGE AND THIRD-PARTY SERVICES
 We rely on first or industry-standard third-party providers to operate our Service. By using the Site, you acknowledge that your data may be processed by:
 *   **Stripe:** For secure payment processing. [Stripe Privacy Policy](https://stripe.com/privacy).
-*   **Email Forwarding:** Communications sent via our contact form are processed through [Postmark](https://postmarkapp.com) server and forwarded to a secure administrative email.
+*   **Email Forwarding:** Communications sent via our contact form are processed through [Postmark](https://www.activecampaign.com/legal/privacy-policy) server and forwarded to a secure administrative email.
 
 ### 4. DATA RETENTION AND ARCHIVING
 **4.1. Archiving Policy:** To protect our intellectual property and verify licensing rights, we do not immediately purge all data upon deletion. When you delete a comment or account, it is removed from public view but remains archived in our secure database.
