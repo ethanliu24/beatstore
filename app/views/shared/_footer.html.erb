@@ -4,7 +4,7 @@
     <% [
       { icon: "brand-youtube", name: "Youtube", link: "https://www.youtube.com/@prodethan8266", external: true },
       { icon: "brand-instagram", name: "Instagram", link: "https://www.instagram.com/prod_ethan_", external: true },
-      { icon: "mail", name: Credentials::Email.producer_email, link: "mailto:#{Credentials::Email.producer_email}", external: false }
+      { icon: "mail", name: Settings.email.producer, link: "mailto:#{Settings.email.producer}", external: false }
     ].each do |d| %>
       <%= link_to d[:link],
         target: d[:external] ? "_blank" : nil,

@@ -2,7 +2,7 @@
   <p class="font-thin text-[0.7rem] italic">
     <%= t(
       "track.exclusive_purchase_instruction_html",
-      producer_email: "<span class='font-bold'>#{Credentials::Email.producer_email}</span>".html_safe,
+      producer_email: "<span class='font-bold'>#{Settings.email.producer}</span>".html_safe,
       contact_link: link_to(t("label.contact"), contact_path, target: "_blank", rel: "noopener noreferrer", class: "underline text-accent").html_safe
     ) %>
   </p>

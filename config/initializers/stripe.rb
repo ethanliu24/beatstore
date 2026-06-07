@@ -1,7 +1,3 @@
 require "stripe"
 
-Stripe.api_key = Rails.application.credentials.dig(
-  :stripe,
-  Rails.env.production? ? :live : :test,
-  :secret_key
-)
+Stripe.api_key = Rails.application.credentials.dig(:stripe, :secret_key)

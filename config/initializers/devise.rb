@@ -25,7 +25,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = Rails.application.credentials.dig(:email, :domain, :prod)
+  config.mailer_sender = Settings.email.sender
 
   # Configure the class responsible to send e-mails.
   config.mailer = "Devise::Mailer"
@@ -273,8 +273,8 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   config.omniauth :google_oauth2,
-    Rails.application.credentials.dig(:google_oauth2, :client_id),
-    Rails.application.credentials.dig(:google_oauth2, :client_secret),
+    Rails.application.credentials.dig(:oauth2, :google, :client_id),
+    Rails.application.credentials.dig(:oauth2, :google, :client_secret),
     {}
 
   # ==> Warden configuration

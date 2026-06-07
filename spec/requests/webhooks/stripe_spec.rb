@@ -16,10 +16,6 @@ RSpec.describe "Stripe Webhooks", type: :request do
   let!(:order_item) { create(:order_item, order:) }
   let!(:transaction) { create(:payment_transaction, order:) }
 
-  before do
-    allow(::Credentials::Stripe).to receive(:payments_webhook_secret).and_return("whsc_test")
-  end
-
   describe "POST /webhooks/stripe/payments" do
     let(:headers) { { "HTTP_STRIPE_SIGNATURE" => "valid_sig_mock" } }
 

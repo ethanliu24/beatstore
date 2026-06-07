@@ -64,7 +64,7 @@ module Webhooks
     def parse_event
       payload = request.body.read
       sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
-      endpoint_secret = ::Credentials::Stripe.payments_webhook_secret
+      endpoint_secret = Settings.stripe.payments_webhook_secret
 
       begin
         Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)

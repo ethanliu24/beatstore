@@ -12,9 +12,9 @@ class ContactMailer < ApplicationMailer
 
     mail(
       subject: @subject,
-      to: ::Credentials::Email.producer_email,
+      to: Settings.email.producer,
       reply_to: sender_email,
-      cc: ::Credentials::Email.domain_email
+      cc: Settings.email.sender
     )
   end
 end
