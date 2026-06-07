@@ -7,15 +7,12 @@ RSpec.describe ContactMailer, type: :mailer do
   let(:mailer) { ContactMailer.with(inbound_email:).contact }
 
   describe "#contact" do
-    it "sends email to both producer email, cc's itself and replies to the customer email" do
-      expect(mailer.to).to include(Settings.email.producer)
+    it "sends email to both producer email and replies to the customer email" do
+      expect(mailer.to).to include(Settings.email.sender)
       expect(mailer.to.length).to eq(1)
 
       expect(mailer.reply_to).to include(inbound_email.email)
       expect(mailer.reply_to.length).to eq(1)
-
-      expect(mailer.cc).to include(Settings.email.sender)
-      expect(mailer.cc.length).to eq(1)
 
       expect(mailer.subject).to eq(inbound_email.subject)
     end
