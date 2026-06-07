@@ -58,6 +58,9 @@ jobs:
 
     env:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      APP_HOST: "localhost"
+      MAILER_SENDER="noreply@domain.com"
+      PRODUCER_EMAIL="producer@domain.com"
 
     services:
       postgres:
