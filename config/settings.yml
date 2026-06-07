@@ -1,5 +1,4 @@
 host: "<%= ENV.fetch("APP_HOST", "prodethan.com") %>"
-secret_key_base: "<%= Rails.application.credentials.fetch(:secret_key_base) %>"
 email:
   producer: "ethanmadeit24@gmail.com"
   sender: "<%= ENV.fetch("MAILER_SENDER", "noreply@prodethan.com") %>"

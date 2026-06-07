@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../config/environments"
 require "spec_helper"
 
 RSpec.describe Settings, type: :system do
