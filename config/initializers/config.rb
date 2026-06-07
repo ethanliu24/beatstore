@@ -1,4 +1,6 @@
 Config.setup do |config|
+  config.fail_on_missing = true
+
   # Name of the constant exposing loaded settings
   config.const_name = "Settings"
 
