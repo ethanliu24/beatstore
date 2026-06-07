@@ -59,6 +59,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
     services:
       postgres:
         image: postgres
@@ -98,7 +101,6 @@ jobs:
 
       - name: Run tests
         env:
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           DATABASE_URL: postgres://beatstore:beatstore@localhost:5432
           DEPENDABOT: ${{ github.actor == 'dependabot[bot]' }}
           # REDIS_URL: redis://localhost:6379/0
