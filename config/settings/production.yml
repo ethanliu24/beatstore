@@ -7,3 +7,6 @@ oauth2:
   google:
     client_id: "<%= Rails.application.credentials.fetch(:oauth2).fetch(:google).(:client_id) %>"
     client_secret: "<%= Rails.application.credentials.fetch(:oauth2).fetch(:google).fetch(:client_secret) %>"
+smtp:
+  user_name: "<%= Rails.application.credentials.fetch(:smtp).fetch(:user_name) %>"
+  password: "<%= Rails.application.credentials.fetch(:smtp).fetch(:password) %>"

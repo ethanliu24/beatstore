@@ -45,18 +45,18 @@ Rails.application.configure do
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.delivery_method = :letter_opener  # :smtp for mail catch gem
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST"),
+    host: ENV.fetch("APP_HOST", "localhost"),
     port: ENV.fetch("APP_PORT", 3000)
   }
 
   # for mail catch gem
-  # config.action_mailer.smtp_settings = {
-  #   address: "127.0.0.1",
-  #   port: 1025
-  # }
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDR", "127.0.0.1"),
+    port: ENV.fetch("SMTP_ADDR", 1025)
+  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
