@@ -1,7 +1,7 @@
 host: "<%= ENV.fetch("APP_HOST", "localhost") %>"
 stripe:
   public_key: "pk_test"
-  secret_key: "pk_secret"
+  secret_key: "sk_test"
   payments_webhook_secret: "whsec_test"
 oauth2:
   google:
