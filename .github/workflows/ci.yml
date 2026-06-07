@@ -5,6 +5,12 @@ on:
   push:
     branches: [ main ]
 
+env:
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+  APP_HOST: "localhost"
+  MAILER_SENDER: "noreply@domain.com"
+  PRODUCER_EMAIL: "producer@domain.com"
+
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
@@ -55,9 +61,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-
-    env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
     services:
       postgres:
