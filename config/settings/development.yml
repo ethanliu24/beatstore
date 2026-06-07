@@ -1,2 +1,2 @@
-host: "<%= ENV.fetch("APP_HOST", "localhost:3000") %>"
+host: "<%= ENV.fetch("APP_HOST") %>"
 port: 3000
