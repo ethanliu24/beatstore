@@ -1,0 +1,4 @@
+stripe:
+  public_key: <%= Rails.application.credentials.dig(:stripe, :public_key) %>
+  secret_key: <%= Rails.application.credentials.dig(:stripe, :secret_key) %>
+  payments_webhook_secret: <%= Rails.application.credentials.dig(:stripe, :payments_webhook_secret) %>
