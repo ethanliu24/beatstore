@@ -1,1 +1,2 @@
 host: "localhost:3000"
+secret_key_base: "<%= Rails.application.credentials.dig(:secret_key_base) %>"
