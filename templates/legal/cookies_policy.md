@@ -2,7 +2,7 @@
 
 **Last Updated:** May 9, 2026
 
-This Cookie Policy explains how **prodethan** ("we," "us," or "our") uses cookies and similar tracking technologies on **[TODO URL]** (the "Site"). By continuing to browse our Site, you consent to our use of cookies as described in this policy.
+This Cookie Policy explains how **prodethan** ("we," "us," or "our") uses cookies and similar tracking technologies on **prodethan.com** (the "Site"). By continuing to browse our Site, you consent to our use of cookies as described in this policy.
 
 ---
 

@@ -26,7 +26,6 @@
           <p class="text-sm font-light"><%= @track.cheapest_price %></p>
         <% end %>
 
-        <%# TODO add tool tips for the following %>
         <% if current_user %>
           <div id="track-show-heart">
             <%= render "tracks/hearts/show_heart", track: @track, user_liked: current_user.hearted?(@track) %>
