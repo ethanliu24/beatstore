@@ -1,4 +1,5 @@
 host: "prodethan.com"
+secret_key_base: "<%= Rails.application.credentials.fetch(:secret_key_base) %>"
 stripe:
   public_key: "<%= Rails.application.credentials.fetch(:stripe).fetch(:public_key) %>"
   secret_key: "<%= Rails.application.credentials.fetch(:stripe).fetch(:secret_key) %>"
