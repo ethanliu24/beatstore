@@ -1,5 +1,11 @@
 # Development enviornment set up
 
+## `.env`
+The config in example should be enough for development. Make a `.env` file at root level and copy the contents from `.env.example` in it.
+- `SECRET_KEY_BASE` is empty, check in `credentials:rails` make sure it exists.
+  - If it does, either remove this from `.env` or copy the contents. This is sensitive information
+  - If it does not, generate a new one
+
 ## `settings.local.yml`
 This overrides default env config for personal local development, and is not tracked by version control.
 Create the file `config/settings.local.yml` if haven't already.
