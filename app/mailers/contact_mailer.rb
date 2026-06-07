@@ -12,9 +12,8 @@ class ContactMailer < ApplicationMailer
 
     mail(
       subject: @subject,
-      to: Settings.email.producer,
-      reply_to: sender_email,
-      cc: Settings.email.sender
+      to: Settings.email.sender,
+      reply_to: sender_email
     )
   end
 end
