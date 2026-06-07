@@ -2,3 +2,4 @@ host: "prodethan.com"
 email:
   producer: "ethanmadeit24@gmail.com"
   sender: "<%= ENV.fetch("MAILER_SENDER", "noreply@prodethan.com") %>"
+secret_key_base: "<%= Rails.application.credentials.dig(:secret_key_base) %>"
