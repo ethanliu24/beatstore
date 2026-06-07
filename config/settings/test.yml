@@ -1,1 +1,9 @@
 host: "localhost:3000"
+stripe:
+  public_key: "pk_test"
+  secret_key: "pk_secret"
+  payments_webhook_secret: "whsec_test"
+oauth2:
+  google:
+    client_id: "google_oauth2_client_id"
+    client_secret: "google_oauth2_client_id"
