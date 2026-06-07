@@ -1,4 +1,4 @@
-host: "prodethan.com"
+host: "<%= ENV.fetch("APP_HOST", "prodethan.com") %>"
 secret_key_base: "<%= Rails.application.credentials.fetch(:secret_key_base) %>"
 stripe:
   public_key: "<%= Rails.application.credentials.fetch(:stripe).fetch(:public_key) %>"
