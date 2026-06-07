@@ -10,32 +10,7 @@ A marketplace for me to store, manage and license my beats.
 ## Installation
 
 ### Stripe
-Stripe will handle payments with Stripe Checkout.
-
-1. In the rails project, enter rails credentials editing enviornment using this command:
-`VISUAL="code --wait" rails credentials:edit`
-    - _Instead of "code", you can use the command that opens the editor of your choice, e.g. "cursor"_
-    - _Locate the stripe field_
-2. Set up Stripe with the project by creating/logging in to [Stripe Dashboard](https://dashboard.stripe.com/)
-3. Copy the public and secret keys to `stripe.<env>.public_key` and `stripe.<env>.secret_key`.
-4. Get the payments webhook route signiture and paste to `stripe.<env>.payments_webhook_secret`
-
-The resulting credential file for stripe should look like this:
-```
-stripe:
-  test:
-    public_key: <sk_test_...>
-    secret_key: <sk_test_...>
-    payments_webhook_secret: <whsec_...>
-  live:
-    public_key: <sk_live_...>
-    secret_key: <sk_live_...>
-    payments_webhook_secret: <whsec_...>
-```
-
-Close the file to save.
-
-Additionally, we need to install the [Stripe CLI](https://docs.stripe.com/stripe-cli) to test Stripe webhooks locally.
+Stripe will handle payments with Stripe Checkout. Install the [Stripe CLI](https://docs.stripe.com/stripe-cli) to test Stripe webhooks locally.
 Run the following command to install it on:
 - Mac: `brew install stripe/stripe-cli/stripe`
 
@@ -65,6 +40,8 @@ rails db:setup  # set up dev and test databases for rails
 Useful commands:
 1. `psql -U $(whoami) -d postgres -c "\du"` - Checks all database roles you have
 
+## Environment Set Up
+See `ENV_SETUP.md` for more info.
 
 ## Running
 
@@ -75,7 +52,7 @@ Run this to start the server:
 $ ./bin/dev
 ```
 
-This command executes `Procfile.dev` and runs all commands defined in there. 
+This command executes `Procfile.dev` and runs all commands defined in there.
 
 ### Stripe CLI
 This is for testing Stripe webhooks locally. In a seperate terminal and run the following commands:
@@ -100,6 +77,14 @@ $ rspec <directory-or-file>  # run all tests in the given directory or file
 
 # or alternatively, use "bundle exec rspec" instead of rspec
 ```
+
+## Editing Credentials
+1. In the rails project, enter rails credentials editing enviornment using this command:
+`VISUAL="code --wait" rails credentials:edit`
+    - _Instead of "code", you can use the command that opens the editor of your choice, e.g. "cursor"_
+2. Add the desired credentials to the file
+3. Close the file to save.
+4. Fetch the credentials in the appropriate `settings.*.yml` config file, do NOT hardcode any sensitive information.
 
 ## Tabler Icons
 All icons are from [Tabler](https://tabler.io/icons). Add new icons by:

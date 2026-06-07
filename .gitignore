@@ -9,6 +9,7 @@
 
 # Ignore all environment files.
 /.env*
+!.env.example
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -40,3 +41,7 @@
 /coverage
 
 /config/credentials/development.key
+
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
