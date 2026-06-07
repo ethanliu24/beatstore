@@ -1,4 +1,4 @@
-host: prodethan.com
+host: "prodethan.com"
 email:
   producer: "ethanmadeit24@gmail.com"
   sender: "<%= ENV.fetch("MAILER_SENDER", "noreply@prodethan.com") %>"
