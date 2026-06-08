@@ -4,6 +4,12 @@ module Templates
   class LegalTemplates
     extend Templates::Reader
 
+    VERSIONS = {
+      tos: "2026.05.09.v1",
+      privacy: "2026.06.07.v1",
+      cookies: "2026.05.09.v1"
+    }.freeze
+
     class Versioning
       attr_accessor :tos, :privacy, :cookies
 
@@ -25,12 +31,6 @@ module Templates
         self.new(**h)
       end
     end
-
-    VERSIONS = {
-      tos: "2026.05.09.v1",
-      privacy: "2026.04.28.v1",
-      cookies: "2026.05.09.v1"
-    }.freeze
 
     class << self
       def current_versions

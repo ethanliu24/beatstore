@@ -1,5 +1,5 @@
 <div id="<%= "track-recommendation-#{recommendation.group}" %>"
-  class="flex flex-col justify-between items-stretch gap-4 w-50 p-3 rounded hover:bg-hover">
+  class="flex flex-col justify-between items-stretch gap-4 w-50 min-w-50 p-3 rounded hover:bg-hover">
   <div class="w-full aspect-square rounded relative flex justify-center items-center bg-secondary-bg cursor-pointer">
     <div class="recommendation-group-img w-full h-full flex justify-center items-center rounded">
       <% if recommendation.display_image.attached? %>
