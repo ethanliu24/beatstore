@@ -123,6 +123,8 @@ en:
       tos: "Terms of Service"
       privacy: "Privacy Policy"
       cookies: "Cookies Policy"
+      stripe_privacy: "Stripe Privacy Policy"
+      postmark_privacy: "Postmark Privacy Policy"
 
   legal_policies_acceptance:
     header: "We've updated our policies"

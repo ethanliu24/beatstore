@@ -15,7 +15,7 @@
       <% end %>
     <% end %>
   </div>
-  <div class="flex-1 flex flex-row justify-between items-center gap-10 gap-y-4 w-full flex-wrap">
+  <div class="flex-1 flex flex-row justify-between items-start gap-10 gap-y-4 w-full flex-wrap">
     <%= render FooterLinkSectionComponent.new(
       section: t("footer.info.section"),
       links: [
@@ -37,7 +37,9 @@
       links: [
         [ terms_of_service_path, t("footer.legal.tos") ],
         [ privacy_path, t("footer.legal.privacy") ],
-        [ cookies_path, t("footer.legal.cookies") ]
+        [ cookies_path, t("footer.legal.cookies") ],
+        [ "https://stripe.com/privacy", t("footer.legal.stripe_privacy") ],
+        [ "https://www.activecampaign.com/legal/privacy-policy", t("footer.legal.postmark_privacy") ],
       ]
     ) %>
   </div>
