@@ -105,3 +105,14 @@ $ rails tmp:clear # clear all files in tmp/
 
 $ rails tmp:storage:clear # likely what you want to run the most
 ```
+
+## Generate passwords
+- Generate using `openssl`, which is already installed in Mac and Linux environments. For example:
+```
+$ openssl rand -base64 32
+```
+
+- Generate using `ruby` directly. It should be safe too, but would double check. For example:
+```
+$ ruby -r securerandom -e "puts SecureRandom.hex(32)"
+```
