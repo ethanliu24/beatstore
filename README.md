@@ -109,7 +109,7 @@ $ rails tmp:storage:clear # likely what you want to run the most
 ## Generate passwords
 - Generate using `openssl`, which is already installed in Mac and Linux environments. For example:
 ```
-$ openssl rand -base64 32
+$ openssl rand -hex 32
 ```
 
 - Generate using `ruby` directly. It should be safe too, but would double check. For example:
