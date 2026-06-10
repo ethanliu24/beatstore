@@ -6,8 +6,15 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-# TODO config when deploying
-# Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
+cloudflare_r2:
+  service: S3
+  endpoint: <%= Rails.application.credentials.dig(:cloudflare, :r2, :access_key_id) %>
+  access_key_id: <%= Rails.application.credentials.dig(:cloudflare, :r2, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:cloudflare, :r2, :secret_access_key) %>
+  region: auto
+  bucket: <%= Rails.application.credentials.dig(:cloudflare, :r2, :bucket) %>
+
+# Coporate greed below
 # amazon:
 #   service: S3
 #   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
