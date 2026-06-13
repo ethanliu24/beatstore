@@ -1,6 +1,15 @@
 # Deployment Guide
 Assumes server runs on Ubuntu.
 
+## SSH Guide
+1. Generate SSH key on local machine, if server doesn't recognize your local machine
+- Guide: https://community.hetzner.com/tutorials/howto-ssh-key
+2. Add generated public SSH key to server
+- i.e. `id_<type>.pub`
+3. SSH into server
+- IPv4 `ssh root@<0.0.0.0>`
+- IPv6 `ssh -6 root@[IPv6]`
+
 ## PostgreSQL
 ***WIP***
 1. First install PostgreSQL if haven't:
