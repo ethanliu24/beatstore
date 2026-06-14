@@ -99,3 +99,4 @@ gem "discard", "~> 2.0"
 gem "ranked-model"
 gem "rack-attack", "~> 6.8"
 gem "config"
+gem "aws-sdk-s3", require: false
