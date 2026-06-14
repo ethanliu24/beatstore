@@ -46,8 +46,8 @@ RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
 
 # 3.
 echo "💾 Committing assets to temporary branch..."
-cp -r /public/assets /assets
-git add assets/
+cp -r ./public/assets ./assets
+git add ./assets/
 git commit -m "Internal: Compiled assets for Kamal deployment" --allow-empty
 
 # 4.
