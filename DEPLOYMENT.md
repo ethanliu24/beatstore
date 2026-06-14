@@ -1,6 +1,12 @@
 # Deployment Guide
 Assumes server runs on Ubuntu.
 
+## Deploy
+```
+$ git checkout main && git fetch && git pull
+$ `KAMAL_REGISTRY_PASSWORD=<password> RAILS_MASTER_KEY=<key> kamal deploy`
+```
+
 ## SSH Guide
 1. Generate SSH key on local machine, if server doesn't recognize your local machine
 - Guide: https://community.hetzner.com/tutorials/howto-ssh-key
