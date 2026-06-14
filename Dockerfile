@@ -20,10 +20,17 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
+ARG APP_HOST
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    APP_HOST="prodethan.com" \
+    SMTP_ADDR="smtp.postmarkapp.com" \
+    SMTP_PORT=587 \
+    MAILER_SENDER="noreply@prodethan.com" \
+    PRODUCER_EMAIL="ethanmadeit24@gmail.com" \
+    DATABASE_HOST=172.17.0.1
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
