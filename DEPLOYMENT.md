@@ -24,6 +24,7 @@ $ ./bin/deploy
 3. Since deploying with Kamal, set listen port to listen for Docker's intenral network:
 - Check IP address (should be `172.17.0.1`): `ip addr show docker0`
 - Append it the address to `listen_addresses`: `sudo nano /etc/postgresql/18/main/postgresql.conf`
+- Append this at the end of file: `host    all             all             172.16.0.0/12           scram-sha-256`
 - Restart PostgreSQL: `sudo systemctl restart postgresql`
 4. Create neccessary databases
 - `beatstore_production`
