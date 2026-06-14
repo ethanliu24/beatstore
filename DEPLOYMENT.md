@@ -55,5 +55,9 @@ $ ./bin/deploy
 ## OAuth2
 Check that OAuth2 origin and callbacks in production environment exists for:
 - [Google](https://console.cloud.google.com/auth/clients)
-  - Authorized JavaScript origins: `http://prodethan.com`
-  - Authorized redirect URIs: `http://prodethan.com/auth/google_oauth2/callback`
+  - Authorized JavaScript origins: `https://prodethan.com`
+  - Authorized redirect URIs: `https://prodethan.com/auth/google_oauth2/callback`
+- Rotating secrets:
+  - Add new secret and copy the value
+  - Put it in credentials file
+  - Disable and delete the old secret if neccessary
