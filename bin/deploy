@@ -1,52 +1,30 @@
 #!/bin/bash
 
+# Exit immediately if any command fails
 set -e
 
-TEMP_BRANCH="kamal-deploy-$(date +%s)"
-BASE_BRANCH="${1:-${BASE_BRANCH:-main}}"
+# Default to main branch if no argument is passed
+BASE_BRANCH="${1:-main}"
 
-# check if work director is clean
+# 1. Protect against deploying half-baked code
 if [ -n "$(git status --porcelain)" ]; then
-  echo "❌ Error: Your working directory has uncommitted changes. Clean them up first."
+  echo "❌ Error: Your working directory has uncommitted changes. Commit or stash them first."
   exit 1
 fi
 
-# 5. clean up trap, runs no matter what
-cleanup() {
-  echo "🧹 Cleaning up deployment artifacts..."
-  git checkout -f "$BASE_BRANCH" > /dev/null 2>&1
-  git branch -D "$TEMP_BRANCH" > /dev/null 2>&1
-  echo "✨ Back on "$BASE_BRANCH". Temp branch deleted."
-}
-trap cleanup EXIT
+echo "🚀 Starting streamlined deployment workflow..."
 
-echo "🚀 Starting deployment workflow..."
-
-# load env variables
-echo "🗝️ Loading production environment variables..."
-set -a
-source .env.production
-set +a
-
-# 1.
+# 2. Sync with Git remote to ensure you are deploying up-to-date code
+echo "🔄 Syncing with origin/$BASE_BRANCH..."
 git checkout "$BASE_BRANCH"
-git fetch origin main
-git pull origin main
-git checkout -b "$TEMP_BRANCH"
+git pull origin "$BASE_BRANCH"
 
-# 2.
-echo "📦 Precompiling assets..."
+# 3. Clear any broken local asset caches on your Mac
+echo "🧹 Clearing local asset caches..."
 bin/rails assets:clobber
-RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
 
-# 3.
-echo "💾 Committing assets to temporary branch..."
-cp -r ./public/assets ./assets
-git add ./assets/
-git commit -m "Internal: Compiled assets for Kamal deployment" --allow-empty
-
-# 4.
-echo "🚢 Deploying with Kamal..."
-kamal deploy
+# 4. Trigger Kamal using your specific production environment file
+echo "🚢 Streaming context to Hetzner Remote Builder..."
+bundle exec kamal deploy --env-file .env.production
 
 echo "🎉 Deployment successful!"
