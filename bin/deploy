@@ -22,18 +22,25 @@ trap cleanup EXIT
 
 echo "🚀 Starting deployment workflow..."
 
-# 1. Sync with origin and cut the isolated deploy branch
+# sync with origin and cut the isolated deploy branch
 git checkout "$BASE_BRANCH"
 git fetch origin main
 git pull origin main
 git checkout -b "$TEMP_BRANCH"
 
-# 2. Clear out any broken local asset caches on your Mac
+# load env variables
+
+echo "🗝️ Loading production environment variables..."
+set -a
+source .env.production
+set +a
+
+# clear out any broken local asset caches on your Mac
 echo "🧹 Clearing local asset caches..."
 bin/rails assets:clobber
 
-# 3. Deploy with Kamal using your specific production environment file
+# deploy with Kamal
 echo "🚢 Deploying with Kamal via Hetzner Remote Builder..."
-kamal deploy --env-file .env.production
+kamal deploy
 
 echo "🎉 Deployment successful!"
