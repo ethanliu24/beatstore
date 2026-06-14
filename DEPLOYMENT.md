@@ -21,6 +21,16 @@ $ ./bin/deploy
 1. First install PostgreSQL if haven't:
 2. If haven't, generate password using `openssl` and place it in credentials file
 - e.g. `openssl rand -hex 32`
+3. Since deploying with Kamal, set listen port to listen for Docker's intenral network:
+- Check IP address (should be `172.17.0.1`): `ip addr show docker0`
+- Append it the address to `listen_addresses`: `sudo nano /etc/postgresql/18/main/postgresql.conf`
+- Append this at the end of file: `host    all             all             172.16.0.0/12           scram-sha-256`
+- Restart PostgreSQL: `sudo systemctl restart postgresql`
+4. Create neccessary databases
+- `beatstore_production`
+- `beatstore_production_queue`
+- `beatstore_production_cache` (Not used atm)
+- `beatstore_production_cable` (Not used atm)
 
 ### Notes
 - Comprehensive guide: https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
