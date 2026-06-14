@@ -2,8 +2,52 @@
 
 set -e
 
-TEMP_BRANCH="kamal-deploy-$(date +%s)"
-BASE_BRANCH="${1:-${BASE_BRANCH:-main}}"
+DEPLOY_BRANCH="main"
+ENV_FILE=".env.production"
+FETCH_FROM_MAIN="true"
+
+# Function to display help
+show_help() {
+    cat << EOF
+Usage: ./bin/deploy [OPTIONS]
+
+Options:
+  --help                    Show this help message
+  --deploy-branch <name>    Set the branch to deploy (default: main)
+  --env-file <path>         Set the environment file path (default: .env.production)
+  --dont-fetch-from-main    Disable fetching from main before deployment
+
+Example:
+  ./bin/deploy --deploy-branch feature/ui-update --env-file .env.staging
+EOF
+}
+
+# load params
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+      --help)
+        show_help
+        exit 0
+        ;;
+      --deploy-branch)
+        DEPLOY_BRANCH="$2"
+        shift
+        ;;
+      --env-file)
+        ENV_FILE"$2"
+        shift
+        ;;
+      --dont-fetch-from-main)
+        FETCH_FROM_MAIN="false"
+        ;;
+      *)
+        echo "❌ Unknown parameter passed: $1. Use --help for guide."
+        exit 1
+        ;;
+    esac
+
+    shift
+done
 
 # Check if working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
@@ -11,33 +55,20 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-# Cleanup trap, runs no matter what (even if deploy fails)
-cleanup() {
-  echo "🧹 Cleaning up deployment branches..."
-  git checkout -f "$BASE_BRANCH" > /dev/null 2>&1
-  git branch -D "$TEMP_BRANCH" > /dev/null 2>&1
-  echo "✨ Back on $BASE_BRANCH. Temp branch deleted."
-}
-trap cleanup EXIT
-
 echo "🚀 Starting deployment workflow..."
 
 # sync with origin and cut the isolated deploy branch
-git checkout "$BASE_BRANCH"
-git fetch origin main
-git pull origin main
-git checkout -b "$TEMP_BRANCH"
+git checkout "$DEPLOY_BRANCH"
+if [[ "$FETCH_FROM_MAIN" == "true" ]]; then
+  git fetch origin main
+  git pull origin main
+fi
 
 # load env variables
-
 echo "🗝️ Loading production environment variables..."
 set -a
-source .env.production
+source "$ENV_FILE"
 set +a
-
-# clear out any broken local asset caches on your Mac
-echo "🧹 Clearing local asset caches..."
-bin/rails assets:clobber
 
 # deploy with Kamal
 echo "🚢 Deploying with Kamal via Hetzner Remote Builder..."
