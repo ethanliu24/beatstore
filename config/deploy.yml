@@ -1,3 +1,5 @@
+<% require "dotenv"; Dotenv.load(".env.production", overwrite: true) %>
+
 # Name of your application. Used to uniquely configure containers.
 service: beatstore
 

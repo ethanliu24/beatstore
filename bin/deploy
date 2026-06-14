@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Asset precompile fails on docker build due to bug with hardware architecture and tailwind gem.
-# This script runs the full deployment pipeline to work around this:
-# 1. Checkout out temp deploy branch
-# 2. Precompile assets
-# 3. Commit asset build in assets/ (git doesn't commit this, so kamal doesn't see it)
-# 4. Run Kamal deploy
-# 5. Clean up deploy branch
-
 set -e
 
 TEMP_BRANCH="kamal-deploy-$(date +%s)"
