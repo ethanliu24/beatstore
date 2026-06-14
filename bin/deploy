@@ -12,11 +12,6 @@ set -e
 
 TEMP_BRANCH="kamal-deploy-$(date +%s)"
 
-# load env variables
-set -a
-source .env.production
-set +a
-
 # check if work director is clean
 if [ -n "$(git status --porcelain)" ]; then
   echo "❌ Error: Your working directory has uncommitted changes. Clean them up first."
@@ -33,6 +28,12 @@ cleanup() {
 trap cleanup EXIT
 
 echo "🚀 Starting deployment workflow..."
+
+# load env variables
+echo "🗝️ Loading production environment variables..."
+set -a
+source .env.production
+set +a
 
 # 1.
 git checkout main
