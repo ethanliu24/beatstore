@@ -91,7 +91,7 @@ production:
     <<: *default
     database: beatstore_production
     username: beatstore
-    password: <%= ENV["BEATSTORE_DATABASE_PASSWORD"] %>
+    password: <%= Rails.application.credentials.dig(:postgres, :password) %>
   cache:
     <<: *primary_production
     database: beatstore_production_cache
