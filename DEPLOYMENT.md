@@ -3,8 +3,7 @@ Assumes server runs on Ubuntu.
 
 ## Deploy
 ```
-$ git checkout main && git fetch && git pull
-$ `KAMAL_REGISTRY_PASSWORD=<password> RAILS_MASTER_KEY=<key> kamal deploy`
+$ ./bin/deploy
 ```
 
 ## SSH Guide
