@@ -25,6 +25,11 @@ $ ./bin/deploy
 - Check IP address (should be `172.17.0.1`): `ip addr show docker0`
 - Append it the address to `listen_addresses`: `sudo nano /etc/postgresql/18/main/postgresql.conf`
 - Restart PostgreSQL: `sudo systemctl restart postgresql`
+4. Create neccessary databases
+- `beatstore_production`
+- `beatstore_production_queue`
+- `beatstore_production_cache` (Not used atm)
+- `beatstore_production_cable` (Not used atm)
 
 ### Notes
 - Comprehensive guide: https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
