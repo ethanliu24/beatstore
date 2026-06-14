@@ -11,6 +11,7 @@
 set -e
 
 TEMP_BRANCH="kamal-deploy-$(date +%s)"
+BASE_BRANCH="${1:-${BASE_BRANCH:-main}}"
 
 # check if work director is clean
 if [ -n "$(git status --porcelain)" ]; then
@@ -21,9 +22,9 @@ fi
 # 5. clean up trap, runs no matter what
 cleanup() {
   echo "🧹 Cleaning up deployment artifacts..."
-  git checkout -f main > /dev/null 2>&1
+  git checkout -f "$BASE_BRANCH" > /dev/null 2>&1
   git branch -D "$TEMP_BRANCH" > /dev/null 2>&1
-  echo "✨ Back on main. Temp branch deleted."
+  echo "✨ Back on "$BASE_BRANCH". Temp branch deleted."
 }
 trap cleanup EXIT
 
@@ -36,7 +37,7 @@ source .env.production
 set +a
 
 # 1.
-git checkout main
+git checkout "$BASE_BRANCH"
 git fetch origin main
 git pull origin main
 git checkout -b "$TEMP_BRANCH"
