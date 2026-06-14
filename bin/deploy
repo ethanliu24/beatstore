@@ -2,7 +2,20 @@
 
 set -e
 
-DEPLOY_BRANCH="${1:-${DEPLOY_BRANCH:-main}}"
+DEPLOY_BRANCH="main"
+
+# load params
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+      --deploy-branch)
+        DEPLOY_BRANCH="$2";
+        shift ;;
+      *)
+        echo "❌ Unknown parameter passed: $1";
+        exit 1 ;;
+    esac
+    shift
+done
 
 # Check if working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
