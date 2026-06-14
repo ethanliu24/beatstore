@@ -45,8 +45,11 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
+# Because there's trouble building docker images on different architectures for tailwind gem,
+# we'll skip asset pre build here and do it manually, and copy the built assets.
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+COPY assets/ ./public/assets
 
 
 
