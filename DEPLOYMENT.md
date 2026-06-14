@@ -3,6 +3,7 @@ Assumes server runs on Ubuntu.
 
 ## Deploy
 ```
+# if rebooted server / or turning power on again, ssh in to server and restart pg: sudo systemctl restart postgresql
 $ ./bin/deploy
 ```
 
