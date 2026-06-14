@@ -85,14 +85,14 @@ builder:
   arch: amd64
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
-  # remote: ssh://docker@docker-builder-server
+  remote: ssh://root@49.12.6.72
   #
   # # Pass arguments and secrets to the Docker build process
-  # args:
-  #   RUBY_VERSION: 3.3.0
-  # secrets:
+  args:
+    RUBY_VERSION: 3.3.0
+  secrets:
+    - RAILS_MASTER_KEY
   #   - GITHUB_TOKEN
-  #   - RAILS_MASTER_KEY
 
 # Use a different ssh user than root
 ssh:
