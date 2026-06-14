@@ -3,6 +3,7 @@
 set -e
 
 DEPLOY_BRANCH="main"
+ENV_FILE=".env.production"
 FETCH_FROM_MAIN="true"
 
 # load params
@@ -11,7 +12,10 @@ while [[ "$#" -gt 0 ]]; do
       --deploy-branch)
         DEPLOY_BRANCH="$2";
         shift ;;
-      --dont-fetch-from-main
+      --env-file)
+        ENV_FILE"$2";
+        shift ;;
+      --dont-fetch-from-main)
         FETCH_FROM_MAIN="false";
       *)
         echo "❌ Unknown parameter passed: $1";
@@ -39,7 +43,7 @@ fi
 # load env variables
 echo "🗝️ Loading production environment variables..."
 set -a
-source .env.production
+source "$ENV_FILE"
 set +a
 
 # deploy with Kamal
