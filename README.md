@@ -10,7 +10,7 @@ A marketplace for me to store, manage and license my beats.
 
 ## Installation
 
-### Stripe
+### Stripe CLI
 Stripe will handle payments with Stripe Checkout. Install the [Stripe CLI](https://docs.stripe.com/stripe-cli) to test Stripe webhooks locally.
 Run the following command to install it on:
 - Mac: `brew install stripe/stripe-cli/stripe`
@@ -62,8 +62,7 @@ This is for testing Stripe webhooks locally. In a seperate terminal and run the 
     - This will prompt you to go to an url to log in
 2. `stripe listen --forward-to localhost:3000/webhooks/stripe/payments`
     - This will output a webhook signiture event in format `whsec_...`
-    - Open rails credentials: `VISUAL="code --wait" rails credentials:edit`
-    - in `stripe.test.payments_webhook_secret`, if the signiture is different, replace it with the newly generated signiture
+    - Add the secret to `stripe.payments_webhook_secret` in `settings.local.yml`
 3. `stripe trigger <webhook-event>`
     - This will trigger a Stripe webhook event and will be picked up by localhost
 
