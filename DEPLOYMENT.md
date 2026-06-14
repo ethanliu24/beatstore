@@ -11,11 +11,20 @@ Assumes server runs on Ubuntu.
 - IPv6 `ssh -6 root@[IPv6]`
 
 ## PostgreSQL
-***WIP***
+
+### Set up
 1. First install PostgreSQL if haven't:
-- `sudo` or run some script
 2. If haven't, generate password using `openssl` and place it in env variable `BEATSTORE_DATABASE_PASSWORD`
 - e.g. `openssl rand -hex 32`
+
+### Notes
+- Comprehensive guide: https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
+- Prod uses version 18.4 as of Jun 13, 2026. Check with `psql --version`
+- PostgreSQL should not be exposed to the public and should only listen on localhost. Installation should default to listening locally only. If want to expose, follow the guide for details on how to do it securly.
+- Create user `beatstore` with `CREATE DB` rights
+- Test role is set up correctly:
+  - In `psql`, `\du` to see all users
+  - Check password (it will prompt to enter): `psql -U beatstore -d postgres -h localhost -W`
 
 ## OAuth2
 Check that OAuth2 origin and callbacks in production environment exists for:
