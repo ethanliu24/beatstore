@@ -1,30 +1,39 @@
 #!/bin/bash
 
-# Exit immediately if any command fails
 set -e
 
-# Default to main branch if no argument is passed
-BASE_BRANCH="${1:-main}"
+TEMP_BRANCH="kamal-deploy-$(date +%s)"
+BASE_BRANCH="${1:-${BASE_BRANCH:-main}}"
 
-# 1. Protect against deploying half-baked code
+# Check if working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
-  echo "❌ Error: Your working directory has uncommitted changes. Commit or stash them first."
+  echo "❌ Error: Your working directory has uncommitted changes. Clean them up first."
   exit 1
 fi
 
-echo "🚀 Starting streamlined deployment workflow..."
+# Cleanup trap, runs no matter what (even if deploy fails)
+cleanup() {
+  echo "🧹 Cleaning up deployment branches..."
+  git checkout -f "$BASE_BRANCH" > /dev/null 2>&1
+  git branch -D "$TEMP_BRANCH" > /dev/null 2>&1
+  echo "✨ Back on $BASE_BRANCH. Temp branch deleted."
+}
+trap cleanup EXIT
 
-# 2. Sync with Git remote to ensure you are deploying up-to-date code
-echo "🔄 Syncing with origin/$BASE_BRANCH..."
+echo "🚀 Starting deployment workflow..."
+
+# 1. Sync with origin and cut the isolated deploy branch
 git checkout "$BASE_BRANCH"
-git pull origin "$BASE_BRANCH"
+git fetch origin main
+git pull origin main
+git checkout -b "$TEMP_BRANCH"
 
-# 3. Clear any broken local asset caches on your Mac
+# 2. Clear out any broken local asset caches on your Mac
 echo "🧹 Clearing local asset caches..."
 bin/rails assets:clobber
 
-# 4. Trigger Kamal using your specific production environment file
-echo "🚢 Streaming context to Hetzner Remote Builder..."
-bundle exec kamal deploy --env-file .env.production
+# 3. Deploy with Kamal using your specific production environment file
+echo "🚢 Deploying with Kamal via Hetzner Remote Builder..."
+kamal deploy --env-file .env.production
 
 echo "🎉 Deployment successful!"
