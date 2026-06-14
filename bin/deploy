@@ -2,8 +2,7 @@
 
 set -e
 
-TEMP_BRANCH="kamal-deploy-$(date +%s)"
-BASE_BRANCH="${1:-${BASE_BRANCH:-main}}"
+DEPLOY_BRANCH="${1:-${DEPLOY_BRANCH:-main}}"
 
 # Check if working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
@@ -14,10 +13,9 @@ fi
 echo "🚀 Starting deployment workflow..."
 
 # sync with origin and cut the isolated deploy branch
-git checkout "$BASE_BRANCH"
+git checkout "$DEPLOY_BRANCH"
 git fetch origin main
 git pull origin main
-git checkout -b "$TEMP_BRANCH"
 
 # load env variables
 echo "🗝️ Loading production environment variables..."
