@@ -10,6 +10,7 @@ env:
   APP_HOST: "localhost"
   MAILER_SENDER: "noreply@domain.com"
   PRODUCER_EMAIL: "producer@domain.com"
+  DATABASE_HOST: 1.2.3.4
 
 jobs:
   scan_ruby:
