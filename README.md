@@ -2,10 +2,11 @@
 A marketplace for me to store, manage and license my beats.
 
 ## Handy Links
-- [Hetzner Projects](https://console.hetzner.com/projects): Deployments
+- [Stripe Dashboard](https://dashboard.stripe.com/): Payments
 - [Cloudfare Admin](https://dash.cloudflare.com): Domain, DNS & internet services
-- [DockerHub](https://hub.docker.com/): Deployment images
+- [Hetzner Projects](https://console.hetzner.com/projects): Deployments
 - [Google OAuth2 Client](https://console.cloud.google.com/auth/clients): Oauth2
+- [DockerHub](https://hub.docker.com/): Deployment images
 - [Coveralls](https://coveralls.io/github/ethanliu24/beatstore): Code coverage report
 
 ## Installation
