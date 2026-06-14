@@ -1,59 +1,46 @@
 #!/bin/bash
 
-# Asset precompile fails on docker build due to bug with hardware architecture and tailwind gem.
-# This script runs the full deployment pipeline to work around this:
-# 1. Checkout out temp deploy branch
-# 2. Precompile assets
-# 3. Commit asset build in assets/ (git doesn't commit this, so kamal doesn't see it)
-# 4. Run Kamal deploy
-# 5. Clean up deploy branch
-
 set -e
 
 TEMP_BRANCH="kamal-deploy-$(date +%s)"
 BASE_BRANCH="${1:-${BASE_BRANCH:-main}}"
 
-# check if work director is clean
+# Check if working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
   echo "❌ Error: Your working directory has uncommitted changes. Clean them up first."
   exit 1
 fi
 
-# 5. clean up trap, runs no matter what
+# Cleanup trap, runs no matter what (even if deploy fails)
 cleanup() {
-  echo "🧹 Cleaning up deployment artifacts..."
+  echo "🧹 Cleaning up deployment branches..."
   git checkout -f "$BASE_BRANCH" > /dev/null 2>&1
   git branch -D "$TEMP_BRANCH" > /dev/null 2>&1
-  echo "✨ Back on "$BASE_BRANCH". Temp branch deleted."
+  echo "✨ Back on $BASE_BRANCH. Temp branch deleted."
 }
 trap cleanup EXIT
 
 echo "🚀 Starting deployment workflow..."
 
-# load env variables
-echo "🗝️ Loading production environment variables..."
-set -a
-source .env.production
-set +a
-
-# 1.
+# sync with origin and cut the isolated deploy branch
 git checkout "$BASE_BRANCH"
 git fetch origin main
 git pull origin main
 git checkout -b "$TEMP_BRANCH"
 
-# 2.
-echo "📦 Precompiling assets..."
-RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
+# load env variables
 
-# 3.
-echo "💾 Committing assets to temporary branch..."
-cp -r ./public/assets ./assets
-git add ./assets/
-git commit -m "Internal: Compiled assets for Kamal deployment" --allow-empty
+echo "🗝️ Loading production environment variables..."
+set -a
+source .env.production
+set +a
 
-# 4.
-echo "🚢 Deploying with Kamal..."
+# clear out any broken local asset caches on your Mac
+echo "🧹 Clearing local asset caches..."
+bin/rails assets:clobber
+
+# deploy with Kamal
+echo "🚢 Deploying with Kamal via Hetzner Remote Builder..."
 kamal deploy
 
 echo "🎉 Deployment successful!"

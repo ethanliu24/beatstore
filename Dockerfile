@@ -20,10 +20,17 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
+ARG APP_HOST
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    APP_HOST="prodethan.com" \
+    SMTP_ADDR="smtp.postmarkapp.com" \
+    SMTP_PORT=587 \
+    MAILER_SENDER="noreply@prodethan.com" \
+    PRODUCER_EMAIL="ethanmadeit24@gmail.com" \
+    DATABASE_HOST=172.17.0.1
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -45,11 +52,8 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Because there's trouble building docker images on different architectures for tailwind gem,
-# we'll skip asset pre build here and do it manually, and copy the built assets.
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-COPY ./assets/ ./public/assets
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
 
