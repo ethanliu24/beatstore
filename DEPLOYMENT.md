@@ -14,7 +14,7 @@ Assumes server runs on Ubuntu.
 
 ### Set up
 1. First install PostgreSQL if haven't:
-2. If haven't, generate password using `openssl` and place it in env variable `BEATSTORE_DATABASE_PASSWORD`
+2. If haven't, generate password using `openssl` and place it in credentials file
 - e.g. `openssl rand -hex 32`
 
 ### Notes
