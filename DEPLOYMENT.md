@@ -26,6 +26,11 @@ Assumes server runs on Ubuntu.
   - In `psql`, `\du` to see all users
   - Check password (it will prompt to enter): `psql -U beatstore -d postgres -h localhost -W`
 
+## Docker Hub
+- Install Docker CLI if haven't
+- Locate beatstore image in DockerHub
+- Generate new Personal Access Tokens as `KAMAL_REGISTRY_PASSWORD` in env file
+
 ## OAuth2
 Check that OAuth2 origin and callbacks in production environment exists for:
 - [Google](https://console.cloud.google.com/auth/clients)
