@@ -6,20 +6,44 @@ DEPLOY_BRANCH="main"
 ENV_FILE=".env.production"
 FETCH_FROM_MAIN="true"
 
+# Function to display help
+show_help() {
+    cat << EOF
+Usage: ./bin/deploy [OPTIONS]
+
+Options:
+  --help                    Show this help message
+  --deploy-branch <name>    Set the branch to deploy (default: main)
+  --env-file <path>         Set the environment file path (default: .env.production)
+  --dont-fetch-from-main    Disable fetching from main before deployment
+
+Example:
+  ./bin/deploy --deploy-branch feature/ui-update --env-file .env.staging
+EOF
+}
+
 # load params
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+      --help)
+        show_help
+        exit 0
+        ;;
       --deploy-branch)
-        DEPLOY_BRANCH="$2";
-        shift ;;
+        DEPLOY_BRANCH="$2"
+        shift
+        ;;
       --env-file)
-        ENV_FILE"$2";
-        shift ;;
+        ENV_FILE"$2"
+        shift
+        ;;
       --dont-fetch-from-main)
-        FETCH_FROM_MAIN="false";
+        FETCH_FROM_MAIN="false"
+        ;;
       *)
-        echo "❌ Unknown parameter passed: $1";
-        exit 1 ;;
+        echo "❌ Unknown parameter passed: $1. Use --help for guide."
+        exit 1
+        ;;
     esac
 
     shift
