@@ -356,7 +356,7 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-    psych (5.3.1)
+    psych (5.4.0)
       date
       stringio
     public_suffix (6.0.2)
@@ -534,7 +534,7 @@ GEM
     stripe (19.2.0)
       bigdecimal
       logger
-    tailwindcss-rails (4.4.0)
+    tailwindcss-rails (4.5.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
     tailwindcss-ruby (4.3.0)
@@ -647,7 +647,7 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   stripe
-  tailwindcss-rails (~> 4.4)
+  tailwindcss-rails (~> 4.5)
   tailwindcss-ruby (~> 4.3)
   thruster
   turbo-rails
