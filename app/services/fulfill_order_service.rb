@@ -85,8 +85,8 @@ class FulfillOrderService
       rescue OrderNotEligibleForFulfillment => e
         raise e
       rescue => e
-        # TODO log any errors
-        raise OrderFulfillmentFailedError, e.message
+        Rails.error.report(e)
+        raise OrderFulfillmentFailedError
       end
     end
 
@@ -94,7 +94,7 @@ class FulfillOrderService
 
     def attach_files_to_order_items(order:)
       order.order_items.each do |item|
-        begin
+        Rails.error.handle do
           case item.product_type
           when Track.name
             track = Track.find(item.product_snapshot["id"])
@@ -110,8 +110,6 @@ class FulfillOrderService
           end
 
           item.update!(is_immutable: true)
-        rescue => _e
-          # TODO log any errors
         end
       end
     end

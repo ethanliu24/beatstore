@@ -134,7 +134,6 @@ class User < ApplicationRecord
       accepted_cookies_version: versions.cookies
     }
 
-    # TODO try rescue and log for monitoring
     Users::UpdateAcceptedLegalPoliciesService.new(user: self, **args).call
   end
 end

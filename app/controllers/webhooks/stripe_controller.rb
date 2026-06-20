@@ -68,14 +68,13 @@ module Webhooks
 
       begin
         Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
-      rescue JSON::ParserError, Stripe::SignatureVerificationError => _e
-        # TODO log exception
+      rescue JSON::ParserError, Stripe::SignatureVerificationError => e
+        Rails.error.report(e)
         head :bad_request and return
       end
     end
 
     def check_idempotency(event_id:, order:, user:)
-      # TODO log errors
       begin
         # db engine should handle data races, can assume this op is atomic
         StripePaymentEvent.create!(event_id:, order:, user:)
@@ -95,20 +94,18 @@ module Webhooks
     end
 
     def find_order(session:)
-      begin
+      order_id = nil
+      Rails.error.handle do
         order_id = session.metadata.order_id
-      rescue => _e
-        # TODO log if any errors
       end
 
       Order.find(order_id)
     end
 
     def find_user(session:)
-      begin
+      user_id = nil
+      Rails.error.handle do
         user_id = session.metadata.user_id
-      rescue => _e
-        # TODO log if any errors
       end
 
       User.find(user_id)
