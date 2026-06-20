@@ -96,4 +96,5 @@ Rails.application.configure do
   # config.solid_errors.email_from = ""
   # config.solid_errors.email_to = ""
   config.solid_errors.base_controller_class = "Admin::BaseController"
+  config.solid_errors.destroy_after = 6.months
 end
