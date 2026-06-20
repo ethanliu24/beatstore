@@ -19,8 +19,7 @@ module Admin
     private
 
     def get_quick_stats(window_size:)
-      db_records = CrunchAdminAnalyticsService.new(window_size:).call
-      db_records.map { |(name, relation)| QuickStats.new(name:, relation:, window: window_size) }
+      CrunchAdminAnalyticsService.new(window_size:).get_quick_stats
     end
   end
 end
