@@ -13,19 +13,26 @@ class CrunchAdminAnalyticsService
     sales = get_analytics(Transaction).where(status: Transaction.statuses[:completed])
     free_downloads = get_analytics(FreeDownload)
 
+    users = get_analytics(User, unscoped: true)
+    registered_users = users.kept.where.not(role: :guest)
+    deleted_users = users.discarded
+
     {
+      sales:,
       plays:,
       hearts:,
       comments:,
-      sales:,
-      free_downloads:
+      free_downloads:,
+      registered_users:,
+      deleted_users:
     }
   end
 
   private
 
-  def get_analytics(entity)
-    entity.where(created_at: @time_frame..Time.current)
+  def get_analytics(entity, unscoped: false)
+    scope = unscoped ? entity.unscoped : entity
+    scope.where(created_at: @time_frame..Time.current)
   end
 
   def time_frame(window)

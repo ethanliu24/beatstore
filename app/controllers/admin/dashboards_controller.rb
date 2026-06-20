@@ -4,16 +4,12 @@ module Admin
   class DashboardsController < Admin::BaseController
     def show
       @window_size = WindowSize::ONE_MONTH
-      db_records = CrunchAdminAnalyticsService.new(window_size: @window_size).call
-      @cum_stats = process_cum_stats(db_records)
-      @chron_stats = process_chron_stats(db_records)
+      @cum_stats, @chron_stats = process_data(window_size: @window_size)
     end
 
     def quick_stats
       window_size = params[:window_size]
-      db_records = CrunchAdminAnalyticsService.new(window_size:).call
-      @cum_stats = process_cum_stats(db_records)
-      @chron_stats = process_chron_stats(db_records)
+      @cum_stats, @chron_stats = process_data(window_size:)
 
       respond_to do |format|
         format.turbo_stream
@@ -22,24 +18,36 @@ module Admin
 
     private
 
+    def process_data(window_size:)
+      db_records = CrunchAdminAnalyticsService.new(window_size:).call
+      cum_stats = process_cum_stats(db_records)
+      chron_stats = process_chron_stats(db_records)
+
+      [ cum_stats, chron_stats ]
+    end
+
     def process_cum_stats(db_records)
-      {
-        plays: db_records[:plays].count,
-        hearts: db_records[:hearts].count,
-        comments: db_records[:comments].count,
-        sales: Money.new(db_records[:sales].reduce(0) { |acc, t| acc + t.amount_cents }).format,
-        free_downloads: db_records[:free_downloads].count
-      }
+      db_records.each_with_object({}) do |(key, relation), stats|
+        stat = if key == :sales
+          Money.new(relation.reduce(0) { |acc, t| acc + t.amount_cents }).format
+        else
+          relation.count
+        end
+
+        stats[key] = stat
+      end
     end
 
     def process_chron_stats(db_records)
-      {
-        plays: group_metrics_by_time(db_records[:plays]).count,
-        hearts: group_metrics_by_time(db_records[:hearts]).count,
-        comments: group_metrics_by_time(db_records[:comments]).count,
-        sales: group_metrics_by_time(db_records[:sales]).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) },
-        free_downloads: group_metrics_by_time(db_records[:free_downloads]).count
-      }
+      db_records.each_with_object({}) do |(key, relation), stats|
+        stat = if key == :sales
+          group_metrics_by_time(relation).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
+        else
+          group_metrics_by_time(relation).count
+        end
+
+        stats[key] = stat
+      end
     end
 
     def group_metrics_by_time(stats)
