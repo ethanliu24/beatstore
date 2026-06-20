@@ -94,8 +94,10 @@ Rails.application.routes.draw do
       end
     end
 
-    mount MissionControl::Jobs::Engine, at: :jobs
-    mount SolidErrors::Engine, at: :exceptions
+    authenticate :user, ->(user) { user.admin? } do
+      mount MissionControl::Jobs::Engine, at: :jobs
+      mount SolidErrors::Engine, at: :exceptions
+    end
   end
 
   get "contact", to: "contacts#new", as: :contact
