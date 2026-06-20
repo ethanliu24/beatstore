@@ -80,5 +80,11 @@ RSpec.describe Metric, type: :model do
 
       expect(metric.prunes_at).to eq(nil)
     end
+
+    it "should raise an error if validation fails" do
+      expect {
+        Metric.track("undefined")
+      }.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 end
