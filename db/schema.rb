@@ -160,9 +160,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_20_154835) do
   end
 
   create_table "metrics", force: :cascade do |t|
-    t.string "event_name"
-    t.boolean "prune_after_time"
-    t.jsonb "tags"
+    t.string "event_name", null: false
+    t.boolean "prune_after_time", default: true
+    t.jsonb "tags", default: {}
     t.datetime "time"
     t.index ["event_name", "tags"], name: "index_metrics_on_event_name_and_tags"
     t.index ["tags"], name: "index_metrics_on_tags", opclass: :jsonb_path_ops, using: :gin

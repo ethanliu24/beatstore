@@ -1,9 +1,9 @@
 class CreateMetrics < ActiveRecord::Migration[8.0]
   def change
     create_table :metrics do |t|
-      t.string :event_name
-      t.boolean :prune_after_time
-      t.jsonb :tags
+      t.string :event_name, null: false
+      t.boolean :prune_after_time, default: true
+      t.jsonb :tags, default: {}
       t.datetime :time
     end
 
