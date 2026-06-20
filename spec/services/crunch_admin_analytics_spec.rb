@@ -54,7 +54,7 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
 
       expect(quick_stats.is_a?(Array)).to eq(true)
       quick_stats.each do |qs|
-        expect(qs.is_a?(CrunchAdminAnalyticsService::QuickStats)).to eq(true)
+        expect(qs.is_a?(CrunchAdminAnalyticsService::QuickStat)).to eq(true)
       end
     end
   end
