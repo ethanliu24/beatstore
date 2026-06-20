@@ -89,8 +89,8 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.solid_errors.connects_to = { database: { writing: :errors } }
-  # config.solid_errors.send_emails = true
-  # config.solid_errors.email_from = ""
-  # config.solid_errors.email_to = ""
+  config.solid_errors.send_emails = true
+  config.solid_errors.email_from = ENV.fetch("ERROR_MAIL_SENDER", "errors@domain.com")
+  config.solid_errors.email_to = ENV.fetch("ERROR_MAIL_SENDER", "errors@domain.com")
   config.solid_errors.base_controller_class = "Admin::BaseController"
 end

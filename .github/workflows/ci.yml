@@ -9,6 +9,7 @@ env:
   RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
   APP_HOST: "localhost"
   MAILER_SENDER: "noreply@domain.com"
+  ERROR_MAIL_SENDER: "errors@domain.com"
   PRODUCER_EMAIL: "producer@domain.com"
   DATABASE_HOST: 1.2.3.4
 
