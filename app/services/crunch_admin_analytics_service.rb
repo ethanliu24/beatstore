@@ -14,8 +14,8 @@ class CrunchAdminAnalyticsService
     free_downloads = get_analytics(FreeDownload)
 
     users = get_analytics(User, unscoped: true)
-    users_created = users.kept.where.not(role: :guest)
-    users_deleted = users.discarded
+    registered_users = users.kept.where.not(role: :guest)
+    deleted_users = users.discarded
 
     {
       plays:,
@@ -23,8 +23,8 @@ class CrunchAdminAnalyticsService
       comments:,
       sales:,
       free_downloads:,
-      users_created:,
-      users_deleted:
+      registered_users:,
+      deleted_users:
     }
   end
 

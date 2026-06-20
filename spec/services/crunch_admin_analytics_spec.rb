@@ -17,6 +17,7 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       create(:payment_transaction, amount_cents: 9999, status: :pending, created_at: 1.hour.ago, order:)
       create(:free_download, created_at: 1.hour.ago, user:)
       create(:free_download, created_at: 2.days.ago, user:)
+      create(:user, username: "deleted", email: "deleted@exmaple.com")
 
       records = call_service(window_size: WindowSize::ONE_DAY)
 
@@ -25,6 +26,8 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       expect(records[:comments]).to be_a(ActiveRecord::Relation)
       expect(records[:sales]).to be_a(ActiveRecord::Relation)
       expect(records[:free_downloads]).to be_a(ActiveRecord::Relation)
+      expect(records[:registered_users]).to be_a(ActiveRecord::Relation)
+      expect(records[:deleted_users]).to be_a(ActiveRecord::Relation)
 
       expect(records[:plays].all? { |v| v.respond_to?(:id) }).to be true
       expect(records[:sales].all? { |v| v.respond_to?(:id) }).to be true
@@ -38,6 +41,8 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
       expect(records[:comments]).to eq([])
       expect(records[:sales]).to eq([])
       expect(records[:free_downloads]).to eq([])
+      expect(records[:registered_users]).to eq([])
+      expect(records[:deleted_users]).to eq([])
     end
   end
 
