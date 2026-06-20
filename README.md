@@ -88,6 +88,15 @@ $ rspec <directory-or-file>  # run all tests in the given directory or file
 3. Close the file to save.
 4. Fetch the credentials in the appropriate `settings.*.yml` config file, do NOT hardcode any sensitive information.
 
+## Adding new ENV vars
+1. Try to use env vars for configuration only
+2. If adding env vars for production environment, hard fail if variable doesn't exist (for neccessary ones of course) so it can be seen when deploying. For development/test env, add a fallback
+3. After deciding to add an env var, make sure to update it in the following places accordingly:
+  - `.env.example`
+  - `Dockerfile`
+  - `.github/workflows/ci.yml`
+  - `config/settings.yml`
+
 ## Tabler Icons
 All icons are from [Tabler](https://tabler.io/icons). Add new icons by:
 1. Visit the website and find the icon wanted
