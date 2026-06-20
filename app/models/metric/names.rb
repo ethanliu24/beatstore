@@ -2,7 +2,7 @@
 
 require "set"
 
-module Metrics
+module Metric
   class Names
     DEFINED_NAMES = Set.new([]).freeze
 

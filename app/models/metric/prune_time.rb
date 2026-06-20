@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metrics
+module Metric
   class PruneTime
     DEFAULT = 3.months
   end
