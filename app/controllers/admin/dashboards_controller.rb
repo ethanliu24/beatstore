@@ -4,16 +4,12 @@ module Admin
   class DashboardsController < Admin::BaseController
     def show
       @window_size = WindowSize::ONE_MONTH
-      db_records = CrunchAdminAnalyticsService.new(window_size: @window_size).call
-      @cum_stats = process_cum_stats(db_records)
-      @chron_stats = process_chron_stats(db_records)
+      @cum_stats, @chron_stats = process_data(window_size: @window_size)
     end
 
     def quick_stats
       window_size = params[:window_size]
-      db_records = CrunchAdminAnalyticsService.new(window_size:).call
-      @cum_stats = process_cum_stats(db_records)
-      @chron_stats = process_chron_stats(db_records)
+      @cum_stats, @chron_stats = process_data(window_size:)
 
       respond_to do |format|
         format.turbo_stream
@@ -21,6 +17,14 @@ module Admin
     end
 
     private
+
+    def process_data(window_size:)
+      db_records = CrunchAdminAnalyticsService.new(window_size:).call
+      cum_stats = process_cum_stats(db_records)
+      chron_stats = process_chron_stats(db_records)
+
+      [ cum_stats, chron_stats ]
+    end
 
     def process_cum_stats(db_records)
       {
