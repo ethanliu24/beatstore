@@ -94,5 +94,13 @@ RSpec.describe CheckoutsController, type: :request do
       expect(acceptance.privacy_version).to eq("test-2.0")
       expect(acceptance.cookies_version).to eq("test-1.0")
     end
+
+    it "should track a checkout intent" do
+      expect {
+        post checkout_url
+      }.to change(Metric, :count).by(1)
+
+      expect(Metric.where(event_name: Metrics::Name::STRIPE_CHECKOUT_INTENT).count).to eq(1)
+    end
   end
 end
