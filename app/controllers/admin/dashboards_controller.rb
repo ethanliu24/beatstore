@@ -28,7 +28,9 @@ module Admin
         hearts: db_records[:hearts].count,
         comments: db_records[:comments].count,
         sales: Money.new(db_records[:sales].reduce(0) { |acc, t| acc + t.amount_cents }).format,
-        free_downloads: db_records[:free_downloads].count
+        free_downloads: db_records[:free_downloads].count,
+        users_created: db_records[:users_created].count,
+        users_deleted: db_records[:users_deleted].count
       }
     end
 
@@ -38,7 +40,9 @@ module Admin
         hearts: group_metrics_by_time(db_records[:hearts]).count,
         comments: group_metrics_by_time(db_records[:comments]).count,
         sales: group_metrics_by_time(db_records[:sales]).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) },
-        free_downloads: group_metrics_by_time(db_records[:free_downloads]).count
+        free_downloads: group_metrics_by_time(db_records[:free_downloads]).count,
+        users_created: group_metrics_by_time(db_records[:users_created]).count,
+        users_deleted: group_metrics_by_time(db_records[:users_deleted]).count
       }
     end
 

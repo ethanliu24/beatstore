@@ -13,16 +13,18 @@ class CrunchAdminAnalyticsService
     sales = get_analytics(Transaction).where(status: Transaction.statuses[:completed])
     free_downloads = get_analytics(FreeDownload)
 
-    users = get_analytics(User, scoped: false)
+    users = get_analytics(User, unscoped: true)
     users_created = users.kept
-    uesrs_deleted = users.discarded
+    users_deleted = users.discarded
 
     {
       plays:,
       hearts:,
       comments:,
       sales:,
-      free_downloads:
+      free_downloads:,
+      users_created:,
+      users_deleted:
     }
   end
 
