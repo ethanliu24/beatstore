@@ -189,6 +189,17 @@ RSpec.describe FulfillOrderService, type: :service do
         call_service(order:, session:)
       }.to raise_error(FulfillOrderService::OrderFulfillmentFailedError)
     end
+
+    it "tracks a metric if fulfillment succeeded" do
+      expect {
+        call_service(order:, session:)
+      }.to change(Metric, :count).by(1)
+
+      metric = Metric.last
+
+      expect(metric.event_name).to eq(Metrics::Name::ORDER_FULFILLMENT_SUCEEDED)
+      expect(metric.tags).to eq({ "order_id" => order.id })
+    end
   end
 
   private

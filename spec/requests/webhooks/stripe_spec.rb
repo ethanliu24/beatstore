@@ -165,6 +165,23 @@ RSpec.describe "Stripe Webhooks", type: :request do
       expect(order.reload.metadata).to eq(expected_metadata)
     end
 
+    it "tracks a one time payment event" do
+      event = Stripe::Event.construct_from(
+        id: "123",
+        type: "checkout.session.completed",
+        data: { object: { metadata: {} } }
+      )
+
+      allow(Stripe::Webhook).to receive(:construct_event).and_return(event)
+
+      expect {
+        post webhooks_stripe_payments_url, params: {}, headers: headers
+      }.to change(Metric, :count).by(1)
+
+      expect(response).to have_http_status(:ok)
+      expect(Metric.where(event_name: Metrics::Name::STRIPE_ONE_TIME_PAYMENT).count).to eq(1)
+    end
+
     context "idempotency detection" do
       it "skips event for completed event" do
         event = build_event(type: "checkout.session.completed", event_id: "unique_event")

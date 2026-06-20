@@ -13,15 +13,19 @@ class CheckoutsController < ApplicationController
       currency: "USD"
     )
 
+    metadata = {
+      order_id: @order.id,
+      user_id: current_or_guest_user.id
+    }
+
+    Metric.track(Metrics::Name::STRIPE_CHECKOUT_INTENT, tags: metadata)
+
     session = Stripe::Checkout::Session.create({
       line_items: line_items,
       mode: "payment",
       success_url: success_checkout_url,
       cancel_url: cancel_checkout_url,
-      metadata: {
-        order_id: @order.id,
-        user_id: current_or_guest_user.id
-      }
+      metadata:
     })
 
     redirect_to session.url, status: :see_other, allow_other_host: true
