@@ -80,6 +80,7 @@ gem "cocoon"
 gem "countries", "~> 8.0"
 gem "redcarpet"
 gem "mission_control-jobs"
+gem "solid_errors"
 
 gem "devise", "~> 5.0"
 gem "omniauth"

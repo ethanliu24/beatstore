@@ -2,13 +2,25 @@
 
 require "rails_helper"
 
-RSpec.describe MissionControl::Jobs, type: :request do
+class TestSolidErrorsController < Admin::BaseController
+  def index
+    head :ok
+  end
+end
+
+RSpec.describe SolidErrors, type: :request do
+  before do
+    allow_any_instance_of(SolidErrors::ErrorsController).to receive(:index) do |controller|
+      controller.head :ok
+    end
+  end
+
   describe "get admin/jobs" do
     it "should let admin visit the page" do
       user = create(:admin)
       sign_in user, scope: :user
 
-      get admin_mission_control_jobs_path
+      get admin_solid_errors_path
 
       expect(response).to have_http_status(:ok)
     end
@@ -17,7 +29,7 @@ RSpec.describe MissionControl::Jobs, type: :request do
       user = create(:user)
       sign_in user, scope: :user
 
-      get admin_mission_control_jobs_path
+      get admin_solid_errors_path
 
       expect(response).to have_http_status(:not_found)
     end
@@ -26,7 +38,7 @@ RSpec.describe MissionControl::Jobs, type: :request do
       user = create(:guest)
       sign_in user, scope: :user
 
-      get admin_mission_control_jobs_path
+      get admin_solid_errors_path
 
       expect(response).to have_http_status(:not_found)
     end

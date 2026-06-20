@@ -24,13 +24,17 @@ default: &default
 
 
 development:
-  primay:
+  primary:
     <<: *default
     database: beatstore_development
   queue:
     <<: *default
     database: beatstore_development_queue
     migrations_paths: db/queue_migrate
+  errors:
+    <<: *default
+    database: beatstore_development_errors
+    migrations_paths: db/errors_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -105,3 +109,7 @@ production:
     <<: *primary_production
     database: beatstore_production_cable
     migrations_paths: db/cable_migrate
+  errors:
+    <<: *primary_production
+    database: beatstore_production_errors
+    migrations_paths: db/errors_migrate

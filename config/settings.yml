@@ -1,3 +1,4 @@
 email:
   producer: "<%= ENV.fetch("PRODUCER_EMAIL") %>"
   sender: "<%= ENV.fetch("MAILER_SENDER") %>"
+  error: "<%= ENV.fetch("ERROR_MAIL_SENDER") %>"

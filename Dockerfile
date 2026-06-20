@@ -29,6 +29,7 @@ ENV RAILS_ENV="production" \
     SMTP_ADDR="smtp.postmarkapp.com" \
     SMTP_PORT=587 \
     MAILER_SENDER="noreply@prodethan.com" \
+    ERROR_MAIL_SENDER="errors@prodethan.com" \
     PRODUCER_EMAIL="ethanmadeit24@gmail.com" \
     DATABASE_HOST=172.17.0.1
 

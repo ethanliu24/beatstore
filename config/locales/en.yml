@@ -499,6 +499,7 @@ en:
       transactions: "Transactions"
       recommendations: "Recommendations"
       jobs: "Jobs"
+      exceptions: "Exceptions"
 
   checkout:
     common:
