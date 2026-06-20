@@ -9,8 +9,8 @@ class Metric < ApplicationRecord
 
   class << self
     def track(event_name, tags: {}, prune: true, prunes_after: PruneTime::DEFAULT)
-      prunes_at = prune ? prunes_after : nil
       created_at = Time.current
+      prunes_at = prune ? created_at + prunes_after : nil
 
       Metric.create!(event_name:, tags:, prunes_at:, created_at:)
     end
