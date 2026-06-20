@@ -22,7 +22,7 @@ module Webhooks
       session = event.data.object
 
       if one_time_payment?(session:)
-        # TODO log
+        Metric.track(Metrics::Name::STRIPE_ONE_TIME_PAYMENT)
         head :ok and return
       end
 

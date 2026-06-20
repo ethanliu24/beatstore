@@ -5,6 +5,7 @@ require "set"
 module Metrics
   class Name
     TEST = "test"
+    STRIPE_ONE_TIME_PAYMENT = "stripe_one_time_payment"
 
     class << self
       def is_defined?(name)
