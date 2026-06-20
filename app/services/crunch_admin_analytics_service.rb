@@ -14,7 +14,7 @@ class CrunchAdminAnalyticsService
     free_downloads = get_analytics(FreeDownload)
 
     users = get_analytics(User, unscoped: true)
-    users_created = users.kept
+    users_created = users.kept.where.not(role: :guest)
     users_deleted = users.discarded
 
     {
