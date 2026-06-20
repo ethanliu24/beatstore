@@ -6,6 +6,7 @@ module Metrics
   class Name
     TEST = "test"
     STRIPE_ONE_TIME_PAYMENT = "stripe_one_time_payment"
+    STRIPE_CHECKOUT_INTENT = "stripe_checkout_intent"
 
     class << self
       def is_defined?(name)
