@@ -1,3 +1,3 @@
 <%= turbo_stream.update "quick-stats" do %>
-  <%= render partial: "admin/dashboards/quick_stats", locals: { @quick_stats } %>
+  <%= render partial: "admin/dashboards/quick_stats", locals: { quick_stats: @quick_stats } %>
 <% end %>
