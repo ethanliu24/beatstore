@@ -1,19 +1,14 @@
 <div class="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 gap-x-6 gap-y-3 w-full mb-10"
   data-tabs-toggle="#admin-dashboard-quick-stats" role="tablist">
-  <% @quick_stats.each do |qs| %>
-    <%= render partial: "admin/dashboards/quick_stats_tab", locals: {
-      icon_name: qs.icon,
-      title: t("admin.dashboards.quick_stats.#{qs.name}"),
-      stats: qs.cum_stats,
-      tab_id: qs.name
-    } %>
+  <% quick_stats.each do |quick_stat| %>
+    <%= render partial: "admin/dashboards/quick_stats_tab", locals: { quick_stat: } %>
   <% end %>
 </div>
 <div id="admin-dashboard-quick-stats" class="w-full h-full">
-  <% @quick_stats.each do |qs| %>
+  <% quick_stats.each do |qs| %>
     <div id="<%= "#{qs.name}_chart" %>" class="<%= "#{qs.name == :sales ? "" : "hidden"}" %>" role="tabpanel">
       <div class="text-center font-bold text-secondary-txt mb-4"><%= "#{qs.name}".humanize.upcase %></div>
-      <%= line_chart qs.chron_stats,
+      <%= line_chart qs.chron_stat,
         xtitle: "DATE",
         ytitle: "#{qs.name}".humanize.upcase
       %>

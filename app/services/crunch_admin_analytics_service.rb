@@ -29,7 +29,7 @@ class CrunchAdminAnalyticsService
 
   def get_quick_stats
     raw_data = call
-    raw_data.map { |(name, relation)| QuickStats.new(name:, relation:, window: @window_size) }
+    raw_data.map { |(name, relation)| QuickStat.new(name:, relation:, window: @window_size) }
   end
 
   private

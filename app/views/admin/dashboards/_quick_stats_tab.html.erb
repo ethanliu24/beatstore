@@ -1,8 +1,8 @@
 <button class="flex flex-col justify-between items-start bg-secondary-bg py-4 px-4 rounded gap-2 cursor-pointer hover:bg-hover"
-  data-tabs-target="#<%= "#{tab_id}_chart" %>" type="button" role="tab">
+  data-tabs-target="#<%= "#{quick_stat.name}_chart" %>" type="button" role="tab">
   <div class="flex justify-center items-center gap-2">
-    <%= icon icon_name, variant: "filled", class: "text-accent w-3 h-3" %>
-    <p class="text-secondary-txt text-xs"><%= title %></p>
+    <%= icon quick_stat.icon, variant: "filled", class: "text-accent w-3 h-3" %>
+    <p class="text-secondary-txt text-xs"><%= t("admin.dashboards.quick_stats.#{quick_stat.name}") %></p>
   </div>
-  <p class="text-xl"><%= stats %></p>
+  <p class="text-xl"><%= quick_stat.cum_stat %></p>
 </button>
