@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Solid Errors</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= render "layouts/solid_errors/style" %>
+  </head>
+  <body class="pb-4">
+    <main class="max-w-6xl mx-auto px-4">
+      <%= content_for?(:content) ? yield(:content) : yield %>
+    </main>
+
+    <div class="fixed top-0 left-0 right-0 text-center py-2">
+      <%= render "shared/toasts", flash: flash %>
+    </div>
+
+    <script>
+      document.body.style.padding = "16px 24px";
+    </script>
+  </body>
+</html>
