@@ -95,6 +95,7 @@ Rails.application.routes.draw do
     end
 
     mount MissionControl::Jobs::Engine, at: :jobs
+    mount SolidErrors::Engine, at: :exceptions
   end
 
   get "contact", to: "contacts#new", as: :contact
