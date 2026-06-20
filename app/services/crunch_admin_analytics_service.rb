@@ -18,10 +18,10 @@ class CrunchAdminAnalyticsService
     deleted_users = users.discarded
 
     {
+      sales:,
       plays:,
       hearts:,
       comments:,
-      sales:,
       free_downloads:,
       registered_users:,
       deleted_users:
