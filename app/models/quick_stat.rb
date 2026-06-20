@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Meant to be used with CrunchAdminAnalyticsService
 class QuickStat
   # Variant filled only
   DEFAULT_ICON = "analyze"
