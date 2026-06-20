@@ -36,19 +36,37 @@ RSpec.describe CrunchAdminAnalyticsService, type: :service do
     it "returns zeroed cumulative stats and empty chron stats when no records exist" do
       records = call_service(window_size: WindowSize::ONE_DAY)
 
-      expect(records[:plays]).to eq([])
-      expect(records[:hearts]).to eq([])
-      expect(records[:comments]).to eq([])
-      expect(records[:sales]).to eq([])
-      expect(records[:free_downloads]).to eq([])
-      expect(records[:registered_users]).to eq([])
-      expect(records[:deleted_users]).to eq([])
+      expect(records[:plays].count).to eq(0)
+      expect(records[:hearts].count).to eq(0)
+      expect(records[:comments].count).to eq(0)
+      expect(records[:sales].count).to eq(0)
+      expect(records[:free_downloads].count).to eq(0)
+      expect(records[:registered_users].count).to eq(0)
+      expect(records[:deleted_users].count).to eq(0)
+    end
+  end
+
+  describe ".get_quick_stats" do
+    it "returns a list of quick stats" do
+      create(:user)
+
+      quick_stats = call_service(window_size: WindowSize::ONE_DAY, raw_data: false)
+
+      expect(quick_stats.is_a?(Array)).to eq(true)
+      quick_stats.each do |qs|
+        expect(qs.is_a?(CrunchAdminAnalyticsService::QuickStats)).to eq(true)
+      end
     end
   end
 
   private
 
-  def call_service(window_size:)
-    CrunchAdminAnalyticsService.new(window_size:).call
+  def call_service(window_size:, raw_data: true)
+    service = CrunchAdminAnalyticsService.new(window_size:)
+    if raw_data
+      service.call
+    else
+      service.get_quick_stats
+    end
   end
 end
