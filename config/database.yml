@@ -105,3 +105,7 @@ production:
     <<: *primary_production
     database: beatstore_production_cable
     migrations_paths: db/cable_migrate
+  errors:
+    <<: *primary_production
+    database: app_production_errors
+    migrations_paths: db/errors_migrate
