@@ -2,7 +2,6 @@
 
 class Metric < ApplicationRecord
   validates :event_name, presence: true
-  validates :prunes_at, presence: true
   validates :created_at, presence: true
   validate :event_name_is_defined
   validate :tags_is_hash
