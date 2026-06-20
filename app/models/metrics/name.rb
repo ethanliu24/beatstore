@@ -2,7 +2,7 @@
 
 require "set"
 
-module Metric
+module Metrics
   class Name
     TEST = "test"
 
@@ -15,7 +15,7 @@ module Metric
 
       def defined_names
         @defined_names ||= Set.new(
-          Names.constants.map { |const_name| Names.const_get(const_name) }
+          Name.constants.map { |const_name| Name.const_get(const_name) }
         )
       end
     end

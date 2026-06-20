@@ -8,7 +8,7 @@ class Metric < ApplicationRecord
   validate :tags_is_hash
 
   class << self
-    def track(event_name, tags: {}, prune: true, prunes_after: PruneTime::DEFAULT)
+    def track(event_name, tags: {}, prune: true, prunes_after: Metrics::PruneTime::DEFAULT)
       created_at = Time.current
       prunes_at = prune ? created_at + prunes_after : nil
 
@@ -16,14 +16,16 @@ class Metric < ApplicationRecord
     end
   end
 
+  private
+
   def event_name_is_defined
-    unless Names.is_defined?(self.event_name)
+    unless Metrics::Name.is_defined?(event_name)
       errors.add(:event_name, "is not defined - add in Metric::Names")
     end
   end
 
   def tags_is_hash
-    unless tag_names.kind_of?(Hash)
+    unless tags.kind_of?(Hash)
       errors.add(:tags, "must be a hash")
     end
   end
