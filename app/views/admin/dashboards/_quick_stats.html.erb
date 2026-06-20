@@ -1,32 +1,16 @@
 <div class="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 gap-x-6 gap-y-3 w-full mb-10"
   data-tabs-toggle="#admin-dashboard-quick-stats" role="tablist">
-  <%# Variant filled only %>
-  <% tab_icons = {
-    sales: "receipt-dollar",
-    plays: "player-play",
-    hearts: "heart",
-    comments: "message",
-    free_downloads: "file-download",
-    registered_users: "user",
-    deleted_users: "square-rounded-x"
-  } %>
-
-  <% @cum_stats.each do |name, stats| %>
-    <%= render partial: "admin/dashboards/quick_stats_tab", locals: {
-      icon_name: tab_icons.fetch(name, "analyze"),
-      title: t("admin.dashboards.quick_stats.#{name}"),
-      stats:,
-      tab_id: name
-    } %>
+  <% quick_stats.each do |quick_stat| %>
+    <%= render partial: "admin/dashboards/quick_stats_tab", locals: { quick_stat: } %>
   <% end %>
 </div>
 <div id="admin-dashboard-quick-stats" class="w-full h-full">
-  <% @chron_stats.each do |name, stats| %>
-    <div id="<%= "#{name}_chart" %>" class="<%= "#{name == :sales ? "" : "hidden"}" %>" role="tabpanel">
-      <div class="text-center font-bold text-secondary-txt mb-4"><%= "#{name}".humanize.upcase %></div>
-      <%= line_chart stats,
+  <% quick_stats.each do |qs| %>
+    <div id="<%= "#{qs.name}_chart" %>" class="<%= "#{qs.name == :sales ? "" : "hidden"}" %>" role="tabpanel">
+      <div class="text-center font-bold text-secondary-txt mb-4"><%= "#{qs.name}".humanize.upcase %></div>
+      <%= line_chart qs.chron_stat,
         xtitle: "DATE",
-        ytitle: "#{name}".upcase
+        ytitle: "#{qs.name}".humanize.upcase
       %>
     </div>
   <% end %>

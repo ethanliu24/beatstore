@@ -2,8 +2,7 @@
 
 class CrunchAdminAnalyticsService
   def initialize(window_size:)
-    @window = window_size
-    @time_frame = time_frame(@window)
+    @window_size = window_size
   end
 
   def call
@@ -28,13 +27,19 @@ class CrunchAdminAnalyticsService
     }
   end
 
+  def get_quick_stats
+    raw_data = call
+    raw_data.map { |(name, relation)| QuickStat.new(name:, relation:, window: @window_size) }
+  end
+
   private
 
   def get_analytics(entity, unscoped: false)
     scope = unscoped ? entity.unscoped : entity
-    scope.where(created_at: @time_frame..Time.current)
+    scope.where(created_at: time_frame(@window_size)..Time.current)
   end
 
+  # TODO refactor to a service
   def time_frame(window)
     case window
     when WindowSize::ONE_HOUR

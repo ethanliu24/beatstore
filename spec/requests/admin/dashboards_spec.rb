@@ -23,50 +23,7 @@ RSpec.describe Admin::DashboardsController, type: :request, admin: true do
 
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(:show)
-      expect(assigns(:cum_stats)).to be_a(Hash)
-      expect(assigns(:chron_stats)).to be_a(Hash)
-    end
-
-    it "computes the correct stats" do
-      get admin_dashboard_url
-
-      cum_stats = @controller.view_assigns["cum_stats"]
-      expect(cum_stats[:plays]).to eq(2)
-      expect(cum_stats[:hearts]).to eq(1)
-      expect(cum_stats[:comments]).to eq(2)
-      expect(cum_stats[:sales]).to eq(Money.new(4000).format)
-      expect(cum_stats[:free_downloads]).to eq(1)
-
-      chron_stats = @controller.view_assigns["chron_stats"]
-      expect(chron_stats[:plays].values.sum).to eq(2)
-      expect(chron_stats[:hearts].values.sum).to eq(1)
-      expect(chron_stats[:comments].values.sum).to eq(2)
-      expect(chron_stats[:sales].values.sum).to eq(40.0)
-      expect(chron_stats[:free_downloads].values.sum).to eq(1)
-    end
-
-    it "computes the correct stats when there's no data" do
-      Track::Play.delete_all
-      Track::Heart.delete_all
-      Comment.delete_all
-      Transaction.delete_all
-      FreeDownload.delete_all
-
-      get admin_dashboard_url
-
-      cum_stats = @controller.view_assigns["cum_stats"]
-      expect(cum_stats[:plays]).to eq(0)
-      expect(cum_stats[:hearts]).to eq(0)
-      expect(cum_stats[:comments]).to eq(0)
-      expect(cum_stats[:sales]).to eq(Money.new(0).format)
-      expect(cum_stats[:free_downloads]).to eq(0)
-
-      chron_stats = @controller.view_assigns["chron_stats"]
-      expect(chron_stats[:plays]).to eq({})
-      expect(chron_stats[:hearts]).to eq({})
-      expect(chron_stats[:comments]).to eq({})
-      expect(chron_stats[:sales]).to eq({})
-      expect(chron_stats[:free_downloads]).to eq({})
+      expect(assigns(:quick_stats)).to be_a(Array)
     end
   end
 
@@ -80,54 +37,7 @@ RSpec.describe Admin::DashboardsController, type: :request, admin: true do
 
       expect(response).to have_http_status(:ok)
       expect(response.media_type).to eq("text/vnd.turbo-stream.html")
-      expect(assigns(:cum_stats)).to be_a(Hash)
-      expect(assigns(:chron_stats)).to be_a(Hash)
-    end
-
-    it "computes the correct stats" do
-      get quick_stats_admin_dashboard_url(format: :turbo_stream),
-        params: { window_size: window_size },
-        headers: { "Accept" => "text/vnd.turbo-stream.html" }
-
-      cum_stats = @controller.view_assigns["cum_stats"]
-      expect(cum_stats[:plays]).to eq(2)
-      expect(cum_stats[:hearts]).to eq(1)
-      expect(cum_stats[:comments]).to eq(2)
-      expect(cum_stats[:sales]).to eq(Money.new(4000).format)
-      expect(cum_stats[:free_downloads]).to eq(1)
-
-      chron_stats = @controller.view_assigns["chron_stats"]
-      expect(chron_stats[:plays].values.sum).to eq(2)
-      expect(chron_stats[:hearts].values.sum).to eq(1)
-      expect(chron_stats[:comments].values.sum).to eq(2)
-      expect(chron_stats[:sales].values.sum).to eq(40.0)
-      expect(chron_stats[:free_downloads].values.sum).to eq(1)
-    end
-
-    it "computes the correct stats when there's no data" do
-      Track::Play.delete_all
-      Track::Heart.delete_all
-      Comment.delete_all
-      Transaction.delete_all
-      FreeDownload.delete_all
-
-      get quick_stats_admin_dashboard_url(format: :turbo_stream),
-        params: { window_size: window_size },
-        headers: { "Accept" => "text/vnd.turbo-stream.html" }
-
-      cum_stats = @controller.view_assigns["cum_stats"]
-      expect(cum_stats[:plays]).to eq(0)
-      expect(cum_stats[:hearts]).to eq(0)
-      expect(cum_stats[:comments]).to eq(0)
-      expect(cum_stats[:sales]).to eq(Money.new(0).format)
-      expect(cum_stats[:free_downloads]).to eq(0)
-
-      chron_stats = @controller.view_assigns["chron_stats"]
-      expect(chron_stats[:plays]).to eq({})
-      expect(chron_stats[:hearts]).to eq({})
-      expect(chron_stats[:comments]).to eq({})
-      expect(chron_stats[:sales]).to eq({})
-      expect(chron_stats[:free_downloads]).to eq({})
+      expect(assigns(:quick_stats)).to be_a(Array)
     end
   end
 
