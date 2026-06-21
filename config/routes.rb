@@ -95,7 +95,9 @@ Rails.application.routes.draw do
     end
 
     resources :metrics, only: [ :index ] do
-      get :dashboards
+      collection do
+        get :dashboards
+      end
     end
 
     authenticate :user, ->(user) { user.admin? } do

@@ -14,7 +14,7 @@ class Api::MetricsController < ApplicationController
   def line_chart_metrics(event_name, tags: {}, &tag_filter)
     relation = Metric
       .where(event_name:)
-      .where(created_at: BuildTimeFrameWindowService.time_frame(window: @window)..Time.current)
+      .where(created_at: BuildTimeFrameWindowService.time_frame(@window)..Time.current)
       .where("tags @> ?", tags.to_json)
 
     if tag_filter

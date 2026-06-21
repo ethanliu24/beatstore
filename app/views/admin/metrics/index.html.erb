@@ -1,10 +1,24 @@
 <% title(t("admin.metrics.index.tab_title")) %>
 
-<%= render PageTitleComponent.new(
-  title: t("admin.metrics.index.page_title"),
-  subtitle: t("admin.metrics.index.page_subtitle")
-) %>
+<div class="flex justify-between items-center w-full">
+  <%= render PageTitleComponent.new(
+    title: t("admin.metrics.index.page_title"),
+    subtitle: t("admin.metrics.index.page_subtitle")
+  ) %>
+
+  <select class="py-1 px-2 cursor-pointer bg-secondary-bg focus:outline-none focus:ring-0 focus:border-none roudned"
+    data-controller="selector-turbo"
+    data-selector-turbo-url-value="<%= dashboards_admin_metrics_path %>"
+    data-selector-turbo-param-value="window"
+    data-action="change->selector-turbo#change">
+    <% WindowSize.sizes.each do |size| %>
+      <option value="<%= size %>" <%= "selected" if size == @window %>>
+        <%= size.humanize %>
+      </option>
+    <% end %>
+  </select>
+</div>
 
 <div id="metric-dashboards-container" class="w-full h-full">
-  <%= render "admin/metrics/dashboards" %>
+  <%= render "admin/metrics/dashboards", { window: @window } %>
 </div>

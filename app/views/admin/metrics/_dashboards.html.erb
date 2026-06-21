@@ -5,7 +5,7 @@
     class: "metrics-charts-section-title" %>
   <div class="grid grid-cols-2 gap-x-4 gap-y-8 auto-rows-min">
     <div>
-      <%= line_chart api_metrics_stripe_checkout_intent_path,
+      <%= line_chart api_metrics_stripe_checkout_intent_path(window:),
         title: Metrics::Name::STRIPE_CHECKOUT_INTENT, ytitle: "Intents", refresh: %>
     </div>
   </div>
