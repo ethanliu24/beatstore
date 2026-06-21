@@ -110,6 +110,10 @@ Rails.application.routes.draw do
     namespace :templates do
       get :contracts, to: "get_contract_templates"
     end
+
+    namespace :metrics do
+      get :stripe_checkout_intent, to: "stripe_checkout_intent"
+    end
   end
 
   namespace :webhooks do
