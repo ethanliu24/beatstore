@@ -14,7 +14,7 @@ class QuickStat
     deleted_users: "square-rounded-x"
   }.freeze
 
-  attr_reader :name, :cum_stat, :chron_stat
+  attr_reader :name
 
   def initialize(name:, relation:, window:)
     @name = name
@@ -53,7 +53,7 @@ class QuickStat
     when :sales
       grouped.sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
     else
-      grouped
+      grouped.count
     end
   end
 end
