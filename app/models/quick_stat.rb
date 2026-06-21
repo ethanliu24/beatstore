@@ -53,20 +53,4 @@ class QuickStat
       group_metrics_by_time(@relation).count
     end
   end
-
-  # TODO would be helpful to refactor to a service, and take the key to group in param
-  def group_metrics_by_time(relation)
-    case @window
-    when WindowSize::ONE_HOUR
-      relation.group_by_minute(:created_at)
-    when WindowSize::TWELVE_HOURS, WindowSize::ONE_DAY, WindowSize::THREE_DAYS
-      relation.group_by_hour(:created_at)
-    when WindowSize::ONE_WEEK, WindowSize::ONE_MONTH
-      relation.group_by_day(:created_at)
-    when WindowSize::SIX_MONTHS, WindowSize::ONE_YEAR
-      relation.group_by_week(:created_at)
-    else
-      relation.group_by_day(:created_at)
-    end
-  end
 end
