@@ -5,6 +5,16 @@
   subtitle: t("admin.metrics.index.page_subtitle")
 ) %>
 
-<div>
-  <%= line_chart api_metrics_stripe_checkout_intent_path %>
+<% refresh = Admin::MetricsController::CHART_REFRESH_SECONDS %>
+<div class="w-full h-full">
+  <section class="metrics-charts-section">
+    <%= content_tag :h2, t("metrics.index.sections.payments_and_fulfillment"),
+      class: "metrics-charts-section-title" %>
+    <div class="grid grid-cols-2 gap-x-4 gap-y-8 auto-rows-min">
+      <div>
+        <%= line_chart api_metrics_stripe_checkout_intent_path,
+          title: Metrics::Name::STRIPE_CHECKOUT_INTENT, ytitle: "Intents", refresh: %>
+      </div>
+    </div>
+  </section>
 </div>

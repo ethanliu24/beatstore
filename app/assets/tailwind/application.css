@@ -297,6 +297,15 @@
   .recs-tag-selected {
     @apply bg-accent/90 text-primary-txt border-secondary-bg hover:text-primary-txt;
   }
+
+  /* Metrics Charts */
+  .metrics-charts-section {
+    @apply flex flex-col justify-start items-stretch gap-2;
+  }
+
+  .metrics-charts-section-title {
+    @apply tracking-wider font-light italic text-lg text-accent;
+  }
 }
 
 /* Admin tracks page layout */

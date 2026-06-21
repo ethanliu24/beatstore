@@ -340,6 +340,8 @@ en:
         tab_title: "Metrics"
         page_title: "Metrics"
         page_subtitle: "See metrics here"
+        sections:
+          payments_and_fulfillment: "Payments & Fulfillment"
 
   users:
     passwords:
