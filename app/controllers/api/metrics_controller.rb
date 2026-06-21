@@ -6,12 +6,16 @@ class Api::MetricsController < ApplicationController
   before_action :set_window
 
   def stripe_checkout_intent
-    relation = get_metrics_relation(Metrics::Name::STRIPE_CHECKOUT_INTENT)
-    metrics = group_by_time(relation).count
-    render json: metrics
+    render json: line_chart_metrics(Metrics::Name::STRIPE_CHECKOUT_INTENT)
   end
 
   private
+
+  def line_chart_metrics(event_name, tags: {})
+    relation = get_metrics_relation(event_name)
+    metrics = group_by_time(relation)
+    metrics.count
+  end
 
   def get_metrics_relation(event_name, tags: {})
     time_frame = BuildTimeFrameWindowService.time_frame(window: @window)..Time.current
