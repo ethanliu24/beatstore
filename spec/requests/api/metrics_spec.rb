@@ -11,8 +11,9 @@ RSpec.describe Api::MetricsController, type: :request do
     end
 
     it "should let admins access stripe_checkout_intent" do
-      get api_metrics_stripe_checkout_intent_path
+      get api_metrics_stripe_checkout_intent_path(window: WindowSize::ONE_DAY)
       expect(response).to have_http_status(:ok)
+      expect(assigns[:window]).to eq(WindowSize::ONE_DAY)
     end
   end
 
