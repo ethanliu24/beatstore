@@ -19,7 +19,9 @@ class Api::MetricsController < ApplicationController
 
   def get_metrics_relation(event_name, tags: {})
     time_frame = BuildTimeFrameWindowService.time_frame(window: @window)..Time.current
-    Metric.where(event_name:, created_at: time_frame)
+    Metric
+      .where(event_name:, created_at: time_frame)
+      .where("tags @> ?", tags.to_json)
   end
 
   def group_by_time(relation)
