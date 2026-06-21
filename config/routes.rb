@@ -94,6 +94,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :metrics, only: [ :index ]
+
     authenticate :user, ->(user) { user.admin? } do
       mount MissionControl::Jobs::Engine, at: :jobs
       mount SolidErrors::Engine, at: :exceptions
@@ -107,6 +109,10 @@ Rails.application.routes.draw do
     resources :tracks, only: [ :show ]
     namespace :templates do
       get :contracts, to: "get_contract_templates"
+    end
+
+    namespace :metrics do
+      get :stripe_checkout_intent, to: "stripe_checkout_intent"
     end
   end
 

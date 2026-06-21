@@ -335,6 +335,13 @@ en:
         create: "Create"
         update: "Update"
         back: "Back to recommendations"
+    metrics:
+      index:
+        tab_title: "Metrics"
+        page_title: "Metrics"
+        page_subtitle: "See metrics here"
+        sections:
+          payments_and_fulfillment: "Payments & Fulfillment"
 
   users:
     passwords:
@@ -499,6 +506,7 @@ en:
       transactions: "Transactions"
       recommendations: "Recommendations"
       jobs: "Jobs"
+      metrics: "Metrics"
       exceptions: "Exceptions"
 
   checkout:
