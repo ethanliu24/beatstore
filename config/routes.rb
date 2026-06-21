@@ -94,7 +94,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :metrics, only: [ :index ]
+    resources :metrics, only: [ :index ] do
+      get :dashboards
+    end
 
     authenticate :user, ->(user) { user.admin? } do
       mount MissionControl::Jobs::Engine, at: :jobs
