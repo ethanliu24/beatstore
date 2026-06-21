@@ -94,6 +94,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :metrics, only: [ :index ]
+
     authenticate :user, ->(user) { user.admin? } do
       mount MissionControl::Jobs::Engine, at: :jobs
       mount SolidErrors::Engine, at: :exceptions
