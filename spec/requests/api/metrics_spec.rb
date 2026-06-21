@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::MetricsController, type: :request do
+RSpec.describe Api::MetricsController, type: :request do
   context "admin" do
     let(:user) { create(:admin) }
 
