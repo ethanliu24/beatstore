@@ -11,11 +11,16 @@ class Api::MetricsController < ApplicationController
 
   private
 
-  def line_chart_metrics(event_name, tags: {})
+  def line_chart_metrics(event_name, tags: {}, &tag_filter)
     relation = Metric
       .where(event_name:)
       .where(created_at: BuildTimeFrameWindowService.time_frame(window: @window)..Time.current)
       .where("tags @> ?", tags.to_json)
+
+    if tag_filter
+      ids = relation.select { |record| tag_filter.call(record.tags) }.map(&:id)
+      relation = Metric.where(id: ids)
+    end
 
     metrics = BuildTimeFrameWindowService.group_metrics_by_time(
       relation,
