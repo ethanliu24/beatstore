@@ -499,6 +499,7 @@ en:
       transactions: "Transactions"
       recommendations: "Recommendations"
       jobs: "Jobs"
+      metrics: "Metrics"
       exceptions: "Exceptions"
 
   checkout:
