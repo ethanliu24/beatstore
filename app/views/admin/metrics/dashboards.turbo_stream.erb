@@ -1,0 +1,3 @@
+<%= turbo_stream.update "metric-dashboards-container" do %>
+  <%= render "admin/metrics/dashboards", { window: @window } %>
+<% end %>

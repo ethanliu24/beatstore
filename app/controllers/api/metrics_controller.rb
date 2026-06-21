@@ -14,7 +14,7 @@ class Api::MetricsController < ApplicationController
   def line_chart_metrics(event_name, tags: {}, &tag_filter)
     relation = Metric
       .where(event_name:)
-      .where(created_at: BuildTimeFrameWindowService.time_frame(window: @window)..Time.current)
+      .where(created_at: BuildTimeFrameWindowService.time_frame(@window)..Time.current)
       .where("tags @> ?", tags.to_json)
 
     if tag_filter
@@ -32,7 +32,7 @@ class Api::MetricsController < ApplicationController
   end
 
   def set_window
-    @window = params[:window] || WindowSize::ONE_DAY
+    @window = params.require(:window)
   end
 
   def return_if_not_admin
