@@ -46,11 +46,14 @@ class QuickStat
   end
 
   def calculate_chron_stat
+    grouped = BuildTimeFrameWindowService
+      .group_metrics_by_time(@relation, window: @window, column: :created_at)
+
     case @name
     when :sales
-      group_metrics_by_time(@relation).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
+      grouped.sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
     else
-      group_metrics_by_time(@relation).count
+      grouped
     end
   end
 end
