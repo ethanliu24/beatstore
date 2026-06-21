@@ -4,7 +4,6 @@ module Admin
   class MetricsController < Admin::BaseController
     CHART_REFRESH_SECONDS = 60
 
-    def index
-    end
+    def index; end
   end
 end
