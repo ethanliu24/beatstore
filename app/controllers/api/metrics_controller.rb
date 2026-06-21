@@ -32,7 +32,7 @@ class Api::MetricsController < ApplicationController
   end
 
   def set_window
-    @window = params[:window] || WindowSize::ONE_DAY
+    @window = params.require(:window)
   end
 
   def return_if_not_admin
