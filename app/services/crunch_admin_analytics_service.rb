@@ -36,28 +36,7 @@ class CrunchAdminAnalyticsService
 
   def get_analytics(entity, unscoped: false)
     scope = unscoped ? entity.unscoped : entity
-    scope.where(created_at: time_frame(@window_size)..Time.current)
-  end
-
-  # TODO refactor to a service
-  def time_frame(window)
-    case window
-    when WindowSize::ONE_HOUR
-      1.hour.ago
-    when WindowSize::TWELVE_HOURS
-      12.hours.ago
-    when WindowSize::ONE_DAY
-      1.day.ago
-    when WindowSize::THREE_DAYS
-      3.days.ago
-    when WindowSize::ONE_WEEK
-      1.week.ago
-    when WindowSize::ONE_MONTH
-      1.month.ago
-    when WindowSize::SIX_MONTHS
-      6.months.ago
-    when WindowSize::ONE_YEAR
-      1.year.ago
-    end
+    time_frame = BuildTimeFrameWindowService.time_frame(@window_size)
+    scope.where(created_at: time_frame..Time.current)
   end
 end

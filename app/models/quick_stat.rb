@@ -14,7 +14,7 @@ class QuickStat
     deleted_users: "square-rounded-x"
   }.freeze
 
-  attr_reader :name, :cum_stat, :chron_stat
+  attr_reader :name
 
   def initialize(name:, relation:, window:)
     @name = name
@@ -46,27 +46,14 @@ class QuickStat
   end
 
   def calculate_chron_stat
+    grouped = BuildTimeFrameWindowService
+      .group_metrics_by_time(@relation, window: @window, column: :created_at)
+
     case @name
     when :sales
-      group_metrics_by_time(@relation).sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
+      grouped.sum(:amount_cents).transform_values { |v| (v / 100.0).round(2) }
     else
-      group_metrics_by_time(@relation).count
-    end
-  end
-
-  # TODO would be helpful to refactor to a service, and take the key to group in param
-  def group_metrics_by_time(relation)
-    case @window
-    when WindowSize::ONE_HOUR
-      relation.group_by_minute(:created_at)
-    when WindowSize::TWELVE_HOURS, WindowSize::ONE_DAY, WindowSize::THREE_DAYS
-      relation.group_by_hour(:created_at)
-    when WindowSize::ONE_WEEK, WindowSize::ONE_MONTH
-      relation.group_by_day(:created_at)
-    when WindowSize::SIX_MONTHS, WindowSize::ONE_YEAR
-      relation.group_by_week(:created_at)
-    else
-      relation.group_by_day(:created_at)
+      grouped.count
     end
   end
 end
