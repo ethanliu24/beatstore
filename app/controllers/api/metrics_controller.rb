@@ -12,24 +12,18 @@ class Api::MetricsController < ApplicationController
   private
 
   def line_chart_metrics(event_name, tags: {})
-    relation = get_metrics_relation(event_name)
-    metrics = group_by_time(relation)
-    metrics.count
-  end
-
-  def get_metrics_relation(event_name, tags: {})
-    time_frame = BuildTimeFrameWindowService.time_frame(window: @window)..Time.current
-    Metric
-      .where(event_name:, created_at: time_frame)
+    relation = Metric
+      .where(event_name:)
+      .where(created_at: BuildTimeFrameWindowService.time_frame(window: @window)..Time.current)
       .where("tags @> ?", tags.to_json)
-  end
 
-  def group_by_time(relation)
-    BuildTimeFrameWindowService.group_metrics_by_time(
+    metrics = BuildTimeFrameWindowService.group_metrics_by_time(
       relation,
       window: @window,
       column: :created_at
     )
+
+    metrics.count
   end
 
   def set_window
