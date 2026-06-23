@@ -21,7 +21,7 @@ module Metrics
       relation = query_relation(tags:, &tag_filter)
       relation = relation.where("tags->>? IS NOT NULL", group.to_s)
 
-      group_expr = Arel.sql("tags->>'#{group}'") # this should escape str safely
+      group_expr = Arel.sql(ActiveRecord::Base.sanitize_sql_array([ "tags->>?", group ]))
       relation.group(group_expr).count.compact
     end
 
