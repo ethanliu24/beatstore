@@ -46,7 +46,7 @@ class QuickStat
   end
 
   def calculate_chron_stat
-    grouped = BuildTimeFrameWindowService
+    grouped = GroupMetricsByWindowService
       .group_metrics_by_time(@relation, window: @window, column: :created_at)
 
     case @name

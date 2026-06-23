@@ -35,8 +35,8 @@ class CrunchAdminAnalyticsService
   private
 
   def get_analytics(entity, unscoped: false)
+    time_frame = WindowSize.time_frame(@window_size)
     scope = unscoped ? entity.unscoped : entity
-    time_frame = BuildTimeFrameWindowService.time_frame(@window_size)
     scope.where(created_at: time_frame..Time.current)
   end
 end
