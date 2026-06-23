@@ -14,7 +14,11 @@ class Api::MetricsController < ApplicationController
   end
 
   def stripe_one_time_payment
-    render json: line_chart_metrics(Metrics::Name::STRIPE_ONE_TIME_PAYMENT)
+    metrics = Metrics::BuildChartMetricsService
+      .new(event_name: Metrics::Name::STRIPE_ONE_TIME_PAYMENT, window: @window)
+      .line_chart_metrics
+
+    render json: metrics
   end
 
   private
