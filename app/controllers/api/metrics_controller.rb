@@ -6,22 +6,25 @@ class Api::MetricsController < ApplicationController
   before_action :set_window
 
   def stripe_checkout_intent
-    metrics = Metrics::BuildChartMetricsService
-      .new(event_name: Metrics::Name::STRIPE_CHECKOUT_INTENT, window: @window)
-      .line_chart_metrics
-
-      render json: metrics
+    metrics = service(Metrics::Name::STRIPE_CHECKOUT_INTENT).line_chart_metrics
+    render json: metrics
   end
 
   def stripe_one_time_payment
-    metrics = Metrics::BuildChartMetricsService
-      .new(event_name: Metrics::Name::STRIPE_ONE_TIME_PAYMENT, window: @window)
-      .line_chart_metrics
+    metrics = service(Metrics::Name::STRIPE_ONE_TIME_PAYMENT).line_chart_metrics
+    render json: metrics
+  end
 
+  def order_fulfillment_successful
+    metrics = service(Metrics::Name::STRIPE_ONE_TIME_PAYMENT).pie_chart_metrics(group: :status)
     render json: metrics
   end
 
   private
+
+  def service(event_name)
+    Metrics::BuildChartMetricsService.new(event_name:, window: @window)
+  end
 
   def set_window
     @window = params.require(:window)
