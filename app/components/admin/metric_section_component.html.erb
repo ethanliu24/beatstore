@@ -1,5 +1,5 @@
 <section class="flex flex-col justify-start items-stretch gap-2">
-  <%= render Ui::AccordionComponent.new do |accordion| %>
+  <%= render Ui::AccordionComponent.new(expand: true) do |accordion| %>
     <% accordion.with_summary do %>
       <div class="flex justify-start">
         <%= content_tag :h2, title, class: "tracking-wider font-light italic text-sm text-accent" %>
