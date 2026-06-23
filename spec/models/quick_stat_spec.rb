@@ -1,4 +1,5 @@
-# spec/services/quick_stats_spec.rb
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe QuickStat do
@@ -45,13 +46,10 @@ RSpec.describe QuickStat do
 
   describe "#chron_stat" do
     let(:grouped_relation) { double("grouped_relation") }
+    let(:stats) { described_class.new(name: name, relation: relation, window: window) }
 
     before do
-      allow(stats).to receive(:group_metrics_by_time).and_return(grouped_relation)
-    end
-
-    let(:stats) do
-      described_class.new(name: name, relation: relation, window: window)
+      allow(GroupMetricsByWindowService).to receive(:group_metrics_by_time).and_return(grouped_relation)
     end
 
     context "for non-sales stats" do

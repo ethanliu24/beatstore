@@ -10,7 +10,7 @@ module Metrics
     def line_chart_metrics(tags: {}, &tag_filter)
       relation = query_relation(tags:, &tag_filter)
 
-      BuildTimeFrameWindowService.group_metrics_by_time(
+      GroupMetricsByWindowService.group_metrics_by_time(
         relation,
         window: @window,
         column: :created_at
@@ -30,7 +30,7 @@ module Metrics
     def query_relation(tags: {}, &tag_filter)
       relation = Metric
         .where(event_name: @event_name)
-        .where(created_at: BuildTimeFrameWindowService.time_frame(@window)..Time.current)
+        .where(created_at: WindowSize.time_frame(@window)..Time.current)
         .where("tags @> ?", tags.to_json)
 
       if tag_filter
