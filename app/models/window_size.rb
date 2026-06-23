@@ -33,6 +33,8 @@ class WindowSize
         6.months.ago
       when WindowSize::ONE_YEAR
         1.year.ago
+      else
+        raise ArgumentError.new("unrecognized window size: #{window}")
       end
     end
   end

@@ -49,5 +49,10 @@ RSpec.describe WindowSize, type: :model do
       expect(described_class.time_frame(WindowSize::ONE_YEAR))
         .to eq(1.year.ago)
     end
+
+    it "raises an error if window is not defined" do
+      expect { described_class.time_frame("unknown") }
+        .to raise_error(ArgumentError, "unrecognized window size: unknown")
+    end
   end
 end
