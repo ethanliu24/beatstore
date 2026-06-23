@@ -148,8 +148,12 @@ RSpec.describe FulfillOrderService, type: :service do
 
     it "raises ArgumentError if input is not valid" do
       expect {
-        described_class.call(input: nil)
-      }.to raise_error(ArgumentError)
+        expect {
+          described_class.call(input: nil)
+        }.to raise_error(ArgumentError)
+      }.to change(Metric, :count).by(1)
+
+      expect(Metric.last.tags).to eq({ "status" => "fail", "order_id" => nil })
     end
 
     it "does not process non pending orders" do
@@ -197,8 +201,20 @@ RSpec.describe FulfillOrderService, type: :service do
 
       metric = Metric.last
 
-      expect(metric.event_name).to eq(Metrics::Name::ORDER_FULFILLMENT_SUCEEDED)
-      expect(metric.tags).to eq({ "order_id" => order.id })
+      expect(metric.event_name).to eq(Metrics::Name::ORDER_FULFILLMENT_RESULT)
+      expect(metric.tags).to eq({ "status" => "success", "order_id" => order.id })
+    end
+
+    it "trakcs a failure metric if something fails" do
+      allow(ActiveRecord::Base).to receive(:transaction).and_raise(StandardError)
+
+      expect {
+        expect {
+          call_service(order:, session:)
+        }.to raise_error(FulfillOrderService::OrderFulfillmentFailedError)
+      }.to change(Metric, :count).by(1)
+
+      expect(Metric.last.tags).to eq({ "status" => "fail", "order_id" => order.id })
     end
   end
 
