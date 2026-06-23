@@ -9,6 +9,10 @@
         <%= line_chart api_metrics_stripe_checkout_intent_path(window:),
           title: Metrics::Name::STRIPE_CHECKOUT_INTENT, ytitle: "Intents", refresh: %>
       </div>
+      <div>
+        <%= line_chart api_metrics_stripe_one_time_payment_path(window:),
+          title: Metrics::Name::STRIPE_ONE_TIME_PAYMENT, ytitle: "Payments", refresh: %>
+      </div>
     </div>
   <% end %>
 <% end %>

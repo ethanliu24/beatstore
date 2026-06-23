@@ -9,6 +9,10 @@ class Api::MetricsController < ApplicationController
     render json: line_chart_metrics(Metrics::Name::STRIPE_CHECKOUT_INTENT)
   end
 
+  def stripe_one_time_payment
+    render json: line_chart_metrics(Metrics::Name::STRIPE_ONE_TIME_PAYMENT)
+  end
+
   private
 
   def line_chart_metrics(event_name, tags: {}, &tag_filter)
