@@ -10,13 +10,19 @@ module Metrics
     def line_chart_metrics(tags: {}, &tag_filter)
       relation = query_relation(tags:, &tag_filter)
 
-      metrics = BuildTimeFrameWindowService.group_metrics_by_time(
+      BuildTimeFrameWindowService.group_metrics_by_time(
         relation,
         window: @window,
         column: :created_at
-      )
+      ).count
+    end
 
-      metrics.count
+    def pie_chart_metrics(group:, tags: {}, &tag_filter)
+      relation = query_relation(tags:, &tag_filter)
+      relation = relation.where("tags->>? IS NOT NULL", group.to_s)
+
+      group_expr = Arel.sql("tags->>'#{group}'") # this should escape str safely
+      relation.group(group_expr).count.compact
     end
 
     private
