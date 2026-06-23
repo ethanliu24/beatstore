@@ -8,6 +8,20 @@ module Metrics
     end
 
     def line_chart_metrics(tags: {}, &tag_filter)
+      relation = query_relation(tags:, &tag_filter)
+
+      metrics = BuildTimeFrameWindowService.group_metrics_by_time(
+        relation,
+        window: @window,
+        column: :created_at
+      )
+
+      metrics.count
+    end
+
+    private
+
+    def query_relation(tags: {}, &tag_filter)
       relation = Metric
         .where(event_name: @event_name)
         .where(created_at: BuildTimeFrameWindowService.time_frame(@window)..Time.current)
@@ -18,13 +32,7 @@ module Metrics
         relation = Metric.where(id: ids)
       end
 
-      metrics = BuildTimeFrameWindowService.group_metrics_by_time(
-        relation,
-        window: @window,
-        column: :created_at
-      )
-
-      metrics.count
+      relation
     end
   end
 end
