@@ -8,14 +8,26 @@ export default class extends Controller {
   }
 
   toggleExpand() {
-    this.summaryTarget.classList.toggle("active");
-
-    if (this.bodyTarget.style.maxHeight) {
-      this.bodyTarget.style.maxHeight = null;
-      this.expandIconTarget.style.transform = "rotate(0deg)";
+    if (this.isActive()) {
+      this.extract();
     } else {
-      this.bodyTarget.style.maxHeight = this.bodyTarget.scrollHeight + "px";
-      this.expandIconTarget.style.transform = "rotate(90deg)";
+      this.expand();
     }
+  }
+
+  expand() {
+    this.summaryTarget.classList.add("active");
+    this.bodyTarget.style.maxHeight = this.bodyTarget.scrollHeight + "px";
+    this.expandIconTarget.style.transform = "rotate(90deg)";
+  }
+
+  extract() {
+    this.summaryTarget.classList.remove("active");
+    this.bodyTarget.style.maxHeight = null;
+    this.expandIconTarget.style.transform = "rotate(0deg)";
+  }
+
+  isActive() {
+    return this.bodyTarget.style.maxHeight;
   }
 }
