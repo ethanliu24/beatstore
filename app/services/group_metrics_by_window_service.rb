@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BuildTimeFrameWindowService
+class GroupMetricsByWindowService
   class << self
     def group_metrics_by_time(relation, window:, column:)
       case window
