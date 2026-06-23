@@ -7,7 +7,7 @@ class Api::MetricsController < ApplicationController
 
   def stripe_checkout_intent
     metrics = Metrics::BuildChartMetricsService
-      .new(Metrics::Name::STRIPE_CHECKOUT_INTENT)
+      .new(Metrics::Name::STRIPE_CHECKOUT_INTENT, window: @window)
       .line_chart_metrics
 
       render json: metrics
