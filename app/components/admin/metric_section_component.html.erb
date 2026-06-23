@@ -1,4 +1,12 @@
 <section class="flex flex-col justify-start items-stretch gap-2">
-  <%= content_tag :h2, title, class: "tracking-wider font-light italic text-sm text-accent" %>
-  <%= charts %>
+  <%= render Ui::AccordionComponent.new do |accordion| %>
+    <% accordion.with_summary do %>
+      <div class="flex justify-start">
+        <%= content_tag :h2, title, class: "tracking-wider font-light italic text-sm text-accent" %>
+      </div>
+    <% end %>
+    <% accordion.with_body do %>
+      <%= charts %>
+    <% end %>
+  <% end %>
 </section>
