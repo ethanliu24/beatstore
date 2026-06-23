@@ -9,7 +9,7 @@
   <div class="flex flex-col justify-center items-center w-full mt-4">
     <% @purchases.each do |item| %>
       <div class="w-full">
-        <%= render Ui::AccordionComponent.new do |accordion| %>
+        <%= render Ui::AccordionComponent.new(expand: false) do |accordion| %>
           <% accordion.with_summary do %>
             <div class="flex justify-start items-center w-full gap-4">
               <div class="rounded bg-secondary-bg w-8 h-8 min-w-8 min-h-8">

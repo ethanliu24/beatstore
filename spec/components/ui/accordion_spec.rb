@@ -32,8 +32,28 @@ RSpec.describe Ui::AccordionComponent, type: :component do
     end
 
     expect(page).to have_css(
-      "div.pl-8.my-2.max-h-0.overflow-hidden.transform-\\[max-height\\].duration-200.ease-out",
+      "div.pl-8.my-2.overflow-hidden.transform-\\[max-height\\].duration-200.ease-out",
       text: "Details"
     )
+  end
+
+  it "passes expand as false to the accordion controller by default and doesn't expands it" do
+    render_inline(described_class.new) do |c|
+      c.with_summary { "Summary" }
+      c.with_body { "Body" }
+    end
+
+    expect(page).to have_css("[data-accordion-expand-initially-value='false']")
+    expect(page).to have_css("[data-accordion-target='body'][style*='max-height:0']")
+  end
+
+  it "passes expand as true to the accordion controller and expands it" do
+    render_inline(described_class.new(expand: true)) do |c|
+      c.with_summary { "Summary" }
+      c.with_body { "Body" }
+    end
+
+    expect(page).to have_css("[data-accordion-expand-initially-value='true']")
+    expect(page).to have_css("[data-accordion-target='body'][style*='max-height:none']")
   end
 end
