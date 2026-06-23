@@ -5,10 +5,10 @@ module Ui
     renders_one :summary
     renders_one :body
 
-    def initialize(open: false)
-      @open = open
+    def initialize(expand: false)
+      @expand = expand
     end
 
-    attr_reader :open
+    attr_reader :expand
   end
 end
