@@ -116,7 +116,9 @@ Rails.application.routes.draw do
     end
 
     namespace :metrics do
-      get :stripe_checkout_intent, to: "stripe_checkout_intent"
+      get :stripe_checkout_intent
+      get :stripe_one_time_payment
+      get :order_fulfillment_result
     end
   end
 

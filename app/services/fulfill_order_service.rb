@@ -80,7 +80,7 @@ class FulfillOrderService
           update_transaction(transaction: input.transaction, status: Transaction.statuses[:completed], input:)
           input.order.update!(status: Order.statuses[:completed])
           PurchaseMailer.with(user: input.user, order: input.order).purchase_complete.deliver_later
-          Metric.track(Metrics::Name::ORDER_FULFILLMENT_SUCEEDED, tags: { order_id: input.order.id })
+          Metric.track(Metrics::Name::ORDER_FULFILLMENT_RESULT, tags: { status: :success, order_id: input.order.id })
         end
       rescue OrderNotEligibleForFulfillment => e
         raise e
@@ -88,6 +88,9 @@ class FulfillOrderService
         Rails.error.report(e)
         raise OrderFulfillmentFailedError
       end
+    rescue => e
+      Metric.track(Metrics::Name::ORDER_FULFILLMENT_RESULT, tags: { status: :fail, order_id: input&.order&.id })
+      raise e
     end
 
     private

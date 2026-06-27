@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Api::MetricsController, type: :request do
+  let(:window) { WindowSize::ONE_DAY }
+
   context "admin" do
     let(:user) { create(:admin) }
 
@@ -11,15 +13,37 @@ RSpec.describe Api::MetricsController, type: :request do
     end
 
     it "should let admins access stripe_checkout_intent" do
-      get api_metrics_stripe_checkout_intent_path(window: WindowSize::ONE_DAY)
+      get api_metrics_stripe_checkout_intent_url(window:)
       expect(response).to have_http_status(:ok)
-      expect(assigns[:window]).to eq(WindowSize::ONE_DAY)
+      expect(assigns[:window]).to eq(window)
+    end
+
+    it "should let admins access stripe_one_time_payment" do
+      get api_metrics_stripe_one_time_payment_url(window:)
+      expect(response).to have_http_status(:ok)
+      expect(assigns[:window]).to eq(window)
+    end
+
+    it "should let admins access order_fulfillment_result" do
+      get api_metrics_order_fulfillment_result_url(window:)
+      expect(response).to have_http_status(:ok)
+      expect(assigns[:window]).to eq(window)
     end
   end
 
   shared_examples "should not let non admins visit" do
     it "#stripe_checkout_intent" do
-      get api_metrics_stripe_checkout_intent_path
+      get api_metrics_stripe_checkout_intent_url(window:)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "#stripe_one_time_payment" do
+      get api_metrics_stripe_one_time_payment_url(window:)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "#order_fulfillment_result" do
+      get api_metrics_order_fulfillment_result_url(window:)
       expect(response).to have_http_status(:not_found)
     end
   end

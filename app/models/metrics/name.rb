@@ -5,7 +5,7 @@ require "set"
 module Metrics
   class Name
     TEST = "test"
-    ORDER_FULFILLMENT_SUCEEDED = "order_fulfillment_succeeded"
+    ORDER_FULFILLMENT_RESULT = "order_fulfillment_result"
     STRIPE_ONE_TIME_PAYMENT = "stripe_one_time_payment"
     STRIPE_CHECKOUT_INTENT = "stripe_checkout_intent"
 
