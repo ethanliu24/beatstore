@@ -1,22 +1,37 @@
 <% refresh = Admin::MetricsController::CHART_REFRESH_SECONDS %>
 
-<%= render Admin::MetricSectionComponent.new(
-  title: t("metrics.index.sections.payments_and_fulfillment")
-) do |section| %>
-  <% section.with_charts do %>
-    <div class="grid grid-cols-2 gap-x-4 gap-y-8 auto-rows-min">
-      <div>
-        <%= line_chart api_metrics_stripe_checkout_intent_path(window:),
-          title: Metrics::Name::STRIPE_CHECKOUT_INTENT, ytitle: "Intents", refresh: %>
+<div class="flex flex-col justify-start items-center gap-8 w-full">
+  <%= render Admin::MetricSectionComponent.new(
+    title: t("metrics.index.sections.payments_and_fulfillment")
+  ) do |section| %>
+    <% section.with_charts do %>
+      <div class="grid grid-cols-2 gap-x-4 gap-y-8 auto-rows-min">
+        <div>
+          <%= line_chart api_metrics_stripe_checkout_intent_path(window:),
+            title: Metrics::Name::STRIPE_CHECKOUT_INTENT, ytitle: "Intents", refresh: %>
+        </div>
+        <div>
+          <%= line_chart api_metrics_stripe_one_time_payment_path(window:),
+            title: Metrics::Name::STRIPE_ONE_TIME_PAYMENT, ytitle: "Payments", refresh: %>
+        </div>
+        <div>
+          <%= pie_chart api_metrics_order_fulfillment_result_path(window:),
+            title: Metrics::Name::ORDER_FULFILLMENT_RESULT %>
+        </div>
       </div>
-      <div>
-        <%= line_chart api_metrics_stripe_one_time_payment_path(window:),
-          title: Metrics::Name::STRIPE_ONE_TIME_PAYMENT, ytitle: "Payments", refresh: %>
-      </div>
-      <div>
-        <%= pie_chart api_metrics_order_fulfillment_result_path(window:),
-          title: Metrics::Name::ORDER_FULFILLMENT_RESULT %>
-      </div>
-    </div>
+    <% end %>
   <% end %>
-<% end %>
+
+  <%= render Admin::MetricSectionComponent.new(
+    title: t("metrics.index.sections.clean_ups")
+  ) do |section| %>
+    <% section.with_charts do %>
+      <div class="grid grid-cols-1 gap-x-4 gap-y-8 auto-rows-min">
+        <div>
+          <%= column_chart api_metrics_metrics_clean_up_finished_path(window:),
+            title: Metrics::Name::METRICS_CLEAN_UP_FINISHED, ytitle: "Records deleted" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
