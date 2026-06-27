@@ -1,4 +1,5 @@
-<nav class="h-full w-52 min-w-52 max-sm:w-fit max-sm:min-w-fit bg-background border-r-2 border-r-secondary-bg
+<aside class="sticky top-0 self-start
+  w-52 min-w-52 max-sm:w-fit max-sm:min-w-fit bg-background border-r-2 border-r-secondary-bg
   px-4 py-4 max-sm:px-2 max-sm:py-2 rounded">
   <ul class="flex flex-col max-sm:gap-1">
     <% [
@@ -7,8 +8,8 @@
       { url: admin_licenses_path, text: t("sidebar.admin.licenses"), icon: "file" },
       { url: admin_transactions_path, text: t("sidebar.admin.transactions"), icon: "currency-dollar" },
       { url: admin_recommendations_path, text: t("sidebar.admin.recommendations"), icon: "star" },
-      { url: admin_mission_control_jobs_path, text: t("sidebar.admin.jobs"), icon: "briefcase-2", external: true },
       { url: admin_metrics_path, text: t("sidebar.admin.metrics"), icon: "chart-bar-popular" },
+      { url: admin_mission_control_jobs_path, text: t("sidebar.admin.jobs"), icon: "briefcase-2", external: true },
       { url: admin_solid_errors_path, text: t("sidebar.admin.exceptions"), icon: "exclamation-circle", external: true }
     ].each do |data| %>
       <li class="admin-sidebar-item">
@@ -22,4 +23,4 @@
       </li>
     <% end %>
   </ul>
-</nav>
+</aside>
