@@ -1,8 +1,10 @@
 <div class="flex w-full h-full bg-transparent">
   <% if render_admin_sidebar? %>
-    <%= render partial: "nav/admin_sidebar" %>
+    <div class="shrink-0">
+      <%= render partial: "nav/admin_sidebar" %>
+    </div>
   <% end %>
-  <div class="p-8 w-full h-full">
+  <div class="p-8 flex-1 min-w-0">
     <%= yield %>
   </div>
 </div>
