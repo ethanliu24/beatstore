@@ -16,7 +16,7 @@ class Api::MetricsController < ApplicationController
   end
 
   def order_fulfillment_result
-    metrics = service(Metrics::Name::STRIPE_ONE_TIME_PAYMENT).pie_chart_metrics(group: :status)
+    metrics = service(Metrics::Name::ORDER_FULFILLMENT_RESULT).pie_chart_metrics(group: :status)
     render json: metrics
   end
 
