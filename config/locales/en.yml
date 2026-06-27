@@ -342,6 +342,7 @@ en:
         page_subtitle: "See metrics here"
         sections:
           payments_and_fulfillment: "Payments & Fulfillment"
+          clean_ups: "Clean Ups"
 
   users:
     passwords:

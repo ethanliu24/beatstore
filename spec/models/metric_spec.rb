@@ -87,4 +87,73 @@ RSpec.describe Metric, type: :model do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
+
+  describe ".query" do
+    let(:event_name) { Metrics::Name::TEST }
+    let(:window) { WindowSize::ONE_DAY }
+    let(:tags) { {} }
+    let(:tag_filter) { nil }
+    let(:now) { Time.current }
+
+    it "returns only metrics for the event name" do
+      matching = Metric.track(event_name)
+      Metric.track(Metrics::Name::ORDER_FULFILLMENT_RESULT)
+      relation = Metric.query(event_name, window:)
+
+      expect(relation).to contain_exactly(matching)
+    end
+
+    it "filters by created_at window" do
+      matching = Metric.track(event_name)
+      travel_to(2.weeks.ago) { Metric.track(event_name) } # outside window
+      relation = Metric.query(event_name, window:)
+
+      expect(relation).to contain_exactly(matching)
+    end
+
+    it "includes records with nil prunes_at" do
+      matching = Metric.track(event_name, prune: false)
+      relation = Metric.query(event_name, window:)
+
+      expect(relation).to include(matching)
+    end
+
+    it "includes records with future prunes_at" do
+      matching = Metric.track(event_name, prunes_after: 1.hour)
+      relation = Metric.query(event_name, window:)
+
+      expect(relation).to include(matching)
+    end
+
+    it "excludes expired records" do
+      Metric.track(event_name, prunes_after: -1.hour)
+      relation = Metric.query(event_name, window:)
+
+      expect(relation).to be_empty
+    end
+
+    context "with tags hash filter" do
+      let(:tags) { { country: "CA" } }
+
+      it "matches JSONB containment" do
+        matching = Metric.track(event_name, tags: { country: "CA" })
+        Metric.track(event_name, tags: { country: "US" })
+        relation = Metric.query(event_name, window:, tags: { country: "CA" })
+
+        expect(relation).to contain_exactly(matching)
+      end
+    end
+
+    context "with &tag_filter" do
+      let(:tag_filter) { ->(tags) { tags["count"] >= 5 } }
+
+      it "filters in Ruby after DB query" do
+        matching = Metric.track(event_name, tags: { count: 10 })
+        Metric.track(event_name, tags: { count: 2 })
+        relation = Metric.query(event_name, window:) { |tag| tag["count"] >= 5 }
+
+        expect(relation).to contain_exactly(matching)
+      end
+    end
+  end
 end

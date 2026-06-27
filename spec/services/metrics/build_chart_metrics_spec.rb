@@ -17,21 +17,24 @@ RSpec.describe Metrics::BuildChartMetricsService, type: :model do
     end
 
     it "filters by event name and basic tags" do
-      result = service.line_chart_metrics(tags: { "env" => "prod" })
+      result = service.line_chart_metrics(tags: { "env" => "prod" }).count
 
       expect(result.values.sum).to eq(1)
     end
 
     it "further filters results using a block" do
-      result = service.line_chart_metrics(tags: { "env" => "prod" }) do |tags|
-        tags["browser"] == "chrome"
+      result = service.line_chart_metrics(tags: { "env" => "prod" }) do |tag|
+        tag["browser"] == "chrome"
       end
+
+      result = result.count
 
       expect(result.values.sum).to eq(1)
     end
 
     it "returns 0 when no records match the criteria" do
-      result = service.line_chart_metrics(tags: { "env" => "staging" })
+      result = service.line_chart_metrics(tags: { "env" => "staging" }).count
+
       expect(result.values.sum).to eq(0)
     end
   end
@@ -45,22 +48,56 @@ RSpec.describe Metrics::BuildChartMetricsService, type: :model do
     end
 
     it "groups by a key inside the tags JSONB column" do
-      result = service.pie_chart_metrics(group: :browser, tags: { "env" => "prod" })
+      result = service.pie_chart_metrics(group: :browser, tags: { "env" => "prod" }).count.compact
 
       expect(result).to eq({ "chrome" => 2, "firefox" => 1 })
     end
 
     it "applies the tag_filter block before grouping" do
-      result = service.pie_chart_metrics(group: :browser, tags: { "env" => "prod" }) do |tags|
-        tags["browser"] == "chrome"
+      result = service.pie_chart_metrics(group: :browser, tags: { "env" => "prod" }) do |tag|
+        tag["browser"] == "chrome"
       end
+
+      result = result.count.compact
 
       expect(result).to eq({ "chrome" => 2 })
     end
 
     it "returns nothing if group key doesn't exist" do
-      result = service.pie_chart_metrics(group: :undefined)
+      result = service.pie_chart_metrics(group: :undefined).count.compact
+
       expect(result).to eq({})
+    end
+  end
+
+  describe "#column_chart_metrics" do
+    before do
+      # Create various metrics
+      create(:metric, event_name:, tags: { "env" => "prod", "browser" => "chrome" }, created_at: 2.hours.ago)
+      create(:metric, event_name:, tags: { "env" => "dev", "browser" => "firefox" }, created_at: 3.hours.ago)
+      create(:metric, event_name: other_event, tags: { "env" => "prod" }, created_at: 1.hour.ago)
+    end
+
+    it "filters by event name and basic tags" do
+      result = service.column_chart_metrics(tags: { "env" => "prod" }).count
+
+      expect(result.values.sum).to eq(1)
+    end
+
+    it "further filters results using a block" do
+      result = service.column_chart_metrics(tags: { "env" => "prod" }) do |tag|
+        tag["browser"] == "chrome"
+      end
+
+      result = result.count
+
+      expect(result.values.sum).to eq(1)
+    end
+
+    it "returns 0 when no records match the criteria" do
+      result = service.column_chart_metrics(tags: { "env" => "staging" }).count
+
+      expect(result.values.sum).to eq(0)
     end
   end
 end

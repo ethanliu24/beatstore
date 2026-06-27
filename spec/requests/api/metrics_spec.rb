@@ -29,6 +29,12 @@ RSpec.describe Api::MetricsController, type: :request do
       expect(response).to have_http_status(:ok)
       expect(assigns[:window]).to eq(window)
     end
+
+    it "should let admins access metrics_clean_up_finished" do
+      get api_metrics_metrics_clean_up_finished_url(window:)
+      expect(response).to have_http_status(:ok)
+      expect(assigns[:window]).to eq(window)
+    end
   end
 
   shared_examples "should not let non admins visit" do
@@ -44,6 +50,11 @@ RSpec.describe Api::MetricsController, type: :request do
 
     it "#order_fulfillment_result" do
       get api_metrics_order_fulfillment_result_url(window:)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "#metrics_clean_up_finished" do
+      get api_metrics_metrics_clean_up_finished_url(window:)
       expect(response).to have_http_status(:not_found)
     end
   end
