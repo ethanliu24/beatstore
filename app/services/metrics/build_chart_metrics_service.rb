@@ -14,7 +14,7 @@ module Metrics
         relation,
         window: @window,
         column: :created_at
-      ).count
+      )
     end
 
     def pie_chart_metrics(group:, tags: {}, &tag_filter)
@@ -22,7 +22,7 @@ module Metrics
       relation = relation.where("tags->>? IS NOT NULL", group.to_s)
 
       group_expr = Arel.sql(ActiveRecord::Base.sanitize_sql_array([ "tags->>?", group ]))
-      relation.group(group_expr).count.compact
+      relation.group(group_expr)
     end
   end
 end
