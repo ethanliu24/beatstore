@@ -24,5 +24,15 @@ module Metrics
       group_expr = Arel.sql(ActiveRecord::Base.sanitize_sql_array([ "tags->>?", group ]))
       relation.group(group_expr)
     end
+
+    def column_chart_metrics(tags: {}, &tag_filter)
+      relation = Metric.query(@event_name, window: @window, tags:, &tag_filter)
+
+      GroupMetricsByWindowService.group_metrics_by_time(
+        relation,
+        window: @window,
+        column: :created_at
+      )
+    end
   end
 end
