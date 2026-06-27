@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class Metric < ApplicationRecord
+  DEFAULT_PRUNES_AFTER = 3.months
+
   validates :event_name, presence: true
   validates :created_at, presence: true
   validate :event_name_is_defined
   validate :tags_is_hash
 
   class << self
-    def track(event_name, tags: {}, prune: true, prunes_after: Metrics::PruneTime::DEFAULT)
+    def track(event_name, tags: {}, prune: true, prunes_after: DEFAULT_PRUNES_AFTER)
       created_at = Time.current
       prunes_at = prune ? created_at + prunes_after : nil
 
