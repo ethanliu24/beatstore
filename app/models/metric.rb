@@ -33,6 +33,10 @@ class Metric < ApplicationRecord
     end
   end
 
+  def name
+    event_name
+  end
+
   private
 
   def event_name_is_defined
