@@ -5,13 +5,7 @@ module Recurring
     queue_as :low
 
     def perform
-      num_deleted = 0
-
-      Rails.error.handle do
-        num_deleted = Metric.where("prunes_at <= ?", Time.current).delete_all
-      end
-
-      Metric.track(Metrics::Name::METRICS_CLEAN_UP_FINISHED, tags: { num_deleted: num_deleted })
+      CleanUps::CleanUpMetricsService.call
     end
   end
 end

@@ -8,3 +8,9 @@
 #     command: "SoftDeletedRecord.due.delete_all"
 #     priority: 2
 #     schedule: at 5am every day
+
+production:
+  description: "Cleans up / prunes expired metrics."
+  class: Recurring::MetricsCleanUpJob
+  queue: low
+  schedule: every day at 12pm
