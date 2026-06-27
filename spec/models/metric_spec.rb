@@ -44,7 +44,7 @@ RSpec.describe Metric, type: :model do
       expect(metric.event_name).to eq(event_name)
       expect(metric.tags).to eq({})
       expect(metric.created_at).not_to eq(nil)
-      expect(metric.prunes_at).to eq(metric.created_at + Metrics::PruneTime::DEFAULT)
+      expect(metric.prunes_at).to eq(metric.created_at + Metric::DEFAULT_PRUNES_AFTER)
     end
 
     it "should set tags to what's provided" do
