@@ -5,7 +5,7 @@ module Recurring
     queue_as :low
 
     def perform
-      Metric.where("prune_at <= ?", Time.current).delete_all
+      Metric.where("prunes_at <= ?", Time.current).delete_all
     end
   end
 end
