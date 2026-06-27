@@ -24,23 +24,5 @@ module Metrics
       group_expr = Arel.sql(ActiveRecord::Base.sanitize_sql_array([ "tags->>?", group ]))
       relation.group(group_expr).count.compact
     end
-
-    private
-
-    def query_relation(tags: {}, &tag_filter)
-      now = Time.current
-      relation = Metric
-        .where(event_name: @event_name)
-        .where(created_at: WindowSize.time_frame(@window)..now)
-        .where("prunes_at IS NULL OR prunes_at > ?", now)
-        .where("tags @> ?", tags.to_json)
-
-      if tag_filter
-        ids = relation.select { |record| tag_filter.call(record.tags) }.map(&:id)
-        relation = Metric.where(id: ids)
-      end
-
-      relation
-    end
   end
 end
