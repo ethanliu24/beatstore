@@ -28,9 +28,11 @@ module Metrics
     private
 
     def query_relation(tags: {}, &tag_filter)
+      now = Time.current
       relation = Metric
         .where(event_name: @event_name)
-        .where(created_at: WindowSize.time_frame(@window)..Time.current)
+        .where(created_at: WindowSize.time_frame(@window)..now)
+        .where("prunes_at IS NULL OR prunes_at > ?", now)
         .where("tags @> ?", tags.to_json)
 
       if tag_filter
