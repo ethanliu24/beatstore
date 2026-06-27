@@ -5,9 +5,14 @@ require "set"
 module Metrics
   class Name
     TEST = "test"
+
+    # payments & fulfillments
     ORDER_FULFILLMENT_RESULT = "order_fulfillment_result"
     STRIPE_ONE_TIME_PAYMENT = "stripe_one_time_payment"
     STRIPE_CHECKOUT_INTENT = "stripe_checkout_intent"
+
+    # clean ups
+    METRICS_CLEAN_UP_FINISHED = "metrics_clean_up_finished"
 
     class << self
       def is_defined?(name)
