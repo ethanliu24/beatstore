@@ -116,9 +116,13 @@ Rails.application.routes.draw do
     end
 
     namespace :metrics do
+      # payments & fulfillments
       get :stripe_checkout_intent
       get :stripe_one_time_payment
       get :order_fulfillment_result
+
+      # clean ups
+      get :metrics_clean_up_finished
     end
   end
 

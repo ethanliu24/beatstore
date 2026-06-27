@@ -6,17 +6,29 @@ class Api::MetricsController < ApplicationController
   before_action :set_window
 
   def stripe_checkout_intent
-    metrics = service(Metrics::Name::STRIPE_CHECKOUT_INTENT).line_chart_metrics
+    metrics = service(Metrics::Name::STRIPE_CHECKOUT_INTENT).line_chart_metrics.count
     render json: metrics
   end
 
   def stripe_one_time_payment
-    metrics = service(Metrics::Name::STRIPE_ONE_TIME_PAYMENT).line_chart_metrics
+    metrics = service(Metrics::Name::STRIPE_ONE_TIME_PAYMENT).line_chart_metrics.count
     render json: metrics
   end
 
   def order_fulfillment_result
-    metrics = service(Metrics::Name::ORDER_FULFILLMENT_RESULT).pie_chart_metrics(group: :status)
+    metrics = service(Metrics::Name::ORDER_FULFILLMENT_RESULT)
+      .pie_chart_metrics(group: :status)
+      .count
+      .compact
+
+    render json: metrics
+  end
+
+  def metrics_clean_up_finished
+    metrics = service(Metrics::Name::METRICS_CLEAN_UP_FINISHED)
+      .column_chart_metrics
+      .sum("COALESCE((tags->>'num_deleted')::int, 0)")
+
     render json: metrics
   end
 
