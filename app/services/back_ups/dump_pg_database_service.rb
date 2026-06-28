@@ -21,10 +21,10 @@ module BackUps
 
     # config is a db config, e.g. Rails.configuration.database_configuration[Rails.env]["primary"]
     def initialize(config)
-      @database = @config["database"]
-      @username = @config["username"]
-      @password = @config["password"]
-      @host = @config["host"]
+      @database = config["database"]
+      @username = config["username"]
+      @password = config["password"]
+      @host = config["host"]
       @backup_path = tmp_path
     end
 
@@ -36,7 +36,7 @@ module BackUps
     private
 
     def command
-      "PGPASSWORD='#{@password}' pg_dump -h #{@host} -U #{@username} -Fc -d #{@db_name} -f #{@backup_path}"
+      "PGPASSWORD='#{@password}' pg_dump -h #{@host} -U #{@username} -Fc -d #{@database} -f #{@backup_path}"
     end
 
     def tmp_path
@@ -45,7 +45,7 @@ module BackUps
       path = Rails.root.join("tmp", "db_backups", @database, filename)
       FileUtils.mkdir_p(File.dirname(path))
 
-      path
+      path.to_s
     end
   end
 end
