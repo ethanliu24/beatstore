@@ -17,6 +17,14 @@ module BackUps
       def ok?
         @success
       end
+
+      def path
+        @backup_path
+      end
+
+      def dir
+        File.dirname(@backup_path)
+      end
     end
 
     # config is a db config, e.g. Rails.configuration.database_configuration[Rails.env]["primary"]

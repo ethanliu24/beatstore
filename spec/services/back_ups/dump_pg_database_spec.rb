@@ -4,21 +4,15 @@ require "rails_helper"
 
 RSpec.describe BackUps::DumpPgDatabaseService do
   let(:backup_time) { Time.zone.parse("2026-01-01 11:11:11") }
-  let(:config) {
-    {
-      "database" => "my_db",
-      "username" => "user",
-      "password" => "secret",
-      "host"     => "localhost"
-    }
-  }
+  let(:db_config) { Rails.configuration.database_configuration[Rails.env] }
 
   describe "#perform" do
     let(:expected_command) {
-      /PGPASSWORD='secret' pg_dump -h localhost -U user -Fc -d my_db -f .+\.dump/
+      /PGPASSWORD='beatstore' pg_dump -h 127.0.0.1 -U beatstore -Fc -d beatstore_test -f .+\.dump/
     }
 
     before do
+      allow(FileUtils).to receive(:mkdir_p)
       travel_to backup_time
     end
 
@@ -29,7 +23,7 @@ RSpec.describe BackUps::DumpPgDatabaseService do
 
       result = service.perform
       expect(result.ok?).to eq(true)
-      expect(result.backup_path).to include("tmp/db_backups/my_db/2026-01-01-11:11:11")
+      expect(result.backup_path).to include("tmp/db_backups/beatstore_test/2026-01-01-11:11:11.dump")
     end
 
     it "returns an error if the command fails" do
@@ -42,9 +36,18 @@ RSpec.describe BackUps::DumpPgDatabaseService do
     end
   end
 
+  context "integration" do
+    it 'actually creates a file', :integration do
+      result = service.perform
+      expect(File.exist?(result.backup_path)).to eq(true)
+
+      FileUtils.rm_rf(result.dir)
+    end
+  end
+
   private
 
   def service
-    described_class.new(config)
+    described_class.new(db_config)
   end
 end
