@@ -5,25 +5,21 @@ require "open3"
 module BackUps
   class DumpPgDatabaseService
     class Result
-      attr_reader :backup_path, :error, :out
+      attr_reader :path, :message, :error
 
-      def initialize(success:, backup_path: nil, error: nil, out: nil)
+      def initialize(success:, path: nil, message: nil, error: nil)
         @success = success
-        @backup_path = backup_path
+        @path = path
+        @message = message
         @error = error
-        @stdout = out
       end
 
       def ok?
         @success
       end
 
-      def path
-        @backup_path
-      end
-
       def dir
-        File.dirname(@backup_path)
+        path.nil? ? nil : File.dirname(@path)
       end
     end
 
@@ -38,7 +34,13 @@ module BackUps
 
     def perform
       stdout, stderr, status = Open3.capture3(command)
-      Result.new(success: status.success?, backup_path: @backup_path, error: stderr, out: stdout)
+      result = Result.new(success: status.success?, path: @backup_path, message: stdout, error: stderr)
+
+      Metric.track(Metrics::Name::BACKUP_PG_DUMP_RESULT, tags: {
+        success: result.ok?, path: result.path
+      })
+
+      result
     end
 
     private

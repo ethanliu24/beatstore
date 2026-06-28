@@ -4,7 +4,12 @@ require "rails_helper"
 
 RSpec.describe BackUps::DumpPgDatabaseService do
   let(:backup_time) { Time.zone.parse("2026-01-01 11:11:11") }
+  let(:backup_path) { "tmp/db_backups/beatstore_test/2026-01-01-11:11:11.dump" }
   let(:db_config) { Rails.configuration.database_configuration[Rails.env] }
+
+  before do
+    FileUtils.rm_rf(Rails.root.join("tmp", "db_backups", "beatstore_test"))
+  end
 
   describe "#perform" do
     let(:expected_command) {
@@ -21,25 +26,46 @@ RSpec.describe BackUps::DumpPgDatabaseService do
         .with(expected_command)
         .and_return([ "", "", double(success?: true) ])
 
-      result = service.perform
-      expect(result.ok?).to eq(true)
-      expect(result.backup_path).to include("tmp/db_backups/beatstore_test/2026-01-01-11:11:11.dump")
+      expect {
+        result = service.perform
+
+        expect(result.ok?).to eq(true)
+        expect(result.path).to include(backup_path)
+        expect(result.message).to eq("")
+        expect(result.error).to eq("")
+      }.to change(Metric, :count).by(1)
+
+      metric = Metric.last
+      expect(metric.name).to eq(Metrics::Name::BACKUP_PG_DUMP_RESULT)
+      expect(metric.tags["success"]).to eq(true)
+      expect(metric.tags["path"]).to include(backup_path)
     end
 
     it "returns an error if the command fails" do
       # Mock a failure
-      allow(Open3).to receive(:capture3).and_return([ "", "Access Denied", double(success?: false) ])
+      allow(Open3).to receive(:capture3).and_return(
+        [ "You don't have access", "Access Denied", double(success?: false) ]
+      )
 
-      result = service.perform
-      expect(result.ok?).to eq(false)
-      expect(result.error).to eq("Access Denied")
+      expect {
+        result = service.perform
+        expect(result.ok?).to eq(false)
+        expect(result.path).to include(backup_path)
+        expect(result.message).to eq("You don't have access")
+        expect(result.error).to eq("Access Denied")
+      }.to change(Metric, :count).by(1)
+
+      metric = Metric.last
+      expect(metric.name).to eq(Metrics::Name::BACKUP_PG_DUMP_RESULT)
+      expect(metric.tags["success"]).to eq(false)
+      expect(metric.tags["path"]).to include(backup_path)
     end
   end
 
   context "integration" do
     it 'actually creates a file', :integration do
       result = service.perform
-      expect(File.exist?(result.backup_path)).to eq(true)
+      expect(File.exist?(result.path)).to eq(true)
 
       FileUtils.rm_rf(result.dir)
     end

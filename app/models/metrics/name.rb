@@ -14,6 +14,9 @@ module Metrics
     # clean ups
     METRICS_CLEAN_UP_FINISHED = "metrics_clean_up_finished"
 
+    # back ups
+    BACKUP_PG_DUMP_RESULT = "backup_pg_dump_result"
+
     class << self
       def is_defined?(name)
         defined_names.include?(name)
