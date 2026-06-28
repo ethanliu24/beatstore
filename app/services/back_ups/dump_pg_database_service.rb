@@ -40,8 +40,12 @@ module BackUps
     end
 
     def tmp_path
-      filename = "#{@database}_#{Time.current.strftime("%Y-%m-%d-%H:%M:%S")}.dump"
-      Rails.root.join("tmp", "db_backups", filename)
+      time = Time.current.strftime("%Y-%m-%d-%H:%M:%S")
+      filename = "#{time}.dump"
+      path = Rails.root.join("tmp", "db_backups", @database, filename)
+      FileUtils.mkdir_p(File.dirname(path))
+
+      path
     end
   end
 end
