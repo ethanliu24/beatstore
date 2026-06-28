@@ -3,12 +3,13 @@
 require "open3"
 
 module BackUps
-  class DumpPgDatabaseService
+  class DumpDatabaseService
     class Result
-      attr_reader :path, :message, :error
+      attr_reader :filename, :path, :message, :error
 
-      def initialize(success:, path: nil, message: nil, error: nil)
+      def initialize(success:, filename: nil, path: nil, message: nil, error: nil)
         @success = success
+        @filename = filename
         @path = path
         @message = message
         @error = error
@@ -29,15 +30,25 @@ module BackUps
       @username = config["username"]
       @password = config["password"]
       @host = config["host"]
-      @backup_path = tmp_path
+      @backup_path, @filename = tmp_path
     end
 
     def perform
       stdout, stderr, status = Open3.capture3(command)
-      result = Result.new(success: status.success?, path: @backup_path, message: stdout, error: stderr)
+      result = if status.success?
+        Result.new(
+          success: true,
+          filename: @filename,
+          path: @backup_path,
+          message: stdout,
+          error: stderr
+        )
+      else
+        Result.new(success: false, message: stdout, error: stderr)
+      end
 
       Metric.track(Metrics::Name::BACKUP_PG_DUMP_RESULT, tags: {
-        success: result.ok?, path: result.path
+        success: result.ok?, path: @backup_path, result_path: result.path
       })
 
       result
@@ -55,7 +66,7 @@ module BackUps
       path = Rails.root.join("tmp", "db_backups", @database, filename)
       FileUtils.mkdir_p(File.dirname(path))
 
-      path.to_s
+      [ path.to_s, filename ]
     end
   end
 end

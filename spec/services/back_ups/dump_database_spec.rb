@@ -2,8 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe BackUps::DumpPgDatabaseService do
+RSpec.describe BackUps::DumpDatabaseService do
   let(:backup_time) { Time.zone.parse("2026-01-01 11:11:11") }
+  let(:backup_filename) { "2026-01-01-11:11:11.dump" }
   let(:backup_path) { "tmp/db_backups/beatstore_test/2026-01-01-11:11:11.dump" }
   let(:db_config) { Rails.configuration.database_configuration[Rails.env] }
 
@@ -30,6 +31,7 @@ RSpec.describe BackUps::DumpPgDatabaseService do
         result = service.perform
 
         expect(result.ok?).to eq(true)
+        expect(result.filename).to eq(backup_filename)
         expect(result.path).to include(backup_path)
         expect(result.message).to eq("")
         expect(result.error).to eq("")
@@ -39,6 +41,7 @@ RSpec.describe BackUps::DumpPgDatabaseService do
       expect(metric.name).to eq(Metrics::Name::BACKUP_PG_DUMP_RESULT)
       expect(metric.tags["success"]).to eq(true)
       expect(metric.tags["path"]).to include(backup_path)
+      expect(metric.tags["result_path"]).to include(backup_path)
     end
 
     it "returns an error if the command fails" do
@@ -50,8 +53,9 @@ RSpec.describe BackUps::DumpPgDatabaseService do
       expect {
         result = service.perform
         expect(result.ok?).to eq(false)
-        expect(result.path).to include(backup_path)
-        expect(result.message).to eq("You don't have access")
+        expect(result.filename).to be(nil)
+        expect(result.path).to be(nil)
+        expect(result.message).to be("You don't have access")
         expect(result.error).to eq("Access Denied")
       }.to change(Metric, :count).by(1)
 
@@ -59,6 +63,7 @@ RSpec.describe BackUps::DumpPgDatabaseService do
       expect(metric.name).to eq(Metrics::Name::BACKUP_PG_DUMP_RESULT)
       expect(metric.tags["success"]).to eq(false)
       expect(metric.tags["path"]).to include(backup_path)
+      expect(metric.tags["result_path"]).to be(nil)
     end
   end
 
