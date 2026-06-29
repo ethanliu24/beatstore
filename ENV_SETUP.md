@@ -37,3 +37,21 @@ oauth2:
     client_id: "get this from the client created"
     client_secret: "get this from the client created"
 ```
+
+### Backup Google Drive
+1. Log in to producer email's google drive and get the folder ids in the url for:
+- primary
+- queue
+- errors
+
+```
+backup:
+  google_drive:
+    service_account: "<%= Rails.application.credentials.dig(:backup, :google_drive, :service_account) %>"
+    folders:
+      primay: "primary folder id"
+      queue: "queue folder id"
+      cable: "cable folder id"
+      cache: "cache folder id"
+      errors: "errors folder id"
+```
