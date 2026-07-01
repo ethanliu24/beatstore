@@ -11,7 +11,7 @@ backup:
   google_drive:
     service_account: "<%= Rails.application.credentials.dig(:backup, :google_drive, :service_account) %>"
     folders:
-      primay: "1WcfCWe7GSrL9mZw79Ti20HGsTKoLqpnZ"
+      primary: "1WcfCWe7GSrL9mZw79Ti20HGsTKoLqpnZ"
       queue: "1MBo6EZF15R6KoEFK3X6U8RUnfeZOXD-R"
       cable: "1A1TCiO7cGlVQOAJAt5L-NYE1PYqvvbC5"
       cache: "1iw5N_tvfIpWptEHudWSEM3MnY3uKyh9p"
