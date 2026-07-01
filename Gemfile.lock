@@ -293,6 +293,7 @@ GEM
       money (~> 6.13)
       railties (>= 3.0)
     msgpack (1.8.1)
+    multi_json (1.21.1)
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
     mutex_m (0.3.0)
@@ -675,6 +676,7 @@ DEPENDENCIES
   letter_opener
   mission_control-jobs
   money-rails (~> 1.12)
+  multi_json
   omniauth
   omniauth-google-oauth2
   omniauth-rails_csrf_protection

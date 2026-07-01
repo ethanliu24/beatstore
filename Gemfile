@@ -101,4 +101,5 @@ gem "ranked-model"
 gem "rack-attack", "~> 6.8"
 gem "config"
 gem "aws-sdk-s3", require: false
+gem "multi_json"
 gem "google-api-client"
