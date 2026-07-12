@@ -32,6 +32,7 @@ RSpec.describe BackUps::DumpDatabaseService do
 
         expect(result.ok?).to eq(true)
         expect(result.filename).to eq(backup_filename)
+        expect(result.content_type).to be("application/octet-stream")
         expect(result.path).to include(backup_path)
         expect(result.message).to eq("")
         expect(result.error).to eq("")
@@ -54,6 +55,7 @@ RSpec.describe BackUps::DumpDatabaseService do
         result = service.perform
         expect(result.ok?).to eq(false)
         expect(result.filename).to be(nil)
+        expect(result.content_type).to be(nil)
         expect(result.path).to be(nil)
         expect(result.message).to be("You don't have access")
         expect(result.error).to eq("Access Denied")

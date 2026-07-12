@@ -4,12 +4,15 @@ require "open3"
 
 module BackUps
   class DumpDatabaseService
-    class Result
-      attr_reader :filename, :path, :message, :error
+    DUMP_FILE_CONTENT_TYPE = "application/octet-stream"
 
-      def initialize(success:, filename: nil, path: nil, message: nil, error: nil)
+    class Result
+      attr_reader :filename, :content_type, :path, :message, :error
+
+      def initialize(success:, filename: nil, content_type: nil, path: nil, message: nil, error: nil)
         @success = success
         @filename = filename
+        @content_type = content_type
         @path = path
         @message = message
         @error = error
@@ -39,6 +42,7 @@ module BackUps
         Result.new(
           success: true,
           filename: @filename,
+          content_type: DUMP_FILE_CONTENT_TYPE,
           path: @backup_path,
           message: stdout,
           error: stderr
