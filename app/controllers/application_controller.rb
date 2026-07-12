@@ -85,11 +85,12 @@ class ApplicationController < ActionController::Base
   end
 
   def create_guest_user
-    name = Users::GenerateUsernameService.new.generate_from_display_name("guest")
+    suffix = SecureRandom.hex(6)
+    username = Users::GenerateUsernameService.new.generate_from_display_name("guest-#{suffix}")
     pw = SecureRandom.hex(16)
     guest = User.new(
-      username: name,
-      display_name: name,
+      username:,
+      display_name: username,
       role: User.roles[:guest],
       email: "#{name}@example.com",
       password: pw,
