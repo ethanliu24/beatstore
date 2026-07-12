@@ -21,6 +21,8 @@ module BackUps
     end
 
     def call(backup, db_key:)
+      db_key = db_key.to_sym
+
       if backup.class.name != "BackUps::DumpDatabaseService::Result"
         raise ArgumentError, "<backup> must be a BackUps::DumpDatabaseService::Result, but got #{backup.class.name}"
       end
@@ -29,7 +31,7 @@ module BackUps
         raise ArgumentError, "<backup> data dump is not successful, cannot upload"
       end
 
-      unless FOLDER_IDS.keys.include?(db_key.to_sym)
+      unless FOLDER_IDS.keys.include?(db_key)
         raise ArgumentError, "<db_key> #{db_key} is not a valid or defined database key, check config/database.yml"
       end
 
@@ -40,7 +42,7 @@ module BackUps
 
       file = @google_drive.create_file(
         file_metadata,
-        fields: "id, name, parents, webViewLink, md5Checksum",
+        fields: "id, name, size, parents, webViewLink, md5Checksum",
         upload_source: backup.path,
         content_type: backup.content_type
       )
@@ -49,6 +51,7 @@ module BackUps
         status: :success,
         file_id: file.id,
         file_name: file.name,
+        file_size: file.size,
         file_parents: file.parents,
         file_web_view_link: file.web_view_link,
         file_md5_checksum: file.md5_checksum
