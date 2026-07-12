@@ -6,6 +6,7 @@ require "stringio"
 
 module BackUps
   class UploadToCloudService
+    API_SCOPE = "https://www.googleapis.com/auth/drive.file"
     FOLDER_IDS = {
       primary: Settings.backup.google_drive.folders.primary,
       queue: Settings.backup.google_drive.folders.queue,
@@ -29,21 +30,23 @@ module BackUps
         end
 
         drive_service = Google::Apis::DriveV3::DriveService.new
-        credentials = Settings.backup.google_drive.service_account.to_json
-        drive_service.authorization = Google::Auth::ServiceAccountCredentials.make_creds(
-          json_key_io: StringIO.new(credentials),
-          scope: Settings.google_drive_api_url
+        credentials = Google::Auth::UserRefreshCredentials.new(
+          client_id: GD_CLIENT_ID,
+          client_secret: GD_CLIENT_SECRET,
+          refresh_token: GG_REFRESH_TOKEN,
+          scope: API_SCOPE
         )
+        drive_service.authorization = credentials
 
-        file_metadata = {
-          name: backup.filename,
-          parents: [ FOLDER_IDS[db_key] ]
-        }
+        file_metadata = Google::Apis::DriveV3::File.new(
+          name: FILE_PATH.split("/").last,
+          parents: [ FOLDER ]
+        )
 
         file = drive_service.create_file(
           file_metadata,
           fields: "id",
-          upload_source: backup.path,
+          upload_source: FILE_PATH,
           content_type: "application/octet-stream"
         )
 
