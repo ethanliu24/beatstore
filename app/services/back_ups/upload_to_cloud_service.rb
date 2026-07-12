@@ -40,12 +40,24 @@ module BackUps
 
       file = @google_drive.create_file(
         file_metadata,
-        fields: "id",
+        fields: "id, name, parents, webViewLink, md5Checksum",
         upload_source: backup.path,
         content_type: backup.content_type
       )
 
+      Metric.track(Metrics::Name::BACKUP_GOOGLE_DRIVE_UPLOAD_RESULT, tags: {
+        status: :success,
+        file_id: file.id,
+        file_name: file.name,
+        file_parents: file.parents,
+        file_web_view_link: file.web_view_link,
+        file_md5_checksum: file.md5_checksum
+      })
+
       file
+    rescue => e
+      Metric.track(Metrics::Name::BACKUP_GOOGLE_DRIVE_UPLOAD_RESULT, tags: { status: :fail })
+      raise e
     end
 
     private

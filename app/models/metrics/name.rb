@@ -16,6 +16,7 @@ module Metrics
 
     # back ups
     BACKUP_PG_DUMP_RESULT = "backup_pg_dump_result"
+    BACKUP_GOOGLE_DRIVE_UPLOAD_RESULT = "backup_google_drive_upload_result"
 
     class << self
       def is_defined?(name)
