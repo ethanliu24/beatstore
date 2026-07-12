@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
       username:,
       display_name: username,
       role: User.roles[:guest],
-      email: "#{name}@example.com",
+      email: "#{username}@example.com",
       password: pw,
       password_confirmation: pw,
       confirmed_at: Time.now
