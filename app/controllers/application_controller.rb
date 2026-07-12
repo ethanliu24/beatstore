@@ -85,13 +85,14 @@ class ApplicationController < ActionController::Base
   end
 
   def create_guest_user
-    name = Users::GenerateUsernameService.new.generate_from_display_name("guest")
+    suffix = SecureRandom.uuid
+    username = Users::GenerateUsernameService.new.generate_from_display_name("guest-#{suffix}")
     pw = SecureRandom.hex(16)
     guest = User.new(
-      username: name,
-      display_name: name,
+      username:,
+      display_name: username,
       role: User.roles[:guest],
-      email: "#{name}@example.com",
+      email: "#{username}@example.com",
       password: pw,
       password_confirmation: pw,
       confirmed_at: Time.now
