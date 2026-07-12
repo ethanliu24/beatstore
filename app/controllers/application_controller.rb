@@ -85,7 +85,7 @@ class ApplicationController < ActionController::Base
   end
 
   def create_guest_user
-    suffix = SecureRandom.hex(6)
+    suffix = SecureRandom.uuid
     username = Users::GenerateUsernameService.new.generate_from_display_name("guest-#{suffix}")
     pw = SecureRandom.hex(16)
     guest = User.new(
