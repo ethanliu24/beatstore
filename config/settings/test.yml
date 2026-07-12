@@ -7,3 +7,17 @@ oauth2:
   google:
     client_id: "google_oauth2_client_id"
     client_secret: "google_oauth2_client_id"
+google:
+  api:
+    oauth:
+      client_id: "client_id"
+      client_secret: "secret"
+      google_drive_refresh_token: "refresh_token"
+backup:
+  google_drive:
+    folders:
+      primary: "primary"
+      queue: "queue"
+      cable: "cable"
+      cache: "cache"
+      errors: "errors"

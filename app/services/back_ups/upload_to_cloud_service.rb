@@ -7,6 +7,7 @@ require "stringio"
 module BackUps
   class UploadToCloudService
     API_SCOPE = "https://www.googleapis.com/auth/drive.file"
+    RETURNED_FILE_METADATA = "id, name, size, parents, webViewLink, md5Checksum"
     FOLDER_IDS = {
       primary: Settings.backup.google_drive.folders.primary,
       queue: Settings.backup.google_drive.folders.queue,
@@ -32,7 +33,7 @@ module BackUps
       end
 
       unless FOLDER_IDS.keys.include?(db_key)
-        raise ArgumentError, "<db_key> #{db_key} is not a valid or defined database key, check config/database.yml"
+        raise ArgumentError, "<db_key> '#{db_key}' is not a valid or defined database key, check config/database.yml"
       end
 
       file_metadata = Google::Apis::DriveV3::File.new(
@@ -42,7 +43,7 @@ module BackUps
 
       file = @google_drive.create_file(
         file_metadata,
-        fields: "id, name, size, parents, webViewLink, md5Checksum",
+        fields: RETURNED_FILE_METADATA,
         upload_source: backup.path,
         content_type: backup.content_type
       )
