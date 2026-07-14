@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BackUps
-  class CleanUpBackupArtifacts
+  class CleanUpBackupArtifactsService
     class << self
       def call(backup)
         if backup.class.name != "BackUps::DumpDatabaseService::Result"
@@ -9,18 +9,18 @@ module BackUps
         end
 
         unless backup.ok?
-          raise ArgumentError, "<backup> data dump is not successful, cannot upload"
+          raise ArgumentError, "<backup> data dump is not successful"
         end
 
         unless File.exist?(backup.path)
-          raise Errno::ENOENT, "<backup> file path does not exist: #{backup.path}"
+          raise Errno::ENOENT, backup.path
         end
 
         File.delete(backup.path)
 
-        Metrics.track(Metrics::Name::CLEAN_UP_BACKUP_ARTIFACT_RESULT, tags: { status: :success })
+        Metric.track(Metrics::Name::CLEAN_UP_BACKUP_ARTIFACT_RESULT, tags: { status: :success })
       rescue => e
-        Metrics.track(Metrics::Name::CLEAN_UP_BACKUP_ARTIFACT_RESULT, tags: { status: :fail })
+        Metric.track(Metrics::Name::CLEAN_UP_BACKUP_ARTIFACT_RESULT, tags: { status: :fail })
         raise e
       end
     end
