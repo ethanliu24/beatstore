@@ -17,6 +17,7 @@ module Metrics
     # back ups
     BACKUP_PG_DUMP_RESULT = "backup_pg_dump_result"
     BACKUP_GOOGLE_DRIVE_UPLOAD_RESULT = "backup_google_drive_upload_result"
+    CLEAN_UP_BACKUP_ARTIFACT_RESULT = "clean_up_backup_artifact_result"
 
     class << self
       def is_defined?(name)

@@ -17,6 +17,11 @@ module BackUps
         end
 
         File.delete(backup.path)
+
+        Metrics.track(Metrics::Name::CLEAN_UP_BACKUP_ARTIFACT_RESULT, tags: { status: :success })
+      rescue => e
+        Metrics.track(Metrics::Name::CLEAN_UP_BACKUP_ARTIFACT_RESULT, tags: { status: :fail })
+        raise e
       end
     end
   end
