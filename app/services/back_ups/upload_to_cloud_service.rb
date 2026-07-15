@@ -2,10 +2,13 @@
 
 require "google/apis/drive_v3"
 require "googleauth"
+require "singleton"
 require "stringio"
 
 module BackUps
   class UploadToCloudService
+    include Singleton
+
     API_SCOPE = "https://www.googleapis.com/auth/drive.file"
     RETURNED_FILE_METADATA = "id, name, size, parents, webViewLink, md5Checksum"
     FOLDER_IDS = {
@@ -17,8 +20,7 @@ module BackUps
     }.freeze
 
     def initialize
-      @google_drive = Google::Apis::DriveV3::DriveService.new
-      configure_cloud
+      @google_drive = build_google_drive
     end
 
     def call(backup, db_key:)
@@ -36,15 +38,10 @@ module BackUps
         raise ArgumentError, "<db_key> '#{db_key}' is not a valid or defined database key, check config/database.yml"
       end
 
-      file_metadata = Google::Apis::DriveV3::File.new(
-        name: backup.filename,
-        parents: [ FOLDER_IDS[db_key] ]
-      )
-
-      file = @google_drive.create_file(
-        file_metadata,
-        fields: RETURNED_FILE_METADATA,
-        upload_source: backup.path,
+      file = create_file(
+        db_key:,
+        filename: backup.filename,
+        file_path: backup.path,
         content_type: backup.content_type
       )
 
@@ -66,7 +63,26 @@ module BackUps
 
     private
 
-    def configure_cloud
+    def google_drive
+      @google_drive
+    end
+
+    def create_file(db_key:, filename:, file_path:, content_type:)
+      file_metadata = Google::Apis::DriveV3::File.new(
+        name: filename,
+        parents: [ FOLDER_IDS[db_key] ]
+      )
+
+      google_drive.create_file(
+        file_metadata,
+        fields: RETURNED_FILE_METADATA,
+        upload_source: file_path,
+        content_type:
+      )
+    end
+
+    def build_google_drive
+      google_drive = Google::Apis::DriveV3::DriveService.new
       credentials = Google::Auth::UserRefreshCredentials.new(
         client_id: Settings.google.api.oauth.client_id,
         client_secret: Settings.google.api.oauth.client_secret,
@@ -74,7 +90,9 @@ module BackUps
         scope: API_SCOPE
       )
 
-      @google_drive.authorization = credentials
+      google_drive.authorization = credentials
+
+      google_drive
     end
   end
 end
