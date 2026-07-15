@@ -38,15 +38,10 @@ module BackUps
         raise ArgumentError, "<db_key> '#{db_key}' is not a valid or defined database key, check config/database.yml"
       end
 
-      file_metadata = Google::Apis::DriveV3::File.new(
-        name: backup.filename,
-        parents: [ FOLDER_IDS[db_key] ]
-      )
-
-      file = google_drive.create_file(
-        file_metadata,
-        fields: RETURNED_FILE_METADATA,
-        upload_source: backup.path,
+      file = create_file(
+        db_key:,
+        filename: backup.filename,
+        file_path: backup.path,
         content_type: backup.content_type
       )
 
@@ -70,6 +65,20 @@ module BackUps
 
     def google_drive
       @google_drive
+    end
+
+    def create_file(db_key:, filename:, file_path:, content_type:)
+      file_metadata = Google::Apis::DriveV3::File.new(
+        name: filename,
+        parents: [ FOLDER_IDS[db_key] ]
+      )
+
+      google_drive.create_file(
+        file_metadata,
+        fields: RETURNED_FILE_METADATA,
+        upload_source: file_path,
+        content_type:
+      )
     end
 
     def build_google_drive

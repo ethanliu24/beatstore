@@ -28,7 +28,7 @@ RSpec.describe BackUps::UploadToCloudService do
 
   before do
     allow(described_class.instance).to receive(:google_drive).and_return(mock_google_drive)
-    allow(mock_google_drive).to receive(:create_file).and_return(mock_file_response)
+    allow(described_class.instance).to receive(:create_file).and_return(mock_file_response)
   end
 
   it "should upload the backup file and return the file metadata uploaded" do
