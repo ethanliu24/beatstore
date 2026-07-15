@@ -27,9 +27,8 @@ RSpec.describe BackUps::UploadToCloudService do
   }
 
   before do
-    allow_any_instance_of(described_class).to receive(:configure_cloud)
-    allow(Google::Apis::DriveV3::DriveService).to receive(:new).and_return(mock_google_drive)
-    allow(mock_google_drive).to receive(:create_file).and_return(mock_file_response)
+    allow(described_class.instance).to receive(:google_drive).and_return(mock_google_drive)
+    allow(described_class.instance).to receive(:create_file).and_return(mock_file_response)
   end
 
   it "should upload the backup file and return the file metadata uploaded" do
@@ -107,9 +106,16 @@ RSpec.describe BackUps::UploadToCloudService do
     }.to change(Metric, :count).by(1)
   end
 
+  it "is a singleton class" do
+    service_1 = described_class.instance
+    service_2 = described_class.instance
+
+    expect(service_1).to be(service_2)
+  end
+
   private
 
   def call_service(backup: mock_backup, db_key: "primary")
-    described_class.new.call(backup, db_key:)
+    described_class.instance.call(backup, db_key:)
   end
 end
