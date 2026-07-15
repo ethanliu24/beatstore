@@ -2,3 +2,4 @@ email:
   producer: "<%= ENV.fetch("PRODUCER_EMAIL") %>"
   sender: "<%= ENV.fetch("MAILER_SENDER") %>"
   error: "<%= ENV.fetch("ERROR_MAIL_SENDER") %>"
+google_drive_api_url: "https://www.googleapis.com/auth/drive"
