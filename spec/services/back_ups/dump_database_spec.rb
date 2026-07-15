@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe BackUps::DumpDatabaseService do
   let(:backup_time) { Time.zone.parse("2026-01-01 11:11:11") }
-  let(:backup_filename) { "2026-01-01-11:11:11.dump" }
-  let(:backup_path) { "tmp/db_backups/beatstore_test/2026-01-01-11:11:11.dump" }
+  let(:backup_filename) { "2026-01-01-11:11:11_beatstore_test.dump" }
+  let(:backup_path) { "tmp/db_backups/beatstore_test/#{backup_filename}" }
   let(:db_config) { Rails.configuration.database_configuration[Rails.env] }
 
   before do
