@@ -15,23 +15,24 @@ module BackUps
           raise ArgumentError, "<upload_to_cloud_service> must respond to #call"
         end
 
-        backup = DumpDatabaseService.new(config).perform
+        begin
+          backup = DumpDatabaseService.new(config).perform
 
-        unless backup.ok?
+          unless backup.ok?
+            raise SnapshotBackupFailed, "backup file dump result not ok"
+          end
+
+          Rails.error.handle do
+            upload_to_cloud_service.call(backup, db_key:)
+          end
+
+          Metric.track(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT, tags: {
+            status: :success,
+            db_key:
+          })
+        ensure
           CleanUpBackupArtifactsService.call(backup)
-          raise SnapshotBackupFailed, "backup file dump result not ok"
         end
-
-        Rails.error.handle do
-          upload_to_cloud_service.call(backup, db_key:)
-        end
-
-        CleanUpBackupArtifactsService.call(backup)
-
-        Metric.track(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT, tags: {
-          status: :success,
-          db_key:
-        })
       rescue SnapshotBackupFailed => e
         Metric.track(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT, tags: {
           status: :fail,

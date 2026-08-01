@@ -115,9 +115,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
           service.call(db_key, upload_service)
         }.to raise_error(described_class::SnapshotBackupFailed)
 
-        expect(BackUps::CleanUpBackupArtifactsService)
-          .to have_received(:call)
-          .with(backup)
+        expect(BackUps::CleanUpBackupArtifactsService).to have_received(:call).with(backup)
       end
 
       it "increments failed metrics" do
@@ -139,9 +137,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       let(:error) { StandardError.new("upload failed") }
 
       before do
-        allow(upload_service)
-          .to receive(:call)
-          .and_raise(error)
+        allow(upload_service).to receive(:call).and_raise(error)
       end
 
       it "handles the error through Rails.error.handle" do
@@ -152,13 +148,12 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
         }.to raise_error(error)
       end
 
-      it "does not clean up artifacts" do
+      it "still cleans up artifacts" do
         expect {
           service.call(db_key, upload_service)
         }.to raise_error(error)
 
-        expect(BackUps::CleanUpBackupArtifactsService)
-          .not_to have_received(:call)
+        expect(BackUps::CleanUpBackupArtifactsService).to have_received(:call)
       end
     end
   end
