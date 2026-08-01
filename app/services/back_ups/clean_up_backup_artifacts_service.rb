@@ -12,9 +12,7 @@ module BackUps
           raise ArgumentError, "<backup> data dump is not successful"
         end
 
-        unless File.exist?(backup.path)
-          raise Errno::ENOENT, backup.path
-        end
+        return unless File.exist?(backup.path)
 
         File.delete(backup.path)
 
