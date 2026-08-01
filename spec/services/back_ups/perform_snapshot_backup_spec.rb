@@ -6,7 +6,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
   subject(:service) { described_class }
 
   let(:db_key) { Rails.env }
-  let(:config) { Rails.configuration.database_configuration[Rails.env] }
+  let(:env_config) { Rails.configuration.database_configuration[Rails.env] }
   let(:backup) {
     BackUps::DumpDatabaseService::Result.new(
       success: true,
@@ -19,13 +19,9 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
   let(:upload_service) { instance_double(BackUps::UploadToCloudService) }
 
   before do
-    allow(Rails.configuration)
-      .to receive(:database_configuration)
-      .and_return(Rails.env => { db_key => config })
-
     allow(BackUps::DumpDatabaseService)
       .to receive(:new)
-      .with(config)
+      .with(env_config)
       .and_return(backup_service)
 
     allow(upload_service).to receive(:call)
@@ -82,6 +78,17 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
           .to have_received(:call)
           .with(backup)
       end
+
+      it "emits success metric" do
+        expect {
+          service.call(db_key, upload_service)
+        }.to change(Metric, :count).by(1)
+
+        metric = Metric.last
+        expect(metric.name).to eq(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT)
+        expect(metric.tags["status"]).to eq("success")
+        expect(metric.tags["db_key"]).to eq(db_key)
+      end
     end
 
     context "when backup fails" do
@@ -111,6 +118,19 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
         expect(BackUps::CleanUpBackupArtifactsService)
           .to have_received(:call)
           .with(backup)
+      end
+
+      it "increments failed metrics" do
+        expect {
+          expect {
+            service.call(db_key, upload_service)
+          }.to raise_error(described_class::SnapshotBackupFailed)
+        }.to change(Metric, :count).by(1)
+
+        metric = Metric.last
+        expect(metric.name).to eq(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT)
+        expect(metric.tags["status"]).to eq("fail")
+        expect(metric.tags["db_key"]).to eq(db_key)
       end
     end
 

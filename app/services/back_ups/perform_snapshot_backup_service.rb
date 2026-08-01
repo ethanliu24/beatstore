@@ -6,10 +6,10 @@ module BackUps
 
     class << self
       def call(db_key, upload_to_cloud_service)
-        config = Rails.configuration.database_configuration[Rails.env][db_key] || \
-          Rails.configuration.database_configuration[Rails.env]
+        env_config = Rails.configuration.database_configuration[Rails.env]
+        config = env_config[db_key] || env_config
 
-        return unless config
+        return if config.blank?
 
         unless upload_to_cloud_service.respond_to?(:call)
           raise ArgumentError, "<upload_to_cloud_service> must respond to #call"
@@ -27,7 +27,17 @@ module BackUps
         end
 
         CleanUpBackupArtifactsService.call(backup)
+
+        Metric.track(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT, tags: {
+          status: :success,
+          db_key:
+        })
       rescue SnapshotBackupFailed => e
+        Metric.track(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT, tags: {
+          status: :fail,
+          db_key:
+        })
+
         raise e
       end
     end
