@@ -5,15 +5,11 @@ module BackUps
     class SnapshotBackupFailed < StandardError; end
 
     class << self
-      def call(db_key, upload_to_cloud_service)
+      def call(db_key)
         env_config = Rails.configuration.database_configuration[Rails.env]
         config = env_config[db_key] || env_config
 
         return if config.blank?
-
-        unless upload_to_cloud_service.respond_to?(:call)
-          raise ArgumentError, "<upload_to_cloud_service> must respond to #call"
-        end
 
         begin
           backup = DumpDatabaseService.new(config).perform
@@ -23,7 +19,7 @@ module BackUps
           end
 
           Rails.error.handle do
-            upload_to_cloud_service.call(backup, db_key:)
+            BackUps::UploadToCloudService.instance.call(backup, db_key:)
           end
 
           Metric.track(Metrics::Name::PERFORM_SNAPSHOT_BACKUP_RESULT, tags: {

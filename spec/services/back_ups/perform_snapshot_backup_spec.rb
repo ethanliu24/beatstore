@@ -15,8 +15,9 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       path: ".",
     )
   }
+  let(:file) { instance_double(Google::Apis::DriveV3::File) }
   let(:backup_service) { instance_double(BackUps::DumpDatabaseService, perform: backup) }
-  let(:upload_service) { instance_double(BackUps::UploadToCloudService) }
+  let(:upload_service) { instance_double(BackUps::UploadToCloudService, call: file) }
 
   before do
     allow(BackUps::DumpDatabaseService)
@@ -24,7 +25,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       .with(env_config)
       .and_return(backup_service)
 
-    allow(upload_service).to receive(:call)
+    allow(BackUps::UploadToCloudService).to receive(:instance).and_return(upload_service)
 
     allow(BackUps::CleanUpBackupArtifactsService)
       .to receive(:call)
@@ -40,23 +41,13 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       end
 
       it "returns nil" do
-        expect(service.call(db_key, upload_service)).to be_nil
+        expect(service.call(db_key)).to be_nil
       end
 
       it "does not attempt a backup" do
-        service.call(db_key, upload_service)
+        service.call(db_key)
 
         expect(BackUps::DumpDatabaseService).not_to have_received(:new)
-      end
-    end
-
-    context "when upload service is the wrong type" do
-      let(:wrong_service) { Object.new }
-
-      it "raises ArgumentError" do
-        expect {
-          service.call(db_key, wrong_service)
-        }.to raise_error(ArgumentError, "<upload_to_cloud_service> must respond to #call")
       end
     end
 
@@ -64,7 +55,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       let(:backup_ok) { true }
 
       it "uploads the backup" do
-        service.call(db_key, upload_service)
+        service.call(db_key)
 
         expect(upload_service)
           .to have_received(:call)
@@ -72,7 +63,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       end
 
       it "cleans up backup artifacts" do
-        service.call(db_key, upload_service)
+        service.call(db_key)
 
         expect(BackUps::CleanUpBackupArtifactsService)
           .to have_received(:call)
@@ -81,7 +72,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
 
       it "emits success metric" do
         expect {
-          service.call(db_key, upload_service)
+          service.call(db_key)
         }.to change(Metric, :count).by(1)
 
         metric = Metric.last
@@ -98,13 +89,13 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
 
       it "raises SnapshotBackupFailed" do
         expect {
-          service.call(db_key, upload_service)
+          service.call(db_key)
         }.to raise_error(described_class::SnapshotBackupFailed, "backup file dump result not ok")
       end
 
       it "does not upload" do
         expect {
-          service.call(db_key, upload_service)
+          service.call(db_key)
         }.to raise_error(described_class::SnapshotBackupFailed)
 
         expect(upload_service).not_to have_received(:call)
@@ -112,7 +103,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
 
       it "cleans up backup artifacts" do
         expect {
-          service.call(db_key, upload_service)
+          service.call(db_key)
         }.to raise_error(described_class::SnapshotBackupFailed)
 
         expect(BackUps::CleanUpBackupArtifactsService).to have_received(:call).with(backup)
@@ -121,7 +112,7 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
       it "increments failed metrics" do
         expect {
           expect {
-            service.call(db_key, upload_service)
+            service.call(db_key)
           }.to raise_error(described_class::SnapshotBackupFailed)
         }.to change(Metric, :count).by(1)
 
@@ -144,13 +135,13 @@ RSpec.describe BackUps::PerformSnapshotBackupService do
         expect(Rails.error).to receive(:handle).and_yield
 
         expect {
-          service.call(db_key, upload_service)
+          service.call(db_key)
         }.to raise_error(error)
       end
 
       it "still cleans up artifacts" do
         expect {
-          service.call(db_key, upload_service)
+          service.call(db_key)
         }.to raise_error(error)
 
         expect(BackUps::CleanUpBackupArtifactsService).to have_received(:call)
