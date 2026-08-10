@@ -22,6 +22,11 @@
 !/tmp/pids/
 !/tmp/pids/.keep
 
+# Ignore exported DB backup files, but keep the directory
+/tmp/db_backups/*
+!/tmp/db_backups/
+!/tmp/db_backups/.keep
+
 # Ignore storage (uploaded files in development and any SQLite databases).
 /storage/*
 !/storage/.keep
